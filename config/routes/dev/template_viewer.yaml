@@ -1,0 +1,4 @@
+twig_template_viewer:
+    methods   : ['GET']
+    path      : /_tmp_viewer
+    controller: App\Controller\_TemplateViewerController::index
