@@ -1,0 +1,3 @@
+controllers:
+    resource: ../../vendor/controleonline/carrier/src/Controller/
+    type: annotation    
