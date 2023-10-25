@@ -1,12 +1,7 @@
 doctrine_migrations:
     # Namespace/path to search for migrations
     migrations_paths:
-        "DoctrineMigrations": "%kernel.project_dir%/migrations"
-        "Carrier": "%kernel.project_dir%/vendor/controleonline/carrier/migrations"
-        "Common": "%kernel.project_dir%/vendor/controleonline/common/migrations"
-        "Product": "%kernel.project_dir%/vendor/controleonline/products/migrations"
-        "Users": "%kernel.project_dir%/vendor/controleonline/users/migrations"
-        "Financial": "%kernel.project_dir%/vendor/controleonline/financial/migrations"
+        "DoctrineMigrations": "%kernel.project_dir%/migrations"        
     storage:
         # Default (SQL table) metadata storage configuration
         table_storage:
