@@ -48,15 +48,3 @@ doctrine:
                 dir: "%kernel.project_dir%/vendor/controleonline/financial/src/Entity"
                 prefix: 'ControleOnline\Entity'
                 alias: ControleOnline                              
-            Common:
-                is_bundle: false
-                type: annotation
-                dir: "%kernel.project_dir%/vendor/controleonline/common/src/Entity"
-                prefix: 'ControleOnline\Entity'
-                alias: ControleOnline       
-            Carrier:
-                is_bundle: false
-                type: annotation
-                dir: "%kernel.project_dir%/vendor/controleonline/carrier/src/Entity"
-                prefix: 'ControleOnline\Entity'
-                alias: ControleOnline      

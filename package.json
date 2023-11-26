@@ -15,12 +15,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ControleOnline/api-community.git"
+    "url": "git+https://github.com/ControleOnline/api.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ControleOnline/api-community/issues"
+    "url": "https://github.com/ControleOnline/api/issues"
   },
-  "homepage": "https://github.com/ControleOnline/api-community#readme"
+  "homepage": "https://github.com/ControleOnline/api#readme"
 }

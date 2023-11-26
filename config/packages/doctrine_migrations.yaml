@@ -1,7 +1,8 @@
-doctrine_migrations:
+doctrine_migrations:    
     # Namespace/path to search for migrations
     migrations_paths:
-        "DoctrineMigrations": "%kernel.project_dir%/migrations"        
+        "DoctrineMigrations": "%kernel.project_dir%/migrations"
+
     storage:
         # Default (SQL table) metadata storage configuration
         table_storage:

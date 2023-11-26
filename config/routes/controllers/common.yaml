@@ -1,3 +1,0 @@
-controllers:
-    resource: ../../vendor/controleonline/common/src/Controller/
-    type: annotation    
