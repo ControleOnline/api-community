@@ -41,7 +41,7 @@ composer.phar
 .bash*
 public_html
 module
-/public/.htaccess
+#/public/.htaccess
 
 
 .cagefs
