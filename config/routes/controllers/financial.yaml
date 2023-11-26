@@ -1,3 +1,0 @@
-controllers:
-    resource: ../../vendor/controleonline/financial/src/Controller/
-    type: annotation    
