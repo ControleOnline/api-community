@@ -1,0 +1,73 @@
+/helm/api/charts
+*.lock
+error_log
+*error_log
+.bowerrc
+composer.lock
+symfony.lock
+yarn.lock
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/public/bundles/
+/public/vendor/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> friendsofphp/php-cs-fixer ###
+/.php_cs
+/.php_cs.cache
+###< friendsofphp/php-cs-fixer ###
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
+
+/docker-compose.override.yaml
+/docker-compose.override.yml
+
+###> symfony/phpunit-bridge ###
+.phpunit
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+/.composer
+composer.phar
+/.subversion
+.bash*
+public_html
+module
+/public/.htaccess
+
+
+.cagefs
+.cl.selector
+.cloud-locale-test.skip
+.contactemail
+.cpanel
+.cphorde
+.lastlogin
+.spamassassin
+.spamassassinboxenable
+.spamassassinenable
+/etc/
+/mail/
+/ssl/
+/www
+/public_html/
+/public/app
+/public/images
+.idea
+.vscode/
+/data/
+
+node_modules/**/*
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+.DS_Store

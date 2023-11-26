@@ -1,0 +1,51 @@
+parameters:
+    # Adds a fallback VARNISH_URL if the env var is not set.
+    # This allows you to run cache:warmup even if your
+    # environment variables are not available yet.
+    # You should not need to change this value.
+    env(VARNISH_URL): ""
+
+api_platform:
+    enable_re_doc: true
+    enable_swagger_ui: false
+    defaults:
+        normalization_context:
+        skip_null_values: true
+    metadata_backward_compatibility_layer: false
+    formats:
+        jsonld: ["application/ld+json"]
+        jsonhal: ["application/hal+json"]
+        jsonapi: ["application/vnd.api+json"]
+        json: ["application/json"]
+        xml: ["application/xml", "text/xml"]
+        yaml: ["application/x-yaml"]
+        csv: ["text/csv"]
+        html: ["text/html"]
+    mapping:
+        paths:
+            [
+                "%kernel.project_dir%/src/Entity",
+                "%kernel.project_dir%/src/Resource",
+                "%kernel.project_dir%/vendor/controleonline/products/src/Entity",
+                "%kernel.project_dir%/vendor/controleonline/users/src/Entity",
+                "%kernel.project_dir%/vendor/controleonline/financial/src/Entity",
+            ]
+    title: API
+    show_webby: false
+    version: 1.0.0
+    swagger:
+        api_keys:
+            apiKey:
+                name: Authorization
+                type: header
+    collection:
+        pagination:
+            client_items_per_page: true
+            items_per_page_parameter_name: itemsPerPage
+    graphql:
+        graphiql:
+            enabled: true
+        graphql_playground:
+            enabled: true
+    eager_loading:
+        max_joins: 100

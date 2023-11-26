@@ -1,0 +1,35 @@
+version : '3.4'
+
+services:
+  fclick-api:
+    image         : rchdev/phpache-server:latest
+    container_name: fcapi-server
+    build         :
+      context: ./
+    volumes       :
+      - ./:/var/www/html/back:rw
+    restart       : "no"
+    stdin_open    : true
+    tty           : true
+    ports         :
+      - "8081:80"
+
+  database:
+    image: mysql:5.7
+    container_name: mysql57-server
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=fclick-api
+    volumes:
+      - db:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes :
+  db: {}

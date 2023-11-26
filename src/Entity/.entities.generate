@@ -1,0 +1,4 @@
+php bin/console doctrine:mapping:import --path=src/Entity App\Entity annotation --filter="Role"
+php bin/console doctrine:mapping:import --path=src/Entity App\Entity annotation --filter="Menu"
+
+php bin/console make:entity --regenerate
