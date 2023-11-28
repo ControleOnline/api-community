@@ -2,18 +2,6 @@ controllers:
     resource: ../../src/Controller/
     type: annotation
 
-common:
-    resource: ../../vendor/controleonline/common/Controller/
-    type: annotation
-
-products:
-    resource: ../../vendor/controleonline/products/Controller/
-    type: annotation
-
-financial:
-    resource: ../../vendor/controleonline/financial/Controller/
-    type: annotation
-
 users:
     resource: ../../vendor/controleonline/users/Controller/
     type: annotation
