@@ -5,8 +5,3 @@ controllers:
 users:
     resource: ../../vendor/controleonline/users/src/Controller
     type: annotation
-
-
-common:
-    resource: ../../vendor/controleonline/common/src/Controller
-    type: annotation    
