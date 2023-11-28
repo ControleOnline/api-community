@@ -19,18 +19,6 @@ services:
         resource: "../src/*"
         exclude: "../src/{DependencyInjection,Entity,Resource,Migrations,Library,Tests,Kernel.php}"
 
-    ControleOnline\:
-        resource: "../vendor/controleonline/products/src/*"
-        exclude: "../vendor/controleonline/*/src/{Listener,Security,Controller,Repository,DependencyInjection,Entity,Resource,Migrations,Library,Tests,Kernel.php}"
-    ControleOnline\Repository\:
-        resource: "../vendor/controleonline/*/src/Repository/*"
-        tags: ["doctrine.repository_service"]
-    ControleOnline\Controller\:
-        resource: "../vendor/controleonline/*/src/Controller/*"
-        tags: ["controller.service_arguments"]
-    ControleOnline\Security\:
-        resource: "../vendor/controleonline/*/src/Security/*"
-
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\Controller\:
