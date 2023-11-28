@@ -21,7 +21,7 @@ services:
 
     ControleOnline\:
         resource: "../vendor/controleonline/*/src/*"
-        exclude: "../vendor/controleonline/*/src/{Security,Controller,Repository,DependencyInjection,Entity,Resource,Migrations,Library,Tests,Kernel.php}"
+        exclude: "../vendor/controleonline/*/src/{Listener,Security,Controller,Repository,DependencyInjection,Entity,Resource,Migrations,Library,Tests,Kernel.php}"
     ControleOnline\Repository\:
         resource: "../vendor/controleonline/*/src/Repository"
         tags: ['doctrine.repository_service']
