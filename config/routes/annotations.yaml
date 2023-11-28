@@ -1,3 +1,12 @@
 controllers:
     resource: ../../src/Controller/
     type: annotation
+
+controllers:
+    resource: ../../vendor/controleonline/common/Controller/
+    type: annotation
+
+controllers:
+    resource: ../../vendor/controleonline/products/Controller/
+    type: annotation
+

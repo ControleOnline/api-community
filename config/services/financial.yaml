@@ -8,6 +8,3 @@ services:
         arguments:
             $registry: '@doctrine'   
             
-    ControleOnline\Controller\:
-        resource: "../../vendor/controleonline/financial/src/Controller"
-        tags: ["controller.service_arguments"]                
