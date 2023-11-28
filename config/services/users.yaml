@@ -9,8 +9,4 @@ services:
         arguments:
             $registry: "@doctrine"
 
-    ControleOnline\Controller\:
-        resource: "../../vendor/controleonline/users/src/Controller"
-        tags: ["controller.service_arguments"]
-        arguments:
-            $entityManager: "@doctrine.orm.default_entity_manager"
+
