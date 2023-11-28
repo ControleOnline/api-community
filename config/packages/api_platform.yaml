@@ -26,6 +26,7 @@ api_platform:
             [
                 "%kernel.project_dir%/src/Entity",
                 "%kernel.project_dir%/src/Resource",
+                "%kernel.project_dir%/vendor/controleonline/common/src/Entity",
                 "%kernel.project_dir%/vendor/controleonline/products/src/Entity",
                 "%kernel.project_dir%/vendor/controleonline/users/src/Entity",
                 "%kernel.project_dir%/vendor/controleonline/financial/src/Entity",

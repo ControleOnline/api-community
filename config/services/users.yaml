@@ -2,3 +2,7 @@ services:
     ControleOnline\:
         resource: "../../vendor/controleonline/users/src/*"
         exclude: "../src/{DependencyInjection,Entity,Resource,Migrations,Library,Tests,Kernel.php}"
+
+    ControleOnline\Controller\:
+        resource: "../../vendor/controleonline/users/src/Controller"
+        tags: ["controller.service_arguments"]
