@@ -5,5 +5,3 @@ controllers:
 users:
     resource: ../../vendor/controleonline/users/src/Controller
     type: annotation
-    arguments:
-        $entityManager: "@doctrine.orm.default_entity_manager"
