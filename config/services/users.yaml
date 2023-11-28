@@ -14,8 +14,3 @@ services:
         tags: ["controller.service_arguments"]
         arguments:
             $entityManager: "@doctrine.orm.default_entity_manager"
-
-    ControleOnline\Controller\Oauth\GoogleController:
-        tags: ["controller.service_arguments"]
-        arguments:
-            $entityManager: "@doctrine.orm.default_entity_manager"
