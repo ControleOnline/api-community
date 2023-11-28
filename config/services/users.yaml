@@ -9,8 +9,6 @@ services:
         arguments:
             $registry: "@doctrine"
 
-
-services:
     ControleOnline\Controller\Oauth\GoogleController:
         arguments:
             $entityManager: '@doctrine.orm.default_entity_manager'
