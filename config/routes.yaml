@@ -12,14 +12,3 @@ graphiql:
 graphql_playground:
     path      : /docs/graphql_playground
     controller: api_platform.graphql.action.graphql_playground
-
-
-
-connect_google_start:
-    path: '/oauth/google/connect'
-    controller: 'ControleOnline\Controller\Oauth\GoogleController::connectAction'
-
-connect_google_return:
-    path: '/oauth/google/return'
-    controller: 'ControleOnline\Controller\Oauth\GoogleController::returnAction'
-    methods: ['GET', 'POST']
