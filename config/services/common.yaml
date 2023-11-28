@@ -2,3 +2,12 @@ services:
     ControleOnline\:
         resource: "../../vendor/controleonline/common/src/*"
         exclude: "../src/{DependencyInjection,Entity,Resource,Migrations,Library,Tests,Kernel.php}"
+    ControleOnline\Repository\:
+        resource: "../../vendor/controleonline/common/src/Repository"
+        tags: ["doctrine.repository_service"]
+        arguments:
+            $registry: '@doctrine'        
+
+    ControleOnline\Controller\:
+        resource: "../../vendor/controleonline/common/src/Controller"
+        tags: ["controller.service_arguments"]    

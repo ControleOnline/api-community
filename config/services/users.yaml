@@ -3,6 +3,12 @@ services:
         resource: "../../vendor/controleonline/users/src/*"
         exclude: "../src/{DependencyInjection,Entity,Resource,Migrations,Library,Tests,Kernel.php}"
 
+    ControleOnline\Repository\:
+        resource: "../../vendor/controleonline/users/src/Repository"
+        tags: ["doctrine.repository_service"]
+        arguments:
+            $registry: "@doctrine"
+
     ControleOnline\Controller\:
         resource: "../../vendor/controleonline/users/src/Controller"
         tags: ["controller.service_arguments"]
