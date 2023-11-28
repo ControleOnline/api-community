@@ -1,4 +1,4 @@
 services:
     ControleOnline\:
         resource: "../../vendor/controleonline/common/src/*"
-        exclude: "../../vendor/controleonline/common/src/{DependencyInjection,Entity,Resource,Migrations,Library,Tests,Kernel.php}"
+        exclude: "../src/{DependencyInjection,Entity,Resource,Migrations,Library,Tests,Kernel.php}"
