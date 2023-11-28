@@ -3,6 +3,6 @@ controllers:
     type: annotation
 
 
-google:
-    resource: ../../vendor/controleonline/users/Controller/Oauth/GoogleController.php
+users:
+    resource: ../../vendor/controleonline/users/src/Controller
     type: annotation    
