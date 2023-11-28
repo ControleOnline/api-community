@@ -3,8 +3,7 @@ controllers:
     type: annotation
 
 users:
-    resource: "../../vendor/controleonline/users/src/Controller/"
+    resource: ../../vendor/controleonline/users/src/Controller
     type: annotation
-    tags: ["controller.service_arguments"]
     arguments:
         $entityManager: "@doctrine.orm.default_entity_manager"
