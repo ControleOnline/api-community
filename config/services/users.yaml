@@ -8,6 +8,7 @@ services:
         tags: ["doctrine.repository_service"]
         arguments:
             $registry: "@doctrine"
+            $encoder:  "@security.password_encoder"
 
     ControleOnline\Controller\:
         resource: "../../vendor/controleonline/users/src/Controller"
