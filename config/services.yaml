@@ -2,7 +2,7 @@
 # Files in the packages/ subdirectory configure your dependencies.
 imports:
     - { resource: "../vendor/controleonline/products/config/services/products.yaml" }
-    - { resource: "../vendor/controleonline/products/config/services/common.yaml" }
+    - { resource: "../vendor/controleonline/common/config/services/common.yaml" }
     - { resource: "services/financial.yaml" }
     - { resource: "services/users.yaml" }
 
