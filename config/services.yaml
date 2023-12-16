@@ -3,8 +3,15 @@
 imports:
     - { resource: "../vendor/controleonline/products/config/services/products.yaml" }
     - { resource: "../vendor/controleonline/common/config/services/common.yaml" }
-    - { resource: "services/financial.yaml" }
-    - { resource: "services/users.yaml" }
+    - { resource: "../vendor/controleonline/financial/config/services/financial.yaml" }
+    - { resource: "../vendor/controleonline/contract/config/services/contract.yaml" }
+    - { resource: "../vendor/controleonline/dashboard/config/services/dashboard.yaml" }
+    - { resource: "../vendor/controleonline/ead/config/services/ead.yaml" }
+    - { resource: "../vendor/controleonline/orders/config/services/orders.yaml" }
+    - { resource: "../vendor/controleonline/people/config/services/people.yaml" }
+    - { resource: "../vendor/controleonline/queue/config/services/queue.yaml" }
+    - { resource: "../vendor/controleonline/quote/config/services/quote.yaml" }
+    - { resource: "../vendor/controleonline/users/config/services/users.yaml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
