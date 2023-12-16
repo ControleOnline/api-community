@@ -19,7 +19,7 @@ use ControleOnline\Entity\PeopleSalesman;
 use ControleOnline\Entity\TaskInteration;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\SalesOrder;
-use App\Repository\ConfigRepository;
+use ControleOnline\Repository\ConfigRepository;
 
 class CRMCommand extends Command
 {
@@ -45,7 +45,7 @@ class CRMCommand extends Command
   /**
    * Config repository
    *
-   * @var \App\Repository\ConfigRepository
+   * @var \ControleOnline\Repository\ConfigRepository
    */
   private $config;
 

@@ -28,7 +28,7 @@ use ControleOnline\Entity\SalesOrderInvoiceTax;
 use ControleOnline\Entity\Document;
 use ControleOnline\Entity\PeopleSalesman;
 use ControleOnline\Entity\PeopleClient;
-use App\Repository\ConfigRepository;
+use ControleOnline\Repository\ConfigRepository;
 use App\Library\Itau\ItauClient;
 use ControleOnline\Entity\Config;
 use ControleOnline\Entity\Contract;
@@ -66,7 +66,7 @@ class OrderNotifierCommand extends Command
   /**
    * Config repository
    *
-   * @var \App\Repository\ConfigRepository
+   * @var \ControleOnline\Repository\ConfigRepository
    */
   private $config;
 
@@ -1369,7 +1369,7 @@ class OrderNotifierCommand extends Command
       return null;
     else {
       /**
-       * @var \App\Repository\SalesOrder $order
+       * @var \ControleOnline\Repository\SalesOrder $order
        */
       foreach ($salesOrders as $order) {
         $orders[] = (object) [
@@ -1459,7 +1459,7 @@ class OrderNotifierCommand extends Command
       return null;
     else {
       /**
-       * @var \App\Repository\SalesOrder $order
+       * @var \ControleOnline\Repository\SalesOrder $order
        */
       foreach ($salesOrders as $order) {
         $orders[] = (object) [
@@ -1552,7 +1552,7 @@ class OrderNotifierCommand extends Command
       return null;
     else {
       /**
-       * @var \App\Repository\SalesOrder $order
+       * @var \ControleOnline\Repository\SalesOrder $order
        */
       foreach ($salesOrders as $order) {
         $orders[] = (object) [
@@ -1653,7 +1653,7 @@ class OrderNotifierCommand extends Command
       return null;
     else {
       /**
-       * @var \App\Repository\SalesOrder $order
+       * @var \ControleOnline\Repository\SalesOrder $order
        */
       foreach ($salesOrders as $order) {
         $orders[] = (object) [
@@ -3394,7 +3394,7 @@ class OrderNotifierCommand extends Command
   private function getItauConfig(People $people): ?array
   {
     /**
-     * @var \App\Repository\ConfigRepository
+     * @var \ControleOnline\Repository\ConfigRepository
      */
     if (!isset($this->itau_configs[$people->getId()])) {
       $config = $this->em->getRepository(Config::class)

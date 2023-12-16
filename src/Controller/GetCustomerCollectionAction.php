@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\PeopleSalesman;
-use App\Repository\PeopleRepository;
+use ControleOnline\Repository\PeopleRepository;
 use App\Service\PeopleRoleService;
 
 class GetCustomerCollectionAction

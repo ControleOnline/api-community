@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use ControleOnline\Entity\Carrier;
 use ControleOnline\Entity\People;
-use App\Repository\CarrierRepository;
+use ControleOnline\Repository\CarrierRepository;
 
 class GetCarrierCollectionAction
 {

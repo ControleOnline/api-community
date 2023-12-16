@@ -63,7 +63,7 @@ class GetAvailableProfessionalsAction
             throw new \Exception('StartTime can not be greater than EndTime', 400);
 
         /**
-         * @var \App\Repository\SchoolProfessionalWeeklyRepository
+         * @var \ControleOnline\Repository\SchoolProfessionalWeeklyRepository
          */
         $repository = $this->manager->getRepository(SchoolProfessionalWeekly::class);
 

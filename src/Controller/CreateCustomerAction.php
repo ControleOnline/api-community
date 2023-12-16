@@ -50,7 +50,7 @@ class CreateCustomerAction
     /**
      * PeopleClient Repository
      *
-     * @var \App\Repository\PeopleClientRepository
+     * @var \ControleOnline\Repository\PeopleClientRepository
      */
     private $clients  = null;
 

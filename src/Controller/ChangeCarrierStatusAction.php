@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use App\Repository\PeopleRepository;
+use ControleOnline\Repository\PeopleRepository;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\PeopleCarrier;
 

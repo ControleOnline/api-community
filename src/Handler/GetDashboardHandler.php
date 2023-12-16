@@ -23,14 +23,14 @@ class GetDashboardHandler implements MessageHandlerInterface
   /**
    * People Repository
    *
-   * @var \App\Repository\PeopleRepository
+   * @var \ControleOnline\Repository\PeopleRepository
    */
   private $people;
 
   /**
    * PeopleSalesman Repository
    *
-   * @var \App\Repository\PeopleSalesmanRepository
+   * @var \ControleOnline\Repository\PeopleSalesmanRepository
    */
   private $salesman;
 
@@ -106,7 +106,7 @@ class GetDashboardHandler implements MessageHandlerInterface
   private function getMyPeopleCompanies(): array
   {
     /**
-     * @var \App\Repository\PeopleRepository
+     * @var \ControleOnline\Repository\PeopleRepository
      */
     $repository = $this->manager->getRepository(People::class);
 

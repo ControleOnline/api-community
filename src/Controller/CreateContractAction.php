@@ -13,7 +13,7 @@ use ControleOnline\Entity\Contract;
 use ControleOnline\Entity\MyContractModel;
 use ControleOnline\Entity\MyContractPeople;
 use ControleOnline\Entity\SalesOrder;
-use App\Repository\ContractRepository;
+use ControleOnline\Repository\ContractRepository;
 
 class CreateContractAction
 {

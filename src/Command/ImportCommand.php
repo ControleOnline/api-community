@@ -7,9 +7,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\ImportRepository;
-use App\Repository\DeliveryRegionRepository;
-use App\Repository\DeliveryTaxGroupRepository;
+use ControleOnline\Repository\ImportRepository;
+use ControleOnline\Repository\DeliveryRegionRepository;
+use ControleOnline\Repository\DeliveryTaxGroupRepository;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -467,7 +467,7 @@ class ImportCommand extends Command
 
                 if ($nfs) {
                     /**
-                     * @var \App\Repository\SalesOrderRepository $repo
+                     * @var \ControleOnline\Repository\SalesOrderRepository $repo
                      */
                     $repo   = $this->manager->getRepository(SalesOrder::class);
                     $orders = $repo->createQueryBuilder('O')

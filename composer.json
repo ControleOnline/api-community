@@ -18,6 +18,7 @@
         "controleonline/ead": "dev-master",
         "controleonline/queue": "dev-master",
         "controleonline/quote": "dev-master",
+        "controleonline/orders": "dev-master",
         "ctodobom/api-inter": "dev-master",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.4",

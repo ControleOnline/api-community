@@ -194,7 +194,7 @@ class SearchContactAction
                 $search['country'] = strtolower($search['country']) == 'brasil' ? 'Brazil' : $search['country'];
 
                 /**
-                 * @var \App\Repository\AddressRepository $addRepo
+                 * @var \ControleOnline\Repository\AddressRepository $addRepo
                  */
                 $addRepo = $this->em->getRepository(Address::class);
                 $address = $addRepo->findOneByCityStateCountryOfPeople($search['city'], $search['state'], $search['country'], $people);

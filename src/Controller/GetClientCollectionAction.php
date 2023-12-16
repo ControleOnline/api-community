@@ -5,7 +5,7 @@ namespace App\Controller;
 use ControleOnline\Entity\Client;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\PeopleSalesman;
-use App\Repository\ClientRepository;
+use ControleOnline\Repository\ClientRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
@@ -81,7 +81,7 @@ class GetClientCollectionAction
             return null;
 
         /**
-         * @var \App\Repository\PeopleSalesmanRepository
+         * @var \ControleOnline\Repository\PeopleSalesmanRepository
          */
         $salesman = $this->manager->getRepository(PeopleSalesman::class);
         /**

@@ -27,7 +27,7 @@ class GetPurchasingOrderQuotationAction
     /**
      * Quotation repository
      *
-     * @var \App\Repository\QuotationRepository
+     * @var \ControleOnline\Repository\QuotationRepository
      */
     private $quotation = null;
 

@@ -387,7 +387,7 @@ class UpdateQuotationAddTaxAction
     private function getItauConfig(People $people): array
     {
         /**
-         * @var \App\Repository\ConfigRepository
+         * @var \ControleOnline\Repository\ConfigRepository
          */
         $confrepo = $this->manager->getRepository(Config::class);
         $configs  = $confrepo->getItauConfigByPeople($people);

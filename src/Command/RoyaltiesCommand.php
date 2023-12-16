@@ -22,7 +22,7 @@ use ControleOnline\Entity\Status;
 use ControleOnline\Entity\PurchasingOrderInvoiceTax;
 use ControleOnline\Entity\Document;
 use ControleOnline\Entity\PeopleSalesman;
-use App\Repository\ConfigRepository;
+use ControleOnline\Repository\ConfigRepository;
 use App\Library\Itau\ItauClient;
 use ControleOnline\Entity\Config;
 use ControleOnline\Entity\Quotation;
@@ -51,7 +51,7 @@ class RoyaltiesCommand extends Command
   /**
    * Config repository
    *
-   * @var \App\Repository\ConfigRepository
+   * @var \ControleOnline\Repository\ConfigRepository
    */
   private $config;
 

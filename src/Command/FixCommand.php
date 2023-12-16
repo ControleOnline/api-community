@@ -11,8 +11,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
 
-use App\Repository\DeliveryRegionRepository;
-use App\Repository\DeliveryTaxGroupRepository;
+use ControleOnline\Repository\DeliveryRegionRepository;
+use ControleOnline\Repository\DeliveryTaxGroupRepository;
 
 use ControleOnline\Entity\DeliveryRegion;
 use ControleOnline\Entity\DeliveryRegionCity;

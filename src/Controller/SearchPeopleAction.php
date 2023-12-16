@@ -17,7 +17,7 @@ class SearchPeopleAction
   /**
    * peopleSalesman repository
    *
-   * @var \App\Repository\PeopleRepository
+   * @var \ControleOnline\Repository\PeopleRepository
    */
   private $people;
 

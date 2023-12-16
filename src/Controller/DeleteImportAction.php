@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use App\Repository\ImportRepository;
+use ControleOnline\Repository\ImportRepository;
 
 use ControleOnline\Entity\Import;
 

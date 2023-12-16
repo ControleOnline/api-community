@@ -5,7 +5,7 @@ namespace App\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Repository\ImportRepository;
+use ControleOnline\Repository\ImportRepository;
 
 use ControleOnline\Entity\Import;
 

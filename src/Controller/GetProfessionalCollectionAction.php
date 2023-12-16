@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use ControleOnline\Entity\People;
-use App\Repository\PeopleRepository;
+use ControleOnline\Repository\PeopleRepository;
 use App\Service\PeopleRoleService;
 
 class GetProfessionalCollectionAction

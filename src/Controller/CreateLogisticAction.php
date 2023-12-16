@@ -6,7 +6,7 @@ use ControleOnline\Entity\OrderLogistic;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\SalesOrder;
-use App\Repository\OrderLogisticRepository;
+use ControleOnline\Repository\OrderLogisticRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;

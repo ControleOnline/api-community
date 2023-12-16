@@ -90,7 +90,7 @@ class UpdateClientAction
     public function updateClient(array $data)
     {
         /**
-         * @var \App\Repository\ClientRepository
+         * @var \ControleOnline\Repository\ClientRepository
          */
         $myRepo = $this->manager->getRepository(Client::class);
 

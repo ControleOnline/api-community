@@ -28,7 +28,7 @@ use ControleOnline\Entity\Contract;
 use ControleOnline\Entity\ContractModel;
 use ControleOnline\Entity\ContractPeople;
 use ControleOnline\Entity\PeopleDomain;
-use App\Repository\ContractRepository;
+use ControleOnline\Repository\ContractRepository;
 
 class SaveAcceptOrderPayerAction extends AbstractController
 {

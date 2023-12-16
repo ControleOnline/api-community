@@ -126,7 +126,7 @@ class OrderRetrieveStatusCommand extends Command
   private function getOrders(int $limit): array
   {
     /**
-     * @var \App\Repository\SalesOrderRepository
+     * @var \ControleOnline\Repository\SalesOrderRepository
      */
     $repositorio = $this->manager->getRepository(SalesOrder::class);
 
