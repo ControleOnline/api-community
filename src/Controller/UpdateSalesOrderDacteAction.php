@@ -5,12 +5,12 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 
-use App\Entity\SalesOrder as Order;
-use App\Entity\SalesOrderInvoiceTax as OrderInvoiceTax;
-use App\Entity\SalesInvoiceTax as InvoiceTax;
+use ControleOnline\Entity\SalesOrder as Order;
+use ControleOnline\Entity\SalesOrderInvoiceTax as OrderInvoiceTax;
+use ControleOnline\Entity\SalesInvoiceTax as InvoiceTax;
 use ControleOnline\Entity\Status;
-use App\Entity\People;
-use App\Entity\Address;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Address;
 use App\Service\AddressService;
 
 class UpdateSalesOrderDacteAction

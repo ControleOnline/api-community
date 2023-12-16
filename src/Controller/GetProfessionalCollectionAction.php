@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use App\Repository\PeopleRepository;
 use App\Service\PeopleRoleService;
 

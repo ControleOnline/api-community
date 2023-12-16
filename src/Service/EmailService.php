@@ -2,8 +2,8 @@
 
 namespace App\Service;
 
-use App\Entity\File;
-use App\Entity\Import;
+use ControleOnline\Entity\File;
+use ControleOnline\Entity\Import;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class EmailService

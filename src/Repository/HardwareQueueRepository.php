@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\HardwareQueue;
+use ControleOnline\Entity\HardwareQueue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\Persistence\ManagerRegistry;

@@ -4,7 +4,7 @@
 namespace App\Repository;
 
 
-use App\Entity\ComissionInvoice;
+use ControleOnline\Entity\ComissionInvoice;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

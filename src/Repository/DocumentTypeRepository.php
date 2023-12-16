@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\DocumentType;
+use ControleOnline\Entity\DocumentType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

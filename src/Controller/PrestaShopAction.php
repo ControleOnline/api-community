@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Quotation;
+use ControleOnline\Entity\Quotation;
 use ControleOnline\Entity\User;
 use GuzzleHttp\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 use ControleOnline\Entity\PurchasingOrder AS Order;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**

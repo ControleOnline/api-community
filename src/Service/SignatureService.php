@@ -5,9 +5,9 @@ namespace App\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Library\Provider\Signature\SignatureFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
-use App\Entity\People;
-use App\Entity\Config;
-use App\Entity\PeopleDomain;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Config;
+use ControleOnline\Entity\PeopleDomain;
 
 class SignatureService
 {

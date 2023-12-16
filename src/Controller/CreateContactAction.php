@@ -2,14 +2,14 @@
 
 namespace App\Controller;
 
-use App\Entity\Document;
-use App\Entity\DocumentType;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\DocumentType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use App\Entity\People;
-use App\Entity\PeopleEmployee;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleEmployee;
 use App\Service\AddressService;
 use App\Service\PeopleService;
 

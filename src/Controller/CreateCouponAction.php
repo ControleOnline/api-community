@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 
-use App\Entity\People;
-use App\Entity\DiscountCoupon;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\DiscountCoupon;
 
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;

@@ -7,7 +7,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Doctrine\ORM\EntityManagerInterface;
 
-use App\Entity\Contract;
+use ControleOnline\Entity\Contract;
 
 class SchoolCancelContractCommand extends Command
 {

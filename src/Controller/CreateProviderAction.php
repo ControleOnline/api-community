@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Controller\AbstractCustomResourceAction;
-use App\Entity\Provider;
-use App\Entity\Document;
-use App\Entity\Language;
-use App\Entity\People;
-use App\Entity\PeopleProvider;
+use ControleOnline\Entity\Provider;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\Language;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleProvider;
 use Symfony\Component\HttpFoundation\Request;
 
 class CreateProviderAction extends AbstractCustomResourceAction

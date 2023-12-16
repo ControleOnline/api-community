@@ -2,7 +2,7 @@
 
 namespace App\Listener;
 
-use App\Entity\Log;
+use ControleOnline\Entity\Log;
 use Doctrine\ORM\Event\PreFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -126,7 +126,7 @@ class LogListener
 
     private function log()
     {
-        if (get_class($this->entity) == 'App\Entity\Webapi\Usuario')
+        if (get_class($this->entity) == 'ControleOnline\Entity\Webapi\Usuario')
             $this->user = $this->entity;
         else
             $this->log[] =

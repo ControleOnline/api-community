@@ -1,8 +1,8 @@
 <?php
 namespace App\Controller;
 
-use App\Entity\Lesson;
-use App\Entity\People;
+use ControleOnline\Entity\Lesson;
+use ControleOnline\Entity\People;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

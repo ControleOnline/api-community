@@ -7,9 +7,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use App\Entity\SchoolClass;
-use App\Entity\People;
-use App\Entity\PeopleSalesman;
+use ControleOnline\Entity\SchoolClass;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleSalesman;
 use App\Service\PeopleRoleService;
 
 class GetSchoolProfessionalClassesCollectionAction

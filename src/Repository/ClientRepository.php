@@ -2,12 +2,12 @@
 
 namespace App\Repository;
 
-use App\Entity\Client;
+use ControleOnline\Entity\Client;
 use ControleOnline\Entity\Status;
-use App\Entity\People;
-use App\Entity\PeopleClient;
-use App\Entity\PeopleSalesman;
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleClient;
+use ControleOnline\Entity\PeopleSalesman;
+use ControleOnline\Entity\SalesOrder;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\ResultSetMapping;

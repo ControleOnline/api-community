@@ -2,9 +2,9 @@
 
 namespace App\Repository;
 
-use App\Entity\Client;
-use App\Entity\People;
-use App\Entity\PeopleClient;
+use ControleOnline\Entity\Client;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleClient;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\ResultSetMapping;

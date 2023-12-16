@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\PurchasingInvoiceTax as InvoiceTax;
+use ControleOnline\Entity\PurchasingInvoiceTax as InvoiceTax;
 use ControleOnline\Entity\PurchasingOrder as Order;
 use ControleOnline\Entity\PurchasingOrderInvoiceTax;
 use ControleOnline\Entity\Status;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Doctrine\ORM\EntityManagerInterface;

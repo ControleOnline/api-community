@@ -7,12 +7,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\People;
-use App\Entity\Person;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Person;
 use ControleOnline\Entity\User;
-use App\Entity\Particulars;
-use App\Entity\ParticularsType;
-use App\Entity\PeopleClient;
+use ControleOnline\Entity\Particulars;
+use ControleOnline\Entity\ParticularsType;
+use ControleOnline\Entity\PeopleClient;
 use App\Service\PeopleService;
 
 class AdminPersonSummaryAction

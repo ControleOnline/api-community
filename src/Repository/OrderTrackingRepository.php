@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\OrderTracking;
+use ControleOnline\Entity\OrderTracking;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

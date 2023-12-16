@@ -2,15 +2,15 @@
 
 namespace App\Handler;
 
-use App\Entity\Email;
+use ControleOnline\Entity\Email;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Twig\Environment;
 
-use App\Entity\PasswordRecovery;
-use App\Entity\People;
-use App\Entity\PeopleDomain;
+use ControleOnline\Entity\PasswordRecovery;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleDomain;
 use ControleOnline\Entity\User;
 use App\Repository\ConfigRepository;
 use App\Library\Utils\Hasher;
@@ -79,7 +79,7 @@ class PasswordRecoveryHandler implements MessageHandlerInterface
   private function recoveryPassword(PasswordRecovery $recovery)
   {
     /**
-     * @var \App\Entity\Email
+     * @var \ControleOnline\Entity\Email
      */
     $email = $this->manager->getRepository(Email::class)->findOneBy(['email' => $recovery->email]);
 

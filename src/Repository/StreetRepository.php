@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Street;
+use ControleOnline\Entity\Street;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

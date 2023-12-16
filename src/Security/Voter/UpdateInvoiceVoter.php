@@ -11,7 +11,7 @@ use App\Service\PeopleRoleService;
 use App\Service\UserCompanyService;
 use App\Resource\UpdateInvoice;
 use ControleOnline\Entity\User;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 
 class UpdateInvoiceVoter extends Voter
 {

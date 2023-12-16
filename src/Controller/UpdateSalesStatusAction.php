@@ -4,10 +4,10 @@ namespace App\Controller;
 
 use ControleOnline\Entity\Status;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\SalesOrder as Order;
-use App\Entity\Task;
+use ControleOnline\Entity\SalesOrder as Order;
+use ControleOnline\Entity\Task;
 use ControleOnline\Entity\Category;
-use App\Entity\TaskInteration;
+use ControleOnline\Entity\TaskInteration;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 

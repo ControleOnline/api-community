@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Cep;
+use ControleOnline\Entity\Cep;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

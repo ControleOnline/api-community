@@ -2,14 +2,14 @@
 
 namespace App\Controller;
 
-use App\Entity\Address;
-use App\Entity\DocumentType;
+use ControleOnline\Entity\Address;
+use ControleOnline\Entity\DocumentType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use ControleOnline\Entity\PurchasingOrder AS Order;
-use App\Entity\People;
-use App\Entity\Quotation;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Quotation;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Comparison;
 

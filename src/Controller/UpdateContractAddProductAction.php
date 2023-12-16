@@ -6,12 +6,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use App\Entity\Contract;
-use App\Entity\MyContract;
-use App\Entity\MyContractProduct;
-use App\Entity\MyContractProductPayment;
-use App\Entity\People;
-use App\Entity\ProductOld AS Product;
+use ControleOnline\Entity\Contract;
+use ControleOnline\Entity\MyContract;
+use ControleOnline\Entity\MyContractProduct;
+use ControleOnline\Entity\MyContractProductPayment;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\ProductOld AS Product;
 
 class UpdateContractAddProductAction
 {

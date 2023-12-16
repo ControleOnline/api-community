@@ -8,9 +8,9 @@ use Symfony\Component\Security\Core\Security;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Service\PeopleRoleService;
-use App\Entity\CompanyExpense;
+use ControleOnline\Entity\CompanyExpense;
 use ControleOnline\Entity\User;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use App\Service\UserCompanyService;
 
 class CompanyExpenseVoter extends Voter

@@ -6,7 +6,7 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Exception;
@@ -41,7 +41,7 @@ class SearchTasksPeopleAction
 
       $peoples  = $repository->createQueryBuilder('P')
         ->select()
-        ->innerJoin('\App\Entity\Task', 'T', 'WITH', 'T.taskFor = P.id')
+        ->innerJoin('\ControleOnline\Entity\Task', 'T', 'WITH', 'T.taskFor = P.id')
         ->where('T.provider = :provider')
         ->andWhere('T.type = :context')        
         ->setParameters([

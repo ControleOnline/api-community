@@ -5,7 +5,7 @@ namespace App\Controller;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-use App\Entity\DeliveryTaxGroup;
+use ControleOnline\Entity\DeliveryTaxGroup;
 
 class UpdateDeliveryGroupTaxPriceAction
 {

@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\SchoolClass;
-use App\Entity\StudentProficiency;
+use ControleOnline\Entity\SchoolClass;
+use ControleOnline\Entity\StudentProficiency;
 use DateTime;
 use Doctrine\DBAL\DBALException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

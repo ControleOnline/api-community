@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Client;
-use App\Entity\People;
-use App\Entity\PeopleSalesman;
+use ControleOnline\Entity\Client;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleSalesman;
 use App\Repository\ClientRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
@@ -61,7 +61,7 @@ class GetClientCollectionAction
         $myUser   = $this->security->getUser();
 
         /**
-         * @var \App\Entity\People $salesman
+         * @var \ControleOnline\Entity\People $salesman
          */
         $salesman = $myUser->getPeople();
 

@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Address;
-use App\Entity\SalesOrder;
-use App\Entity\Quotation;
+use ControleOnline\Entity\Address;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Quotation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;

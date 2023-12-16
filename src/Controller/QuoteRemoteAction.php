@@ -4,22 +4,22 @@ namespace App\Controller;
 
 use App\Controller\AbstractCustomResourceAction;
 use App\Library\Utils\Address;
-use App\Entity\SalesOrder;
-use App\Entity\PeopleDomain;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\PeopleDomain;
 use ControleOnline\Entity\User;
-use App\Entity\Order;
+use ControleOnline\Entity\Order;
 use App\Repository\TaxesRepository;
 use App\Library\Quote\View\Group as ViewGroup;
 use App\Library\Quote\Core\DataBag;
-use App\Entity\DeliveryRegion;
-use App\Entity\DeliveryRegionCity;
-use App\Entity\People;
-use App\Entity\City;
-use App\Entity\State;
-use App\Entity\DeliveryTax;
-use App\Entity\DeliveryTaxGroup;
-use App\Entity\Quotation;
-use App\Entity\QuoteDetail;
+use ControleOnline\Entity\DeliveryRegion;
+use ControleOnline\Entity\DeliveryRegionCity;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\City;
+use ControleOnline\Entity\State;
+use ControleOnline\Entity\DeliveryTax;
+use ControleOnline\Entity\DeliveryTaxGroup;
+use ControleOnline\Entity\Quotation;
+use ControleOnline\Entity\QuoteDetail;
 
 class QuoteRemoteAction extends AbstractCustomResourceAction
 {
@@ -230,7 +230,7 @@ class QuoteRemoteAction extends AbstractCustomResourceAction
   private function getRateQuotationsFromExternalServices(array $params): array
   {
     $rates    = [];
-    $carriers = $this->repository(\App\Entity\CarrierIntegration::class)->findBy(['enable' => 1]);
+    $carriers = $this->repository(\ControleOnline\Entity\CarrierIntegration::class)->findBy(['enable' => 1]);
 
     foreach ($carriers as $carrier) {
       $service = \App\Library\Rates\RateServiceFactory::create(

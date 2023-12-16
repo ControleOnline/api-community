@@ -2,14 +2,14 @@
 
 namespace App\Service;
 
-use App\Entity\Address;
-use App\Entity\Cep;
-use App\Entity\City;
-use App\Entity\Country;
-use App\Entity\District;
-use App\Entity\People;
-use App\Entity\State;
-use App\Entity\Street;
+use ControleOnline\Entity\Address;
+use ControleOnline\Entity\Cep;
+use ControleOnline\Entity\City;
+use ControleOnline\Entity\Country;
+use ControleOnline\Entity\District;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\State;
+use ControleOnline\Entity\Street;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\GMapsService;
 use DateTime;

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\MyContract;
+use ControleOnline\Entity\MyContract;
 use App\Library\Provider\Signature\Contract;
 use Symfony\Component\HttpFoundation\JsonResponse;
 

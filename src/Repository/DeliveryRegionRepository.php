@@ -5,8 +5,8 @@ namespace App\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\ResultSetMapping;
-use App\Entity\DeliveryRegion;
-use App\Entity\People;
+use ControleOnline\Entity\DeliveryRegion;
+use ControleOnline\Entity\People;
 
 /**
  * @method DeliveryRegion|null find($id, $lockMode = null, $lockVersion = null)

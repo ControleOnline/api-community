@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Email;
+use ControleOnline\Entity\Email;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

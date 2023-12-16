@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\File;
-use App\Entity\SchoolClass;
-use App\Entity\SchoolClassFiles;
+use ControleOnline\Entity\File;
+use ControleOnline\Entity\SchoolClass;
+use ControleOnline\Entity\SchoolClassFiles;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;

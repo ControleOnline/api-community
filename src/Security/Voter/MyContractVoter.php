@@ -2,7 +2,7 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\MyContract;
+use ControleOnline\Entity\MyContract;
 use ControleOnline\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;

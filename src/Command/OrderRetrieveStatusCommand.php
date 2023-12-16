@@ -2,9 +2,9 @@
 
 namespace App\Command;
 
-use App\Entity\OrderTracking;
-use App\Entity\SalesInvoiceTax;
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\OrderTracking;
+use ControleOnline\Entity\SalesInvoiceTax;
+use ControleOnline\Entity\SalesOrder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

@@ -6,12 +6,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use App\Entity\PeopleCarrier;
-use App\Entity\People;
-use App\Entity\Carrier;
-use App\Entity\Contract;
-use App\Entity\ContractPeople;
-use App\Entity\Document;
+use ControleOnline\Entity\PeopleCarrier;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Carrier;
+use ControleOnline\Entity\Contract;
+use ControleOnline\Entity\ContractPeople;
+use ControleOnline\Entity\Document;
 use App\Service\PeopleService;
 
 class CreateCarrierAction
@@ -143,7 +143,7 @@ class CreateCarrierAction
 /*
     $contracts = $this->manager->getRepository(Contract::class)->createQueryBuilder('C')
       ->select()
-      ->innerJoin('\App\Entity\ContractPeople', 'CP', 'WITH', 'CP.contract = C.id')
+      ->innerJoin('\ControleOnline\Entity\ContractPeople', 'CP', 'WITH', 'CP.contract = C.id')
       ->where('CP.people = :people')
       ->andWhere('CP.people_type = :people_type')
       ->andWhere('C.contractStatus = :contractStatus')

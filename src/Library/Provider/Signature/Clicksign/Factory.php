@@ -2,7 +2,7 @@
 
 namespace App\Library\Provider\Signature\Clicksign;
 
-use App\Entity\Contract;
+use ControleOnline\Entity\Contract;
 use App\Library\Provider\Signature\AbstractProvider;
 use App\Library\Provider\Signature\Document as SignatureDocument;
 use App\Library\Provider\Signature\Signer as SignatureSigner;

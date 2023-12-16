@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\SchoolClass;
+use ControleOnline\Entity\SchoolClass;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\DBALException;
 use Doctrine\Persistence\ManagerRegistry;

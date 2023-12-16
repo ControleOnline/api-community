@@ -6,10 +6,10 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Entity\SalesOrder as Order;
-use App\Entity\SalesInvoiceTax;
-use App\Entity\SalesOrderInvoiceTax;
-use App\Entity\Config;
+use ControleOnline\Entity\SalesOrder as Order;
+use ControleOnline\Entity\SalesInvoiceTax;
+use ControleOnline\Entity\SalesOrderInvoiceTax;
+use ControleOnline\Entity\Config;
 use NFePHP\CTe\Make;
 use NFePHP\CTe\Tools;
 use NFePHP\CTe\Common\Standardize;
@@ -67,7 +67,7 @@ class CreateDacteAction
 
 
             /**
-             * @var \App\Entity\Address $providerAddress
+             * @var \ControleOnline\Entity\Address $providerAddress
              */
             $providerAddress = $provider->getAddress()[0];
 
@@ -262,7 +262,7 @@ class CreateDacteAction
 
 
             /**
-             * @var \App\Entity\Address $providerAddress
+             * @var \ControleOnline\Entity\Address $providerAddress
              */
             $retrieveAddress = $data->getAddressDestination();
 
@@ -298,7 +298,7 @@ class CreateDacteAction
 
 
             /**
-             * @var \App\Entity\Address $providerAddress
+             * @var \ControleOnline\Entity\Address $providerAddress
              */
             $destinationAddress = $data->getAddressDestination();
 

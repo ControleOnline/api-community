@@ -2,16 +2,16 @@
 
 namespace App\Controller;
 
-use App\Entity\Config;
-use App\Entity\File;
-use App\Entity\People;
-use App\Entity\PeopleDomain;
-use App\Entity\PeopleEmployee;
-use App\Entity\PeoplePackage;
-use App\Entity\PeopleSalesman;
+use ControleOnline\Entity\Config;
+use ControleOnline\Entity\File;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleDomain;
+use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeoplePackage;
+use ControleOnline\Entity\PeopleSalesman;
 use App\Service\PeopleRoleService;
-use App\Entity\PackageModules;
-use App\Entity\Module;
+use ControleOnline\Entity\PackageModules;
+use ControleOnline\Entity\Module;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
@@ -49,7 +49,7 @@ class GetMyCompaniesAction
       $currentUser = $this->security->getUser();
 
       /**
-       * @var \App\Entity\People
+       * @var \ControleOnline\Entity\People
        */
       $userPeople  = $currentUser->getPeople();
       $permissions = [];
@@ -58,7 +58,7 @@ class GetMyCompaniesAction
       $getPeopleCompanies = $userPeople->getPeopleCompany();
 
       /**
-       * @var \App\Entity\PeopleEmployee $peopleCompany
+       * @var \ControleOnline\Entity\PeopleEmployee $peopleCompany
        */
       foreach ($getPeopleCompanies as $peopleCompany) {
 
@@ -249,7 +249,7 @@ class GetMyCompaniesAction
     $documents = $company->getDocument();
 
     /**
-     * @var \App\Entity\Document $document
+     * @var \ControleOnline\Entity\Document $document
      */
     $documents = $documents->filter(function ($document) {
       return $document->getDocumentType()->getDocumentType() == 'CNPJ';

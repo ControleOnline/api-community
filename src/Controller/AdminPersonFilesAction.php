@@ -8,10 +8,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-use App\Entity\People;
-use App\Entity\Particulars;
-use App\Entity\Person;
-use App\Entity\File as File;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Particulars;
+use ControleOnline\Entity\Person;
+use ControleOnline\Entity\File as File;
 
 class AdminPersonFilesAction
 {

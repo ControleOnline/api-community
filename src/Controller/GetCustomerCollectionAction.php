@@ -8,8 +8,8 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
-use App\Entity\People;
-use App\Entity\PeopleSalesman;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleSalesman;
 use App\Repository\PeopleRepository;
 use App\Service\PeopleRoleService;
 

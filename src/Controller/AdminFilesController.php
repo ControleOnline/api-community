@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Filesb;
-use App\Entity\People;
-use App\Entity\PeopleEmployee;
+use ControleOnline\Entity\Filesb;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleEmployee;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\User;
 use DateTime;

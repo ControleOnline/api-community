@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Address;
-use App\Entity\Quotation;
-use App\Entity\QuoteDetail;
+use ControleOnline\Entity\Address;
+use ControleOnline\Entity\Quotation;
+use ControleOnline\Entity\QuoteDetail;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Library\Quote\View\Group   as TaxesView;

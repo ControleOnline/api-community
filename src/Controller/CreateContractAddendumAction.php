@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\MyContract;
+use ControleOnline\Entity\MyContract;
 use Doctrine\ORM\EntityManagerInterface;
 
 class CreateContractAddendumAction

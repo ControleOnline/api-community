@@ -7,8 +7,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Doctrine\ORM\EntityManagerInterface;
 
-use App\Entity\SchoolClass;
-use App\Entity\SchoolClassStatus;
+use ControleOnline\Entity\SchoolClass;
+use ControleOnline\Entity\SchoolClassStatus;
 
 class SchoolClassSetAsMissedCommand extends Command
 {

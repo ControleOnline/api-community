@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\SalesOrder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use App\Library\Utils\Formatter;
@@ -26,7 +26,7 @@ class _TemplateViewerController extends AbstractController
         switch ($templateName) {
             case 'email/invoice-outdated':
                 /**
-                 * @var \App\Entity\SalesOrder
+                 * @var \ControleOnline\Entity\SalesOrder
                  */
                 $salesOrder     = $manager->getRepository(SalesOrder::class)->find(243);
                 $receiveInvoice = $salesOrder->getInvoice()->first() ? $salesOrder->getInvoice()->first()->getInvoice() : null;
@@ -41,7 +41,7 @@ class _TemplateViewerController extends AbstractController
 
                 if ($receiveInvoice != null) {
                     /**
-                     * @var \App\Entity\SalesOrderInvoice $orderInvoice
+                     * @var \ControleOnline\Entity\SalesOrderInvoice $orderInvoice
                      */
                     foreach ($receiveInvoice->getOrder() as $orderInvoice) {
                         $order = $orderInvoice->getOrder();
@@ -70,7 +70,7 @@ class _TemplateViewerController extends AbstractController
 
             case 'email/retrieve-request':
                 /**
-                 * @var \App\Entity\SalesOrder
+                 * @var \ControleOnline\Entity\SalesOrder
                  */
                 $salesOrder   = $manager->getRepository(SalesOrder::class)->find(222);
                 $provider     = $salesOrder->getProvider();
@@ -159,14 +159,14 @@ class _TemplateViewerController extends AbstractController
                     $retrieveData['people_contact']['alias'] = $salesOrder->getRetrieveContact()->getAlias();
 
                     /**
-                     * @var \App\Entity\Email $email
+                     * @var \ControleOnline\Entity\Email $email
                      */
                     foreach ($salesOrder->getRetrieveContact()->getEmail() as $email) {
                         $retrieveData['people_contact']['emails'][] = $email->getEmail();
                     }
 
                     /**
-                     * @var \App\Entity\Phone $phone
+                     * @var \ControleOnline\Entity\Phone $phone
                      */
                     foreach ($salesOrder->getRetrieveContact()->getPhone() as $phone) {
                         $retrieveData['people_contact']['phones'][] = [
@@ -218,14 +218,14 @@ class _TemplateViewerController extends AbstractController
                     $deliveryData['contact']['alias'] = $salesOrder->getDeliveryContact()->getAlias();
 
                     /**
-                     * @var \App\Entity\Email $email
+                     * @var \ControleOnline\Entity\Email $email
                      */
                     foreach ($salesOrder->getDeliveryContact()->getEmail() as $email) {
                         $deliveryData['contact']['emails'][] = $email->getEmail();
                     }
 
                     /**
-                     * @var \App\Entity\Phone $phone
+                     * @var \ControleOnline\Entity\Phone $phone
                      */
                     foreach ($salesOrder->getDeliveryContact()->getPhone() as $phone) {
                         $deliveryData['contact']['phones'][] = [
@@ -263,7 +263,7 @@ class _TemplateViewerController extends AbstractController
                 // order package
 
                 /**
-                 * @var \App\Entity\OrderPackage $package
+                 * @var \ControleOnline\Entity\OrderPackage $package
                  */
                 foreach ($salesOrder->getOrderPackage() as $package) {
                     $orderPackages[] = [
@@ -289,7 +289,7 @@ class _TemplateViewerController extends AbstractController
 
             case 'email/invoice-tax-instructions':
                 /**
-                 * @var \App\Entity\SalesOrder
+                 * @var \ControleOnline\Entity\SalesOrder
                  */
                 $salesOrder = $manager->getRepository(SalesOrder::class)->find(222);
                 $provider   = [
@@ -314,7 +314,7 @@ class _TemplateViewerController extends AbstractController
                 // carrier
 
                 /**
-                 * @var \App\Entity\People $_carrier
+                 * @var \ControleOnline\Entity\People $_carrier
                  */
                 if ($salesOrder->getQuote() && ($_carrier = $salesOrder->getQuote()->getCarrier())) {
                     $carrier['name'] = $_carrier->getName();

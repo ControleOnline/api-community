@@ -9,15 +9,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use App\Entity\Order as Order;
-use App\Entity\Document;
+use ControleOnline\Entity\Order as Order;
+use ControleOnline\Entity\Document;
 
 
 use App\Service\AddressService;
 use App\Service\PeopleService;
 
 
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use stdClass;
 
 class AddOtherInformationsAction

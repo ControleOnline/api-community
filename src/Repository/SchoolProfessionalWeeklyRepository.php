@@ -5,10 +5,10 @@ namespace App\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-use App\Entity\SchoolTeamSchedule;
-use App\Entity\SchoolProfessionalWeekly;
-use App\Entity\Team;
-use App\Entity\Contract;
+use ControleOnline\Entity\SchoolTeamSchedule;
+use ControleOnline\Entity\SchoolProfessionalWeekly;
+use ControleOnline\Entity\Team;
+use ControleOnline\Entity\Contract;
 
 /**
  * @method SchoolProfessionalWeekly|null find($id, $lockMode = null, $lockVersion = null)

@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\PurchasingInvoiceTax AS InvoiceTax;
+use ControleOnline\Entity\PurchasingInvoiceTax AS InvoiceTax;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
 use ApiPlatform\Core\Exception\InvalidValueException;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use NFePHP\DA\NFe\Danfe;
 use NFePHP\DA\CTe\Dacte;
 

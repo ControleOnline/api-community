@@ -2,13 +2,13 @@
 
 namespace App\Handler;
 
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-use App\Entity\RecoveryAccess;
+use ControleOnline\Entity\RecoveryAccess;
 use ControleOnline\Entity\User;
 
 class RecoveryAccessHandler implements MessageHandlerInterface

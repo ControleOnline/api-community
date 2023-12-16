@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\PurchasingInvoiceTax AS InvoiceTax;
+use ControleOnline\Entity\PurchasingInvoiceTax AS InvoiceTax;
 use ControleOnline\Entity\PurchasingOrder AS Order;
 use ControleOnline\Entity\PurchasingOrderInvoiceTax;
 use ControleOnline\Entity\Status;

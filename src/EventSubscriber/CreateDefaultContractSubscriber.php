@@ -49,10 +49,10 @@ final class CreateDefaultContractSubscriber implements EventSubscriberInterface
     public function createDefaultContract(ViewEvent $event)
     {
         /**
-         * @var \App\Entity\MyContract $entity
+         * @var \ControleOnline\Entity\MyContract $entity
          */
         $entity = $event->getControllerResult();
-        if (is_object($entity) && (get_class($entity) !== \App\Entity\MyContract::class)) {
+        if (is_object($entity) && (get_class($entity) !== \ControleOnline\Entity\MyContract::class)) {
             return;
         }
 
@@ -63,12 +63,12 @@ final class CreateDefaultContractSubscriber implements EventSubscriberInterface
         if (empty($this->request->query->get('myProvider', null)))
             return;
 
-        $peopleRepository = $this->manager->getRepository(\App\Entity\People::class);
+        $peopleRepository = $this->manager->getRepository(\ControleOnline\Entity\People::class);
         $peopleProvider   = $peopleRepository->find($this->request->query->get('myProvider'));
-        if (!$peopleProvider instanceof \App\Entity\People)
+        if (!$peopleProvider instanceof \ControleOnline\Entity\People)
             return;
 
-        $contractModel    = $this->manager->getRepository(\App\Entity\MyContractModel::class)->find(1);
+        $contractModel    = $this->manager->getRepository(\ControleOnline\Entity\MyContractModel::class)->find(1);
         if ($contractModel === null)
             return;
 
@@ -81,7 +81,7 @@ final class CreateDefaultContractSubscriber implements EventSubscriberInterface
         // create contract basic components
 
         /*
-        $provider = new \App\Entity\MyContractPeople();
+        $provider = new \ControleOnline\Entity\MyContractPeople();
 
         $provider->setContract  ($entity);
         $provider->setPeople    ($peopleProvider);

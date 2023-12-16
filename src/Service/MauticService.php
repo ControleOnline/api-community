@@ -9,9 +9,9 @@ use App\Library\Utils\Mautic\Client\Contacts;
 use App\Library\Utils\Mautic\Model\Company;
 use App\Library\Utils\Mautic\Model\Contact;
 
-use App\Entity\People as Provider;
-use App\Entity\PeopleDomain;
-use App\Entity\Config;
+use ControleOnline\Entity\People as Provider;
+use ControleOnline\Entity\PeopleDomain;
+use ControleOnline\Entity\Config;
 
 class MauticService
 {

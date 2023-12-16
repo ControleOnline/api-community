@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\PeopleSalesman;
+use ControleOnline\Entity\PeopleSalesman;
 
 
 class SearchCustomerSalesmanAction

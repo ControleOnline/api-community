@@ -8,9 +8,9 @@ use Symfony\Component\Security\Core\Security;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Service\PeopleRoleService;
-use App\Entity\SchoolClass;
+use ControleOnline\Entity\SchoolClass;
 use ControleOnline\Entity\User;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 
 class SchoolClassVoter extends Voter
 {

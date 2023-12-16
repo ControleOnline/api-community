@@ -2,7 +2,7 @@
 
 namespace App\Library\Competitor\CargoBR;
 
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\SalesOrder;
 use App\Library\Rates\Exception\ClientRequestException;
 use Exception;
 use GuzzleHttp\Client as GuzzleHttpClient;

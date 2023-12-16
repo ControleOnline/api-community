@@ -14,13 +14,13 @@ use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use App\Repository\DeliveryRegionRepository;
 use App\Repository\DeliveryTaxGroupRepository;
 
-use App\Entity\DeliveryRegion;
-use App\Entity\DeliveryRegionCity;
-use App\Entity\DeliveryTax;
-use App\Entity\DeliveryTaxGroup;
+use ControleOnline\Entity\DeliveryRegion;
+use ControleOnline\Entity\DeliveryRegionCity;
+use ControleOnline\Entity\DeliveryTax;
+use ControleOnline\Entity\DeliveryTaxGroup;
 use ControleOnline\Entity\Status;
-use App\Entity\PurchasingInvoiceTax;
-use App\Entity\SalesInvoiceTax;
+use ControleOnline\Entity\PurchasingInvoiceTax;
+use ControleOnline\Entity\SalesInvoiceTax;
 
 class FixCommand extends Command
 {
@@ -120,7 +120,7 @@ class FixCommand extends Command
     $salesInvoiceTax = $this->manager->getRepository(SalesInvoiceTax::class)
       ->createQueryBuilder('IT')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrderInvoiceTax', 'SIT', 'WITH', 'SIT.invoiceTax = IT.id AND SIT.invoiceType=:invoiceType')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoiceTax', 'SIT', 'WITH', 'SIT.invoiceTax = IT.id AND SIT.invoiceType=:invoiceType')
       ->where('IT.invoiceNumber =:invoice_number')
       ->orWhere('IT.invoiceNumber IS NULL')
       ->orWhere('IT.invoiceKey =:invoice_key')
@@ -181,7 +181,7 @@ class FixCommand extends Command
     $salesInvoiceTax = $this->manager->getRepository(SalesInvoiceTax::class)
       ->createQueryBuilder('IT')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrderInvoiceTax', 'SIT', 'WITH', 'SIT.invoiceTax = IT.id AND SIT.invoiceType=:invoiceType')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoiceTax', 'SIT', 'WITH', 'SIT.invoiceTax = IT.id AND SIT.invoiceType=:invoiceType')
       ->where('IT.invoiceNumber =:invoice_number')
       ->orWhere('IT.invoiceNumber IS NULL')
       ->orWhere('IT.invoiceKey =:invoice_key')

@@ -7,14 +7,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Doctrine\ORM\EntityManagerInterface;
 
-use App\Entity\SchoolClass;
-use App\Entity\SchoolClassStatus;
+use ControleOnline\Entity\SchoolClass;
+use ControleOnline\Entity\SchoolClassStatus;
 use ControleOnline\Entity\PurchasingOrder;
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\Status;
-use App\Entity\Team;
-use App\Entity\Particulars;
-use App\Entity\ParticularsType;
+use ControleOnline\Entity\Team;
+use ControleOnline\Entity\Particulars;
+use ControleOnline\Entity\ParticularsType;
 
 class SchoolClassCreateOrderCommand extends Command
 {

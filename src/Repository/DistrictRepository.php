@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\District;
+use ControleOnline\Entity\District;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

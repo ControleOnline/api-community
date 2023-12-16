@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\File;
-use App\Entity\People;
-use App\Entity\PeopleSalesman;
+use ControleOnline\Entity\File;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleSalesman;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
@@ -41,7 +41,7 @@ class GetMySaleCompaniesAction
       $currentUser = $this->security->getUser();
 
       /**
-       * @var \App\Entity\People
+       * @var \ControleOnline\Entity\People
        */
       $userPeople  = $currentUser->getPeople();
 

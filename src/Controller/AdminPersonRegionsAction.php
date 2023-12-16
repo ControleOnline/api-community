@@ -7,12 +7,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\People;
-use App\Entity\DeliveryRegion;
-use App\Entity\DeliveryRegionCity;
-use App\Entity\Person;
-use App\Entity\City;
-use App\Entity\State;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\DeliveryRegion;
+use ControleOnline\Entity\DeliveryRegionCity;
+use ControleOnline\Entity\Person;
+use ControleOnline\Entity\City;
+use ControleOnline\Entity\State;
 
 class AdminPersonRegionsAction
 {

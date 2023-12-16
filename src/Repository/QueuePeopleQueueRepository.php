@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\QueuePeopleQueue;
+use ControleOnline\Entity\QueuePeopleQueue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\Persistence\ManagerRegistry;

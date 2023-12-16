@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-use App\Entity\Person;
-use App\Entity\People;
-use App\Entity\File as File;
+use ControleOnline\Entity\Person;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\File as File;
 use App\Library\Utils\File as FileName;
 
 class UploadPersonImageAction

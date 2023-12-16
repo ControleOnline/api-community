@@ -7,14 +7,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\People;
-use App\Entity\Document;
-use App\Entity\Email;
-use App\Entity\Phone;
-use App\Entity\DocumentType;
-use App\Entity\Address;
-use App\Entity\PeopleEmployee;
-use App\Entity\Language;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\Email;
+use ControleOnline\Entity\Phone;
+use ControleOnline\Entity\DocumentType;
+use ControleOnline\Entity\Address;
+use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\Language;
 
 class SearchContactCompanyAction
 {

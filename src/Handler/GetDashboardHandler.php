@@ -7,9 +7,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\Dashboard;
-use App\Entity\People;
-use App\Entity\PeopleSalesman;
+use ControleOnline\Entity\Dashboard;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleSalesman;
 
 class GetDashboardHandler implements MessageHandlerInterface
 {
@@ -112,8 +112,8 @@ class GetDashboardHandler implements MessageHandlerInterface
 
     return $repository->createQueryBuilder('P')
       ->select()          
-      ->innerJoin('\App\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.company = P.id')
-      ->innerJoin('\App\Entity\PeopleSalesman', 'PS', 'WITH', 'PS.salesman = PE.company')
+      ->innerJoin('\ControleOnline\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.company = P.id')
+      ->innerJoin('\ControleOnline\Entity\PeopleSalesman', 'PS', 'WITH', 'PS.salesman = PE.company')
       ->where('PE.employee = :employee')
       ->setParameters([
           'employee' => $this->myUser->getPeople()

@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Document;
-use App\Entity\DocumentType;
-use App\Entity\Particulars;
-use App\Entity\ParticularsType;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\DocumentType;
+use ControleOnline\Entity\Particulars;
+use ControleOnline\Entity\ParticularsType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;

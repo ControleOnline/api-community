@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\SchoolProfessionalWeekly;
+use ControleOnline\Entity\SchoolProfessionalWeekly;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;

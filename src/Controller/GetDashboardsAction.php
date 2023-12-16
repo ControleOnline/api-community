@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\AbstractCustomResourceAction;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 
 class GetDashboardsAction extends AbstractCustomResourceAction
 {
@@ -745,8 +745,8 @@ class GetDashboardsAction extends AbstractCustomResourceAction
 
     return $repository->createQueryBuilder('P')
       ->select()
-      ->innerJoin('\App\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.company = P.id')
-      ->innerJoin('\App\Entity\PeopleSalesman', 'PS', 'WITH', 'PS.salesman = PE.company')
+      ->innerJoin('\ControleOnline\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.company = P.id')
+      ->innerJoin('\ControleOnline\Entity\PeopleSalesman', 'PS', 'WITH', 'PS.salesman = PE.company')
       ->where('PE.employee = :employee')
       ->setParameters([
         'employee' => $this->security()->getUser()->getPeople()

@@ -3,7 +3,7 @@
 
 namespace App\Controller;
 
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;

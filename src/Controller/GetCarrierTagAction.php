@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use ApiPlatform\Core\Exception\InvalidValueException;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\HeaderUtils;
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\SalesOrder;
 use App\Library\Tag\Html\HtmlClient;
 use App\Library\Tag\Pimaco\PimacoClient;
 use Dompdf\Dompdf;

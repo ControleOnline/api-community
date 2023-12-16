@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\MyContractModel;
+use ControleOnline\Entity\MyContractModel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

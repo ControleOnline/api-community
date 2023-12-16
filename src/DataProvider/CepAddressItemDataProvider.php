@@ -4,7 +4,7 @@ namespace App\DataProvider;
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use ApiPlatform\Core\Exception\ResourceClassNotSupportedException;
-use App\Entity\CepAddress;
+use ControleOnline\Entity\CepAddress;
 use App\Library\Postalcode\PostalcodeProviderBalancer;
 
 final class CepAddressItemDataProvider implements ItemDataProviderInterface, RestrictedDataProviderInterface

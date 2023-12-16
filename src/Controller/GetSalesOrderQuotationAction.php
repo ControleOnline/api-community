@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Address;
-use App\Entity\DeliveryTax;
+use ControleOnline\Entity\Address;
+use ControleOnline\Entity\DeliveryTax;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Entity\SalesOrder as Order;
-use App\Entity\Quotation;
+use ControleOnline\Entity\SalesOrder as Order;
+use ControleOnline\Entity\Quotation;
 use ControleOnline\Entity\Status;
 use Symfony\Component\Security\Core\Security;
 
@@ -149,7 +149,7 @@ class GetSalesOrderQuotationAction
         $packages = [];
 
         /**
-         * @var \App\Entity\OrderPackage $package
+         * @var \ControleOnline\Entity\OrderPackage $package
          */
         foreach ($order->getOrderPackage() as $package) {
             $packages[] = [
@@ -242,7 +242,7 @@ class GetSalesOrderQuotationAction
         $taxes = [];
 
         /**
-         * @var \App\Entity\QuoteDetail $quoteDetail
+         * @var \ControleOnline\Entity\QuoteDetail $quoteDetail
          */
         foreach ($quote->getQuoteDetail() as $quoteDetail) {
             $taxes[] = [
@@ -261,7 +261,7 @@ class GetSalesOrderQuotationAction
         $dtax  = null;
 
         /**
-         * @var \App\Entity\QuoteDetail $quoteDetail
+         * @var \ControleOnline\Entity\QuoteDetail $quoteDetail
          */
         foreach ($quote->getQuoteDetail() as $quoteDetail) {
             if ($quoteDetail->getDeliveryTax() !== null) {

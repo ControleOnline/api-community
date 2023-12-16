@@ -5,7 +5,7 @@ use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use ApiPlatform\Core\Exception\ResourceClassNotSupportedException;
 use App\Resource\GetSetting;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class GetSettingItemDataProvider implements

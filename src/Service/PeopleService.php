@@ -2,12 +2,12 @@
 
 namespace App\Service;
 
-use App\Entity\People;
-use App\Entity\Language;
-use App\Entity\Document;
-use App\Entity\DocumentType;
-use App\Entity\Phone;
-use App\Entity\Email;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Language;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\DocumentType;
+use ControleOnline\Entity\Phone;
+use ControleOnline\Entity\Email;
 use ControleOnline\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\Types\Boolean;

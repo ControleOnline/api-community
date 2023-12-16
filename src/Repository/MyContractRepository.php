@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\MyContract;
+use ControleOnline\Entity\MyContract;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

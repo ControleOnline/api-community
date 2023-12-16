@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\File;
+use ControleOnline\Entity\File;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

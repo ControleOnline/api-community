@@ -6,9 +6,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use App\Entity\PeopleProfessional;
-use App\Entity\People;
-use App\Entity\Document;
+use ControleOnline\Entity\PeopleProfessional;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Document;
 use App\Service\PeopleService;
 
 class CreateProfessionalAction

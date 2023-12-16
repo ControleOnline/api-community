@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\ProductOld;
+use ControleOnline\Entity\ProductOld;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

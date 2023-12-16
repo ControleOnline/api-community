@@ -8,11 +8,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Doctrine\ORM\EntityManagerInterface;
 
-use App\Entity\MyContract;
-use App\Entity\SchoolClass;
-use App\Entity\Team;
-use App\Entity\SchoolTeamSchedule;
-use App\Entity\SchoolClassStatus;
+use ControleOnline\Entity\MyContract;
+use ControleOnline\Entity\SchoolClass;
+use ControleOnline\Entity\Team;
+use ControleOnline\Entity\SchoolTeamSchedule;
+use ControleOnline\Entity\SchoolClassStatus;
 
 class SchoolClassSchedulerCommand extends Command
 {

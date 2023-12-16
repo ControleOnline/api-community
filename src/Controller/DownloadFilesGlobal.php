@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Filesb;
+use ControleOnline\Entity\Filesb;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

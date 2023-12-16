@@ -7,13 +7,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\PeopleEmployee;
-use App\Entity\People;
-use App\Entity\Person;
+use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Person;
 use ControleOnline\Entity\User;
-use App\Entity\Email;
+use ControleOnline\Entity\Email;
 use App\Service\PeopleService;
-use App\Entity\PeopleClient;
+use ControleOnline\Entity\PeopleClient;
 use App\Service\PeopleRoleService;
 
 class AdminPersonEmployeesAction

@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Controller\AbstractCustomResourceAction;
-use App\Entity\Config;
-use App\Entity\People;
+use ControleOnline\Entity\Config;
+use ControleOnline\Entity\People;
 
 class GetSettingAction extends AbstractCustomResourceAction
 {

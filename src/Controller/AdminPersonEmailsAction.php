@@ -7,9 +7,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\People;
-use App\Entity\Email;
-use App\Entity\Person;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Email;
+use ControleOnline\Entity\Person;
 
 class AdminPersonEmailsAction
 {

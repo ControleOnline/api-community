@@ -8,9 +8,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use ControleOnline\Entity\User;
-use App\Entity\Person;
+use ControleOnline\Entity\Person;
 
 class AdminPersonUsersAction
 {

@@ -7,9 +7,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 
-use App\Entity\Config;
-use App\Entity\People;
-use App\Entity\PeopleDomain;
+use ControleOnline\Entity\Config;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleDomain;
 use App\Service\PeopleRoleService;
 
 class GetDefaultCompanyAction

@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\PeoplePackage;
+use ControleOnline\Entity\PeoplePackage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

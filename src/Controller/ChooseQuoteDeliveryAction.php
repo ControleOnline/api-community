@@ -10,9 +10,9 @@ use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use ControleOnline\Entity\PurchasingOrder as Order;
-use App\Entity\People;
-use App\Entity\Document;
-use App\Entity\Language;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\Language;
 use App\Service\AddressService;
 use App\Service\PeopleService;
 

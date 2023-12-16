@@ -7,12 +7,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-use App\Entity\People;
-use App\Entity\MyContract;
-use App\Entity\Contract;
-use App\Entity\MyContractModel;
-use App\Entity\MyContractPeople;
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\MyContract;
+use ControleOnline\Entity\Contract;
+use ControleOnline\Entity\MyContractModel;
+use ControleOnline\Entity\MyContractPeople;
+use ControleOnline\Entity\SalesOrder;
 use App\Repository\ContractRepository;
 
 class CreateContractAction

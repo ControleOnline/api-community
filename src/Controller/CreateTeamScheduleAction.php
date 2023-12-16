@@ -2,15 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\Contract;
-use App\Entity\MyContract;
-use App\Entity\MyContractPeople;
-use App\Entity\People;
-use App\Entity\PeopleTeam;
-use App\Entity\PeopleProfessional;
-use App\Entity\SchoolTeamSchedule;
-use App\Entity\SchoolProfessionalWeekly;
-use App\Entity\Team;
+use ControleOnline\Entity\Contract;
+use ControleOnline\Entity\MyContract;
+use ControleOnline\Entity\MyContractPeople;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleTeam;
+use ControleOnline\Entity\PeopleProfessional;
+use ControleOnline\Entity\SchoolTeamSchedule;
+use ControleOnline\Entity\SchoolProfessionalWeekly;
+use ControleOnline\Entity\Team;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -33,7 +33,7 @@ class CreateTeamScheduleAction
     /**
      * Professional people
      *
-     * @var \App\Entity\People
+     * @var \ControleOnline\Entity\People
      */
     private $professional   = null;
 
@@ -135,7 +135,7 @@ class CreateTeamScheduleAction
             foreach ($data['students'] as $student) {
                 if (isset($student['peopleContractId'])) {
                     /**
-                     * @var \App\Entity\MyContractPeople $contractPeople
+                     * @var \ControleOnline\Entity\MyContractPeople $contractPeople
                      */
                     $contractPeople = $this->manager->getRepository(MyContractPeople::class)
                         ->findOneBy([
@@ -158,7 +158,7 @@ class CreateTeamScheduleAction
             throw new \Exception('People professional id is not defined', 400);
         else {
             /**
-             * @var \App\Entity\PeopleProfessional $peopleProfessional
+             * @var \ControleOnline\Entity\PeopleProfessional $peopleProfessional
              */
             $peopleProfessional = $this->manager->getRepository(PeopleProfessional::class)->find($data['peopleProfessionalId']);
 

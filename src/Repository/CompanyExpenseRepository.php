@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\CompanyExpense;
+use ControleOnline\Entity\CompanyExpense;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use App\Entity\DeliveryTaxGroup;
+use ControleOnline\Entity\DeliveryTaxGroup;
 use Doctrine\ORM\Query\ResultSetMapping;
 
 class GetTablesAction

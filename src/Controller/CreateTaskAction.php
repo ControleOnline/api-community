@@ -7,11 +7,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
-use App\Entity\Task;
-use App\Entity\People;
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\Task;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\Category;
-use App\Entity\TaskInteration;
+use ControleOnline\Entity\TaskInteration;
 use ControleOnline\Entity\Status;
 use Exception;
 

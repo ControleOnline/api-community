@@ -6,9 +6,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use ControleOnline\Entity\Status;
-use App\Entity\Quotation;
+use ControleOnline\Entity\Quotation;
 
-use App\Entity\SalesOrder as Order;
+use ControleOnline\Entity\SalesOrder as Order;
 
 class UpdateSalesOrderDeadlineAction
 {

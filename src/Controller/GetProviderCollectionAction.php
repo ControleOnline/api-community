@@ -7,8 +7,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use App\Entity\Provider;
-use App\Entity\People;
+use ControleOnline\Entity\Provider;
+use ControleOnline\Entity\People;
 use App\Repository\ProviderRepository;
 
 class GetProviderCollectionAction

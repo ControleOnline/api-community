@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\CarrierIntegration;
+use ControleOnline\Entity\CarrierIntegration;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

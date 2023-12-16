@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Quotation;
-use App\Entity\SalesOrder;
-use App\Entity\PeopleDomain;
+use ControleOnline\Entity\Quotation;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\PeopleDomain;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\HeaderUtils;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
 use ApiPlatform\Core\Exception\InvalidValueException;
-use App\Entity\Config;
+use ControleOnline\Entity\Config;
 use ControleOnline\Entity\Status;
 
 

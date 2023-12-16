@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Menu;
-use App\Entity\People;
+use ControleOnline\Entity\Menu;
+use ControleOnline\Entity\People;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -45,7 +45,7 @@ class GetMenuByPeopleAction
   {
     $this->manager    = $entityManager;
     $this->security   = $security;
-    $this->repository = $this->manager->getRepository(\App\Entity\Menu::class);
+    $this->repository = $this->manager->getRepository(\ControleOnline\Entity\Menu::class);
   }
 
   public function __invoke(Request $request): JsonResponse

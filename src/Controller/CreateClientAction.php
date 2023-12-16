@@ -2,19 +2,19 @@
 
 namespace App\Controller;
 
-use App\Entity\Document;
-use App\Entity\DocumentType;
-use App\Entity\Particulars;
-use App\Entity\ParticularsType;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\DocumentType;
+use ControleOnline\Entity\Particulars;
+use ControleOnline\Entity\ParticularsType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\People;
-use App\Entity\PeopleClient;
-use App\Entity\PeopleEmployee;
-use App\Entity\PeopleSalesman;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleClient;
+use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleSalesman;
 use App\Service\PeopleService;
 use App\Service\AddressService;
 use App\Service\PeopleRoleService;
@@ -59,14 +59,14 @@ class CreateClientAction
     /**
      * People Entity
      *
-     * @var \App\Entity\People
+     * @var \ControleOnline\Entity\People
      */
     private $client   = null;
 
     /**
      * People Entity
      *
-     * @var \App\Entity\People
+     * @var \ControleOnline\Entity\People
      */
     private $contact  = null;
 
@@ -466,8 +466,8 @@ class CreateClientAction
 
         $companies  = $repository->createQueryBuilder('P')
             ->select()
-            ->innerJoin('\App\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.company = P.id')
-            ->innerJoin('\App\Entity\PeopleSalesman', 'PS', 'WITH', 'PS.salesman = PE.company')
+            ->innerJoin('\ControleOnline\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.company = P.id')
+            ->innerJoin('\ControleOnline\Entity\PeopleSalesman', 'PS', 'WITH', 'PS.salesman = PE.company')
             ->where('PE.employee = :employee')
             ->setParameters([
                 'employee' => $this->currentUser->getPeople()

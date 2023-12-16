@@ -8,7 +8,7 @@ use App\Library\Provider\Signature\Exception\InvalidParameterException;
 use App\Library\Provider\Signature\Clicksign\Document;
 use App\Library\Provider\Signature\Clicksign\User;
 use App\Library\Provider\Signature\Clicksign\Signer;
-use App\Entity\Contract;
+use ControleOnline\Entity\Contract;
 
 class Documents
 {

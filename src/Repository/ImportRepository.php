@@ -5,7 +5,7 @@ namespace App\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\ResultSetMapping;
-use App\Entity\Import;
+use ControleOnline\Entity\Import;
 
 class ImportRepository extends ServiceEntityRepository
 {

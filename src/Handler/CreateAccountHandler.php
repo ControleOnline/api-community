@@ -7,12 +7,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-use App\Entity\Account;
+use ControleOnline\Entity\Account;
 use ControleOnline\Entity\User;
-use App\Entity\People;
-use App\Entity\Email;
-use App\Entity\Language;
-use App\Entity\Phone;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Email;
+use ControleOnline\Entity\Language;
+use ControleOnline\Entity\Phone;
 
 class CreateAccountHandler implements MessageHandlerInterface
 {

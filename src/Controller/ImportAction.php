@@ -9,8 +9,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\Security;
-use App\Entity\File as File;
-use App\Entity\Import;
+use ControleOnline\Entity\File as File;
+use ControleOnline\Entity\Import;
 
 use App\Library\Utils\File as FileName;
 

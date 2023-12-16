@@ -2,10 +2,10 @@
 
 namespace App\Repository;
 
-use App\Entity\DeliveryTax;
+use ControleOnline\Entity\DeliveryTax;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use App\Entity\DeliveryTaxGroup;
+use ControleOnline\Entity\DeliveryTaxGroup;
 
 /**
  * @method DeliveryTax|null find($id, $lockMode = null, $lockVersion = null)

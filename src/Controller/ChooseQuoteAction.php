@@ -10,16 +10,16 @@ use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use ControleOnline\Entity\PurchasingOrder as Order;
-use App\Entity\Address;
-use App\Entity\Email;
-use App\Entity\People;
-use App\Entity\Phone;
-use App\Entity\Language;
+use ControleOnline\Entity\Address;
+use ControleOnline\Entity\Email;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Phone;
+use ControleOnline\Entity\Language;
 use ControleOnline\Entity\Status;
-use App\Entity\Document;
-use App\Entity\DocumentType;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\DocumentType;
 use ControleOnline\Entity\PurchasingOrder;
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\SalesOrder;
 use App\Service\AddressService;
 use App\Service\PeopleService;
 

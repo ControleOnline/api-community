@@ -4,7 +4,7 @@ namespace App\Service;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use App\Library\Utils\GMaps;
-use App\Entity\GeoPlace;
+use ControleOnline\Entity\GeoPlace;
 
 class GMapsService
 {

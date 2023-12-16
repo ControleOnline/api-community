@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\OrderLogistic;
+use ControleOnline\Entity\OrderLogistic;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

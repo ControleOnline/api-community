@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Quotation;
+use ControleOnline\Entity\Quotation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\ResultSetMapping;

@@ -5,11 +5,11 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Entity\SalesOrder as Order;
-use App\Entity\Quotation;
-use \App\Entity\People;
-use App\Entity\QuoteDetail;
-use App\Entity\CarrierIntegration;
+use ControleOnline\Entity\SalesOrder as Order;
+use ControleOnline\Entity\Quotation;
+use \ControleOnline\Entity\People;
+use ControleOnline\Entity\QuoteDetail;
+use ControleOnline\Entity\CarrierIntegration;
 
 class GetSalesStatusAction
 {
@@ -42,7 +42,7 @@ class GetSalesStatusAction
         $productType = $data->getProductType();
 
         /**
-         * @var \App\Entity\SalesOrderInvoiceTax $invoice
+         * @var \ControleOnline\Entity\SalesOrderInvoiceTax $invoice
          */
 
         $invoiceTax = [];
@@ -160,7 +160,7 @@ class GetSalesStatusAction
         // order package
 
         /**
-         * @var \App\Entity\OrderPackage $package
+         * @var \ControleOnline\Entity\OrderPackage $package
          */
 
         $pkgTotal = $data->getOrderPackage() ? 0 : 1;

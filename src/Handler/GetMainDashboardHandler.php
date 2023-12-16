@@ -7,8 +7,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\MainDashboard;
-use App\Entity\People;
+use ControleOnline\Entity\MainDashboard;
+use ControleOnline\Entity\People;
 
 class GetMainDashboardHandler implements MessageHandlerInterface
 {
@@ -119,7 +119,7 @@ class GetMainDashboardHandler implements MessageHandlerInterface
 
     return $repository->createQueryBuilder('P')
       ->select()
-      ->innerJoin('\App\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.company = P.id')
+      ->innerJoin('\ControleOnline\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.company = P.id')
       ->where('PE.employee = :employee')
       ->setParameters([
           'employee' => $this->myUser->getPeople()

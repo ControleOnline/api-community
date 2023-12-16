@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\ComissionOrder;
+use ControleOnline\Entity\ComissionOrder;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

@@ -7,11 +7,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\PeopleClient;
-use App\Entity\PeopleSalesman;
-use App\Entity\People;
-use App\Entity\Document;
-use App\Entity\Email;
+use ControleOnline\Entity\PeopleClient;
+use ControleOnline\Entity\PeopleSalesman;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\Email;
 use App\Service\PeopleService;
 use App\Service\PeopleRoleService;
 use App\Service\AddressService;
@@ -332,8 +332,8 @@ class CreatePeopleCustomerAction
 
         $companies  = $repository->createQueryBuilder('P')
             ->select()
-            ->innerJoin('\App\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.company = P.id')
-            ->innerJoin('\App\Entity\PeopleSalesman', 'PS', 'WITH', 'PS.salesman = PE.company')
+            ->innerJoin('\ControleOnline\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.company = P.id')
+            ->innerJoin('\ControleOnline\Entity\PeopleSalesman', 'PS', 'WITH', 'PS.salesman = PE.company')
             ->where('PE.employee = :employee')
             ->setParameters([
                 'employee' => $this->currentUser->getPeople()

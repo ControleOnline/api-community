@@ -7,9 +7,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\People;
-use App\Entity\Phone;
-use App\Entity\Person;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Phone;
+use ControleOnline\Entity\Person;
 
 class AdminPersonPhonesAction
 {

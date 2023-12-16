@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\DeliveryRestrictionMaterial;
+use ControleOnline\Entity\DeliveryRestrictionMaterial;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

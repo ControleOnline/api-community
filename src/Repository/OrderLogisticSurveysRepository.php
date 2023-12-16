@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\OrderLogisticSurveys;
+use ControleOnline\Entity\OrderLogisticSurveys;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;

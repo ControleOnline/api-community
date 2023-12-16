@@ -10,16 +10,16 @@ use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-use App\Entity\City;
-use App\Entity\People;
-use App\Entity\Address;
-use App\Entity\MyContract;
-use App\Entity\SalesOrder;
-use App\Entity\SchoolTeamSchedule;
-use App\Entity\Team;
-use App\Entity\Particulars;
+use ControleOnline\Entity\City;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Address;
+use ControleOnline\Entity\MyContract;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\SchoolTeamSchedule;
+use ControleOnline\Entity\Team;
+use ControleOnline\Entity\Particulars;
 use App\Library\Utils\Formatter;
-use App\Entity\MyContractProduct;
+use ControleOnline\Entity\MyContractProduct;
 
 
 class ContractDocument

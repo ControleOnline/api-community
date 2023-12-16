@@ -8,10 +8,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
 
-use App\Entity\OrderNf;
-use App\Entity\SalesInvoiceTax;
-use App\Entity\SalesOrder;
-use App\Entity\SalesOrderInvoiceTax;
+use ControleOnline\Entity\OrderNf;
+use ControleOnline\Entity\SalesInvoiceTax;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\SalesOrderInvoiceTax;
 use App\Repository\SalesOrderRepository;
 
 class GetOrderByNfHandler implements MessageHandlerInterface

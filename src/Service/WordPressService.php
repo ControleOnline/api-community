@@ -4,7 +4,7 @@ namespace App\Service;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use App\Library\Utils\WordPress;
-use App\Entity\Posts;
+use ControleOnline\Entity\Posts;
 
 class WordPressService
 {

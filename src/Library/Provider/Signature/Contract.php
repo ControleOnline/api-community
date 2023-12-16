@@ -2,16 +2,16 @@
 
 namespace App\Library\Provider\Signature;
 
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use App\Library\Provider\Signature\Document;
 use App\Library\Provider\Signature\Signer;
 use App\Service\SignatureService;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\MyContract;
+use ControleOnline\Entity\MyContract;
 use App\Library\Provider\Signature\Exception\InvalidParameterException;
 use App\Library\Provider\Signature\Exception\ProviderRequestException;
 use App\Library\Exception\MissingDataException;
-use App\Entity\PeopleDomain;
+use ControleOnline\Entity\PeopleDomain;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use App\Library\Provider\Signature\ContractDocument;

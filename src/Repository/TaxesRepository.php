@@ -220,22 +220,22 @@ class TaxesRepository
       $provider = null;
 
       if ($params['isMainCompany']) {
-        $stateo  = $this->manager->getRepository(\App\Entity\State::class)->findOneBy(['uf' => $params['stateOriginName']]);
-        $pstates = $this->manager->getRepository(\App\Entity\PeopleStates::class)
+        $stateo  = $this->manager->getRepository(\ControleOnline\Entity\State::class)->findOneBy(['uf' => $params['stateOriginName']]);
+        $pstates = $this->manager->getRepository(\ControleOnline\Entity\PeopleStates::class)
           ->findBy(['state' => $stateo]);
 
         if (!empty($pstates)) {
           $provider = $pstates[0]->getPeople();
         }
       } else {
-        $provider = $this->manager->find(\App\Entity\People::class, $params['companyId']);
+        $provider = $this->manager->find(\ControleOnline\Entity\People::class, $params['companyId']);
       }
 
       if ($provider !== null) {
         $people  = $this->user->getPeople();
         $isAdmin = $provider->getPeopleEmployee()
           ->exists(
-            function ($key, \App\Entity\PeopleEmployee $peopleEmployee) use ($people) {
+            function ($key, \ControleOnline\Entity\PeopleEmployee $peopleEmployee) use ($people) {
               return $peopleEmployee->getEmployee() === $people;
             }
           );

@@ -2,17 +2,17 @@
 
 namespace App\Controller;
 
-use App\Entity\Address;
+use ControleOnline\Entity\Address;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Entity\SalesOrder as Order;
-use App\Entity\Street;
-use App\Entity\District;
-use App\Entity\City;
-use App\Entity\Cep;
-use App\Entity\SalesOrder;
-use App\Entity\State;
+use ControleOnline\Entity\SalesOrder as Order;
+use ControleOnline\Entity\Street;
+use ControleOnline\Entity\District;
+use ControleOnline\Entity\City;
+use ControleOnline\Entity\Cep;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\State;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 

@@ -7,14 +7,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Doctrine\ORM\EntityManagerInterface;
 
-use App\Entity\MyContract;
-use App\Entity\SalesOrder;
-use App\Entity\People;
+use ControleOnline\Entity\MyContract;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\People;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\ReceiveInvoice;
-use App\Entity\SalesOrderInvoice;
-use App\Entity\MyContractProductPayment;
-use App\Entity\MyContractOrderInvoice;
+use ControleOnline\Entity\SalesOrderInvoice;
+use ControleOnline\Entity\MyContractProductPayment;
+use ControleOnline\Entity\MyContractOrderInvoice;
 
 class SchoolClassPayerInvoiceCommand extends Command
 {

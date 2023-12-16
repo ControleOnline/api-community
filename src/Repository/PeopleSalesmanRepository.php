@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\People;
-use App\Entity\PeopleSalesman;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleSalesman;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\DBAL\DBALException;

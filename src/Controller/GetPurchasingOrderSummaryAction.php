@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Address;
+use ControleOnline\Entity\Address;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use ControleOnline\Entity\PurchasingOrder as Order;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 
 class GetPurchasingOrderSummaryAction
 {
@@ -66,7 +66,7 @@ class GetPurchasingOrderSummaryAction
     private function getQuoteData(Order $order): ?array
     {
         /**
-         * @var \App\Entity\Quotation
+         * @var \ControleOnline\Entity\Quotation
          */
         if (($quote = $order->getQuotes()->first()) === false)
             return null;
@@ -200,7 +200,7 @@ class GetPurchasingOrderSummaryAction
             return null;
 
         /**
-         * @var \App\Entity\Document $document
+         * @var \ControleOnline\Entity\Document $document
          */
         if (($document = $people->getDocument()->first()) === false)
             return null;

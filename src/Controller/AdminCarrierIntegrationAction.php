@@ -6,9 +6,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use App\Entity\Carrier;
-use App\Entity\People;
-use App\Entity\CarrierIntegration;
+use ControleOnline\Entity\Carrier;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\CarrierIntegration;
 
 class AdminCarrierIntegrationAction
 {

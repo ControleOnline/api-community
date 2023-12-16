@@ -8,9 +8,9 @@ use Symfony\Component\Security\Core\Security;
 use Doctrine\ORM\EntityManagerInterface;
 
 use App\Service\PeopleRoleService;
-use App\Entity\Provider;
+use ControleOnline\Entity\Provider;
 use ControleOnline\Entity\User;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 
 class ProviderVoter extends Voter
 {

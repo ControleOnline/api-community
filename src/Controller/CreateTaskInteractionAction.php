@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Task;
-use App\Entity\File as File;
-use App\Entity\TaskInteration;
+use ControleOnline\Entity\Task;
+use ControleOnline\Entity\File as File;
+use ControleOnline\Entity\TaskInteration;
 use App\Library\Utils\File as FileName;
 use Doctrine\ORM\EntityManagerInterface;
 use stdClass;

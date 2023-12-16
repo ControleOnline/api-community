@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Contract;
-use App\Entity\People;
-use App\Entity\PeopleDomain;
-use App\Entity\PeopleEmployee;
-use App\Entity\PeopleFranchisee;
-use App\Entity\PeopleSalesman;
+use ControleOnline\Entity\Contract;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleDomain;
+use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleFranchisee;
+use ControleOnline\Entity\PeopleSalesman;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

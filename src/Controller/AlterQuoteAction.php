@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Address;
+use ControleOnline\Entity\Address;
 use ControleOnline\Entity\Status;
-use App\Entity\Quotation;
+use ControleOnline\Entity\Quotation;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Entity\SalesOrder as Order;
+use ControleOnline\Entity\SalesOrder as Order;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -38,7 +38,7 @@ class AlterQuoteAction
             if ($quote_id) {
                 $this->manager->getConnection()->beginTransaction();
                 /**
-                 * @var \App\Entity\Quotation $quote
+                 * @var \ControleOnline\Entity\Quotation $quote
                  */
 
                 $quote = $this->manager->getRepository(Quotation::class)->find($quote_id);

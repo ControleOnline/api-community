@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Role;
+use ControleOnline\Entity\Role;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\Persistence\ManagerRegistry;

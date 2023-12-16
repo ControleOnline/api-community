@@ -7,25 +7,25 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\Company;
-use App\Entity\Document;
-use App\Entity\DocumentType;
-use App\Entity\Language;
+use ControleOnline\Entity\Company;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\DocumentType;
+use ControleOnline\Entity\Language;
 use ControleOnline\Entity\User;
-use App\Entity\People;
-use App\Entity\PeopleEmployee;
-use App\Entity\PeopleClient;
-use App\Entity\PeopleDomain;
-use App\Entity\Country;
-use App\Entity\State;
-use App\Entity\City;
-use App\Entity\Address;
-use App\Entity\District;
-use App\Entity\Street;
-use App\Entity\Cep;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleClient;
+use ControleOnline\Entity\PeopleDomain;
+use ControleOnline\Entity\Country;
+use ControleOnline\Entity\State;
+use ControleOnline\Entity\City;
+use ControleOnline\Entity\Address;
+use ControleOnline\Entity\District;
+use ControleOnline\Entity\Street;
+use ControleOnline\Entity\Cep;
 use App\Library\Utils\Address as AddressComponents;
-use App\Entity\SalesOrder;
-use App\Entity\PeopleStates;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\PeopleStates;
 
 class CreateCompanyHandler implements MessageHandlerInterface
 {

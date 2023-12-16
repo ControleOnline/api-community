@@ -2,15 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\Client;
-use App\Entity\Document;
-use App\Entity\Email;
+use ControleOnline\Entity\Client;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\Email;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use App\Entity\People;
-use App\Entity\Phone;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Phone;
 use App\Service\PeopleService;
 
 class UpdateClientAction
@@ -39,7 +39,7 @@ class UpdateClientAction
     /**
      * Client entity
      *
-     * @var \App\Entity\Client
+     * @var \ControleOnline\Entity\Client
      */
     private $client   = null;
 
@@ -118,7 +118,7 @@ class UpdateClientAction
 
         if (isset($data['contact'])) {
             /**
-             * @var \App\Entity\People
+             * @var \ControleOnline\Entity\People
              */
             $contact = $this->manager->getRepository(People::class)->find($data['contact']['id']);
             if ($contact === null)
@@ -146,13 +146,13 @@ class UpdateClientAction
             if (isset($data['contact']['email'])) {
     
                 /**
-                 * @var \App\Entity\Email
+                 * @var \ControleOnline\Entity\Email
                  */
                 $_email = $this->manager->getRepository(Email::class)->findOneBy(['email' => $data['contact']['email']]);
     
                 if (!$contact->getEmail()->isEmpty()) {
                     /**
-                     * @var \App\Entity\Email
+                     * @var \ControleOnline\Entity\Email
                      */
                     $email = $contact->getEmail()->first();
     
@@ -179,7 +179,7 @@ class UpdateClientAction
     
             if (isset($data['contact']['phone'])) {
                 /**
-                 * @var \App\Entity\Phone
+                 * @var \ControleOnline\Entity\Phone
                  */
                 $_phone = $this->manager->getRepository(Phone::class)
                     ->findOneBy([
@@ -189,7 +189,7 @@ class UpdateClientAction
     
                 if (!$contact->getPhone()->isEmpty()) {
                     /**
-                     * @var \App\Entity\Phone
+                     * @var \ControleOnline\Entity\Phone
                      */
                     $phone  = $contact->getPhone()->first();
                     $number = $phone->getDdd() . $phone->getPhone();

@@ -8,9 +8,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\SignatureService;
-use App\Entity\MyContract;
-use App\Entity\People;
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\MyContract;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\Status;
 use App\Library\Provider\Signature\Contract as SignatureContract;
 
@@ -143,7 +143,7 @@ class ActiveContractCommand extends Command
     return $this->manager->getRepository(MyContract::class)
       ->createQueryBuilder('contract')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrder', 'O', 'WITH', 'contract.id = O.contract')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'contract.id = O.contract')
       ->where('contract.contractStatus IN (:contract_status)')
       ->andWhere('O.status IN (:status)')
       ->setParameters([

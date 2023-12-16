@@ -9,7 +9,7 @@ use App\Library\Nuvemshop\Model\Order;
 use App\Library\Nuvemshop\Model\Customer;
 use App\Library\Nuvemshop\Model\Address;
 use App\Library\Nuvemshop\Model\Carrier;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 
 class Client
 {

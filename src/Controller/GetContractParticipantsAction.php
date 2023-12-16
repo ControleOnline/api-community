@@ -7,9 +7,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\People;
-use App\Entity\Address;
-use App\Entity\MyContract;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Address;
+use ControleOnline\Entity\MyContract;
 
 class GetContractParticipantsAction
 {
@@ -50,7 +50,7 @@ class GetContractParticipantsAction
 
             if (!$data->getContractPeople()->isEmpty()) {
                 /**
-                 * @var \App\Entity\MyContractPeople $contractPeople
+                 * @var \ControleOnline\Entity\MyContractPeople $contractPeople
                  */
                 foreach ($data->getContractPeople() as $contractPeople) {
                     $participants[] = [

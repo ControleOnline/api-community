@@ -9,11 +9,11 @@ use App\Library\Rates\CarrierRatesInterface;
 use App\Library\Rates\Model\User;
 use App\Library\Rates\Model\Quotation;
 use App\Library\Rates\Model\Rate;
-use App\Entity\SalesOrderInvoiceTax;
-use App\Entity\SalesOrder;
-use App\Entity\People;
-use App\Entity\Document;
-use App\Entity\Address;
+use ControleOnline\Entity\SalesOrderInvoiceTax;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\Address;
 
 class Client implements CarrierRatesInterface
 {

@@ -9,9 +9,9 @@ use App\Library\Rates\Jadlog\Client as JadlogClient;
 use Symfony\Component\Security\Core\Security;
 use \App\Library\Rates\RateServiceFactory;
 
-use App\Entity\File as FileEntity;
-use App\Entity\SalesOrder;
-use App\Entity\Label;
+use ControleOnline\Entity\File as FileEntity;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Label;
 
 class CreateNewLabel
 {

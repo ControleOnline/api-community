@@ -4,9 +4,9 @@ namespace App\Service;
 
 use Symfony\Component\Security\Core\Security;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use ControleOnline\Entity\User;
-use App\Entity\PeopleSalesman;
+use ControleOnline\Entity\PeopleSalesman;
 
 class UserCompanyService
 {

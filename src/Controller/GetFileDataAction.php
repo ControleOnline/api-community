@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\File;
+use ControleOnline\Entity\File;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\Request;

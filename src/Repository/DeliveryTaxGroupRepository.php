@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\DeliveryTaxGroup;
+use ControleOnline\Entity\DeliveryTaxGroup;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -46,7 +46,7 @@ class DeliveryTaxGroupRepository extends ServiceEntityRepository
     {
       $qb = $this->getEntityManager()->createQueryBuilder();
 
-      $sm = $qb->update('App\Entity\DeliveryTax', 'dtx');
+      $sm = $qb->update('ControleOnline\Entity\DeliveryTax', 'dtx');
 
       $sm->set('dtx.price', '(dtx.price * ?1)');
 

@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Phone;
+use ControleOnline\Entity\Phone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

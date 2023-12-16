@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Contract;
+use ControleOnline\Entity\Contract;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\DBALException;
 use Doctrine\Persistence\ManagerRegistry;

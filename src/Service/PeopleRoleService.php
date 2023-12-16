@@ -2,12 +2,12 @@
 
 namespace App\Service;
 
-use App\Entity\People;
-use App\Entity\PeopleClient;
-use App\Entity\PeopleDomain;
-use App\Entity\PeopleSalesman;
-use App\Entity\PeopleEmployee;
-use App\Entity\PeopleFranchisee;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleClient;
+use ControleOnline\Entity\PeopleDomain;
+use ControleOnline\Entity\PeopleSalesman;
+use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleFranchisee;
 use ControleOnline\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;

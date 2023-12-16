@@ -11,8 +11,8 @@ use \PhpSigep\Model\Remetente;
 use \PhpSigep\Model\SolicitaEtiquetas;
 use \PhpSigep\Model\Dimensao;
 use \PhpSigep\Model\ServicoDePostagem;
-use App\Entity\SalesOrder;
-use App\Entity\People;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\People;
 use App\Library\Tag\AbstractTag;
 
 class CorreiosClient  extends AbstractTag

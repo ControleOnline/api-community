@@ -4,10 +4,10 @@ namespace App\Filter;
 
 use ApiPlatform\Doctrine\Orm\Filter\AbstractFilter;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
-use App\Entity\Task;
+use ControleOnline\Entity\Task;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use ApiPlatform\Metadata\Operation;
 use ControleOnline\Entity\PurchasingOrder AS Order;
 use Doctrine\ORM\QueryBuilder;

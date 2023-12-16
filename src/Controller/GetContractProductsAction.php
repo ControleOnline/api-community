@@ -7,9 +7,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\People;
-use App\Entity\MyContract;
-use App\Entity\MyContractProduct;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\MyContract;
+use ControleOnline\Entity\MyContractProduct;
 
 class GetContractProductsAction
 {

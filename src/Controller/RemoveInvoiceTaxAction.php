@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\SalesInvoiceTax;
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\SalesInvoiceTax;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\PurchasingOrder;
 use ControleOnline\Entity\Status;
 use Doctrine\ORM\EntityManagerInterface;

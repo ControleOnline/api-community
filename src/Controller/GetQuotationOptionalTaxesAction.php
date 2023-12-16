@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Address;
-use App\Entity\Quotation;
+use ControleOnline\Entity\Address;
+use ControleOnline\Entity\Quotation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Library\Quote\View\Group   as TaxesView;
@@ -81,7 +81,7 @@ class GetQuotationOptionalTaxesAction
   private function getParams(Quotation $quotation): TaxesData
   {
     /**
-     * @var \App\Entity\SalesOrder
+     * @var \ControleOnline\Entity\SalesOrder
      */
     $order    = $quotation->getOrder();
     $oaddress = $this->getAddressData($order->getAddressOrigin());

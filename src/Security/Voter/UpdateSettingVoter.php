@@ -11,7 +11,7 @@ use App\Service\PeopleRoleService;
 use App\Service\UserCompanyService;
 use App\Resource\UpdateSetting;
 use ControleOnline\Entity\User;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 
 class UpdateSettingVoter extends Voter
 {

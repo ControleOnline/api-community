@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Repository\ImportRepository;
 
-use App\Entity\Import;
+use ControleOnline\Entity\Import;
 
 class GetImportsAction
 {

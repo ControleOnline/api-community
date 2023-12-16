@@ -7,8 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use App\Repository\PeopleRepository;
-use App\Entity\People;
-use App\Entity\PeopleCarrier;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleCarrier;
 
 class ChangeCarrierStatusAction
 {

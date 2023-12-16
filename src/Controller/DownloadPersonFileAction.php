@@ -9,8 +9,8 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use App\Entity\Person;
-use App\Entity\File as File;
+use ControleOnline\Entity\Person;
+use ControleOnline\Entity\File as File;
 
 class DownloadPersonFileAction
 {

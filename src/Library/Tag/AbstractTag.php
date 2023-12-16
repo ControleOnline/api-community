@@ -2,8 +2,8 @@
 
 namespace App\Library\Tag;
 
-use App\Entity\People;
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\SalesOrder;
 use App\Library\Utils\Formatter;
 use Picqer\Barcode\BarcodeGeneratorHTML;
 use Picqer\Barcode\BarcodeGeneratorPNG;
@@ -40,7 +40,7 @@ abstract class AbstractTag
   protected function _getOrdersTemplateParams(SalesOrder $order): array
   {
     /**
-     * @var \App\Entity\SalesOrder
+     * @var \ControleOnline\Entity\SalesOrder
      */
     $salesOrder   = $order;
     $provider     = $salesOrder->getProvider();
@@ -129,14 +129,14 @@ abstract class AbstractTag
       $retrieveData['contact']['alias'] = $salesOrder->getRetrieveContact()->getAlias();
 
       /**
-       * @var \App\Entity\Email $email
+       * @var \ControleOnline\Entity\Email $email
        */
       foreach ($salesOrder->getRetrieveContact()->getEmail() as $email) {
         $retrieveData['contact']['emails'][] = $email->getEmail();
       }
 
       /**
-       * @var \App\Entity\Phone $phone
+       * @var \ControleOnline\Entity\Phone $phone
        */
       foreach ($salesOrder->getRetrieveContact()->getPhone() as $phone) {
         $retrieveData['contact']['phones'][] = [
@@ -190,14 +190,14 @@ abstract class AbstractTag
       $deliveryData['contact']['alias'] = $salesOrder->getDeliveryContact()->getAlias();
 
       /**
-       * @var \App\Entity\Email $email
+       * @var \ControleOnline\Entity\Email $email
        */
       foreach ($salesOrder->getDeliveryContact()->getEmail() as $email) {
         $deliveryData['contact']['emails'][] = $email->getEmail();
       }
 
       /**
-       * @var \App\Entity\Phone $phone
+       * @var \ControleOnline\Entity\Phone $phone
        */
       foreach ($salesOrder->getDeliveryContact()->getPhone() as $phone) {
         $deliveryData['contact']['phones'][] = [
@@ -234,7 +234,7 @@ abstract class AbstractTag
     // order package
 
     /**
-     * @var \App\Entity\OrderPackage $package
+     * @var \ControleOnline\Entity\OrderPackage $package
      */
 
     $pkgTotal = $salesOrder->getOrderPackage() ? 0 : 1;
@@ -256,7 +256,7 @@ abstract class AbstractTag
 
 
     /**
-     * @var \App\Entity\SalesInvoiceTax $receiveInvoice
+     * @var \ControleOnline\Entity\SalesInvoiceTax $receiveInvoice
      */
     $receiveInvoice = $salesOrder->getClientInvoiceTax();
     $barCode = new BarcodeGeneratorPNG();

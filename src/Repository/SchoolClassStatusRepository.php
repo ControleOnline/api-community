@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\SchoolClassStatus;
+use ControleOnline\Entity\SchoolClassStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

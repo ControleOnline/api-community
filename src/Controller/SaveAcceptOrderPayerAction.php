@@ -2,21 +2,21 @@
 
 namespace App\Controller;
 
-use App\Entity\Cep;
-use App\Entity\City;
-use App\Entity\State;
-use App\Entity\Phone;
-use App\Entity\Email;
-use App\Entity\People;
-use App\Entity\Street;
-use App\Entity\Address;
-use App\Entity\Document;
-use App\Entity\District;
-use App\Entity\Language;
-use App\Entity\DocumentType;
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\Cep;
+use ControleOnline\Entity\City;
+use ControleOnline\Entity\State;
+use ControleOnline\Entity\Phone;
+use ControleOnline\Entity\Email;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Street;
+use ControleOnline\Entity\Address;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\District;
+use ControleOnline\Entity\Language;
+use ControleOnline\Entity\DocumentType;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\Status;
-use App\Entity\Quotation;
+use ControleOnline\Entity\Quotation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,10 +24,10 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-use App\Entity\Contract;
-use App\Entity\ContractModel;
-use App\Entity\ContractPeople;
-use App\Entity\PeopleDomain;
+use ControleOnline\Entity\Contract;
+use ControleOnline\Entity\ContractModel;
+use ControleOnline\Entity\ContractPeople;
+use ControleOnline\Entity\PeopleDomain;
 use App\Repository\ContractRepository;
 
 class SaveAcceptOrderPayerAction extends AbstractController

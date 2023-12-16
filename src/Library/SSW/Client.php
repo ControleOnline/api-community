@@ -2,7 +2,7 @@
 
 namespace App\Library\SSW;
 
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\SalesOrder;
 use App\Library\SSW\Entity\Tracking;
 use GuzzleHttp\Client as GuzzClient;
 

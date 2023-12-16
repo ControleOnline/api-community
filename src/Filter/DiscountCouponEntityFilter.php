@@ -4,9 +4,9 @@ namespace App\Filter;
 
 use ApiPlatform\Doctrine\Orm\Filter\AbstractFilter;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
-use App\Entity\Task;
+use ControleOnline\Entity\Task;
 
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use ApiPlatform\Metadata\Operation;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 
@@ -14,7 +14,7 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
-use App\Entity\DiscountCoupon;
+use ControleOnline\Entity\DiscountCoupon;
 
 class DiscountCouponEntityFilter extends AbstractFilter
 {

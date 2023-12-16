@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Document;
-use App\Entity\Particulars;
-use App\Entity\People;
-use App\Entity\PeopleClient;
-use App\Entity\Email;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\Particulars;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleClient;
+use ControleOnline\Entity\Email;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -186,7 +186,7 @@ class GetClientCompanyAction
 
     if (!empty($_particulars)) {
       /**
-       * @var \App\Entity\Particulars $particular
+       * @var \ControleOnline\Entity\Particulars $particular
        */
       foreach ($_particulars as $particular) {
         $particulars[] = [

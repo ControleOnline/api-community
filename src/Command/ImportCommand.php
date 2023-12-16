@@ -13,17 +13,17 @@ use App\Repository\DeliveryTaxGroupRepository;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
-use App\Entity\Import;
-use App\Entity\DeliveryRegion;
-use App\Entity\DeliveryTax;
-use App\Entity\DeliveryTaxGroup;
-use App\Entity\File;
+use ControleOnline\Entity\Import;
+use ControleOnline\Entity\DeliveryRegion;
+use ControleOnline\Entity\DeliveryTax;
+use ControleOnline\Entity\DeliveryTaxGroup;
+use ControleOnline\Entity\File;
 use ControleOnline\Entity\Status;
-use App\Entity\People;
-use App\Entity\PurchasingInvoiceTax;
-use App\Entity\SalesOrder;
-use App\Entity\Task;
-use App\Entity\TaskInteration;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PurchasingInvoiceTax;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Task;
+use ControleOnline\Entity\TaskInteration;
 use App\Service\EmailService;
 use Exception;
 
@@ -360,8 +360,8 @@ class ImportCommand extends Command
             ->createQueryBuilder('IT')
             ->select()
             ->innerJoin('\ControleOnline\Entity\PurchasingOrderInvoiceTax', 'OIT', 'WITH', 'OIT.invoiceTax = IT.id')
-            ->innerJoin('\App\Entity\SalesOrder', 'O', 'WITH', 'O.id = OIT.order')
-            //->innerJoin('\App\Entity\Document', 'D', 'WITH', 'D.people = O.client')
+            ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'O.id = OIT.order')
+            //->innerJoin('\ControleOnline\Entity\Document', 'D', 'WITH', 'D.people = O.client')
             ->where('O.id =:order')
             ->andWhere('OIT.invoiceType=:invoice_type')
             //->andWhere('O.document:document')
@@ -473,7 +473,7 @@ class ImportCommand extends Command
                     $orders = $repo->createQueryBuilder('O')
                         ->select()
                         ->innerJoin('\ControleOnline\Entity\PurchasingOrderInvoiceTax', 'OIT', 'WITH', 'O.id = OIT.order')
-                        ->innerJoin('\App\Entity\SalesInvoiceTax', 'IT', 'WITH', 'IT.id = OIT.invoiceTax')
+                        ->innerJoin('\ControleOnline\Entity\SalesInvoiceTax', 'IT', 'WITH', 'IT.id = OIT.invoiceTax')
                         ->andWhere('OIT.invoiceType =:invoice_type')
                         ->andWhere('IT.invoiceNumber IN (:invoice)')
                         ->andWhere('O.status IN (:status)')

@@ -3,7 +3,7 @@
 namespace App\Command;
 
 use ControleOnline\Entity\Category;
-use App\Entity\PeopleClient;
+use ControleOnline\Entity\PeopleClient;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -11,14 +11,14 @@ use Symfony\Component\Console\Input\InputArgument;
 use Doctrine\ORM\EntityManagerInterface;
 use Twig\Environment;
 use App\Library\Utils\Formatter;
-use App\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleEmployee;
 use App\Service\MauticService;
-use App\Entity\Task;
-use App\Entity\People;
-use App\Entity\PeopleSalesman;
-use App\Entity\TaskInteration;
+use ControleOnline\Entity\Task;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleSalesman;
+use ControleOnline\Entity\TaskInteration;
 use ControleOnline\Entity\Status;
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\SalesOrder;
 use App\Repository\ConfigRepository;
 
 class CRMCommand extends Command
@@ -219,7 +219,7 @@ class CRMCommand extends Command
     $oportunities = $this->em->getRepository(Task::class)
       ->createQueryBuilder('T')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrder', 'O', 'WITH', 'O.client = T.client')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'O.client = T.client')
       ->where('T.taskStatus IN (:taskStatus)')
       ->andWhere('O.status IN(:oStatus)')
       ->andWhere('T.type = :taskType')
@@ -304,7 +304,7 @@ class CRMCommand extends Command
     $salesmans = $this->em->getRepository(PeopleSalesman::class)
       ->createQueryBuilder('PS')
       ->select()
-      ->leftJoin('\App\Entity\Task', 'T', 'WITH', 'PS.salesman = T.taskFor AND T.provider = PS.company AND T.type = :taskType      
+      ->leftJoin('\ControleOnline\Entity\Task', 'T', 'WITH', 'PS.salesman = T.taskFor AND T.provider = PS.company AND T.type = :taskType      
       AND T.taskStatus = :taskStatus
       ')
       ->where('PS.salesman_type = :salesman_type')
@@ -327,8 +327,8 @@ class CRMCommand extends Command
       $oportunities = $this->em->getRepository(PeopleClient::class)
         ->createQueryBuilder('PC')
         ->select()
-        ->leftJoin('\App\Entity\Task', 'T', 'WITH', 'PC.client = T.client AND T.provider = PC.company_id AND T.type = :taskType')
-        ->innerJoin('\App\Entity\People', 'P', 'WITH', 'PC.client = P.id')
+        ->leftJoin('\ControleOnline\Entity\Task', 'T', 'WITH', 'PC.client = T.client AND T.provider = PC.company_id AND T.type = :taskType')
+        ->innerJoin('\ControleOnline\Entity\People', 'P', 'WITH', 'PC.client = P.id')
         ->where('PC.company_id = :company_id')
         ->andWhere('P.peopleType IN(:peopleType)')
         ->having('COUNT(T.id) = 0')
@@ -438,7 +438,7 @@ class CRMCommand extends Command
     $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('SO')
       ->select()
-      ->leftJoin('\App\Entity\Task', 'T', 'WITH', 'SO.client = T.client AND T.provider = SO.provider AND T.type = :taskType AND T.client IS NOT NULL')
+      ->leftJoin('\ControleOnline\Entity\Task', 'T', 'WITH', 'SO.client = T.client AND T.provider = SO.provider AND T.type = :taskType AND T.client IS NOT NULL')
       ->andWhere('SO.client IS NOT NULL')
       ->andWhere('SO.orderType = :orderType')
       ->andWhere('SO.status IN (:status)')
@@ -554,8 +554,8 @@ class CRMCommand extends Command
     $quotes = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('SO')
       ->select()
-      ->leftJoin('\App\Entity\Task', 'T', 'WITH', 'SO.client = T.client AND T.provider = SO.provider AND T.type = :taskType AND T.client IS NOT NULL')
-      ->leftJoin('\App\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.employee = SO.client')
+      ->leftJoin('\ControleOnline\Entity\Task', 'T', 'WITH', 'SO.client = T.client AND T.provider = SO.provider AND T.type = :taskType AND T.client IS NOT NULL')
+      ->leftJoin('\ControleOnline\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.employee = SO.client')
       ->andWhere('SO.client IS NOT NULL')
       ->andWhere('SO.orderType = :orderType')
       ->andWhere('SO.status IN (:status)')

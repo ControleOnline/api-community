@@ -10,12 +10,12 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\RequestStack;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\AbstractFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\ContextAwareFilterInterface;
-use App\Entity\Task;
+use ControleOnline\Entity\Task;
 use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use ApiPlatform\Metadata\Operation;
-use App\Entity\SalesOrder as Order;
+use ControleOnline\Entity\SalesOrder as Order;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 

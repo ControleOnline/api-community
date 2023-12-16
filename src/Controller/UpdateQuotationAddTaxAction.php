@@ -2,15 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\DeliveryTax;
+use ControleOnline\Entity\DeliveryTax;
 use ControleOnline\Entity\Invoice;
-use App\Entity\Order;
-use App\Entity\People;
-use App\Entity\Quotation;
-use App\Entity\QuoteDetail;
-use App\Entity\Config;
+use ControleOnline\Entity\Order;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Quotation;
+use ControleOnline\Entity\QuoteDetail;
+use ControleOnline\Entity\Config;
 use ControleOnline\Entity\Status;
-use App\Entity\SalesOrderInvoice;
+use ControleOnline\Entity\SalesOrderInvoice;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Library\Itau\ItauClient;
@@ -91,7 +91,7 @@ class UpdateQuotationAddTaxAction
      * Verify if invoice is paid or has billet
      *
      * @param  \ControleOnline\Entity\ReceiveInvoice $invoice
-     * @param  \App\Entity\SalesOrder     $order
+     * @param  \ControleOnline\Entity\SalesOrder     $order
      * @return boolean
      */
     private function orderInvoiceIsPaidOrHasBillet(Invoice $invoice, Order $order): bool
@@ -106,7 +106,7 @@ class UpdateQuotationAddTaxAction
     }
 
 
-    private function createNewInvoice(\App\Entity\SalesOrder $order, float $value)
+    private function createNewInvoice(\ControleOnline\Entity\SalesOrder $order, float $value)
     {
         if (!in_array($order->getStatus()->getStatus(), [
             'automatic analysis', 'analysis', 'waiting client invoice tax', 'quote', 'canceled', 'expired'
@@ -134,7 +134,7 @@ class UpdateQuotationAddTaxAction
     {
         $quotation =  $this->manager->getRepository(Quotation::class)->find($quotation->getId());
         /**
-         * @var \App\Entity\SalesOrder $order
+         * @var \ControleOnline\Entity\SalesOrder $order
          */
         $order   = $quotation->getOrder();
 
@@ -165,7 +165,7 @@ class UpdateQuotationAddTaxAction
     {
         $quotation =  $this->manager->getRepository(Quotation::class)->find($quotation->getId());
         /**
-         * @var \App\Entity\SalesOrder $order
+         * @var \ControleOnline\Entity\SalesOrder $order
          */
         $order = $quotation->getOrder();
 
@@ -228,7 +228,7 @@ class UpdateQuotationAddTaxAction
         
         //$quotation =  $this->manager->getRepository(Quotation::class)->find($quotation->getId());
         /**
-         * @var \App\Entity\QuoteDetail $detail
+         * @var \ControleOnline\Entity\QuoteDetail $detail
          */
 
         foreach ($quotation->getQuoteDetail() as $detail) {
@@ -253,7 +253,7 @@ class UpdateQuotationAddTaxAction
 
 
         /**
-         * @var \App\Entity\QuoteDetail $detail
+         * @var \ControleOnline\Entity\QuoteDetail $detail
          */
         foreach ($taxes['perce'] as $detail) {
             if ($taxProfit) {
@@ -270,7 +270,7 @@ class UpdateQuotationAddTaxAction
         $ntotal = $total;
 
         /**
-         * @var \App\Entity\QuoteDetail $detail
+         * @var \ControleOnline\Entity\QuoteDetail $detail
          */
         foreach ($taxes['ryt'] as $detail) {
             if ($taxProfit) {
@@ -285,7 +285,7 @@ class UpdateQuotationAddTaxAction
         }
 
         /**
-         * @var \App\Entity\QuoteDetail $detail
+         * @var \ControleOnline\Entity\QuoteDetail $detail
          */
         foreach ($taxes['mkt'] as $detail) {
             if ($taxProfit) {
@@ -299,7 +299,7 @@ class UpdateQuotationAddTaxAction
             }
         }
         /**
-         * @var \App\Entity\QuoteDetail $detail
+         * @var \ControleOnline\Entity\QuoteDetail $detail
          */
         foreach ($taxes['impt'] as $detail) {
             if ($taxProfit) {
@@ -314,7 +314,7 @@ class UpdateQuotationAddTaxAction
         }
 
         /**
-         * @var \App\Entity\QuoteDetail $detail
+         * @var \ControleOnline\Entity\QuoteDetail $detail
          */
         foreach ($taxes['icms'] as $detail) {
             if ($taxProfit) {
@@ -330,7 +330,7 @@ class UpdateQuotationAddTaxAction
 
 
         /**
-         * @var \App\Entity\QuoteDetail $detail
+         * @var \ControleOnline\Entity\QuoteDetail $detail
          */
         foreach ($taxes['conv'] as $detail) {
             if ($taxProfit) {
@@ -370,7 +370,7 @@ class UpdateQuotationAddTaxAction
     /**
      *
      * @param  \ControleOnline\Entity\ReceiveInvoice $invoice
-     * @param  \App\Entity\SalesOrder     $order
+     * @param  \ControleOnline\Entity\SalesOrder     $order
      * @return boolean
      */
     private function isBilletCreated(Invoice $invoice, Order $order): bool

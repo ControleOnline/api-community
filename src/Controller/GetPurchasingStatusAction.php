@@ -6,10 +6,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use ControleOnline\Entity\PurchasingOrder as Order;
-use App\Entity\Quotation;
-use \App\Entity\People;
-use App\Entity\QuoteDetail;
-use App\Entity\CarrierIntegration;
+use ControleOnline\Entity\Quotation;
+use \ControleOnline\Entity\People;
+use ControleOnline\Entity\QuoteDetail;
+use ControleOnline\Entity\CarrierIntegration;
 
 class GetPurchasingStatusAction
 {
@@ -40,7 +40,7 @@ class GetPurchasingStatusAction
         $integrationType = null;
 
         /**
-         * @var \App\Entity\SalesOrderInvoiceTax $invoice
+         * @var \ControleOnline\Entity\SalesOrderInvoiceTax $invoice
          */
 
         $invoiceTax = [];

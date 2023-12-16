@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\OrderLogistic;
+use ControleOnline\Entity\OrderLogistic;
 use ControleOnline\Entity\Status;
-use App\Entity\People;
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\SalesOrder;
 use App\Repository\OrderLogisticRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;

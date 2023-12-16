@@ -9,9 +9,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 use App\Service\PeopleRoleService;
 use App\Service\UserCompanyService;
-use App\Entity\Organization;
+use ControleOnline\Entity\Organization;
 use ControleOnline\Entity\User;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 
 class OrganizationVoter extends Voter
 {

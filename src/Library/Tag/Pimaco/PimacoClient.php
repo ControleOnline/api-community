@@ -2,7 +2,7 @@
 
 namespace App\Library\Tag\Pimaco;
 
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\SalesOrder;
 use App\Library\Tag\AbstractTag;
 use Proner\PhpPimaco\Pimaco;
 use Proner\PhpPimaco\Tag;

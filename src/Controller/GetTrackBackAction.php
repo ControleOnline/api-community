@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\SalesOrder;
-use App\Entity\OrderTracking;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\OrderTracking;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use App\Entity\Quotation;
+use ControleOnline\Entity\Quotation;
 
 class GetTrackBackAction
 {

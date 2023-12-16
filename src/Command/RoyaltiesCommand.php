@@ -11,21 +11,21 @@ use App\Library\Utils\Formatter;
 
 use App\Service\MauticService;
 use App\Service\EmailService;
-use App\Entity\People;
-use App\Entity\Order;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Order;
 use ControleOnline\Entity\ReceiveInvoice;
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\PurchasingOrder;
-use App\Entity\SalesOrderInvoice;
-use App\Entity\InvoiceTax;
+use ControleOnline\Entity\SalesOrderInvoice;
+use ControleOnline\Entity\InvoiceTax;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\PurchasingOrderInvoiceTax;
-use App\Entity\Document;
-use App\Entity\PeopleSalesman;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\PeopleSalesman;
 use App\Repository\ConfigRepository;
 use App\Library\Itau\ItauClient;
-use App\Entity\Config;
-use App\Entity\Quotation;
+use ControleOnline\Entity\Config;
+use ControleOnline\Entity\Quotation;
 
 class RoyaltiesCommand extends Command
 {
@@ -147,9 +147,9 @@ class RoyaltiesCommand extends Command
     $salesOrders = $this->em->getRepository(SalesOrder::class)
                   ->createQueryBuilder('O')
                   ->select()
-                  ->leftJoin('\App\Entity\SalesOrder', 'CO', 'WITH', 'CO.mainOrder = O.id AND CO.orderType =:orderType')
-                  ->innerJoin('\App\Entity\PeopleFranchisee', 'PS', 'WITH', 'PS.franchisee = O.provider')                  
-                  ->innerJoin('\App\Entity\SalesOrderInvoice', 'SI', 'WITH', 'SI.order = O.id')
+                  ->leftJoin('\ControleOnline\Entity\SalesOrder', 'CO', 'WITH', 'CO.mainOrder = O.id AND CO.orderType =:orderType')
+                  ->innerJoin('\ControleOnline\Entity\PeopleFranchisee', 'PS', 'WITH', 'PS.franchisee = O.provider')                  
+                  ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'SI', 'WITH', 'SI.order = O.id')
                   ->innerJoin('\ControleOnline\Entity\ReceiveInvoice', 'I', 'WITH', 'I.id = SI.invoice')
                   ->where('O.status =:status')
                   ->andWhere('I.status =:istatus')

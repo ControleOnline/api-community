@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\SalesOrder;
-use App\Entity\Quotation;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Quotation;
 use App\Library\Competitor\CargoBR\Client as CargoClient;
 use App\Library\Competitor\GoFretes\Client as GoClient;
 use App\Library\Competitor\Central\Client as CentralClient;

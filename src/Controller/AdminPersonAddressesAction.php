@@ -7,9 +7,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\People;
-use App\Entity\Person;
-use App\Entity\Address;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Person;
+use ControleOnline\Entity\Address;
 use App\Service\AddressService;
 
 class AdminPersonAddressesAction

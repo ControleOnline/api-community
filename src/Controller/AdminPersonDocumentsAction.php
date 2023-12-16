@@ -7,10 +7,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\People;
-use App\Entity\Document;
-use App\Entity\DocumentType;
-use App\Entity\Person;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\DocumentType;
+use ControleOnline\Entity\Person;
 
 class AdminPersonDocumentsAction
 {

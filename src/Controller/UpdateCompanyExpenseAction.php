@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\AbstractCustomResourceAction;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 
 class UpdateCompanyExpenseAction extends AbstractCustomResourceAction
 {

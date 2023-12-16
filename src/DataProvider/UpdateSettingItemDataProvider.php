@@ -5,7 +5,7 @@ use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use ApiPlatform\Core\Exception\ResourceClassNotSupportedException;
 use App\Resource\UpdateSetting;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use Doctrine\ORM\EntityManagerInterface;
 
 final class UpdateSettingItemDataProvider implements

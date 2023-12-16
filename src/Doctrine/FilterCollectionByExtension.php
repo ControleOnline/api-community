@@ -12,30 +12,30 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Doctrine\ORM\EntityManagerInterface;
 
 use ControleOnline\Entity\PurchasingOrder;
-use App\Entity\SalesOrder;
-use App\Entity\People;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\People;
 use ControleOnline\Entity\ReceiveInvoice;
 use ControleOnline\Entity\PayInvoice;
-use App\Entity\Phone;
+use ControleOnline\Entity\Phone;
 use ControleOnline\Entity\User;
-use App\Entity\Address;
-use App\Entity\Client;
-use App\Entity\ComissionInvoice;
-use App\Entity\ComissionOrder;
-use App\Entity\Document;
+use ControleOnline\Entity\Address;
+use ControleOnline\Entity\Client;
+use ControleOnline\Entity\ComissionInvoice;
+use ControleOnline\Entity\ComissionOrder;
+use ControleOnline\Entity\Document;
 use ControleOnline\Entity\Status;
-use App\Entity\Email;
-use App\Entity\PeopleClient;
-use App\Entity\PeopleEmployee;
-use App\Entity\PeopleSalesman;
-use App\Entity\PeopleCarrier;
-use App\Entity\MyContract;
-use App\Entity\ProductOld as Product;
-use App\Entity\PeopleDomain;
-use App\Entity\Provider;
-use App\Entity\CompanyExpense;
+use ControleOnline\Entity\Email;
+use ControleOnline\Entity\PeopleClient;
+use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleSalesman;
+use ControleOnline\Entity\PeopleCarrier;
+use ControleOnline\Entity\MyContract;
+use ControleOnline\Entity\ProductOld as Product;
+use ControleOnline\Entity\PeopleDomain;
+use ControleOnline\Entity\Provider;
+use ControleOnline\Entity\CompanyExpense;
 use ControleOnline\Entity\Category;
-use App\Entity\Hardware;
+use ControleOnline\Entity\Hardware;
 use ControleOnline\Entity\Invoice;
 use ControleOnline\Entity\PurchasingOrderInvoice;
 use App\Service\PeopleRoleService;
@@ -277,7 +277,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
         $subquery = $this->manager->createQueryBuilder()
           ->select('DISTINCT myContract')
           ->from(MyContract::class, 'myContract')
-          ->innerJoin('App\Entity\MyContractPeople', 'contractPeople', 'WITH', 'contractPeople.contract = myContract')
+          ->innerJoin('ControleOnline\Entity\MyContractPeople', 'contractPeople', 'WITH', 'contractPeople.contract = myContract')
           ->where("contractPeople.peopleType = 'Provider'")
           ->andWhere('contractPeople.people  IN (:providerId)');
 
@@ -312,7 +312,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 
 
         $queryBuilder->innerJoin(
-          \App\Entity\PeopleProvider::class,
+          \ControleOnline\Entity\PeopleProvider::class,
           'people_provider',
           'WITH',
           sprintf('people_provider.provider = %s', $rootAlias)

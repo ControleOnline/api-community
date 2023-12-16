@@ -4,7 +4,7 @@ namespace App\DataProvider;
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use ApiPlatform\Core\Exception\ResourceClassNotSupportedException;
-use App\Entity\CepAddress;
+use ControleOnline\Entity\CepAddress;
 
 final class CepAddressCollectionDataProvider implements CollectionDataProviderInterface, RestrictedDataProviderInterface
 {

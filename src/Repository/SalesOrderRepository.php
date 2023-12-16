@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\SalesOrder AS Order;
+use ControleOnline\Entity\SalesOrder AS Order;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\DBAL\DBALException;

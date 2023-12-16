@@ -2,8 +2,8 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\People;
-use App\Entity\PeopleClient;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\PeopleClient;
 use ControleOnline\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;

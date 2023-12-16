@@ -4,7 +4,7 @@ namespace App\Service;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use App\Library\Utils\ViaCEP;
-use App\Entity\GeoPlace;
+use ControleOnline\Entity\GeoPlace;
 
 class ViaCEPService
 {

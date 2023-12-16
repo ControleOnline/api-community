@@ -12,10 +12,10 @@ use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use App\Repository\DeliveryRegionRepository;
 use App\Repository\DeliveryTaxGroupRepository;
 
-use App\Entity\DeliveryRegion;
-use App\Entity\DeliveryRegionCity;
-use App\Entity\DeliveryTax;
-use App\Entity\DeliveryTaxGroup;
+use ControleOnline\Entity\DeliveryRegion;
+use ControleOnline\Entity\DeliveryRegionCity;
+use ControleOnline\Entity\DeliveryTax;
+use ControleOnline\Entity\DeliveryTaxGroup;
 
 class VtexExportCommand extends Command
 {

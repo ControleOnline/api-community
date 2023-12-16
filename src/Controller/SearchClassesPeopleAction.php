@@ -5,9 +5,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-use App\Entity\People;
-use App\Entity\SchoolClass;
-use App\Entity\PeopleProfessional;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\SchoolClass;
+use ControleOnline\Entity\PeopleProfessional;
 
 class SearchClassesPeopleAction extends AbstractController
 {

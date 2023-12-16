@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\SchoolTeamSchedule;
+use ControleOnline\Entity\SchoolTeamSchedule;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

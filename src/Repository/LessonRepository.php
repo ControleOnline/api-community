@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Lesson;
+use ControleOnline\Entity\Lesson;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;

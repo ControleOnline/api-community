@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\MyContractOrderInvoice;
+use ControleOnline\Entity\MyContractOrderInvoice;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

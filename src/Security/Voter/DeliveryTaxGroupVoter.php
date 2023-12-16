@@ -2,9 +2,9 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\DeliveryTaxGroup;
+use ControleOnline\Entity\DeliveryTaxGroup;
 use ControleOnline\Entity\User;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;

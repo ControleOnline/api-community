@@ -4,8 +4,8 @@
 namespace App\Repository;
 
 
-use App\Entity\SchoolClass;
-use App\Entity\StudentProficiency;
+use ControleOnline\Entity\SchoolClass;
+use ControleOnline\Entity\StudentProficiency;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\DBALException;
 use Doctrine\Persistence\ManagerRegistry;

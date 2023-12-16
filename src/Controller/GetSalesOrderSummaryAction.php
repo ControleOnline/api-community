@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Address;
+use ControleOnline\Entity\Address;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Entity\Quotation;
-use App\Entity\SalesOrder as Order;
-use App\Entity\People;
+use ControleOnline\Entity\Quotation;
+use ControleOnline\Entity\SalesOrder as Order;
+use ControleOnline\Entity\People;
 
 class GetSalesOrderSummaryAction
 {
@@ -93,7 +93,7 @@ class GetSalesOrderSummaryAction
     private function getQuoteData(Order $order): ?array
     {
         /**
-         * @var \App\Entity\Quotation
+         * @var \ControleOnline\Entity\Quotation
          */
         if (($quote = $order->getQuotes()->first()) === false)
             return null;
@@ -118,7 +118,7 @@ class GetSalesOrderSummaryAction
         $packages = [];
 
         /**
-         * @var \App\Entity\OrderPackage $package
+         * @var \ControleOnline\Entity\OrderPackage $package
          */
         foreach ($order->getOrderPackage() as $package) {
             $packages[] = [
@@ -229,7 +229,7 @@ class GetSalesOrderSummaryAction
             return null;
 
         /**
-         * @var \App\Entity\Document $document
+         * @var \ControleOnline\Entity\Document $document
          */
         if (($document = $people->getDocument()->first()) === false)
             return null;

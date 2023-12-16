@@ -2,8 +2,8 @@
 
 namespace App\Repository;
 
-use App\Entity\Address;
-use App\Entity\People;
+use ControleOnline\Entity\Address;
+use ControleOnline\Entity\People;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

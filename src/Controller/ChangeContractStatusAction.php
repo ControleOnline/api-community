@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-use App\Entity\MyContract;
+use ControleOnline\Entity\MyContract;
 
 class ChangeContractStatusAction {
 

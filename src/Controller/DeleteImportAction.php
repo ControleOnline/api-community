@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use App\Repository\ImportRepository;
 
-use App\Entity\Import;
+use ControleOnline\Entity\Import;
 
 class DeleteImportAction
 {

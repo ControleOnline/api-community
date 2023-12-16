@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\CarModel;
-use App\Entity\CarYearPrice;
+use ControleOnline\Entity\CarModel;
+use ControleOnline\Entity\CarYearPrice;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;

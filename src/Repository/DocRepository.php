@@ -4,7 +4,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Filesb;
+use ControleOnline\Entity\Filesb;
 use App\Library\Utils\Formatter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;

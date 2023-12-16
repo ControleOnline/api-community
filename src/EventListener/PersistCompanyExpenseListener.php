@@ -4,13 +4,13 @@ namespace App\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
-use App\Entity\CompanyExpense;
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\CompanyExpense;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\Status;
 
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use ControleOnline\Entity\ReceiveInvoice;
-use App\Entity\SalesOrderInvoice;
+use ControleOnline\Entity\SalesOrderInvoice;
 
 class PersistCompanyExpenseListener
 {

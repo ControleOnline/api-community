@@ -2,16 +2,16 @@
 
 namespace App\Controller;
 
-use App\Entity\Email;
-use App\Entity\Language;
-use App\Entity\OrderLogistic;
-use App\Entity\OrderLogisticSurveys;
-use App\Entity\OrderLogisticSurveysFiles;
-use App\Entity\People;
-use App\Entity\SalesOrder;
-use App\Entity\Task;
-use App\Entity\TasksSurveys;
-use App\Entity\TasksSurveysFiles;
+use ControleOnline\Entity\Email;
+use ControleOnline\Entity\Language;
+use ControleOnline\Entity\OrderLogistic;
+use ControleOnline\Entity\OrderLogisticSurveys;
+use ControleOnline\Entity\OrderLogisticSurveysFiles;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Task;
+use ControleOnline\Entity\TasksSurveys;
+use ControleOnline\Entity\TasksSurveysFiles;
 use App\Library\Exception\MissingDataException;
 use App\Library\Utils\Str;
 use DateTime;

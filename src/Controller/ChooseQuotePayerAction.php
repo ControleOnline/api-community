@@ -10,14 +10,14 @@ use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use ControleOnline\Entity\PurchasingOrder as Order;
-use App\Entity\Document;
+use ControleOnline\Entity\Document;
 
 
 use App\Service\AddressService;
 use App\Service\PeopleService;
 
 use App\Controller\ChooseQuoteAction;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 
 class ChooseQuotePayerAction extends ChooseQuoteAction
 {

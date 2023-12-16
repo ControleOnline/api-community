@@ -13,32 +13,32 @@ use Doctrine\ORM\Query\ResultSetMapping;
 use App\Service\SignatureService;
 use App\Service\MauticService;
 use App\Service\EmailService;
-use App\Entity\People;
-use App\Entity\Order;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Order;
 use ControleOnline\Entity\ReceiveInvoice;
 use ControleOnline\Entity\PayInvoice;
-use App\Entity\SalesOrder;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\PurchasingOrder;
-use App\Entity\SalesOrderInvoice;
-use App\Entity\PurchasingInvoiceTax;
-use App\Entity\SalesInvoiceTax;
+use ControleOnline\Entity\SalesOrderInvoice;
+use ControleOnline\Entity\PurchasingInvoiceTax;
+use ControleOnline\Entity\SalesInvoiceTax;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\PurchasingOrderInvoiceTax;
-use App\Entity\SalesOrderInvoiceTax;
-use App\Entity\Document;
-use App\Entity\PeopleSalesman;
-use App\Entity\PeopleClient;
+use ControleOnline\Entity\SalesOrderInvoiceTax;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\PeopleSalesman;
+use ControleOnline\Entity\PeopleClient;
 use App\Repository\ConfigRepository;
 use App\Library\Itau\ItauClient;
-use App\Entity\Config;
-use App\Entity\Contract;
-use App\Entity\File;
-use App\Entity\Import;
-use App\Entity\Quotation;
-use App\Entity\Task;
+use ControleOnline\Entity\Config;
+use ControleOnline\Entity\Contract;
+use ControleOnline\Entity\File;
+use ControleOnline\Entity\Import;
+use ControleOnline\Entity\Quotation;
+use ControleOnline\Entity\Task;
 use ControleOnline\Entity\Category;
-use App\Entity\OrderLogistic;
-use App\Entity\TaskInteration;
+use ControleOnline\Entity\OrderLogistic;
+use ControleOnline\Entity\TaskInteration;
 
 use DateTime;
 
@@ -181,7 +181,7 @@ class OrderNotifierCommand extends Command
     $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\App\Entity\OrderTracking', 'T', 'WITH', 'T.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\OrderTracking', 'T', 'WITH', 'T.order = O.id')
       ->where('O.status IN(:status)')
       ->andWhere('T.ocorrencia LIKE :ocorrencia')
       ->setParameters(array(
@@ -237,7 +237,7 @@ class OrderNotifierCommand extends Command
     $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\App\Entity\Quotation', 'Q', 'WITH', 'Q.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\Quotation', 'Q', 'WITH', 'Q.order = O.id')
       ->where('O.status IN(:status)')
       ->andWhere('O.alterDate < DATE_SUB(CURRENT_DATE(),(Q.deadline+10), \'day\')')
       ->setParameters(array(
@@ -289,7 +289,7 @@ class OrderNotifierCommand extends Command
     $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\App\Entity\OrderTracking', 'T', 'WITH', 'T.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\OrderTracking', 'T', 'WITH', 'T.order = O.id')
       ->where('O.status IN(:status)')
       ->andWhere('T.ocorrencia LIKE :ocorrencia OR T.ocorrencia LIKE :ocorrencias')
       ->setParameters(array(
@@ -509,8 +509,8 @@ class OrderNotifierCommand extends Command
     $qry = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrderInvoiceTax', 'SOI', 'WITH', 'SOI.order = O.id')
-      ->innerJoin('\App\Entity\SalesInvoiceTax', 'RI', 'WITH', 'SOI.invoiceTax = RI.id AND SOI.invoiceType = 57')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoiceTax', 'SOI', 'WITH', 'SOI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\SalesInvoiceTax', 'RI', 'WITH', 'SOI.invoiceTax = RI.id AND SOI.invoiceType = 57')
       ->where('O.status IN (:status)')
       ->setParameters(array(
         'status' => $this->em->getRepository(Status::class)->findBy(['status' => ['retrieved', 'waiting retrieve'], 'context' => 'order'])
@@ -565,7 +565,7 @@ class OrderNotifierCommand extends Command
     $qry = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrderInvoice', 'SOI', 'WITH', 'SOI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'SOI', 'WITH', 'SOI.order = O.id')
       ->innerJoin('\ControleOnline\Entity\ReceiveInvoice', 'RI', 'WITH', 'SOI.invoice = RI.id AND RI.status NOT IN (:istatus)')
       ->where('O.status IN (:status)')
       ->setParameters(array(
@@ -935,7 +935,7 @@ class OrderNotifierCommand extends Command
     $tasks = $this->em->getRepository(Task::class)
       ->createQueryBuilder('T')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrder', 'O', 'WITH', 'T.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'T.order = O.id')
       ->innerJoin('\ControleOnline\Entity\Category', 'C', 'WITH', 'T.category = C.id')
       ->where('O.status NOT IN (:status)')
       ->andWhere('T.taskStatus NOT IN (:taskStatus)')
@@ -1138,11 +1138,11 @@ class OrderNotifierCommand extends Command
     $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->leftJoin('\App\Entity\SalesOrder', 'CO', 'WITH', 'CO.mainOrder = O.id AND CO.orderType =:orderType')
+      ->leftJoin('\ControleOnline\Entity\SalesOrder', 'CO', 'WITH', 'CO.mainOrder = O.id AND CO.orderType =:orderType')
       ->innerJoin('\ControleOnline\Entity\PurchasingOrder', 'PO', 'WITH', 'PO.mainOrder = O.id AND PO.orderType =:pOrderType')
-      ->innerJoin('\App\Entity\PeopleSalesman', 'PS', 'WITH', 'PS.company = O.provider')
-      ->innerJoin('\App\Entity\PeopleClient', 'PC', 'WITH', 'PC.company_id = PS.salesman AND PC.client = O.client AND PC.commission > 0')
-      ->innerJoin('\App\Entity\SalesOrderInvoice', 'SI', 'WITH', 'SI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\PeopleSalesman', 'PS', 'WITH', 'PS.company = O.provider')
+      ->innerJoin('\ControleOnline\Entity\PeopleClient', 'PC', 'WITH', 'PC.company_id = PS.salesman AND PC.client = O.client AND PC.commission > 0')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'SI', 'WITH', 'SI.order = O.id')
       ->innerJoin('\ControleOnline\Entity\ReceiveInvoice', 'I', 'WITH', 'I.id = SI.invoice')
       ->where('O.status IN(:status)')
       ->andWhere('I.status IN(:istatus)')
@@ -1174,7 +1174,7 @@ class OrderNotifierCommand extends Command
                 $salesmans = $this->em->getRepository(PeopleSalesman::class)
                   ->createQueryBuilder('PS')
                   ->select()
-                  ->innerJoin('\App\Entity\PeopleClient', 'PC', 'WITH', 'PC.company_id = PS.salesman')
+                  ->innerJoin('\ControleOnline\Entity\PeopleClient', 'PC', 'WITH', 'PC.company_id = PS.salesman')
                   ->where('PS.company =:company')
                   ->andWhere('PC.client =:client')
                   ->setParameters(array(
@@ -1267,7 +1267,7 @@ class OrderNotifierCommand extends Command
 
     if (!$carrierInvoiceTax) {
 
-        $carrierInvoiceTax = new \App\Entity\InvoiceTax();
+        $carrierInvoiceTax = new \ControleOnline\Entity\InvoiceTax();
         $carrierInvoiceTax->setInvoice($invoice);
         $this->em->persist($carrierInvoiceTax);
         $this->em->flush($carrierInvoiceTax);
@@ -1351,9 +1351,9 @@ class OrderNotifierCommand extends Command
     $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.order = O.id')
       ->innerJoin('\ControleOnline\Entity\ReceiveInvoice', 'I', 'WITH', 'OI.invoice = I.id')
-      ->innerJoin('\App\Entity\Task', 'T', 'WITH', 'T.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\Task', 'T', 'WITH', 'T.order = O.id')
       ->where('I.status IN (:status)')
       ->andWhere('T.taskStatus IN (:taskStatus)')
       ->groupBy('O.id')
@@ -1439,8 +1439,8 @@ class OrderNotifierCommand extends Command
     $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\App\Entity\OrderTracking', 'OT', 'WITH', 'OT.order = O.id')
-      ->leftJoin('\App\Entity\Task', 'T', 'WITH', 'T.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\OrderTracking', 'OT', 'WITH', 'OT.order = O.id')
+      ->leftJoin('\ControleOnline\Entity\Task', 'T', 'WITH', 'T.order = O.id')
       ->where('OT.tipo IN (:tipo)')
       ->having('COUNT(T.id) = 0')
       ->groupBy('O.id')
@@ -1536,8 +1536,8 @@ class OrderNotifierCommand extends Command
     $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\App\Entity\Contract', 'C', 'WITH', 'O.contract = C.id')
-      ->leftJoin('\App\Entity\Task', 'T', 'WITH', 'T.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\Contract', 'C', 'WITH', 'O.contract = C.id')
+      ->leftJoin('\ControleOnline\Entity\Task', 'T', 'WITH', 'T.order = O.id')
       ->where('C.contractStatus IN (:contractStatus)')
       ->having('COUNT(T.id) = 0')
       ->groupBy('O.id')
@@ -1635,9 +1635,9 @@ class OrderNotifierCommand extends Command
     $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.order = O.id')
       ->innerJoin('\ControleOnline\Entity\ReceiveInvoice', 'I', 'WITH', 'OI.invoice = I.id')
-      ->leftJoin('\App\Entity\Task', 'T', 'WITH', 'T.order = O.id AND T.category IN (:category)')
+      ->leftJoin('\ControleOnline\Entity\Task', 'T', 'WITH', 'T.order = O.id AND T.category IN (:category)')
       ->where('I.status IN (:status)')
       ->having('COUNT(T.id) = 0')
       ->groupBy('O.id')
@@ -1845,9 +1845,9 @@ class OrderNotifierCommand extends Command
     $repository     = $this->em->getRepository(ReceiveInvoice::class);
     $receiveInvoice = $repository->createQueryBuilder('I')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-      ->innerJoin('\App\Entity\SalesOrder', 'O', 'WITH', 'O.id = OI.order')
-      ->innerJoin('\App\Entity\Config', 'C', 'WITH', 'C.people = O.provider')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'O.id = OI.order')
+      ->innerJoin('\ControleOnline\Entity\Config', 'C', 'WITH', 'C.people = O.provider')
       ->where('I.status IN (:status)')
       ->andWhere('I.notified =:notified')
       ->andWhere('C.config_key LIKE :config_key')
@@ -1932,7 +1932,7 @@ class OrderNotifierCommand extends Command
   private function _getInvoiceOrdersTemplateParams(Order $order): array
   {
     /**
-     * @var \App\Entity\SalesOrder
+     * @var \ControleOnline\Entity\SalesOrder
      */
     $salesOrder     = $order;
     /**
@@ -1950,7 +1950,7 @@ class OrderNotifierCommand extends Command
 
     if ($receiveInvoice != null) {
       /**
-       * @var \App\Entity\SalesOrderInvoice $orderInvoice
+       * @var \ControleOnline\Entity\SalesOrderInvoice $orderInvoice
        */
       foreach ($receiveInvoice->getOrder() as $orderInvoice) {
         $order = $orderInvoice->getOrder();
@@ -1982,7 +1982,7 @@ class OrderNotifierCommand extends Command
     $price = 0;
 
     /**
-     * @var \App\Entity\SalesOrderInvoice $salesOrderInvoice
+     * @var \ControleOnline\Entity\SalesOrderInvoice $salesOrderInvoice
      */
     foreach ($receiveInvoice->getOrder() as $salesOrderInvoice) {
       if (!in_array($salesOrderInvoice->getOrder()->getStatus()->getStatus(), ['canceled', 'expired'])) {
@@ -2226,9 +2226,9 @@ class OrderNotifierCommand extends Command
     $receiveInvoice =  $this->em->getRepository(ReceiveInvoice::class)
       ->createQueryBuilder('I')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-      ->innerJoin('\App\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
-      ->innerJoin('\App\Entity\People', 'P', 'WITH', 'O.payer = P.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\People', 'P', 'WITH', 'O.payer = P.id')
       ->where('I.status IN(:status)')
       ->andWhere('OI.id IS NOT NULL')
       ->andWhere('I.invoice_date < :invoice_date')
@@ -2291,9 +2291,9 @@ class OrderNotifierCommand extends Command
     $receiveInvoice =  $this->em->getRepository(ReceiveInvoice::class)
       ->createQueryBuilder('I')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-      ->innerJoin('\App\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
-      ->innerJoin('\App\Entity\People', 'P', 'WITH', 'O.payer = P.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\People', 'P', 'WITH', 'O.payer = P.id')
       ->where('I.status IN(:status)')
       ->andWhere('OI.id IS NOT NULL')
       ->andWhere('I.invoice_date < :invoice_date')
@@ -2356,9 +2356,9 @@ class OrderNotifierCommand extends Command
     $receiveInvoice =  $this->em->getRepository(ReceiveInvoice::class)
       ->createQueryBuilder('I')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-      ->innerJoin('\App\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
-      ->innerJoin('\App\Entity\People', 'P', 'WITH', 'O.payer = P.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\People', 'P', 'WITH', 'O.payer = P.id')
       ->where('I.status IN(:status)')
       ->andWhere('OI.id IS NOT NULL')
       ->andWhere('I.invoice_date < :invoice_date')
@@ -2422,9 +2422,9 @@ class OrderNotifierCommand extends Command
     $receiveInvoice =  $this->em->getRepository(ReceiveInvoice::class)
       ->createQueryBuilder('I')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-      ->innerJoin('\App\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
-      ->innerJoin('\App\Entity\People', 'P', 'WITH', 'O.payer = P.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\People', 'P', 'WITH', 'O.payer = P.id')
       ->where('I.status IN(:status)')
       ->andWhere('OI.id IS NOT NULL')
       ->andWhere('I.invoice_date < :invoice_date')
@@ -2577,7 +2577,7 @@ class OrderNotifierCommand extends Command
     $salesOrder =  $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->leftJoin('\App\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.order = O.id')
+      ->leftJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.order = O.id')
       ->where('O.status NOT IN(:status)')
       ->andWhere('O.status NOT IN(:nstatus)')
       ->andWhere('OI.id IS NULL')
@@ -2612,8 +2612,8 @@ class OrderNotifierCommand extends Command
                   $qry = $this->em->getRepository(ReceiveInvoice::class)
                     ->createQueryBuilder('I')
                     ->select()
-                    ->innerJoin('\App\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-                    ->innerJoin('\App\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
+                    ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+                    ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
                     ->where('I.status IN(:status)')
                     ->andWhere('O.provider = :provider')
                     ->andWhere('O.payer = :payer')
@@ -2658,8 +2658,8 @@ class OrderNotifierCommand extends Command
                     $hasExceeded = $this->em->getRepository(ReceiveInvoice::class)
                       ->createQueryBuilder('I')
                       ->select()
-                      ->innerJoin('\App\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-                      ->innerJoin('\App\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
+                      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+                      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
                       ->where('I.status IN(:status)')->andWhere('O.payer = :payer')
                       ->setParameters(array(
                         'payer' => $order->getPayer(),
@@ -2671,8 +2671,8 @@ class OrderNotifierCommand extends Command
                     $qry = $this->em->getRepository(ReceiveInvoice::class)
                       ->createQueryBuilder('I')
                       ->select()
-                      ->innerJoin('\App\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-                      ->innerJoin('\App\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
+                      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+                      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
                       ->where('I.status IN(:status)');
 
                     if (count($purchasingOrder) > 0) {
@@ -2783,8 +2783,8 @@ class OrderNotifierCommand extends Command
     $receiveInvoice =  $this->em->getRepository(ReceiveInvoice::class)
       ->createQueryBuilder('I')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-      ->innerJoin('\App\Entity\SalesOrder', 'O', 'WITH', 'O.id = OI.order')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'O.id = OI.order')
       ->where('I.status IN(:status)')
       ->andWhere('I.dueDate < :due_date')
       ->setParameters(array(
@@ -2800,7 +2800,7 @@ class OrderNotifierCommand extends Command
     else {
       foreach ($receiveInvoice as $invoice) {
         /**
-         * @var \App\Entity\SalesOrder
+         * @var \ControleOnline\Entity\SalesOrder
          */
         if ($invoice->getOrder()->first()) {
           $order = $invoice->getOrder()->first()->getOrder();
@@ -2859,7 +2859,7 @@ class OrderNotifierCommand extends Command
     else {
       foreach ($receiveInvoice as $invoice) {
         /**
-         * @var \App\Entity\SalesOrder
+         * @var \ControleOnline\Entity\SalesOrder
          */
         $order = $invoice->getOrder()[0]->getOrder();
         $orders[] = (object) [
@@ -2960,7 +2960,7 @@ class OrderNotifierCommand extends Command
   private function _getInvoiceTaxInstructionsOrdersTemplateParams(Order $order): array
   {
     /**
-     * @var \App\Entity\SalesOrder
+     * @var \ControleOnline\Entity\SalesOrder
      */
     $salesOrder = $order;
     $provider   = [
@@ -2985,7 +2985,7 @@ class OrderNotifierCommand extends Command
     // carrier
 
     /**
-     * @var \App\Entity\People $_carrier
+     * @var \ControleOnline\Entity\People $_carrier
      */
     if ($salesOrder->getQuote() && ($_carrier = $salesOrder->getQuote()->getCarrier())) {
       $carrier['name'] = $_carrier->getName();
@@ -3152,7 +3152,7 @@ class OrderNotifierCommand extends Command
   private function _getOrdersTemplateParams(Order $order): array
   {
     /**
-     * @var \App\Entity\SalesOrder
+     * @var \ControleOnline\Entity\SalesOrder
      */
     $salesOrder   = $order;
     $provider     = $salesOrder->getProvider();
@@ -3241,14 +3241,14 @@ class OrderNotifierCommand extends Command
       $retrieveData['contact']['alias'] = $salesOrder->getRetrieveContact()->getAlias();
 
       /**
-       * @var \App\Entity\Email $email
+       * @var \ControleOnline\Entity\Email $email
        */
       foreach ($salesOrder->getRetrieveContact()->getEmail() as $email) {
         $retrieveData['contact']['emails'][] = $email->getEmail();
       }
 
       /**
-       * @var \App\Entity\Phone $phone
+       * @var \ControleOnline\Entity\Phone $phone
        */
       foreach ($salesOrder->getRetrieveContact()->getPhone() as $phone) {
         $retrieveData['contact']['phones'][] = [
@@ -3302,14 +3302,14 @@ class OrderNotifierCommand extends Command
       $deliveryData['contact']['alias'] = $salesOrder->getDeliveryContact()->getAlias();
 
       /**
-       * @var \App\Entity\Email $email
+       * @var \ControleOnline\Entity\Email $email
        */
       foreach ($salesOrder->getDeliveryContact()->getEmail() as $email) {
         $deliveryData['contact']['emails'][] = $email->getEmail();
       }
 
       /**
-       * @var \App\Entity\Phone $phone
+       * @var \ControleOnline\Entity\Phone $phone
        */
       foreach ($salesOrder->getDeliveryContact()->getPhone() as $phone) {
         $deliveryData['contact']['phones'][] = [
@@ -3346,7 +3346,7 @@ class OrderNotifierCommand extends Command
     // order package
 
     /**
-     * @var \App\Entity\OrderPackage $package
+     * @var \ControleOnline\Entity\OrderPackage $package
      */
     foreach ($salesOrder->getOrderPackage() as $package) {
       $orderPackages[] = [
@@ -3361,7 +3361,7 @@ class OrderNotifierCommand extends Command
     // added invoice number
 
     /**
-     * @var \App\Entity\SalesInvoiceTax $receiveInvoice
+     * @var \ControleOnline\Entity\SalesInvoiceTax $receiveInvoice
      */
     $receiveInvoice = $salesOrder->getClientInvoiceTax();
 
@@ -3420,9 +3420,9 @@ class OrderNotifierCommand extends Command
     $repository = $this->em->getRepository(ReceiveInvoice::class);
     $invoices   = $repository->createQueryBuilder('I')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-      ->innerJoin('\App\Entity\SalesOrder', 'O', 'WITH', 'O.id = OI.order')
-      ->innerJoin('\App\Entity\Config', 'C', 'WITH', 'C.people = O.provider')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'O.id = OI.order')
+      ->innerJoin('\ControleOnline\Entity\Config', 'C', 'WITH', 'C.people = O.provider')
       ->where('I.status IN (:status)')
       ->andWhere('C.config_key LIKE :config_key')
       ->andWhere('O.orderType IN(:order_type)')
@@ -3449,7 +3449,7 @@ class OrderNotifierCommand extends Command
       foreach ($invoices as $invoice) {
 
         /**
-         * @var \App\Entity\SalesOrder
+         * @var \ControleOnline\Entity\SalesOrder
          */
 
         if (($orderInvoice = $invoice->getOrder()->first()) === false)
@@ -3607,7 +3607,7 @@ class OrderNotifierCommand extends Command
   {
     $salesOrders = $this->em->getRepository(SalesOrder::class)->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\App\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.order = O.id')
       ->innerJoin('\ControleOnline\Entity\ReceiveInvoice', 'I', 'WITH', 'I.id = OI.invoice')
       ->where('I.status IN (:istatus)')
       ->andWhere('O.status IN (:status)')
@@ -3666,7 +3666,7 @@ class OrderNotifierCommand extends Command
   {
     $salesOrders = $this->em->getRepository(SalesOrder::class)->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\App\Entity\Contract', 'C', 'WITH', 'C.id = O.contract')
+      ->innerJoin('\ControleOnline\Entity\Contract', 'C', 'WITH', 'C.id = O.contract')
       ->where('C.contractStatus IN (:contractStatus)')
       ->setParameters([
         'contractStatus' => ['Waiting signatures']

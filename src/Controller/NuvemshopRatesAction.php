@@ -16,7 +16,7 @@ use App\Library\Nuvemshop\Model\User    as NuvemUser;
 use App\Library\Nuvemshop\Model\Carrier as NuvemCarrier;
 use App\Library\Utils\Address;
 use ControleOnline\Entity\User;
-use App\Entity\Quote;
+use ControleOnline\Entity\Quote;
 
 class NuvemshopRatesAction extends AbstractController
 {

@@ -7,9 +7,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Doctrine\ORM\EntityManagerInterface;
 
-use App\Entity\CarManufacturer;
-use App\Entity\CarModel;
-use App\Entity\CarYearPrice;
+use ControleOnline\Entity\CarManufacturer;
+use ControleOnline\Entity\CarModel;
+use ControleOnline\Entity\CarYearPrice;
 
 class CarImportCommand extends Command
 {

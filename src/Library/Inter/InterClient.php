@@ -3,10 +3,10 @@
 namespace App\Library\Inter;
 
 use App\Controller\GetProviderDataPerInvoiceId;
-use App\Entity\Address;
+use ControleOnline\Entity\Address;
 use ControleOnline\Entity\Invoice;
 use ControleOnline\Entity\Status;
-use App\Entity\People;
+use ControleOnline\Entity\People;
 use ControleOnline\Entity\ReceiveInvoice;
 use App\Service\AddressService;
 use Doctrine\ORM\EntityManager;

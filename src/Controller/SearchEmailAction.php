@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use App\Entity\Email;
+use ControleOnline\Entity\Email;
 
 class SearchEmailAction
 {
