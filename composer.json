@@ -27,7 +27,6 @@
         "dompdf/dompdf": "^1.0",
         "fpdf/fpdf": "^1.83",
         "frete-click/php-sigep": "*",
-        "freteclick/sdk": "^1.2",
         "guzzlehttp/guzzle": "^6.3",
         "league/oauth2-facebook": "^2.2",
         "league/oauth2-google": "^4.0",
