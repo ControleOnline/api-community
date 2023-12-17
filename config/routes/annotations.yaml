@@ -1,3 +1,17 @@
 controllers:
     resource: ../../src/Controller/
     type: annotation
+
+imports:
+    - { resource: "../vendor/controleonline/products/config/routes/annotations.yaml" }
+    - { resource: "../vendor/controleonline/common/config/routes/annotations.yaml" }
+    - { resource: "../vendor/controleonline/financial/config/routes/annotations.yaml" }
+    - { resource: "../vendor/controleonline/contract/config/routes/annotations.yaml" }
+    - { resource: "../vendor/controleonline/dashboard/config/routes/annotations.yaml" }
+    - { resource: "../vendor/controleonline/ead/config/routes/annotations.yaml" }
+    - { resource: "../vendor/controleonline/orders/config/routes/annotations.yaml" }
+    - { resource: "../vendor/controleonline/people/config/routes/annotations.yaml" }
+    - { resource: "../vendor/controleonline/queue/config/routes/annotations.yaml" }
+    - { resource: "../vendor/controleonline/quote/config/routes/annotations.yaml" }
+    - { resource: "../vendor/controleonline/users/config/routes/annotations.yaml" }
+
