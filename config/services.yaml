@@ -34,7 +34,7 @@ services:
               lazy: true
 
 imports:
-    - { resource: "../vendor/controleonline/multi-tenency/config/config.yaml" }
+    - { resource: "../vendor/controleonline/multi-tenancy/config/config.yaml" }
     - { resource: "../vendor/controleonline/products/config/config.yaml" }
     - { resource: "../vendor/controleonline/common/config/config.yaml" }
     - { resource: "../vendor/controleonline/financial/config/config.yaml" }
