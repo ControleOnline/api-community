@@ -46,7 +46,7 @@ class GetTablesAction
 
       $nqu = $this->manager->createNativeQuery($sql, $rsm);
 
-      $nqu->setParameter('domain', $request->get('domain', null));
+      $nqu->setParameter('domain', $request->get('app-domain', null));
 
       $taxNames = $nqu->getArrayResult();
 
