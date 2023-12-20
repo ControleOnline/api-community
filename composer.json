@@ -19,6 +19,7 @@
         "controleonline/queue": "dev-master",
         "controleonline/quote": "dev-master",
         "controleonline/orders": "dev-master",
+        "controleonline/multi-tenancy": "dev-master",
         "ctodobom/api-inter": "dev-master",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.4",
