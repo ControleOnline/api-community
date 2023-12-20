@@ -12,69 +12,73 @@ use ControleOnline\Entity\PeopleDomain;
 
 class GetAppConfigAction
 {
-    private $em = null;
+  private $em = null;
 
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-      $this->em = $entityManager;
-    }
+  public function __construct(EntityManagerInterface $entityManager)
+  {
+    $this->em = $entityManager;
+  }
 
-    public function __invoke(): JsonResponse
-    {
-      try {
+  public function __invoke(Request $request): JsonResponse
+  {
+    try {
 
-        $config  = [];
+      $config  = [];
+      $config_key = $request->get('config_key', null);
+      $result = [];
+      $company = $this->getCompany($this->getDomain());
+      if ($company !== null) {
 
-        // get Google Tag Manager ID
-
-        $company = $this->getCompany($this->getDomain());
-        if ($company !== null) {
-          $gtmcon = $this->em->getRepository(Config::class)
-            ->findOneBy([
-              'config_key' => 'google-tag-manager',
-              'people'     => $company
-            ]);
-
-          if ($gtmcon instanceof Config) {
-            $config['google-tag-manager'] = str_replace("'", '"', $gtmcon->getConfigValue());
-          }
+        $filters = [
+          'visibility' => 'public',
+          'people'     => $company
+        ];
+        if ($config_key) {
+          $filters['config_key'] = $config_key;
         }
 
-        return new JsonResponse([
-          'response' => [
-            'data'    => $config,
-            'count'   => 1,
-            'error'   => '',
-            'success' => true,
-          ],
-        ]);
+        $configs = $this->em->getRepository(Config::class)
+          ->findBy($filters);
 
-      } catch (\Exception $e) {
 
-        return new JsonResponse([
-          'response' => [
-            'data'    => [],
-            'count'   => 0,
-            'error'   => $e->getMessage(),
-            'success' => false,
-          ],
-        ]);
-
+        foreach ($configs as $config) {
+          $result[$config->getConfigKey()] = $config->getConfigValue();
+        }
       }
+
+      return new JsonResponse([
+        'response' => [
+          'data'    => $result,
+          'count'   => 1,
+          'error'   => '',
+          'success' => true,
+        ],
+      ]);
+    } catch (\Exception $e) {
+
+      return new JsonResponse([
+        'response' => [
+          'data'    => [],
+          'count'   => 0,
+          'error'   => $e->getMessage(),
+          'success' => false,
+        ],
+      ]);
     }
+  }
 
-    private function getCompany(string $domain): ?People
-    {
-      $company = $this->em->getRepository(PeopleDomain::class)->findOneBy(['domain' => $domain]);
+  private function getCompany(string $domain): ?People
+  {
+    $company = $this->em->getRepository(PeopleDomain::class)->findOneBy(['domain' => $domain]);
 
-      if ($company === null)
-        return null;
+    if ($company === null)
+      return null;
 
-      return $company->getPeople();
-    }
+    return $company->getPeople();
+  }
 
-    private function getDomain($domain = null): string
-    {
-      return $domain ?: $_SERVER['HTTP_HOST'];
-    }
+  private function getDomain($domain = null): string
+  {
+    return $domain ?: $_SERVER['HTTP_HOST'];
+  }
 }

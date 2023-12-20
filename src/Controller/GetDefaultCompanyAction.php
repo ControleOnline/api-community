@@ -35,7 +35,7 @@ class GetDefaultCompanyAction
     /**
      * @var string $domain
      */
-    $domain = $request->get('domain', null);
+    $domain = $request->get('app-domain', null);
 
     try {
 

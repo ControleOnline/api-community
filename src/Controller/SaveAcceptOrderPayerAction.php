@@ -53,7 +53,7 @@ class SaveAcceptOrderPayerAction extends AbstractController
 
         try {
 
-            $people_domain = $request->query->get('domain');
+            $people_domain = $request->query->get('app-domain');
 
             if (empty($people_domain)){
                 throw new BadRequestHttpException('domain is not found');
