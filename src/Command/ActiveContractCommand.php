@@ -13,6 +13,7 @@ use ControleOnline\Entity\People;
 use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\Status;
 use App\Library\Provider\Signature\Contract as SignatureContract;
+use ControleOnline\Service\DatabaseSwitchService;
 
 class ActiveContractCommand extends Command
 {
@@ -38,12 +39,18 @@ class ActiveContractCommand extends Command
    * @var MyContract
    */
   private $data;
+  /**
+   * Entity manager
+   *
+   * @var DatabaseSwitchService
+   */
+  private $databaseSwitchService;
 
-
-  public function __construct(EntityManagerInterface $entityManager, SignatureService $signature)
+  public function __construct(EntityManagerInterface $entityManager, SignatureService $signature, DatabaseSwitchService $databaseSwitchService)
   {
     $this->manager = $entityManager;
     $this->signature = $signature;
+    $this->databaseSwitchService = $databaseSwitchService;
 
     parent::__construct();
   }
@@ -68,73 +75,79 @@ class ActiveContractCommand extends Command
     ]);
 
     $limit     = $input->getArgument('limit') ?: 100;
-    $contracts = $this->getWaitingContracts($limit);
-
-    if (empty($contracts)) {
-      $output->writeln([
-        '',
-        '   No contracts.',
-        '',
-      ]);
-    } else {
-
-      $output->writeln([
-        '',
-        '   =========================================',
-        sprintf('   Contracts  : %s', count($contracts)),
-        '   =========================================',
-        '',
-      ]);
-
-      foreach ($contracts as $contract) {
-        $defaultCompany = $this->manager->getRepository(People::class)->find(2);
-        $this->signature->setDefaultCompany($defaultCompany);
-
-        $c = new SignatureContract($this->manager, $this->signature);
-        $error = false;
-        try {
-          $data = $c->sign($contract);
-        } catch (\Exception $e) {
-          $error   = $e->getMessage();
-        }
-
-        if ($error) {
-
-          $this->updateContractStatusToAnalysis($contract, $error);
 
 
-          $output->writeln([
-            '',
-            '   =========================================',
-            sprintf('   Contract: %s', $contract->getId()),
-            sprintf('   Message : %s', $error),
-            '   =========================================',
-            '',
-          ]);
-        } else {
-          $result = $this->updateContractStatusToActive($contract);
-          $result['contractId'] = $contract->getId();
-          $result['message']  = 'OK';
-          $output->writeln([
-            '',
-            '   =========================================',
-            sprintf('   Contract: %s', $result['contractId']),
-            sprintf('   Message : %s', $result['message']),
-            '   =========================================',
-            '',
-          ]);
+    $domains = $this->databaseSwitchService->getAllDomains();
+    foreach ($domains as $domain) {
+      $this->databaseSwitchService->switchDatabaseByDomain($domain);
+
+      $contracts = $this->getWaitingContracts($limit);
+
+      if (empty($contracts)) {
+        $output->writeln([
+          '',
+          '   No contracts.',
+          '',
+        ]);
+      } else {
+
+        $output->writeln([
+          '',
+          '   =========================================',
+          sprintf('   Contracts  : %s', count($contracts)),
+          '   =========================================',
+          '',
+        ]);
+
+        foreach ($contracts as $contract) {
+          $defaultCompany = $this->manager->getRepository(People::class)->find(2);
+          $this->signature->setDefaultCompany($defaultCompany);
+
+          $c = new SignatureContract($this->manager, $this->signature);
+          $error = false;
+          try {
+            $data = $c->sign($contract);
+          } catch (\Exception $e) {
+            $error   = $e->getMessage();
+          }
+
+          if ($error) {
+
+            $this->updateContractStatusToAnalysis($contract, $error);
+
+
+            $output->writeln([
+              '',
+              '   =========================================',
+              sprintf('   Contract: %s', $contract->getId()),
+              sprintf('   Message : %s', $error),
+              '   =========================================',
+              '',
+            ]);
+          } else {
+            $result = $this->updateContractStatusToActive($contract);
+            $result['contractId'] = $contract->getId();
+            $result['message']  = 'OK';
+            $output->writeln([
+              '',
+              '   =========================================',
+              sprintf('   Contract: %s', $result['contractId']),
+              sprintf('   Message : %s', $result['message']),
+              '   =========================================',
+              '',
+            ]);
+          }
         }
       }
+
+      $output->writeln([
+        '',
+        '=========================================',
+        'End',
+        '=========================================',
+        '',
+      ]);
     }
-
-    $output->writeln([
-      '',
-      '=========================================',
-      'End',
-      '=========================================',
-      '',
-    ]);
-
     return 0;
   }
 
@@ -179,7 +192,7 @@ class ActiveContractCommand extends Command
       $this->manager->getConnection()->beginTransaction();
       if ($order) {
         $order->setComments($error);
-        $order->setStatus($this->manager->getRepository(Status::class)->findOneBy(['status' => 'analysis','context' => 'order']));
+        $order->setStatus($this->manager->getRepository(Status::class)->findOneBy(['status' => 'analysis', 'context' => 'order']));
         $this->manager->persist($order);
       }
 
@@ -219,7 +232,7 @@ class ActiveContractCommand extends Command
       $this->manager->getConnection()->beginTransaction();
 
       if ($order) {
-        $order->setStatus($this->manager->getRepository(Status::class)->findOneBy(['status' => 'automatic analysis','context' => 'order']));
+        $order->setStatus($this->manager->getRepository(Status::class)->findOneBy(['status' => 'automatic analysis', 'context' => 'order']));
         $this->manager->persist($order);
       }
 

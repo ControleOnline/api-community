@@ -39,6 +39,7 @@ use ControleOnline\Entity\Task;
 use ControleOnline\Entity\Category;
 use ControleOnline\Entity\OrderLogistic;
 use ControleOnline\Entity\TaskInteration;
+use ControleOnline\Service\DatabaseSwitchService;
 
 use DateTime;
 
@@ -70,7 +71,12 @@ class OrderNotifierCommand extends Command
    */
   private $config;
 
-
+  /**
+   * Entity manager
+   *
+   * @var DatabaseSwitchService
+   */
+  private $databaseSwitchService;
 
   /**
    * Config repository
@@ -79,13 +85,14 @@ class OrderNotifierCommand extends Command
    */
   private $output;
 
-  public function __construct(EntityManagerInterface $entityManager, MauticService $mauticService, ConfigRepository $config, Environment $twig)
+  public function __construct(EntityManagerInterface $entityManager, MauticService $mauticService, ConfigRepository $config, Environment $twig, DatabaseSwitchService $databaseSwitchService)
   {
     $this->em     = $entityManager;
     $this->ma     = $mauticService;
     $this->config = $config;
     $this->twig   = $twig;
     $this->errors = [];
+    $this->databaseSwitchService = $databaseSwitchService;
 
     parent::__construct();
   }
@@ -103,63 +110,68 @@ class OrderNotifierCommand extends Command
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
-    $this->output = $output;
 
-    $targetName = $input->getArgument('target');
-    $orderLimit = $input->getArgument('limit') ?: 100;
-    $dateLimit = $input->getArgument('datelimit') ?: 15;
+    $domains = $this->databaseSwitchService->getAllDomains();
+    foreach ($domains as $domain) {
+      $this->databaseSwitchService->switchDatabaseByDomain($domain);
 
-    $getOrders  = 'get' . str_replace('_', '', ucwords(strtolower($targetName), '_')) . 'Orders';
-    if (method_exists($this, $getOrders) === false)
-      throw new \Exception(sprintf('Notification target "%s" is not defined', $targetName));
+      $this->output = $output;
 
-    $this->output->writeln([
-      '',
-      '=========================================',
-      sprintf('Notification target: %s', $targetName),
-      '=========================================',
-      sprintf('Rows to process: %d', $orderLimit),
-      '',
-    ]);
+      $targetName = $input->getArgument('target');
+      $orderLimit = $input->getArgument('limit') ?: 100;
+      $dateLimit = $input->getArgument('datelimit') ?: 15;
 
-    // get orders
+      $getOrders  = 'get' . str_replace('_', '', ucwords(strtolower($targetName), '_')) . 'Orders';
+      if (method_exists($this, $getOrders) === false)
+        throw new \Exception(sprintf('Notification target "%s" is not defined', $targetName));
 
-    $orders = $this->$getOrders($orderLimit, $dateLimit);
+      $this->output->writeln([
+        '',
+        '=========================================',
+        sprintf('Notification target: %s', $targetName),
+        '=========================================',
+        sprintf('Rows to process: %d', $orderLimit),
+        '',
+      ]);
 
-    if (!empty($orders)) {
-      foreach ($orders as $order) {
+      // get orders
 
-        // start notifications...
+      $orders = $this->$getOrders($orderLimit, $dateLimit);
 
-        $this->output->writeln([sprintf('      OrderID : #%s', $order->order)]);
-        $this->output->writeln([sprintf('      Carrier : %s', $order->carrier)]);
-        $this->output->writeln([sprintf('      Provider: %s', $order->company)]);
-        $this->output->writeln([sprintf('      Receiver: %s', $order->receiver)]);
-        $this->output->writeln([sprintf('      Subject : %s', $order->subject)]);
+      if (!empty($orders)) {
+        foreach ($orders as $order) {
 
-        $result = $order->notifier['send']();
+          // start notifications...
 
-        if (is_bool($result)) {
-          $order->events[$result === true ? 'onSuccess' : 'onError']();
-        } else {
-          if ($result === null) {
-            $this->output->writeln(['      Error   : send method internal error']);
+          $this->output->writeln([sprintf('      OrderID : #%s', $order->order)]);
+          $this->output->writeln([sprintf('      Carrier : %s', $order->carrier)]);
+          $this->output->writeln([sprintf('      Provider: %s', $order->company)]);
+          $this->output->writeln([sprintf('      Receiver: %s', $order->receiver)]);
+          $this->output->writeln([sprintf('      Subject : %s', $order->subject)]);
+
+          $result = $order->notifier['send']();
+
+          if (is_bool($result)) {
+            $order->events[$result === true ? 'onSuccess' : 'onError']();
+          } else {
+            if ($result === null) {
+              $this->output->writeln(['      Error   : send method internal error']);
+            }
           }
+
+          $this->output->writeln(['']);
         }
+      } else
+        $this->output->writeln('      There is no pending orders.');
 
-        $this->output->writeln(['']);
-      }
-    } else
-      $this->output->writeln('      There is no pending orders.');
-
-    $this->output->writeln([
-      '',
-      '=========================================',
-      'End of Order Notifier',
-      '=========================================',
-      '',
-    ]);
-
+      $this->output->writeln([
+        '',
+        '=========================================',
+        'End of Order Notifier',
+        '=========================================',
+        '',
+      ]);
+    }
     return 0;
   }
 

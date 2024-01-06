@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Doctrine\ORM\EntityManagerInterface;
+use ControleOnline\Service\DatabaseSwitchService;
 
 class OrderTrackingStatusCommand extends Command
 {
@@ -21,15 +22,21 @@ class OrderTrackingStatusCommand extends Command
    * @var EntityManagerInterface
    */
   private $manager;
-
+  /**
+   * Entity manager
+   *
+   * @var DatabaseSwitchService
+   */
+  private $databaseSwitchService;
 
   private $webservice = [];
 
-  public function __construct(EntityManagerInterface $entityManager)
+  public function __construct(EntityManagerInterface $entityManager, DatabaseSwitchService $databaseSwitchService)
   {
     $this->manager    = $entityManager;
     $this->webservice[] = new \App\Library\SSW\Client;
     $this->webservice[] = new \App\Library\Movvi\Client;
+    $this->databaseSwitchService = $databaseSwitchService;
 
     parent::__construct();
   }
@@ -45,55 +52,61 @@ class OrderTrackingStatusCommand extends Command
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
-    $output->writeln([
-      '',
-      '=========================================',
-      'Starting...',
-      '=========================================',
-      '',
-    ]);
 
-    $limit  = $input->getArgument('limit') ?: 100;
-    $orders = $this->getOrders($limit);
 
-    if (empty($orders)) {
-      $output->writeln([
-        '',
-        '   No orders.',
-        '',
-      ]);
-    } else {
+    $domains = $this->databaseSwitchService->getAllDomains();
+    foreach ($domains as $domain) {
+      $this->databaseSwitchService->switchDatabaseByDomain($domain);
 
       $output->writeln([
         '',
-        '   =========================================',
-        sprintf('   Orders  : %s', count($orders)),
-        '   =========================================',
+        '=========================================',
+        'Starting...',
+        '=========================================',
         '',
       ]);
 
-      foreach ($orders as $salesOrder) {
-        $result = $this->createTrackingStatuses($salesOrder);
+      $limit  = $input->getArgument('limit') ?: 100;
+      $orders = $this->getOrders($limit);
+
+      if (empty($orders)) {
+        $output->writeln([
+          '',
+          '   No orders.',
+          '',
+        ]);
+      } else {
 
         $output->writeln([
           '',
           '   =========================================',
-          sprintf('   Order  : %s', $result['orderId']),
-          sprintf('   Message: %s', $result['message']),
+          sprintf('   Orders  : %s', count($orders)),
           '   =========================================',
           '',
         ]);
+
+        foreach ($orders as $salesOrder) {
+          $result = $this->createTrackingStatuses($salesOrder);
+
+          $output->writeln([
+            '',
+            '   =========================================',
+            sprintf('   Order  : %s', $result['orderId']),
+            sprintf('   Message: %s', $result['message']),
+            '   =========================================',
+            '',
+          ]);
+        }
       }
+
+      $output->writeln([
+        '',
+        '=========================================',
+        'End',
+        '=========================================',
+        '',
+      ]);
     }
-
-    $output->writeln([
-      '',
-      '=========================================',
-      'End',
-      '=========================================',
-      '',
-    ]);
-
     return 0;
   }
 

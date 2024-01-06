@@ -12,6 +12,7 @@ use ControleOnline\Repository\DeliveryRegionRepository;
 use ControleOnline\Repository\DeliveryTaxGroupRepository;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use ControleOnline\Service\DatabaseSwitchService;
 
 use ControleOnline\Entity\Import;
 use ControleOnline\Entity\DeliveryRegion;
@@ -78,13 +79,21 @@ class ImportCommand extends Command
 
     private $error = null;
 
-    public function __construct(EntityManagerInterface $entityManager,        KernelInterface $appKernel)
+    /**
+     * Entity manager
+     *
+     * @var DatabaseSwitchService
+     */
+    private $databaseSwitchService;
+
+    public function __construct(EntityManagerInterface $entityManager,        KernelInterface $appKernel, DatabaseSwitchService $databaseSwitchService)
     {
         $this->manager   = $entityManager;
         $this->appKernel = $appKernel;
         $this->imports   = $this->manager->getRepository(Import::class);
         $this->regions   = $this->manager->getRepository(DeliveryRegion::class);
         $this->groups    = $this->manager->getRepository(DeliveryTaxGroup::class);
+        $this->databaseSwitchService = $databaseSwitchService;
 
         parent::__construct();
     }
@@ -106,47 +115,52 @@ class ImportCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->output = $output;
-        $this->importType = $input->getArgument('importType');
-        $this->limit = $input->getArgument('limit') ?: 100;
+
+        $domains = $this->databaseSwitchService->getAllDomains();
+        foreach ($domains as $domain) {
+            $this->databaseSwitchService->switchDatabaseByDomain($domain);
+
+            $this->output = $output;
+            $this->importType = $input->getArgument('importType');
+            $this->limit = $input->getArgument('limit') ?: 100;
 
 
 
-
-        $this->output->writeln([
-            '',
-            '=========================================',
-            'Starting (limit ' . $this->limit . ')...',
-            '=========================================',
-            '',
-        ]);
-
-        try {
-            $this->manager->getConnection()->beginTransaction();
-            $this->startJobs();
-            $this->manager->flush();
-            $this->manager->getConnection()->commit();
-        } catch (\Exception $e) {
-            if ($this->manager->getConnection()->isTransactionActive())
-                $this->manager->getConnection()->rollBack();
-
-            $this->error = $e->getMessage();
 
             $this->output->writeln([
                 '',
-                'Main Error: ' . $e->getMessage(),
+                '=========================================',
+                'Starting (limit ' . $this->limit . ')...',
+                '=========================================',
+                '',
+            ]);
+
+            try {
+                $this->manager->getConnection()->beginTransaction();
+                $this->startJobs();
+                $this->manager->flush();
+                $this->manager->getConnection()->commit();
+            } catch (\Exception $e) {
+                if ($this->manager->getConnection()->isTransactionActive())
+                    $this->manager->getConnection()->rollBack();
+
+                $this->error = $e->getMessage();
+
+                $this->output->writeln([
+                    '',
+                    'Main Error: ' . $e->getMessage(),
+                    '',
+                ]);
+            }
+
+            $this->output->writeln([
+                '',
+                '=========================================',
+                'End',
+                '=========================================',
                 '',
             ]);
         }
-
-        $this->output->writeln([
-            '',
-            '=========================================',
-            'End',
-            '=========================================',
-            '',
-        ]);
-
         return 0;
     }
 

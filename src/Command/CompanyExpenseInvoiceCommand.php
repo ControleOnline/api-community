@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Doctrine\ORM\EntityManagerInterface;
+use ControleOnline\Service\DatabaseSwitchService;
 
 use ControleOnline\Entity\PurchasingOrder;
 use ControleOnline\Entity\PayInvoice;
@@ -23,10 +24,17 @@ class CompanyExpenseInvoiceCommand extends Command
    * @var EntityManagerInterface
    */
   private $manager  = null;
+  /**
+   * Entity manager
+   *
+   * @var DatabaseSwitchService
+   */
+  private $databaseSwitchService;
 
-  public function __construct(EntityManagerInterface $entityManager)
+  public function __construct(EntityManagerInterface $entityManager, DatabaseSwitchService $databaseSwitchService)
   {
     $this->manager = $entityManager;
+    $this->databaseSwitchService = $databaseSwitchService;
 
     parent::__construct();
   }
@@ -42,55 +50,61 @@ class CompanyExpenseInvoiceCommand extends Command
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
-    $output->writeln([
-      '',
-      '=========================================',
-      'Starting...',
-      '=========================================',
-      '',
-    ]);
 
-    $limit    = $input->getArgument('limit') ?: 100;
-    $expenses = $this->getActiveRecurrentExpenses($limit);
 
-    if (empty($expenses)) {
-      $output->writeln([
-        '',
-        '   No active expenses.',
-        '',
-      ]);
-    } else {
+    $domains = $this->databaseSwitchService->getAllDomains();
+    foreach ($domains as $domain) {
+      $this->databaseSwitchService->switchDatabaseByDomain($domain);
 
       $output->writeln([
         '',
-        '   =========================================',
-        sprintf('   Expenses  : %s', count($expenses)),
-        '   =========================================',
+        '=========================================',
+        'Starting...',
+        '=========================================',
         '',
       ]);
 
-      foreach ($expenses as $expense) {
-        $result = $this->createOrderInvoice($expense);
+      $limit    = $input->getArgument('limit') ?: 100;
+      $expenses = $this->getActiveRecurrentExpenses($limit);
+
+      if (empty($expenses)) {
+        $output->writeln([
+          '',
+          '   No active expenses.',
+          '',
+        ]);
+      } else {
 
         $output->writeln([
           '',
           '   =========================================',
-          sprintf('   Expense: %s', $result['expenseId']),
-          sprintf('   Message: %s', $result['message']),
+          sprintf('   Expenses  : %s', count($expenses)),
           '   =========================================',
           '',
         ]);
+
+        foreach ($expenses as $expense) {
+          $result = $this->createOrderInvoice($expense);
+
+          $output->writeln([
+            '',
+            '   =========================================',
+            sprintf('   Expense: %s', $result['expenseId']),
+            sprintf('   Message: %s', $result['message']),
+            '   =========================================',
+            '',
+          ]);
+        }
       }
+
+      $output->writeln([
+        '',
+        '=========================================',
+        'End',
+        '=========================================',
+        '',
+      ]);
     }
-
-    $output->writeln([
-      '',
-      '=========================================',
-      'End',
-      '=========================================',
-      '',
-    ]);
-
     return 0;
   }
 

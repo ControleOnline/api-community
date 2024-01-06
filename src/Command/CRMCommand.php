@@ -20,6 +20,7 @@ use ControleOnline\Entity\TaskInteration;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Repository\ConfigRepository;
+use ControleOnline\Service\DatabaseSwitchService;
 
 class CRMCommand extends Command
 {
@@ -49,12 +50,20 @@ class CRMCommand extends Command
    */
   private $config;
 
-  public function __construct(EntityManagerInterface $entityManager, MauticService $mauticService, ConfigRepository $config, Environment $twig)
+  /**
+   * Entity manager
+   *
+   * @var DatabaseSwitchService
+   */
+  private $databaseSwitchService;
+
+  public function __construct(EntityManagerInterface $entityManager, MauticService $mauticService, ConfigRepository $config, Environment $twig, DatabaseSwitchService $databaseSwitchService)
   {
     $this->em     = $entityManager;
     $this->ma     = $mauticService;
     $this->config = $config;
     $this->twig   = $twig;
+    $this->databaseSwitchService = $databaseSwitchService;
 
     parent::__construct();
   }
@@ -71,61 +80,67 @@ class CRMCommand extends Command
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
-    $targetName = $input->getArgument('target');
-    $orderLimit = $input->getArgument('limit') ?: 10;
 
-    $getOrders  = 'get' . str_replace('_', '', ucwords(strtolower($targetName), '_')) . 'Orders';
-    if (method_exists($this, $getOrders) === false)
-      throw new \Exception(sprintf('Notification target "%s" is not defined', $targetName));
 
-    $output->writeln([
-      '',
-      '=========================================',
-      sprintf('Notification target: %s', $targetName),
-      '=========================================',
-      sprintf('Rows to process: %d', $orderLimit),
-      '',
-    ]);
+    $domains = $this->databaseSwitchService->getAllDomains();
+    foreach ($domains as $domain) {
+      $this->databaseSwitchService->switchDatabaseByDomain($domain);
 
-    // get orders
+      $targetName = $input->getArgument('target');
+      $orderLimit = $input->getArgument('limit') ?: 10;
 
-    $orders = $this->$getOrders($orderLimit);
+      $getOrders  = 'get' . str_replace('_', '', ucwords(strtolower($targetName), '_')) . 'Orders';
+      if (method_exists($this, $getOrders) === false)
+        throw new \Exception(sprintf('Notification target "%s" is not defined', $targetName));
 
-    if (!empty($orders)) {
-      foreach ($orders as $order) {
+      $output->writeln([
+        '',
+        '=========================================',
+        sprintf('Notification target: %s', $targetName),
+        '=========================================',
+        sprintf('Rows to process: %d', $orderLimit),
+        '',
+      ]);
 
-        // start notifications...
+      // get orders
 
-        $output->writeln([sprintf('      ID : #%s', $order->id)]);
-        $output->writeln([sprintf('      SalesmanID : #%s', $order->saleamanId)]);
-        $output->writeln([sprintf('      Salesman : %s', $order->salesman)]);
-        $output->writeln([sprintf('      Company: %s', $order->company)]);
-        $output->writeln([sprintf('      Client: %s', $order->client)]);
-        $output->writeln([sprintf('      Subject : %s', $order->subject)]);
+      $orders = $this->$getOrders($orderLimit);
 
-        $result = $order->notifier['send']();
+      if (!empty($orders)) {
+        foreach ($orders as $order) {
 
-        if (is_bool($result)) {
-          $order->events[$result === true ? 'onSuccess' : 'onError']();
-        } else {
-          if ($result === null) {
-            $output->writeln(['      Error   : send method internal error']);
+          // start notifications...
+
+          $output->writeln([sprintf('      ID : #%s', $order->id)]);
+          $output->writeln([sprintf('      SalesmanID : #%s', $order->saleamanId)]);
+          $output->writeln([sprintf('      Salesman : %s', $order->salesman)]);
+          $output->writeln([sprintf('      Company: %s', $order->company)]);
+          $output->writeln([sprintf('      Client: %s', $order->client)]);
+          $output->writeln([sprintf('      Subject : %s', $order->subject)]);
+
+          $result = $order->notifier['send']();
+
+          if (is_bool($result)) {
+            $order->events[$result === true ? 'onSuccess' : 'onError']();
+          } else {
+            if ($result === null) {
+              $output->writeln(['      Error   : send method internal error']);
+            }
           }
+
+          $output->writeln(['']);
         }
+      } else
+        $output->writeln('      There is no pending orders.');
 
-        $output->writeln(['']);
-      }
-    } else
-      $output->writeln('      There is no pending orders.');
-
-    $output->writeln([
-      '',
-      '=========================================',
-      'End of Order Notifier',
-      '=========================================',
-      '',
-    ]);
-
+      $output->writeln([
+        '',
+        '=========================================',
+        'End of Order Notifier',
+        '=========================================',
+        '',
+      ]);
+    }
     return 0;
   }
 

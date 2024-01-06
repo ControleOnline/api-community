@@ -21,6 +21,7 @@ use ControleOnline\Entity\DeliveryTaxGroup;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\PurchasingInvoiceTax;
 use ControleOnline\Entity\SalesInvoiceTax;
+use ControleOnline\Service\DatabaseSwitchService;
 
 class FixCommand extends Command
 {
@@ -34,18 +35,16 @@ class FixCommand extends Command
   private $manager  = null;
 
   /**
-   * DeliveryRegion repository
+   * Entity manager
    *
-   * @var DeliveryRegionRepository
+   * @var DatabaseSwitchService
    */
-  private $regions = null;
-  /**
-   * 
-   */
+  private $databaseSwitchService;
 
 
-  public function __construct(EntityManagerInterface $entityManager)
+  public function __construct(EntityManagerInterface $entityManager, DatabaseSwitchService $databaseSwitchService)
   {
+    $this->databaseSwitchService = $databaseSwitchService;
     $this->manager = $entityManager;
     parent::__construct();
   }
@@ -86,7 +85,13 @@ class FixCommand extends Command
         sprintf('Rows to process: %d', $limit),
         '',
       ]);
-      $this->$fix($output, $limit);
+
+      $domains = $this->databaseSwitchService->getAllDomains();
+      foreach ($domains as $domain) {
+        $this->databaseSwitchService->switchDatabaseByDomain($domain);
+        $this->$fix($output, $limit);
+      }
+      
     } catch (\Exception $e) {
       if ($this->manager->getConnection()->isTransactionActive())
         $this->manager->getConnection()->rollBack();
@@ -331,19 +336,19 @@ class FixCommand extends Command
      * Quando houver uma vistoria finalizada
      */
 
-     $rawSQL = 'UPDATE order_logistic AS OL 
+    $rawSQL = 'UPDATE order_logistic AS OL 
      INNER JOIN orders O ON O.id = OL.order_id AND  O.parking_date IS NOT NULL
      SET OL.shipping_date = O.parking_date
      WHERE OL.shipping_date IS NULL 
      ';
- 
-     $output->writeln(['', 'Change Logistic Status', '']);
-     $this->manager->getConnection()->executeQuery($rawSQL);
+
+    $output->writeln(['', 'Change Logistic Status', '']);
+    $this->manager->getConnection()->executeQuery($rawSQL);
 
 
 
 
-         /**
+    /**
      * Finaliza a logística quando houver uma logística pro mesmo pedido já aberta
      */
 
@@ -359,9 +364,8 @@ class FixCommand extends Command
     AND OLS.status = \'complete\'
     ';
 
-   $output->writeln(['', 'Change Logistic Status', '']);
-   $this->manager->getConnection()->executeQuery($rawSQL);
-
+    $output->writeln(['', 'Change Logistic Status', '']);
+    $this->manager->getConnection()->executeQuery($rawSQL);
   }
 
   protected function fixOrderStatusByContract(OutputInterface $output, $limit)
@@ -376,7 +380,7 @@ class FixCommand extends Command
     $params = [
       'set_status' => $this->manager->getRepository(Status::class)->findOneBy(['status' => 'waiting payment', 'context' => 'order'])->getId(),
       'status' => $this->manager->getRepository(Status::class)->findOneBy(['status' => 'waiting client invoice tax', 'context' => 'order'])->getId(),
-    ];    
+    ];
 
     $output->writeln(['', 'Fix Orders Status', '']);
     $this->manager->getConnection()->executeQuery($rawSQL, $params);

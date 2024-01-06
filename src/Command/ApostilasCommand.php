@@ -16,6 +16,7 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use stdClass;
+use ControleOnline\Service\DatabaseSwitchService;
 
 class ApostilasCommand extends Command
 {
@@ -45,6 +46,12 @@ class ApostilasCommand extends Command
    *
    * @var InputInterface
    */
+  /**
+   * Entity manager
+   *
+   * @var DatabaseSwitchService
+   */
+  private $databaseSwitchService;
   private $input = null;
   private static $__basedir;
   private $result = null;
@@ -61,9 +68,11 @@ class ApostilasCommand extends Command
   private $targetName;
 
 
-  public function __construct(EntityManagerInterface $entityManager)
+  public function __construct(EntityManagerInterface $entityManager, DatabaseSwitchService $databaseSwitchService)
   {
     $this->manager = $entityManager;
+    $this->databaseSwitchService = $databaseSwitchService;
+
     parent::__construct();
   }
 
@@ -90,51 +99,55 @@ class ApostilasCommand extends Command
   protected function execute(InputInterface $input, OutputInterface $output)
   {
 
-    $this->output = $output;
-    $this->input = $input;
-    $this->output->writeln([
-      '',
-      '=========================================',
-      'Starting...',
-      '=========================================',
-      '',
-    ]);
-    $this->targetName = $this->input->getArgument('target');
-    $this->force = $this->input->getArgument('force');
+    $domains = $this->databaseSwitchService->getAllDomains();
+    foreach ($domains as $domain) {
+      $this->databaseSwitchService->switchDatabaseByDomain($domain);
 
-    try {
-
-
-      $copy  = 'copy' . str_replace('-', '', ucwords(strtolower($this->targetName), '-'));
-      if (method_exists($this, $copy) === false)
-        throw new \Exception(sprintf('Notification target "%s" is not defined', $this->targetName));
-
+      $this->output = $output;
+      $this->input = $input;
       $this->output->writeln([
         '',
         '=========================================',
-        sprintf('Notification target: %s', $this->targetName),
+        'Starting...',
         '=========================================',
         '',
       ]);
-    } catch (\Exception $e) {
-      if ($this->manager->getConnection()->isTransactionActive())
-        $this->manager->getConnection()->rollBack();
+      $this->targetName = $this->input->getArgument('target');
+      $this->force = $this->input->getArgument('force');
 
+      try {
+
+
+        $copy  = 'copy' . str_replace('-', '', ucwords(strtolower($this->targetName), '-'));
+        if (method_exists($this, $copy) === false)
+          throw new \Exception(sprintf('Notification target "%s" is not defined', $this->targetName));
+
+        $this->output->writeln([
+          '',
+          '=========================================',
+          sprintf('Notification target: %s', $this->targetName),
+          '=========================================',
+          '',
+        ]);
+      } catch (\Exception $e) {
+        if ($this->manager->getConnection()->isTransactionActive())
+          $this->manager->getConnection()->rollBack();
+
+        $this->output->writeln([
+          '',
+          'Error: ' . $e->getMessage(),
+          '',
+        ]);
+      }
+      $this->$copy();
       $this->output->writeln([
         '',
-        'Error: ' . $e->getMessage(),
+        '=========================================',
+        'End',
+        '=========================================',
         '',
       ]);
     }
-    $this->$copy();
-    $this->output->writeln([
-      '',
-      '=========================================',
-      'End',
-      '=========================================',
-      '',
-    ]);
-
     return 0;
   }
 

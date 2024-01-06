@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Command;
 
 use Symfony\Component\Console\Command\Command;
@@ -16,6 +17,7 @@ use ControleOnline\Entity\DeliveryRegion;
 use ControleOnline\Entity\DeliveryRegionCity;
 use ControleOnline\Entity\DeliveryTax;
 use ControleOnline\Entity\DeliveryTaxGroup;
+use ControleOnline\Service\DatabaseSwitchService;
 
 class VtexExportCommand extends Command
 {
@@ -37,130 +39,137 @@ class VtexExportCommand extends Command
   /**
    * 
    */
-  
+  /**
+   * Entity manager
+   *
+   * @var DatabaseSwitchService
+   */
+  private $databaseSwitchService;
 
-  public function __construct(EntityManagerInterface $entityManager)
+  public function __construct(EntityManagerInterface $entityManager, DatabaseSwitchService $databaseSwitchService)
   {
-      $this->manager = $entityManager;
-      $this->regions = $this->manager->getRepository(DeliveryRegion::class);
+    $this->manager = $entityManager;
+    $this->regions = $this->manager->getRepository(DeliveryRegion::class);
+    $this->databaseSwitchService = $databaseSwitchService;
 
-      parent::__construct();
+    parent::__construct();
   }
 
   protected function configure()
   {
     $this
       ->setDescription('Export sheet to VTEX.')
-      ->setHelp       ('This command export xsl to import VTEX.')
-    ;
+      ->setHelp('This command export xsl to import VTEX.');
 
     $this->addArgument('limit', InputArgument::OPTIONAL, 'Limit of export to process');
   }
 
   protected function execute(InputInterface $input, OutputInterface $output)
   {
-    $output->writeln([
-      '',
-      '=========================================',
-      'Starting...',
-      '=========================================',
-      '',
-    ]);
 
-    $limit  = $input->getArgument('limit') ?: 100;
+    $domains = $this->databaseSwitchService->getAllDomains();
+    foreach ($domains as $domain) {
+      $this->databaseSwitchService->switchDatabaseByDomain($domain);
 
-    try {
+      $output->writeln([
+        '',
+        '=========================================',
+        'Starting...',
+        '=========================================',
+        '',
+      ]);
 
-      $this->saveAsXls($output);
+      $limit  = $input->getArgument('limit') ?: 100;
 
-    } catch (\Exception $e) {
+      try {
+
+        $this->saveAsXls($output);
+      } catch (\Exception $e) {
         if ($this->manager->getConnection()->isTransactionActive())
-            $this->manager->getConnection()->rollBack();
+          $this->manager->getConnection()->rollBack();
 
         $output->writeln([
-            '',
-            'Error: ' . $e->getMessage(),
-            '',
+          '',
+          'Error: ' . $e->getMessage(),
+          '',
         ]);
-    }
-
-
-    $output->writeln([
-      '',
-      '=========================================',
-      'End',
-      '=========================================',
-      '',
-    ]);
-
-      return 0;
-    }
-
-    /**
-     * Save file in format xls!
-     */
-    protected function saveAsXls(OutputInterface $output){
-
-      $spreadsheet = new Spreadsheet();
-      $sheet = $spreadsheet->getActiveSheet();
-
-      $xlsxHeader = [
-        "A1" => "ZipCodeStart",
-        "B1" => "ZipCodeEnd",
-        "C1" => "PolygonName",
-        "D1" => "WeightStart",
-        "E1" => "WeightEnd",
-        "F1" => "AbsoluteMoneyCost",
-        "G1" => "PricePercent",
-        "H1" => "PriceByExtraWeight",
-        "I1" => "MaxVolume",
-        "J1" => "TimeCost",
-        "K1" => "Country",
-        "L1" => "MinimumValueInsurance",
-      ];
-      
-      /**
-       * Create Header For xls!
-       */
-      foreach($xlsxHeader as $key => $header){
-
-        $output->writeln(sprintf('-- Header Added: %s in col: %s', $header, $key));
-
-        $sheet->setCellValue($key, $header);
-
-      }
-
-      $output->writeln(['','-- Header xls created!', '']);
-
-      $deadlines = $this->getDeadline();
-
-      foreach($deadlines as $deadline){
-        print_r($deadline);
       }
 
 
-      $writer = new Xls($spreadsheet);
-      $writer->save('public/arquivos/ExportVtex.xls');
-
-      $output->writeln(['-- File xls save in public/arquivos/ExportVtex.xls', '']);
-
+      $output->writeln([
+        '',
+        '=========================================',
+        'End',
+        '=========================================',
+        '',
+      ]);
     }
-
-    /**
-     * Get Deadline
-     */
-    protected function getDeadline(){
-      
-      $region = $this->regions->findAll();
-
-      foreach($region as $regionss){
-          $deadline[] = [
-            'deadline' => $regionss->getDeadline()
-          ];
-      }
-
-      return $deadline;
-
-    }
-
+    return 0;
   }
+
+  /**
+   * Save file in format xls!
+   */
+  protected function saveAsXls(OutputInterface $output)
+  {
+
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    $xlsxHeader = [
+      "A1" => "ZipCodeStart",
+      "B1" => "ZipCodeEnd",
+      "C1" => "PolygonName",
+      "D1" => "WeightStart",
+      "E1" => "WeightEnd",
+      "F1" => "AbsoluteMoneyCost",
+      "G1" => "PricePercent",
+      "H1" => "PriceByExtraWeight",
+      "I1" => "MaxVolume",
+      "J1" => "TimeCost",
+      "K1" => "Country",
+      "L1" => "MinimumValueInsurance",
+    ];
+
+    /**
+     * Create Header For xls!
+     */
+    foreach ($xlsxHeader as $key => $header) {
+
+      $output->writeln(sprintf('-- Header Added: %s in col: %s', $header, $key));
+
+      $sheet->setCellValue($key, $header);
+    }
+
+    $output->writeln(['', '-- Header xls created!', '']);
+
+    $deadlines = $this->getDeadline();
+
+    foreach ($deadlines as $deadline) {
+      print_r($deadline);
+    }
+
+
+    $writer = new Xls($spreadsheet);
+    $writer->save('public/arquivos/ExportVtex.xls');
+
+    $output->writeln(['-- File xls save in public/arquivos/ExportVtex.xls', '']);
+  }
+
+  /**
+   * Get Deadline
+   */
+  protected function getDeadline()
+  {
+
+    $region = $this->regions->findAll();
+
+    foreach ($region as $regionss) {
+      $deadline[] = [
+        'deadline' => $regionss->getDeadline()
+      ];
+    }
+
+    return $deadline;
+  }
+}
