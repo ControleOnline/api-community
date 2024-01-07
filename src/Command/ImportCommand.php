@@ -246,9 +246,8 @@ class ImportCommand extends Command
     {
         $pathRoot  = $this->appKernel->getProjectDir();
 
-        $filePath  = sprintf('%s/%s', $pathRoot, $fileEntity->getPath());
 
-        $contents = file_get_contents($filePath);
+        $contents = $fileEntity->getContent();
 
         $contents = mb_convert_encoding(
             $contents,
@@ -336,9 +335,8 @@ class ImportCommand extends Command
         $fileEntity = $this->getFileEntity();
         $pathRoot  = $this->appKernel->getProjectDir();
 
-        $filePath  = sprintf('%s/%s', $pathRoot, $fileEntity->getPath());
 
-        return  file_get_contents($filePath);
+        return  $fileEntity->getContent();
     }
 
 

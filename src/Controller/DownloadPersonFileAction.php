@@ -45,7 +45,7 @@ class DownloadPersonFileAction
             $filePath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . $file->getPath();
             $fileName = pathinfo($file->getUrl(), PATHINFO_BASENAME);
 
-            $content  = $this->getFileContent($filePath);
+            $content  = $file->getContent();
             $response = new StreamedResponse(function () use ($content) {
     			       fputs(fopen('php://output', 'wb'), $content);
             });
@@ -70,16 +70,4 @@ class DownloadPersonFileAction
         }
     }
 
-    private function getFileContent(string $filePath): string
-    {
-        if (!file_exists($filePath)) {
-          return '';
-        }
-
-        if (($content = file_get_contents($filePath)) === false) {
-          return '';
-        }
-
-        return $content;
-    }
 }

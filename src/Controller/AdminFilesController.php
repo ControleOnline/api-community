@@ -164,28 +164,7 @@ class AdminFilesController extends AbstractController
         return "$year-$month-$day";
     }
 
-    /**
-     * @param string $lastID // Último ID inserido na tabela
-     * @param UploadedFile $file
-     * @param int $type {0 = Guia, 1 = Recibo}
-     * @return string // Retorna o path no servidor Ex: 'data/docs/arq-63.pdf'
-     */
-    private function moveFileToServerPath(string $lastID, UploadedFile $file, int $type): string
-    {
-        $marc = ($type === 0) ? 'gui' : 'rec'; // Sinaliza como guia ou recibo no nome do arquivo
-        $fileInfo = pathinfo($file->getClientOriginalName());
-        $filePath = 'data/filesb/docs/';
-        $pathRoot = $this->appKernel->getProjectDir();
-        $fullPath = $pathRoot . '/' . $filePath;
-        $fileName = $marc . '-' . $fileInfo['filename'];
-        if (strlen($fileName) > 40) { // Não deixa o nome do arquivo ultrapassar a quantia de 30 carácteres
-            $fileName = substr($fileName, 0, 40);
-        }
-        $fileName = Str::removeSpecial($fileName);
-        $fileName .= '-' . $lastID . '.' . $fileInfo['extension'];
-        $file->move($fullPath, $fileName);
-        return $filePath . $fileName;
-    }
+
 
     /**
      * Verifica se o parâmetro 'company_id' pertence há uma compania válida do usuário do token
@@ -396,16 +375,10 @@ class AdminFilesController extends AbstractController
         $fileNameReceipt = null;
 
         if (!is_null($file)) { // Arquivo da GUIA, se existir, atualiza
-            $fileNameGuideBD = $this->moveFileToServerPath($id, $file, 0); // Move o PDF da Guia para a pasta no servidor
-            $filesEtt->setFileNameGuide($fileNameGuideBD);
-            preg_match("/(.*?)\/([^\/]*?)$/", $fileNameGuideBD, $piece); // Pega o conteúdo após a última barra
-            $fileNameGuideBD = $piece[2];
+            $filesEtt->setContent($file->getContent());
         }
         if (!is_null($fileb)) { // Arquivo do RECIBO, se existir, atualiza
-            $fileNameReceipt = $this->moveFileToServerPath($id, $fileb, 1); // Move o PDF da Guia para a pasta no servidor
-            $filesEtt->setFileNameReceipt($fileNameReceipt);
-            preg_match("/(.*?)\/([^\/]*?)$/", $fileNameReceipt, $piece2); // Pega o conteúdo após a última barra
-            $fileNameReceipt = $piece2[2];
+            $filesEtt->setContent($fileb->getContent());
         }
 
         if ($detachReceipt === 'sim') { // Solicitação para desanexar o recibo

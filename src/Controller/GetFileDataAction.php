@@ -45,18 +45,17 @@ class GetFileDataAction
                 throw new \Exception('Not found', 404);
 
 
-            $filePath = $this->kernel->getProjectDir() . DIRECTORY_SEPARATOR . $file->getPath();
-            $content  = $this->getFileContent($filePath);
+            $content  = $file->getContent();
             $response = new StreamedResponse(function () use ($content) {
                 fputs(fopen('php://output', 'wb'), $content);
             });
 
 
-            $ext = pathinfo($filePath, PATHINFO_EXTENSION);
+            $ext = $file->getFileType();
             if ($ext == 'svg') {
                 $response->headers->set('Content-Type', 'image/svg+xml');
             } else {
-                $response->headers->set('Content-Type', mime_content_type($filePath));
+                $response->headers->set('Content-Type', $ext);
             }
 
             $disposition = HeaderUtils::makeDisposition(HeaderUtils::DISPOSITION_ATTACHMENT, basename($request->getPathInfo()));
@@ -75,16 +74,5 @@ class GetFileDataAction
         }
     }
 
-    private function getFileContent(string $filePath): string
-    {
-        if (!file_exists($filePath)) {
-            return '';
-        }
 
-        if (($content = file_get_contents($filePath)) === false) {
-            return '';
-        }
-
-        return $content;
-    }
 }

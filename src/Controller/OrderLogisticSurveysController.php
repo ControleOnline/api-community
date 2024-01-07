@@ -113,34 +113,7 @@ class OrderLogisticSurveysController extends AbstractController
             if (empty($surveyFilesEtt)) {
                 throw new RuntimeException("O Registro 'order_logistic_surveys_files' de ID: $fileId e com 'order_logistic_surveys' de ID: $surveyId, não foi localizado.");
             }
-            $fileNameAndPathBd = $surveyFilesEtt->getFileName();
-            preg_match("/(.*?)\/([^\/]*)$/", $fileNameAndPathBd, $piece); // Pega o conteúdo após a última barra
-            $fileNameBd = $piece[2];
-            $prePath = str_replace($fileNameBd, '', $fileNameAndPathBd);
-
-            $pathRoot = $this->appKernel->getProjectDir();
-
-            if ($type === 'thumb') { // Exibir Miniatura
-                // ---------------------- Captura o nome do arquivo sem a extensão e a extensão separada
-                preg_match('/(.*?)\.(?!.*\.)/s', $fileNameBd, $saida); // Captura o nome do arquivo sem a extensão
-                $fileNameWithoutExtension = $saida[1];
-                $onlyExtension = str_replace($saida[0], '', $fileNameBd);
-                $fileNameThumb = $fileNameWithoutExtension . '-thumb.' . $onlyExtension;
-                $fileName = $fileNameThumb;
-                $fileNameAndPathBd = $prePath . $fileName;
-                // -----------------------------------------------------------------------------
-            } else {
-                $fileName = $fileNameBd;
-                // dd($fileName);
-
-            }
-
-            $fileNameAndPath = $pathRoot . '/' . $fileNameAndPathBd;
-
-            if (!file_exists($fileNameAndPath)) {
-                throw new RuntimeException("Arquivo não existe ou foi recentemente apagado.");
-            }
-
+   
             $response = new Response();
             $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $fileName);
             $response->headers->set('Content-Disposition', $disposition);
@@ -150,7 +123,7 @@ class OrderLogisticSurveysController extends AbstractController
             $response->headers->addCacheControlDirective('public', true);
             $response->headers->removeCacheControlDirective('private');
             $response->headers->set('Content-Type', 'file/jpeg');
-            $response->setContent(file_get_contents($fileNameAndPath));
+            $response->setContent($surveyFilesEtt->getContent());
             return $response;
         } catch (\Exception $e) {
             $response = new Response($e->getMessage(), $e->getCode());
@@ -198,9 +171,9 @@ class OrderLogisticSurveysController extends AbstractController
             $this->manager->flush();
             $surveyFilesId = $surveyFilesAdd->getId();
             // --------------- Move o Arquivo da imagem para pasta /data e cria uma miniatura
-            $fileNameAndPath = $this->moveFileToServerPath($surveyFilesId, $file, $surveyId);
             // --------------- Atualiza o Nome do Arquivo + Path no novo registo inserido no BD
-            $surveyFilesAdd->setFileName($fileNameAndPath);
+            $surveyFilesAdd->setContent($file->getContent());
+
             $this->manager->persist($surveyFilesAdd);
             $this->manager->flush();
             // -----------------------------------------------------------------------
@@ -226,88 +199,7 @@ class OrderLogisticSurveysController extends AbstractController
         }
     }
 
-    /**
-     * Captura o POST do arquivo da imagem enviado, move para pasta específica, otimiza a imagem e cria uma miniatura
-     *
-     * @param string $lastIdFile // Último ID inserido na tabela
-     * @param UploadedFile $file
-     * @param int $idSurvey
-     * @return string // Retorna o path no servidor Ex: 'data/files/photos/id-survey-1/'
-     * @throws ImagickException
-     */
-    private function moveFileToServerPath(string $lastIdFile, UploadedFile $file, int $idSurvey): string
-    {
-        $realMimeType = $file->getMimeType();
-        $part = explode('/', $realMimeType);
-        $fileRealExtension = $part[1];
-        $fileInfo = pathinfo($file->getClientOriginalName());
-        $filePath = 'data/order-logistic-surveys/photos/id-survey-' . $idSurvey . '/';
-        $pathRoot = $this->appKernel->getProjectDir();
-        $fullPath = $pathRoot . '/' . $filePath;
-        $fileName = $fileInfo['filename'];
-        if (strlen($fileName) > 40) { // Não deixa o nome do arquivo ultrapassar a quantia de 30 carácteres
-            $fileName = substr($fileName, 0, 40);
-        }
-        $fileName = Str::removeSpecial($fileName);
-        $fileNameBase = $fileName;
-        $stringLastIdAndIdSurvey = '-' . $lastIdFile . '-' . $idSurvey;
-        $fileName .= $stringLastIdAndIdSurvey . '.' . $fileRealExtension;
-        $file->move($fullPath, $fileName);
-
-        // --------------- Otimiza a Imagem enviada
-
-        // $imagick_mini = new Imagick($fullPath . $fileName);
-        // $imagick_mini->setFileFormat($fileRealExtension);
-        // $imagick_mini->setFileCompressionQuality(80);
-        // $imagick_mini->setFileFilename($fullPath . $fileName);
-        // $imagick_mini->writeFile();
-
-        $image = imagecreatefromjpeg($fullPath . $fileName);
-
-        imagejpeg($image, $fullPath . $fileName, 80);
-
-        imagedestroy($image);
-
-
-
-
-        // --------------- Cria uma Miniatura da Imagem enviada com largura igual a 230px e Altura proporcional a largura
-
-        $fileNameAndPathThumb = $fullPath . $fileNameBase . $stringLastIdAndIdSurvey . '-thumb.' . $fileRealExtension;
-        //dump($fileNameAndPathThumb);
-        //preg_match('/(.*?)\.(?!.*\.)/s', $fileNameAndPath, $saida); // Captura o nome do arquivo sem a extensão
-        //$fileInfo = pathinfo($file->getClientOriginalName());
-        // $imagick_mini = new Imagick($fullPath . $fileName);
-        // $imagick_mini->scaleFile(230, 0); // Redimenciona a altura proporcionalmente de acordo com a largura
-        // $imagick_mini->setFileFormat($fileRealExtension);
-        // $imagick_mini->setFileCompressionQuality(80);
-        // $imagick_mini->setFileFilename($fileNameAndPathThumb);
-        // $imagick_mini->writeFile();
-
-        $imagem = imagecreatefromjpeg($fullPath . $fileName);
-
-        $nova_largura = 230;
-
-        $largura_original = imagesx($imagem);
-        $altura_original = imagesy($imagem);
-
-        $ratio = $largura_original / $nova_largura;
-        $nova_altura = $altura_original / $ratio;
-
-        $nova_imagem = imagecreatetruecolor($nova_largura, $nova_altura);
-
-        imagecopyresampled($nova_imagem, $imagem, 0, 0, 0, 0, $nova_largura, $nova_altura, $largura_original, $altura_original);
-
-        imagejpeg($nova_imagem, $fileNameAndPathThumb, 80);
-
-        imagedestroy($imagem);
-        imagedestroy($nova_imagem);
-
-
-
-        // -----------------------------------------------------------------------
-        return $filePath . $fileName;
-    }
+   
 
     /**
    *

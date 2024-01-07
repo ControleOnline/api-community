@@ -91,26 +91,15 @@ class CreateTaskInteractionAction
 
           $fileInfo  = $this->getFileInfo($uploadedFile);
           $filePath  = $fileInfo['filePath'] . '/' . $fileInfo['fileName'];
-          $fullPath  = sprintf('%s/%s', $pathRoot, $fileInfo['filePath']);
+
 
           // save uploaded file in drive
-
-          if (!file_exists($fullPath)) {
-            if (mkdir($fullPath, 0777, true) === false) {
-              throw new \InvalidArgumentException('Import files storage was not created');
-            }
-          }
-
-          if (((fileperms("$fullPath") & 0x4000) == 0x4000) === false) {
-            throw new \InvalidArgumentException('Import storage space is unavailable');
-          }
-
-          $uploadedFile->move($fullPath, $fileInfo['fileName']);
 
           $file = new File();
 
           $file->setUrl($fileInfo['fileUrl']);
           $file->setPath($filePath);
+          $file->setContent($uploadedFile->getContent());
 
           $this->manager->persist($file);
         }

@@ -92,11 +92,7 @@ class UploadPersonFilesAction
 
             // create or update stored file
 
-            $fileInfo = pathinfo($file->getClientOriginalName());
             $fileUrl  = sprintf('/user/profile-file/id/%s/%s', $company->getId(), $file->getClientOriginalName());
-            $fileName = FileName::generateUniqueName($fileInfo['filename'], $fileInfo['extension']);
-            $userPath = sprintf('data/files/users/profile/%s', $company->getId());
-            $filePath = sprintf('%s/%s', $userPath, $fileName);
 
             if (!empty($particular->getId())) {
                 $fileValue  = @json_decode($particular->getValue());
@@ -107,13 +103,14 @@ class UploadPersonFilesAction
                     }
 
                     $storedFile->setUrl ($fileUrl);
-                    $storedFile->setPath($filePath);
+                    $storedFile->setContent($file->getContent());
+
                 }
             }
             else {
                 $storedFile = new File();
                 $storedFile->setUrl ($fileUrl);
-                $storedFile->setPath($filePath);
+                $storedFile->setContent($file->getContent());
 
                 $this->manager->persist($storedFile);
 
@@ -133,22 +130,6 @@ class UploadPersonFilesAction
 
             $this->manager->flush();
             $this->manager->getConnection()->commit();
-
-            // save uploaded file in drive
-
-            $pathRoot = $this->appKernel->getProjectDir();
-            $fullPath = sprintf('%s/%s', $pathRoot, $userPath);
-            if (!file_exists($fullPath)) {
-              if (mkdir($fullPath, 0777, true) === false) {
-                throw new \InvalidArgumentException('User files storage was not created');
-              }
-            }
-
-            if (((fileperms("$fullPath") & 0x4000) == 0x4000) === false) {
-              throw new \InvalidArgumentException('User storage space is unavailable');
-            }
-
-            $file->move($fullPath, $fileName);
 
             return new JsonResponse([
                 'response' => [
