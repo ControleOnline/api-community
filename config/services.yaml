@@ -46,3 +46,4 @@ imports:
     - { resource: "../vendor/controleonline/queue/config/config.yaml" }
     - { resource: "../vendor/controleonline/quote/config/config.yaml" }
     - { resource: "../vendor/controleonline/users/config/config.yaml" }
+    - { resource: "../vendor/controleonline/tasks/config/config.yaml" }
