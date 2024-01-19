@@ -115,11 +115,17 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 
 
       case PayInvoice::class:
-        $client   = $this->getMyCompanies();
-        $queryBuilder->innerJoin(sprintf('%s.order', $rootAlias), 'I');
-        $queryBuilder->innerJoin('I.order', 'O');
-        $queryBuilder->andWhere('O.client IN(:client)');
-        $queryBuilder->setParameter('client', $client);
+        $payer_id   = $this->getMyCompanies();
+        $company = $this->request->query->get('company', null);
+        //$queryBuilder->innerJoin(sprintf('%s.order', $rootAlias), 'I');
+        //$queryBuilder->innerJoin('I.order', 'O');
+        $queryBuilder->andWhere(sprintf('%s.payer_id IN(:payer_id)', $rootAlias));
+        $queryBuilder->setParameter('payer_id', $payer_id);
+
+        if ($company) {
+          $queryBuilder->andWhere(sprintf('%s.payer_id IN(:company)', $rootAlias));
+          $queryBuilder->setParameter('company', preg_replace("/[^0-9]/", "",$company));
+        }
 
         break;
       case PurchasingOrder::class:
