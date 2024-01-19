@@ -193,65 +193,6 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 
         break;
 
-      case People::class:
-
-        if ($applyTo == 'collection') {
-
-          // search my employees
-
-          if ($this->isFilteringByMyCompany()) {
-            $myUser = $this->security->getUser();
-            $people = $this->getMyCompany();
-
-            $queryBuilder->innerJoin(sprintf('%s.peopleCompany', $rootAlias), 'pc');
-            $queryBuilder->andWhere('pc.company   = :company');
-            // $queryBuilder->andWhere ('pc.employee != :myself' );
-
-            $queryBuilder->setParameter('company', $people);
-            // $queryBuilder->setParameter('myself' , $myUser->getPeople());
-          } else {
-            $queryBuilder->andWhere(
-              sprintf('%s = :people', $rootAlias)
-            );
-            $queryBuilder->setParameter('people', null);
-          }
-        }
-
-        /*
-
-        if ($applyTo == 'justoneitem') {
-
-          // search one of my employees
-
-          if ($this->isFilteringByMyCompany()) {
-            $people = $this->getMyCompany();
-
-            $queryBuilder->innerJoin(sprintf('%s.peopleCompany', $rootAlias), 'pc');
-            $queryBuilder->andWhere ('pc.company = :company');
-
-            $queryBuilder->setParameter('company', $people);
-          }
-
-          // search myself or one of my companies
-
-          else {
-            $myUser = $this->security->getUser();
-            $people = [$myUser->getPeople()->getId()];
-
-            // foreach ($myUser->getPeople()->getPeopleCompany() as $peopleCompany) {
-            //   $people[] = $peopleCompany->getCompany()->getId();
-            // }
-            //
-            // $queryBuilder->andWhere(
-            //   sprintf('%s IN (:people)', $rootAlias)
-            // );
-            //
-            // $queryBuilder->setParameter('people', $people);
-          }
-        }
-        */
-
-        break;
 
       case Client::class:
 
