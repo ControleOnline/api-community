@@ -142,7 +142,7 @@ class GetQuotationPdfAction
         // api_link
         $body = preg_replace(
             '/\\{\\{\\s+api_link\\s+\\}\\}/',
-            $protocol . $_SERVER['HTTP_HOST'] . '?app-domain=' . $people_domain,
+            $protocol . $_SERVER['HTTP_HOST'],
             $body
         );
 
