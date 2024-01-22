@@ -45,11 +45,11 @@ class GetQuotationPdfAction
     public function __invoke(Quotation $data, Request $request)
     {
         $people_domain = $request->query->get('app-domain');
-    
+
         $people_domain = $people_domain ?: $request->server->get('HTTP_HOST');
 
         $cleaned_url = strtok($request->getUri(), '?');
-    
+
         return $this->getBody($data, $people_domain, $cleaned_url);
     }
 
@@ -59,7 +59,7 @@ class GetQuotationPdfAction
             'people' => $this->manager->getRepository(PeopleDomain::class)->findOneBy(['domain' => $people_domain])->getPeople(),
             'config_key' => 'proposal_body'
         ]);
-    
+
         $body = $config ? $config->getConfigValue() : '';
 
         $originCity = $data->getCityOrigin();
@@ -142,7 +142,7 @@ class GetQuotationPdfAction
         // api_link
         $body = preg_replace(
             '/\\{\\{\\s+api_link\\s+\\}\\}/',
-            $protocol . $_SERVER['HTTP_HOST'],
+            $protocol . $_SERVER['HTTP_HOST'] . '?app-domain=' . $people_domain,
             $body
         );
 
