@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class VersionTeste extends AbstractMigration
+final class VersionFinancial0001 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -22,17 +22,13 @@ final class VersionTeste extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE IF NOT EXISTS `teste_migrate` (
-            `id` int(11) NOT NULL AUTO_INCREMENT,
-            `carrier_id` int(11) NOT NULL,
-            `integration_type` enum(\'correios\',\'jadlog\',\'ssw\') DEFAULT NULL,
-            `integration_user` varchar(100) DEFAULT NULL,
-            `integration_password` varchar(100) DEFAULT NULL,
-            `enable` tinyint(1) NOT NULL DEFAULT 0,
-            `average_rating` int(11) DEFAULT NULL,
-            PRIMARY KEY (`id`),
-            KEY `carrier_integration_ibfk_1` (`carrier_id`)
-          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;');
+        $this->addSql('ALTER TABLE `invoice`
+        DROP `payment_date`,
+        DROP `invoice_type`,
+        DROP `invoice_subtype`,
+        DROP `payment_response`,
+        DROP `description`,
+        DROP `payment_mode`');
     }
     public function down(Schema $schema): void
     {
