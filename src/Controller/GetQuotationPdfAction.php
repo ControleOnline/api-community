@@ -44,7 +44,7 @@ class GetQuotationPdfAction
 
     public function __invoke(Quotation $data, Request $request)
     {
-        $people_domain = $request->query->get('domain');
+        $people_domain = $request->query->get('app-domain');
 
         return $this->getBody($data, $people_domain);
     }
