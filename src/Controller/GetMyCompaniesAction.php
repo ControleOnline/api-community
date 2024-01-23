@@ -163,7 +163,7 @@ class GetMyCompaniesAction
       }
 
       foreach ($permissions as $key => $permission) {
-        $myCompanies[$key]['permission'] = $permission;
+        $myCompanies[$key]['permission'] = array_values($permission);
       }
 
       usort($myCompanies, function ($a, $b) {

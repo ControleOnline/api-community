@@ -158,7 +158,7 @@ class PeopleRoleService
     }
 
 
-    return array_unique(empty($peopleRole) ? ['guest'] : $peopleRole);
+    return array_values(array_unique(empty($peopleRole) ? ['guest'] : $peopleRole));
   }
 
   /**
