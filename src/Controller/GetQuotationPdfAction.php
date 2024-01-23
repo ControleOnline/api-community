@@ -46,11 +46,7 @@ class GetQuotationPdfAction
     {
         $people_domain = $request->query->get('app-domain');
 
-        $people_domain = $people_domain ?: $request->server->get('HTTP_HOST');
-
-        $cleaned_url = strtok($request->getUri(), '?');
-
-        return $this->getBody($data, $people_domain, $cleaned_url);
+        return $this->getBody($data, $people_domain);
     }
 
     private function getBody(Quotation $data, $people_domain)
