@@ -150,6 +150,9 @@ class GetQuotationPdfAction
 
         $body = preg_replace("/\r|\n/", "", $body);
 
+        echo $body;
+        exit;
+
         $options = new Options();
         $options->set('isRemoteEnabled', true);
 
