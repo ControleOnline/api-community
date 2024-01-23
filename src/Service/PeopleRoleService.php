@@ -112,7 +112,7 @@ class PeopleRoleService
           }
         }
       );
-
+      $peopleRole[] = 'franchisee';
     if ($isFranchisee) {
       $peopleRole[] = 'franchisee';
       $peopleRole[] = 'admin';
