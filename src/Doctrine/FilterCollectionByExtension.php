@@ -74,18 +74,22 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 
     switch ($resourceClass) {
 
-
-
-
       case Invoice::class:
-        $payer   = $this->getMyCompanies();
-        $company = $this->request->query->get('company', null);
-        $queryBuilder->andWhere(sprintf('%s.payer IN(:payer)', $rootAlias));
-        $queryBuilder->setParameter('payer', $payer);
+        $myCompanies   = $this->getMyCompanies();
+        $receiver = $this->request->query->get('receiver', null);
+        if ($receiver) {
+          $queryBuilder->andWhere(sprintf('%s.receiver IN(:receiver)', $rootAlias));
+          $queryBuilder->setParameter('receiver',  $receiver);
+          $queryBuilder->andWhere(sprintf('%s.receiver ', $rootAlias) . ' IN(:myCompanies)');
+          $queryBuilder->setParameter('myCompanies', $myCompanies);
+        }
 
-        if ($company) {
-          $queryBuilder->andWhere(sprintf('%s.payer IN(:company)', $rootAlias));
-          $queryBuilder->setParameter('company', preg_replace("/[^0-9]/", "", $company));
+        $payer = $this->request->query->get('payer', null);
+        if ($payer) {
+          $queryBuilder->andWhere(sprintf('%s.payer IN(:payer)', $rootAlias));
+          $queryBuilder->setParameter('payer',  $payer);
+          $queryBuilder->andWhere(sprintf('%s.payer ', $rootAlias) . ' IN(:myCompanies)');
+          $queryBuilder->setParameter('myCompanies',  $myCompanies);
         }
 
         break;
@@ -104,10 +108,6 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
         $queryBuilder->andWhere(sprintf('%s.company IN(:company)', $rootAlias));
         $queryBuilder->setParameter('company', $this->isFilteringByMyCompany() ?  $this->getMyCompany() : $this->getMyCompanies());
         break;
-
-
-
-
 
       case Document::class:
       case Email::class:
