@@ -31,6 +31,7 @@ use ControleOnline\Entity\Hardware;
 use ControleOnline\Entity\Invoice;
 use ControleOnline\Entity\OrderInvoice;
 use App\Service\PeopleRoleService;
+use ControleOnline\Entity\OrderLogistic;
 
 final class FilterCollectionByExtension
 implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
@@ -93,16 +94,18 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
         }
 
         break;
-      case Order::class:
-
-        $queryBuilder->andWhere(sprintf('%s.client IN (:client) OR %s.provider IN (:provider)', $rootAlias, $rootAlias));
-
-        $queryBuilder->setParameter('client', $this->getMyCompany());
-        $queryBuilder->setParameter('provider', $this->getMyCompany());
-
+      case OrderLogistic::class:
+        $queryBuilder->innerJoin(Order::class, 'O', 'WITH', sprintf('O.id = %s.SalesOrder', $rootAlias));
+        $queryBuilder->andWhere('O.client IN (:client) OR O.provider IN (:provider)');
+        $queryBuilder->setParameter('client', $this->getMyCompanies());
+        $queryBuilder->setParameter('provider', $this->getMyCompanies());
         break;
 
-
+      case  Order::class:
+        $queryBuilder->andWhere(sprintf('%s.client IN (:client) OR %s.provider IN (:provider)', $rootAlias, $rootAlias));
+        $queryBuilder->setParameter('client', $this->getMyCompanies());
+        $queryBuilder->setParameter('provider', $this->getMyCompanies());
+        break;
 
       case Hardware::class:
         $queryBuilder->andWhere(sprintf('%s.company IN(:company)', $rootAlias));
