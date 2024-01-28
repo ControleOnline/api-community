@@ -78,17 +78,17 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
         $myCompanies   = $this->getMyCompanies();
         $receiver = $this->request->query->get('receiver', null);
         if ($receiver) {
-          $queryBuilder->andWhere(sprintf('%s.receiver IN(:receiver)', $rootAlias));
-          $queryBuilder->setParameter('receiver',  $receiver);
+          $queryBuilder->andWhere(sprintf('%s.receiver ', $rootAlias) . ' IN(:receiver)');
           $queryBuilder->andWhere(sprintf('%s.receiver ', $rootAlias) . ' IN(:myCompanies)');
+          $queryBuilder->setParameter('receiver',  preg_replace("/[^0-9]/", "", $receiver));
           $queryBuilder->setParameter('myCompanies', $myCompanies);
         }
 
         $payer = $this->request->query->get('payer', null);
         if ($payer) {
-          $queryBuilder->andWhere(sprintf('%s.payer IN(:payer)', $rootAlias));
-          $queryBuilder->setParameter('payer',  $payer);
+          $queryBuilder->andWhere(sprintf('%s.payer ', $rootAlias) . ' IN(:payer)');
           $queryBuilder->andWhere(sprintf('%s.payer ', $rootAlias) . ' IN(:myCompanies)');
+          $queryBuilder->setParameter('payer',  preg_replace("/[^0-9]/", "", $payer));
           $queryBuilder->setParameter('myCompanies',  $myCompanies);
         }
 
