@@ -18,7 +18,7 @@ use ControleOnline\Entity\People;
 use ControleOnline\Entity\PeopleSalesman;
 use ControleOnline\Entity\TaskInteration;
 use ControleOnline\Entity\Status;
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Order;
 use ControleOnline\Repository\ConfigRepository;
 use ControleOnline\Service\DatabaseSwitchService;
 
@@ -234,7 +234,7 @@ class CRMCommand extends Command
     $oportunities = $this->em->getRepository(Task::class)
       ->createQueryBuilder('T')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'O.client = T.client')
+      ->innerJoin('\ControleOnline\Entity\Order', 'O', 'WITH', 'O.client = T.client')
       ->where('T.taskStatus IN (:taskStatus)')
       ->andWhere('O.status IN(:oStatus)')
       ->andWhere('T.type = :taskType')
@@ -450,7 +450,7 @@ class CRMCommand extends Command
         ];
       }
     }
-    $salesOrders = $this->em->getRepository(SalesOrder::class)
+    $Orders = $this->em->getRepository(Order::class)
       ->createQueryBuilder('SO')
       ->select()
       ->leftJoin('\ControleOnline\Entity\Task', 'T', 'WITH', 'SO.client = T.client AND T.provider = SO.provider AND T.type = :taskType AND T.client IS NOT NULL')
@@ -472,7 +472,7 @@ class CRMCommand extends Command
       ->getQuery()
       ->getResult();
 
-    foreach ($salesOrders as $oportunitie) {
+    foreach ($Orders as $oportunitie) {
       $orders[] = (object) [
         'id'              => null,
         'saleamanId'      => $oportunitie->getProvider()->getId(),
@@ -566,7 +566,7 @@ class CRMCommand extends Command
 
 
 
-    $quotes = $this->em->getRepository(SalesOrder::class)
+    $quotes = $this->em->getRepository(Order::class)
       ->createQueryBuilder('SO')
       ->select()
       ->leftJoin('\ControleOnline\Entity\Task', 'T', 'WITH', 'SO.client = T.client AND T.provider = SO.provider AND T.type = :taskType AND T.client IS NOT NULL')

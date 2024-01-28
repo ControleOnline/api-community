@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use ControleOnline\Entity\Status;
 use Doctrine\ORM\EntityManagerInterface;
-use ControleOnline\Entity\SalesOrder as Order;
+use ControleOnline\Entity\Order as Order;
 use ControleOnline\Entity\Task;
 use ControleOnline\Entity\Category;
 use ControleOnline\Entity\TaskInteration;

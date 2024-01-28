@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use ControleOnline\Entity\PurchasingOrder as Order;
+use ControleOnline\Entity\Order as Order;
 use ControleOnline\Entity\Document;
 
 

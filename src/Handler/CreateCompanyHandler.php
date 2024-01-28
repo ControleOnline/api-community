@@ -24,7 +24,7 @@ use ControleOnline\Entity\District;
 use ControleOnline\Entity\Street;
 use ControleOnline\Entity\Cep;
 use App\Library\Utils\Address as AddressComponents;
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Order;
 use ControleOnline\Entity\PeopleStates;
 
 class CreateCompanyHandler implements MessageHandlerInterface
@@ -242,7 +242,7 @@ class CreateCompanyHandler implements MessageHandlerInterface
   private function updateClientOrder()
   {
     // get orders associated to current people
-    $orders = $this->manager->getRepository(SalesOrder::class)->findBy(['client' => $this->user->getPeople()]);
+    $orders = $this->manager->getRepository(Order::class)->findBy(['client' => $this->user->getPeople()]);
 
     if (empty($orders) === false) {
       foreach ($orders as $order) {

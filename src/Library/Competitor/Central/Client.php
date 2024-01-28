@@ -2,7 +2,7 @@
 
 namespace App\Library\Competitor\Central;
 
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Order;
 use App\Library\Rates\Exception\ClientRequestException;
 use Exception;
 use GuzzleHttp\Client as GuzzleHttpClient;
@@ -14,7 +14,7 @@ class Client
   private $url = 'https://api.centraldofrete.com';
 
 
-  public function quote(SalesOrder $order)
+  public function quote(Order $order)
   {
 
     foreach ($order->getOrderPackage() as $package) {

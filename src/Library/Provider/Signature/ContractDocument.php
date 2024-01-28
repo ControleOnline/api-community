@@ -14,7 +14,7 @@ use ControleOnline\Entity\City;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Address;
 use ControleOnline\Entity\MyContract;
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Order;
 use ControleOnline\Entity\SchoolTeamSchedule;
 use ControleOnline\Entity\Team;
 use ControleOnline\Entity\Particulars;
@@ -482,10 +482,10 @@ class ContractDocument
             'destination_state'         => '[destination_state]',
         ];
 
-        $orderRepo = $this->manager->getRepository(SalesOrder::class);
+        $orderRepo = $this->manager->getRepository(Order::class);
 
         /**
-         * @var SalesOrder $order
+         * @var Order $order
          */
         $order = $orderRepo->findOneBy([
             'contract' => $myContract->getId(),

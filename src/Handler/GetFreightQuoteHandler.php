@@ -18,7 +18,7 @@ use ControleOnline\Entity\User;
 use ControleOnline\Entity\Email;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Quotation;
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Order;
 use ControleOnline\Entity\Status;
 use ControleOnline\Repository\TaxesRepository;
 use ControleOnline\Repository\QuoteRepository;

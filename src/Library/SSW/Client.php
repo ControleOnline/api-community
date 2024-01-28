@@ -2,7 +2,7 @@
 
 namespace App\Library\SSW;
 
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Order;
 use App\Library\SSW\Entity\Tracking;
 use GuzzleHttp\Client as GuzzClient;
 
@@ -64,7 +64,7 @@ class Client
    * @param  string $nf Número da nota fiscal
    * @return array|null
    */
-  public function putRetrieve(SalesOrder $order): ?array
+  public function putRetrieve(Order $order): ?array
   {
     try {
 

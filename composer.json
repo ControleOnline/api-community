@@ -6,20 +6,21 @@
         "ext-iconv": "*",
         "api-platform/core": "^2.7.1",
         "beberlei/doctrineextensions": "^1.3",
+        "composer/installers": "*",
         "composer/package-versions-deprecated": "1.11.99.3",
-        "controleonline/products": "dev-master",
-        "controleonline/financial": "dev-master",
-        "controleonline/users": "dev-master",
         "controleonline/common": "dev-master",
         "controleonline/contract": "dev-master",
-        "controleonline/tasks": "dev-master",
         "controleonline/dashboard": "dev-master",
-        "controleonline/people": "dev-master",
         "controleonline/ead": "dev-master",
+        "controleonline/financial": "dev-master",
+        "controleonline/multi-tenancy": "dev-master",
+        "controleonline/orders": "dev-master",
+        "controleonline/people": "dev-master",
+        "controleonline/products": "dev-master",
         "controleonline/queue": "dev-master",
         "controleonline/quote": "dev-master",
-        "controleonline/orders": "dev-master",
-        "controleonline/multi-tenancy": "dev-master",
+        "controleonline/tasks": "dev-master",
+        "controleonline/users": "dev-master",
         "ctodobom/api-inter": "dev-master",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.4",
@@ -108,7 +109,8 @@
             "symfony/flex": true,
             "composer/package-versions-deprecated": true,
             "php-http/discovery": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "composer/installers": true
         }
     },
     "scripts": {
@@ -127,6 +129,23 @@
         ]
     },
     "extra": {
+        "installer-paths": {
+            "modules/controleonline/{$name}/": [
+                "controleonline/common",
+                "controleonline/contract",
+                "controleonline/dashboard",
+                "controleonline/ead",
+                "controleonline/financial",
+                "controleonline/multi-tenancy",
+                "controleonline/orders",
+                "controleonline/people",
+                "controleonline/products",
+                "controleonline/queue",
+                "controleonline/quote",
+                "controleonline/tasks",
+                "controleonline/users"
+            ]
+        },
         "symfony": {
             "allow-contrib": false,
             "require": "5.4.*",

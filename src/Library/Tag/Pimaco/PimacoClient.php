@@ -2,19 +2,19 @@
 
 namespace App\Library\Tag\Pimaco;
 
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Order;
 use App\Library\Tag\AbstractTag;
 use Proner\PhpPimaco\Pimaco;
 use Proner\PhpPimaco\Tag;
 
 class PimacoClient extends AbstractTag
 {
-    public function getPdf(SalesOrder $orderData)
+    public function getPdf(Order $orderData)
     {
         return $this->getPdfTagData($orderData);
     }
 
-    protected function getPdfTagData(SalesOrder $orderData)
+    protected function getPdfTagData(Order $orderData)
     {
 
         $people = $orderData->getProvider();

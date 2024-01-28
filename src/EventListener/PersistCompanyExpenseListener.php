@@ -5,12 +5,12 @@ namespace App\EventListener;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 use ControleOnline\Entity\CompanyExpense;
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Order;
 use ControleOnline\Entity\Status;
 
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\ReceiveInvoice;
-use ControleOnline\Entity\SalesOrderInvoice;
+use ControleOnline\Entity\Invoice;
+use ControleOnline\Entity\OrderInvoice;
 
 class PersistCompanyExpenseListener
 {
@@ -23,7 +23,7 @@ class PersistCompanyExpenseListener
 
     // create order
 
-    ($order = new SalesOrder())
+    ($order = new Order())
       ->setStatus  ($ostatus)
       ->setClient  ($companyExpense->getCompany ())
       ->setProvider($provider)
@@ -35,7 +35,7 @@ class PersistCompanyExpenseListener
 
     // create first payment
 
-    $firstInvoice = new ReceiveInvoice();
+    $firstInvoice = new Invoice();
     $firstInvoice->setPrice   ($companyExpense->getAmount());
     $firstInvoice->setDueDate ($companyExpense->getDuedate());
     $firstInvoice->setStatus  ($istatus);
@@ -43,7 +43,7 @@ class PersistCompanyExpenseListener
 
     $manager->persist($firstInvoice);
 
-    $orderInvoice = new SalesOrderInvoice();
+    $orderInvoice = new OrderInvoice();
     $orderInvoice->setInvoice($firstInvoice);
     $orderInvoice->setOrder  ($order);
 
@@ -68,7 +68,7 @@ class PersistCompanyExpenseListener
       // create invoices
 
       for ($p = 2; $p <= $companyExpense->getParcels(); $p++) {
-        $invoice = new ReceiveInvoice();
+        $invoice = new Invoice();
         $invoice->setPrice   ($amount);
         $invoice->setDueDate ((clone $duedate));
         $invoice->setStatus  ($istatus);
@@ -76,7 +76,7 @@ class PersistCompanyExpenseListener
 
         $manager->persist($invoice);
 
-        $orderInvoice = new SalesOrderInvoice();
+        $orderInvoice = new OrderInvoice();
         $orderInvoice->setInvoice($invoice);
         $orderInvoice->setOrder  ($order);
 

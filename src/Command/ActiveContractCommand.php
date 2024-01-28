@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Service\SignatureService;
 use ControleOnline\Entity\MyContract;
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Order;
 use ControleOnline\Entity\Status;
 use App\Library\Provider\Signature\Contract as SignatureContract;
 use ControleOnline\Service\DatabaseSwitchService;
@@ -156,7 +156,7 @@ class ActiveContractCommand extends Command
     return $this->manager->getRepository(MyContract::class)
       ->createQueryBuilder('contract')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'contract.id = O.contract')
+      ->innerJoin('\ControleOnline\Entity\Order', 'O', 'WITH', 'contract.id = O.contract')
       ->where('contract.contractStatus IN (:contract_status)')
       ->andWhere('O.status IN (:status)')
       ->setParameters([
@@ -175,11 +175,11 @@ class ActiveContractCommand extends Command
   {
 
     /**
-     * SalesOrder
+     * Order
      *
-     * @var SalesOrder
+     * @var Order
      */
-    $order = $this->manager->getRepository(SalesOrder::class)->findOneBy([
+    $order = $this->manager->getRepository(Order::class)->findOneBy([
       'contract' => $contract
     ]);
 
@@ -219,11 +219,11 @@ class ActiveContractCommand extends Command
     ];
 
     /**
-     * SalesOrder
+     * Order
      *
-     * @var SalesOrder
+     * @var Order
      */
-    $order = $this->manager->getRepository(SalesOrder::class)->findOneBy([
+    $order = $this->manager->getRepository(Order::class)->findOneBy([
       'contract' => $contract
     ]);
 

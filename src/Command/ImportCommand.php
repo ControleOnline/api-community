@@ -21,8 +21,8 @@ use ControleOnline\Entity\DeliveryTaxGroup;
 use ControleOnline\Entity\File;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\PurchasingInvoiceTax;
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\InvoiceTax;
+use ControleOnline\Entity\Order;
 use ControleOnline\Entity\Task;
 use ControleOnline\Entity\TaskInteration;
 use App\Service\EmailService;
@@ -354,7 +354,7 @@ class ImportCommand extends Command
         return array_filter($result);
     }
 
-    protected function addCarrierInvoiceTax(SalesOrder $order, $nf)
+    protected function addCarrierInvoiceTax(Order $order, $nf)
     {
         $carrierInvoiceTax = null;
 
@@ -368,11 +368,11 @@ class ImportCommand extends Command
         //$document
 
 
-        $clientInvoiceTax = $this->manager->getRepository(PurchasingInvoiceTax::class)
+        $clientInvoiceTax = $this->manager->getRepository(InvoiceTax::class)
             ->createQueryBuilder('IT')
             ->select()
-            ->innerJoin('\ControleOnline\Entity\PurchasingOrderInvoiceTax', 'OIT', 'WITH', 'OIT.invoiceTax = IT.id')
-            ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'O.id = OIT.order')
+            ->innerJoin('\ControleOnline\Entity\OrderInvoiceTax', 'OIT', 'WITH', 'OIT.invoiceTax = IT.id')
+            ->innerJoin('\ControleOnline\Entity\Order', 'O', 'WITH', 'O.id = OIT.order')
             //->innerJoin('\ControleOnline\Entity\Document', 'D', 'WITH', 'D.people = O.client')
             ->where('O.id =:order')
             ->andWhere('OIT.invoiceType=:invoice_type')
@@ -446,7 +446,7 @@ class ImportCommand extends Command
                     $order->setStatus($status);
                     $this->manager->persist($order);
                     //$this->manager->flush($order);
-                    //$carrierInvoiceTax = $this->createPurchasingOrderFromSaleOrder($order, $order->getQuote()->getCarrier(), $invoice);
+                    //$carrierInvoiceTax = $this->createOrderFromSaleOrder($order, $order->getQuote()->getCarrier(), $invoice);
                     $this->manager->flush();
                 }
             } else {
@@ -479,13 +479,13 @@ class ImportCommand extends Command
 
                 if ($nfs) {
                     /**
-                     * @var \ControleOnline\Repository\SalesOrderRepository $repo
+                     * @var \ControleOnline\Repository\OrderRepository $repo
                      */
-                    $repo   = $this->manager->getRepository(SalesOrder::class);
+                    $repo   = $this->manager->getRepository(Order::class);
                     $orders = $repo->createQueryBuilder('O')
                         ->select()
-                        ->innerJoin('\ControleOnline\Entity\PurchasingOrderInvoiceTax', 'OIT', 'WITH', 'O.id = OIT.order')
-                        ->innerJoin('\ControleOnline\Entity\SalesInvoiceTax', 'IT', 'WITH', 'IT.id = OIT.invoiceTax')
+                        ->innerJoin('\ControleOnline\Entity\OrderInvoiceTax', 'OIT', 'WITH', 'O.id = OIT.order')
+                        ->innerJoin('\ControleOnline\Entity\InvoiceTax', 'IT', 'WITH', 'IT.id = OIT.invoiceTax')
                         ->andWhere('OIT.invoiceType =:invoice_type')
                         ->andWhere('IT.invoiceNumber IN (:invoice)')
                         ->andWhere('O.status IN (:status)')

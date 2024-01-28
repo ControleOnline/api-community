@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use ControleOnline\Entity\PurchasingOrder as Order;
 use ControleOnline\Entity\Address;
 use ControleOnline\Entity\Email;
 use ControleOnline\Entity\People;
@@ -18,8 +17,7 @@ use ControleOnline\Entity\Language;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\Document;
 use ControleOnline\Entity\DocumentType;
-use ControleOnline\Entity\PurchasingOrder;
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Order;
 use App\Service\AddressService;
 use App\Service\PeopleService;
 
@@ -308,7 +306,7 @@ class ChooseQuoteAction
         return $this->manager->getRepository(Language::class)->findOneBy(['language' => 'pt-BR']);
     }
 
-    protected function getStatus(PurchasingOrder $order = null): ?Status
+    protected function getStatus(Order $order = null): ?Status
     {
         if ($order && $order->getContract() != null) {
             return $this->manager->getRepository(Status::class)->findOneBy(['status' => 'automatic analysis']);

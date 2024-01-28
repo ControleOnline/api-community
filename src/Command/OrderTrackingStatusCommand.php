@@ -3,8 +3,8 @@
 namespace App\Command;
 
 use ControleOnline\Entity\OrderTracking;
-use ControleOnline\Entity\SalesInvoiceTax;
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\InvoiceTax;
+use ControleOnline\Entity\Order;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -85,8 +85,8 @@ class OrderTrackingStatusCommand extends Command
           '',
         ]);
 
-        foreach ($orders as $salesOrder) {
-          $result = $this->createTrackingStatuses($salesOrder);
+        foreach ($orders as $Order) {
+          $result = $this->createTrackingStatuses($Order);
 
           $output->writeln([
             '',
@@ -110,7 +110,7 @@ class OrderTrackingStatusCommand extends Command
     return 0;
   }
 
-  private function createTrackingStatuses(SalesOrder $order): array
+  private function createTrackingStatuses(Order $order): array
   {
     $output       = [
       'orderId' => $order->getId(),
@@ -126,7 +126,7 @@ class OrderTrackingStatusCommand extends Command
 
     if (!$invoiceTaxes->isEmpty()) {
       /**
-       * @var \ControleOnline\Entity\SalesOrderInvoiceTax $orderInvoiceTax
+       * @var \ControleOnline\Entity\OrderInvoiceTax $orderInvoiceTax
        */
       foreach ($invoiceTaxes as $orderInvoiceTax) {
         $trackings = $this->getOrderTracking($orderInvoiceTax->getInvoiceTax());
@@ -175,7 +175,7 @@ class OrderTrackingStatusCommand extends Command
     return $output;
   }
 
-  private function getOrderTracking(SalesInvoiceTax $invoiceTax): array
+  private function getOrderTracking(InvoiceTax $invoiceTax): array
   {
     $trackings = [];
     if (!empty($invoiceTax->getInvoice())) {
@@ -198,9 +198,9 @@ class OrderTrackingStatusCommand extends Command
   private function getOrders(int $limit): array
   {
     /**
-     * @var \ControleOnline\Repository\SalesOrderRepository
+     * @var \ControleOnline\Repository\OrderRepository
      */
-    $repositorio = $this->manager->getRepository(SalesOrder::class);
+    $repositorio = $this->manager->getRepository(Order::class);
 
     return $repositorio
       ->createQueryBuilder('O')

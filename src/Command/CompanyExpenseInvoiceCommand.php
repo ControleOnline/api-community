@@ -9,10 +9,10 @@ use Symfony\Component\Console\Input\InputArgument;
 use Doctrine\ORM\EntityManagerInterface;
 use ControleOnline\Service\DatabaseSwitchService;
 
-use ControleOnline\Entity\PurchasingOrder;
-use ControleOnline\Entity\PayInvoice;
+use ControleOnline\Entity\Order;
+use ControleOnline\Entity\Invoice;
 use ControleOnline\Entity\Status;
-use ControleOnline\Entity\PurchasingOrderInvoice;
+use ControleOnline\Entity\OrderInvoice;
 
 class CompanyExpenseInvoiceCommand extends Command
 {
@@ -110,7 +110,7 @@ class CompanyExpenseInvoiceCommand extends Command
 
   private function getActiveRecurrentExpenses(int $limit): array
   {
-    $repository = $this->manager->getRepository(PurchasingOrder::class);
+    $repository = $this->manager->getRepository(Order::class);
 
     $lastDate = new \DateTime(
       date('Y-m', strtotime("-1 months"))
@@ -131,7 +131,7 @@ class CompanyExpenseInvoiceCommand extends Command
       ->innerJoin('o.invoice', 'oi')
       ->innerJoin('oi.invoice', 'i')
       ->leftJoin('o.invoice', 'oin')
-      ->leftJoin('\ControleOnline\Entity\PayInvoice', 'ni', 'WITH', '(ni.id = oin.invoice AND ni.dueDate >= :todayDate AND ni.dueDate < :toDate)')
+      ->leftJoin('\ControleOnline\Entity\Invoice', 'ni', 'WITH', '(ni.id = oin.invoice AND ni.dueDate >= :todayDate AND ni.dueDate < :toDate)')
       ->where('i.paymentMode = 0')
       ->having('COUNT(ni.id) = 0')
       ->andWhere("o.orderType = 'purchase'")
@@ -149,7 +149,7 @@ class CompanyExpenseInvoiceCommand extends Command
       ->getResult();
   }
 
-  private function createOrderInvoice(PurchasingOrder $expense): array
+  private function createOrderInvoice(Order $expense): array
   {
     $output = [
       'expenseId' => $expense->getId(),
@@ -160,13 +160,13 @@ class CompanyExpenseInvoiceCommand extends Command
 
       $baseInvoice = $expense->getOneInvoice();
 
-      if ($baseInvoice instanceof PayInvoice) {
+      if ($baseInvoice instanceof Invoice) {
         $currentDuedate = new \DateTime(
           date(sprintf('Y-m-%s 00:00:00', $baseInvoice->getDuedate()->format('d')))
         );
 
 
-        $currentInvoice = $this->manager->getRepository(PurchasingOrder::class)
+        $currentInvoice = $this->manager->getRepository(Order::class)
           ->createQueryBuilder('o')
           ->select()
           ->innerJoin('o.invoice', 'oi')
@@ -192,7 +192,7 @@ class CompanyExpenseInvoiceCommand extends Command
 
           $invoice = clone $baseInvoice;
 
-          $order_invoice = new PurchasingOrderInvoice();
+          $order_invoice = new OrderInvoice();
           $order_invoice->setOrder($expense);
           $order_invoice->setInvoice($invoice);
           $order_invoice->setRealPrice($invoice->getPrice());

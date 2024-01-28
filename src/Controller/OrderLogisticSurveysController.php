@@ -8,7 +8,7 @@ use ControleOnline\Entity\OrderLogistic;
 use ControleOnline\Entity\OrderLogisticSurveys;
 use ControleOnline\Entity\OrderLogisticSurveysFiles;
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Order;
 use ControleOnline\Entity\Task;
 use ControleOnline\Entity\TasksSurveys;
 use ControleOnline\Entity\TasksSurveysFiles;
@@ -237,7 +237,7 @@ class OrderLogisticSurveysController extends AbstractController
 
             // ------------------ Capturando dados da Order
             $orderId = $orderLogisticEtt->getOrder()->getId();
-            $orderEtt = $this->manager->getRepository(SalesOrder::class)->find($orderId);
+            $orderEtt = $this->manager->getRepository(Order::class)->find($orderId);
             // dd($orderEtt->getAddressDestination());
             if (empty($orderEtt)) {
                 throw new RuntimeException("Registro 'Orders' com o ID: $orderId, não foi encontrado.");

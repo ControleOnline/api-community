@@ -14,13 +14,11 @@ use App\Service\MauticService;
 use App\Service\EmailService;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Order;
-use ControleOnline\Entity\ReceiveInvoice;
-use ControleOnline\Entity\SalesOrder;
-use ControleOnline\Entity\PurchasingOrder;
-use ControleOnline\Entity\SalesOrderInvoice;
+use ControleOnline\Entity\Invoice;
+use ControleOnline\Entity\OrderInvoice;
 use ControleOnline\Entity\InvoiceTax;
 use ControleOnline\Entity\Status;
-use ControleOnline\Entity\PurchasingOrderInvoiceTax;
+use ControleOnline\Entity\OrderInvoiceTax;
 use ControleOnline\Entity\Document;
 use ControleOnline\Entity\PeopleSalesman;
 use ControleOnline\Repository\ConfigRepository;
@@ -153,13 +151,13 @@ class RoyaltiesCommand extends Command
    */
   protected function getRoyaltiesOrders(int $limit): ?array
   {
-    $salesOrders = $this->em->getRepository(SalesOrder::class)
+    $Orders = $this->em->getRepository(Order::class)
       ->createQueryBuilder('O')
       ->select()
-      ->leftJoin('\ControleOnline\Entity\SalesOrder', 'CO', 'WITH', 'CO.mainOrder = O.id AND CO.orderType =:orderType')
+      ->leftJoin('\ControleOnline\Entity\Order', 'CO', 'WITH', 'CO.mainOrder = O.id AND CO.orderType =:orderType')
       ->innerJoin('\ControleOnline\Entity\PeopleFranchisee', 'PS', 'WITH', 'PS.franchisee = O.provider')
-      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'SI', 'WITH', 'SI.order = O.id')
-      ->innerJoin('\ControleOnline\Entity\ReceiveInvoice', 'I', 'WITH', 'I.id = SI.invoice')
+      ->innerJoin('\ControleOnline\Entity\OrderInvoice', 'SI', 'WITH', 'SI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\Invoice', 'I', 'WITH', 'I.id = SI.invoice')
       ->where('O.status =:status')
       ->andWhere('I.status =:istatus')
       ->andWhere('CO.id IS NULL')
@@ -175,11 +173,11 @@ class RoyaltiesCommand extends Command
       ->getQuery()->getResult();
 
 
-    if (count($salesOrders) == 0)
+    if (count($Orders) == 0)
       return null;
     else {
 
-      foreach ($salesOrders as $order) {
+      foreach ($Orders as $order) {
 
         $orders[] = (object) [
           'order'         => $order->getId(),

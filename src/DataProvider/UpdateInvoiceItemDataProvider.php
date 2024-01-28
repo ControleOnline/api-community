@@ -5,7 +5,7 @@ use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use ApiPlatform\Core\Exception\ResourceClassNotSupportedException;
 use App\Resource\UpdateInvoice;
-use ControleOnline\Entity\ReceiveInvoice;
+use ControleOnline\Entity\Invoice;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -33,7 +33,7 @@ final class UpdateInvoiceItemDataProvider implements
     string $resourceClass, $id, string $operationName = null, array $context = []
   ): ?UpdateInvoice
   {
-    if ($this->manager->find(ReceiveInvoice::class, $id) === null) {
+    if ($this->manager->find(Invoice::class, $id) === null) {
       return null;
     }
 

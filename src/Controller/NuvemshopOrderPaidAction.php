@@ -20,7 +20,7 @@ use ControleOnline\Entity\Email;
 use ControleOnline\Entity\Document;
 use ControleOnline\Entity\Address;
 use ControleOnline\Entity\User;
-use ControleOnline\Entity\PurchasingOrder;
+use ControleOnline\Entity\Order;
 use App\Service\PeopleService;
 use App\Service\AddressService;
 
@@ -136,13 +136,13 @@ class NuvemshopOrderPaidAction extends AbstractController
       }
     }
 
-    private function updateOrder(NuvemOrder $nuvemOrder): PurchasingOrder
+    private function updateOrder(NuvemOrder $nuvemOrder): Order
     {
 
       $orderReference = $nuvemOrder->getOrderReference();
       $quoteReference = $nuvemOrder->getQuoteReference();
 
-      $order = $this->manager->getRepository(PurchasingOrder::class)
+      $order = $this->manager->getRepository(Order::class)
         ->find($orderReference);
 
       if ($order === null) {

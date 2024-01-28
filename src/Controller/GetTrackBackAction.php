@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Order;
 use ControleOnline\Entity\OrderTracking;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,9 +45,9 @@ class GetTrackBackAction
 
 
             /**
-             * @var SalesOrder $order
+             * @var Order $order
              */
-            $order = $this->manager->getRepository(SalesOrder::class)
+            $order = $this->manager->getRepository(Order::class)
                 ->findOneBy([
                     "id" => $orderId
                 ]);
@@ -122,7 +122,7 @@ class GetTrackBackAction
         }
     }
 
-    private function getDeliveryDueDate(SalesOrder $order)
+    private function getDeliveryDueDate(Order $order)
     {
         $deliveryDate  = null;
 

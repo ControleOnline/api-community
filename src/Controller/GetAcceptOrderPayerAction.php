@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use ControleOnline\Entity\Address;
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Order;
 use ControleOnline\Entity\Quotation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,7 +50,7 @@ class GetAcceptOrderPayerAction extends AbstractController
                 throw new BadRequestHttpException('Quote is not found');
             }
             /**
-             * @var SalesOrder $order
+             * @var Order $order
              */
             $order = $quote->getOrder();
 

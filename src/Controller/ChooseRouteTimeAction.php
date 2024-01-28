@@ -5,7 +5,7 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use ControleOnline\Entity\SalesOrder as Order;
+use ControleOnline\Entity\Order as Order;
 use App\Service\AddressService;
 use App\Service\PeopleService;
 

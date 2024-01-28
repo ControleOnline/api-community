@@ -8,9 +8,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\Quotation;
 
-use ControleOnline\Entity\SalesOrder as Order;
+use ControleOnline\Entity\Order as Order;
 
-class UpdateSalesOrderDeadlineAction
+class UpdateOrderDeadlineAction
 {
     /**
      * Entity Manager

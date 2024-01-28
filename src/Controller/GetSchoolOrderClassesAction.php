@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use ControleOnline\Entity\ReceiveInvoice;
+use ControleOnline\Entity\Invoice;
 
 class GetSchoolOrderClassesAction
 {
@@ -38,7 +38,7 @@ class GetSchoolOrderClassesAction
         $this->security = $security;
     }
 
-    public function __invoke(ReceiveInvoice $data, Request $request): JsonResponse
+    public function __invoke(Invoice $data, Request $request): JsonResponse
     {
       try {
 
@@ -51,7 +51,7 @@ class GetSchoolOrderClassesAction
           'limit' => !is_numeric($limit) ? 10 : $limit
         ];
 
-        $repository = $this->manager->getRepository(ReceiveInvoice::class);
+        $repository = $this->manager->getRepository(Invoice::class);
 
         $output = [
           'response' => [

@@ -10,7 +10,7 @@ use ControleOnline\Entity\Quotation;
 use ControleOnline\Entity\QuoteDetail;
 use ControleOnline\Entity\Config;
 use ControleOnline\Entity\Status;
-use ControleOnline\Entity\SalesOrderInvoice;
+use ControleOnline\Entity\OrderInvoice;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Library\Itau\ItauClient;
@@ -90,8 +90,8 @@ class UpdateQuotationAddTaxAction
     /**
      * Verify if invoice is paid or has billet
      *
-     * @param  \ControleOnline\Entity\ReceiveInvoice $invoice
-     * @param  \ControleOnline\Entity\SalesOrder     $order
+     * @param  \ControleOnline\Entity\Invoice $invoice
+     * @param  \ControleOnline\Entity\Order     $order
      * @return boolean
      */
     private function orderInvoiceIsPaidOrHasBillet(Invoice $invoice, Order $order): bool
@@ -106,12 +106,12 @@ class UpdateQuotationAddTaxAction
     }
 
 
-    private function createNewInvoice(\ControleOnline\Entity\SalesOrder $order, float $value)
+    private function createNewInvoice(\ControleOnline\Entity\Order $order, float $value)
     {
         if (!in_array($order->getStatus()->getStatus(), [
             'automatic analysis', 'analysis', 'waiting client invoice tax', 'quote', 'canceled', 'expired'
         ])) {
-            $newInvoice   = new \ControleOnline\Entity\ReceiveInvoice();
+            $newInvoice   = new \ControleOnline\Entity\Invoice();
             $newInvoice->setPrice($value);
             $newInvoice->setDueDate(\DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime(' +2 Weekdays'))));
             $newInvoice->setStatus(
@@ -121,7 +121,7 @@ class UpdateQuotationAddTaxAction
             $this->manager->persist($newInvoice);
             $this->manager->flush($newInvoice);
 
-            $orderInvoice = new SalesOrderInvoice();
+            $orderInvoice = new OrderInvoice();
             $orderInvoice->setOrder($order);
             $orderInvoice->setInvoice($newInvoice);
             $orderInvoice->setRealPrice($value);
@@ -134,12 +134,12 @@ class UpdateQuotationAddTaxAction
     {
         $quotation =  $this->manager->getRepository(Quotation::class)->find($quotation->getId());
         /**
-         * @var \ControleOnline\Entity\SalesOrder $order
+         * @var \ControleOnline\Entity\Order $order
          */
         $order   = $quotation->getOrder();
 
         /**
-         * @var \ControleOnline\Entity\ReceiveInvoice $invoice
+         * @var \ControleOnline\Entity\Invoice $invoice
          */
         $invoice = $order->getInvoice()->first() ? $order->getInvoice()->first()->getInvoice() : null;
         if (count($order->getInvoice()) == 1) {
@@ -165,7 +165,7 @@ class UpdateQuotationAddTaxAction
     {
         $quotation =  $this->manager->getRepository(Quotation::class)->find($quotation->getId());
         /**
-         * @var \ControleOnline\Entity\SalesOrder $order
+         * @var \ControleOnline\Entity\Order $order
          */
         $order = $quotation->getOrder();
 
@@ -369,8 +369,8 @@ class UpdateQuotationAddTaxAction
 
     /**
      *
-     * @param  \ControleOnline\Entity\ReceiveInvoice $invoice
-     * @param  \ControleOnline\Entity\SalesOrder     $order
+     * @param  \ControleOnline\Entity\Invoice $invoice
+     * @param  \ControleOnline\Entity\Order     $order
      * @return boolean
      */
     private function isBilletCreated(Invoice $invoice, Order $order): bool

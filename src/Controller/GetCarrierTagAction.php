@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use ApiPlatform\Core\Exception\InvalidValueException;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\HeaderUtils;
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Order;
 use App\Library\Tag\Html\HtmlClient;
 use App\Library\Tag\Pimaco\PimacoClient;
 use Dompdf\Dompdf;
@@ -51,7 +51,7 @@ class GetCarrierTagAction
 
 
 
-    public function __invoke(SalesOrder $data, Request $request, KernelInterface $kernel, Environment $twig)
+    public function __invoke(Order $data, Request $request, KernelInterface $kernel, Environment $twig)
     {
         $this->kernel = $kernel;
         $this->twig   = $twig;
@@ -83,7 +83,7 @@ class GetCarrierTagAction
         return $response;
     }
 
-    protected function getPdf(SalesOrder $orderData, Request $request)
+    protected function getPdf(Order $orderData, Request $request)
     {
         $tag = new HtmlClient($this->twig, $request, $this->kernel->getProjectDir());
         $tagContent =  $tag->getPdf($orderData);

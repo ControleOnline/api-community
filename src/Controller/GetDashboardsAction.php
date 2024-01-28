@@ -331,15 +331,15 @@ class GetDashboardsAction extends AbstractCustomResourceAction
     $repository = $this->repository(People::class);
 
     if ($this->payload()->viewType == 'main') {
-      $salesOrderTotals = $repository
+      $OrderTotals = $repository
         ->getSalesTotalsByDate($fromDate, $toDate, $company, $companies, false, true);
     } else {
-      $salesOrderTotals = $repository
+      $OrderTotals = $repository
         ->getSalesTotalsByDate($fromDate, $toDate, $company, $companies);
     }
 
     return [
-      'sales_order_totals' => $salesOrderTotals,
+      'sales_order_totals' => $OrderTotals,
     ];
   }
 
@@ -353,15 +353,15 @@ class GetDashboardsAction extends AbstractCustomResourceAction
     $repository = $this->repository(People::class);
 
     if ($this->payload()->viewType == 'main') {
-      $purchasingOrderTotals = $repository
+      $OrderTotals = $repository
         ->getPurshasingTotalsByDate($fromDate, $toDate, $company, $companies, false, true);
     } else {
-      $purchasingOrderTotals = $repository
+      $OrderTotals = $repository
         ->getPurshasingTotalsByDate($fromDate, $toDate, $company, $companies);
     }
 
     return [
-      'purchasing_order_totals' => $purchasingOrderTotals,
+      'purchasing_order_totals' => $OrderTotals,
     ];
   }
 
@@ -397,28 +397,28 @@ class GetDashboardsAction extends AbstractCustomResourceAction
     $repository = $this->repository(People::class);
 
     if ($this->payload()->viewType == 'main') {
-      $salesOrderTotals = $repository
+      $OrderTotals = $repository
         ->getSalesTotalsByDate($fromDate, $toDate, $company, $companies, true, true);
     } else {
-      $salesOrderTotals = $repository
+      $OrderTotals = $repository
         ->getSalesTotalsByDate($fromDate, $toDate, $company, $companies, true);
     }
 
     return [
-      'sales_order_total_date' => $salesOrderTotals,
+      'sales_order_total_date' => $OrderTotals,
     ];
   }
 
   private function _getAverageTicketTotals_(): array
   {
     $averageTicketTotal    = null;
-    $salesOrderTotals      = $this->_getSalesTotals_();
-    $purchasingOrderTotals = $this->_getAllOperationalExpenses_();
+    $OrderTotals      = $this->_getSalesTotals_();
+    $OrderTotals = $this->_getAllOperationalExpenses_();
 
-    if (!empty($salesOrderTotals['sales_order_totals']['total_count'])) {
-      $avg = $salesOrderTotals['sales_order_totals']['total_price'] / $salesOrderTotals['sales_order_totals']['total_count'];
-      $averageTicket =  $salesOrderTotals['sales_order_totals']['total_price'] - $purchasingOrderTotals['operational_expenses']['total_price'];
-      $averageTicketTotal = $averageTicket / $salesOrderTotals['sales_order_totals']['total_count'];
+    if (!empty($OrderTotals['sales_order_totals']['total_count'])) {
+      $avg = $OrderTotals['sales_order_totals']['total_price'] / $OrderTotals['sales_order_totals']['total_count'];
+      $averageTicket =  $OrderTotals['sales_order_totals']['total_price'] - $OrderTotals['operational_expenses']['total_price'];
+      $averageTicketTotal = $averageTicket / $OrderTotals['sales_order_totals']['total_count'];
     }
 
     return [
@@ -452,12 +452,12 @@ class GetDashboardsAction extends AbstractCustomResourceAction
   private function _getOperationalProfit_(): array
   {
     $averageTicketTotal    = null;
-    $salesOrderTotals      = $this->_getSalesTotals_();
-    $purchasingOrderTotals = $this->_getAllOperationalExpenses_();
+    $OrderTotals      = $this->_getSalesTotals_();
+    $OrderTotals = $this->_getAllOperationalExpenses_();
 
-    if (!empty($salesOrderTotals['sales_order_totals']['total_count'])) {
-      $averageTicket =  $salesOrderTotals['sales_order_totals']['total_price'] - $purchasingOrderTotals['operational_expenses']['total_price'];
-      $operational_profit_percent = ($averageTicket / $salesOrderTotals['sales_order_totals']['total_price']) * 100;
+    if (!empty($OrderTotals['sales_order_totals']['total_count'])) {
+      $averageTicket =  $OrderTotals['sales_order_totals']['total_price'] - $OrderTotals['operational_expenses']['total_price'];
+      $operational_profit_percent = ($averageTicket / $OrderTotals['sales_order_totals']['total_price']) * 100;
     }
 
     return [
@@ -469,15 +469,15 @@ class GetDashboardsAction extends AbstractCustomResourceAction
   private function _getNetProfit_(): array
   {
     $averageTicketTotal    = null;
-    $salesOrderTotals      = $this->_getSalesTotals_();
-    $purchasingOrderTotals = $this->_getAllOperationalExpenses_();
+    $OrderTotals      = $this->_getSalesTotals_();
+    $OrderTotals = $this->_getAllOperationalExpenses_();
     $administrativeOrderTotals = $this->_getAdministrativeExpenses_();
 
-    if (!empty($salesOrderTotals['sales_order_totals']['total_count'])) {
-      $averageTicket =  $salesOrderTotals['sales_order_totals']['total_price'] -
-        $purchasingOrderTotals['operational_expenses']['total_price'] -
+    if (!empty($OrderTotals['sales_order_totals']['total_count'])) {
+      $averageTicket =  $OrderTotals['sales_order_totals']['total_price'] -
+        $OrderTotals['operational_expenses']['total_price'] -
         $administrativeOrderTotals['administrative_expenses']['total_price'];
-      $net_profit_percent = ($averageTicket / $salesOrderTotals['sales_order_totals']['total_price']) * 100;
+      $net_profit_percent = ($averageTicket / $OrderTotals['sales_order_totals']['total_price']) * 100;
     }
 
     return [
@@ -538,16 +538,16 @@ class GetDashboardsAction extends AbstractCustomResourceAction
   private function _getOperationalExpenses_(): array
   {
     $averageTicketTotal    = null;
-    $salesOrderTotals      = $this->_getSalesTotals_();
-    $purchasingOrderTotals = $this->_getAllOperationalExpenses_();
+    $OrderTotals      = $this->_getSalesTotals_();
+    $OrderTotals = $this->_getAllOperationalExpenses_();
 
-    if (!empty($salesOrderTotals['sales_order_totals']['total_count'])) {
-      $averageTicket =  $purchasingOrderTotals['operational_expenses']['total_price'];
-      $operational_profit_percent = ($purchasingOrderTotals['operational_expenses']['total_price'] / $salesOrderTotals['sales_order_totals']['total_price']) * 100;
+    if (!empty($OrderTotals['sales_order_totals']['total_count'])) {
+      $averageTicket =  $OrderTotals['operational_expenses']['total_price'];
+      $operational_profit_percent = ($OrderTotals['operational_expenses']['total_price'] / $OrderTotals['sales_order_totals']['total_price']) * 100;
     }
 
     return [
-      'purchasing_order_count' => $purchasingOrderTotals['operational_expenses']['total_count'],
+      'purchasing_order_count' => $OrderTotals['operational_expenses']['total_count'],
       'purchasing_order_totals' => $averageTicket,
       'purchasing_percent' => round($operational_profit_percent, 2)
     ];

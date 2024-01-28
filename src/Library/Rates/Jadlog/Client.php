@@ -9,8 +9,8 @@ use App\Library\Rates\CarrierRatesInterface;
 use App\Library\Rates\Model\User;
 use App\Library\Rates\Model\Quotation;
 use App\Library\Rates\Model\Rate;
-use ControleOnline\Entity\SalesOrderInvoiceTax;
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\OrderInvoiceTax;
+use ControleOnline\Entity\Order;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Document;
 use ControleOnline\Entity\Address;
@@ -192,7 +192,7 @@ class Client implements CarrierRatesInterface
     ];
   }
 
-  public function getOrderTag(SalesOrder $order) {
+  public function getOrderTag(Order $order) {
     try {
       $rem = $this->getOrderPeopleData(
         $order->getRetrievePeople(),
@@ -209,13 +209,13 @@ class Client implements CarrierRatesInterface
       $docs = $order->getInvoiceTax();
 
       /**
-       * @var SalesOrderInvoiceTax $doc
+       * @var OrderInvoiceTax $doc
        */
       $orderNfe = null;
 
       if (!empty($docs)) {
         /**
-         * @var SalesOrderInvoiceTax $doc
+         * @var OrderInvoiceTax $doc
          */
         foreach($docs as $doc) {
           if ($doc->getInvoiceType() === 55) {

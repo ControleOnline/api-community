@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use ControleOnline\Entity\Contract;
-use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\Order;
 
 class ChangeContractPaymentAction
 {
@@ -31,9 +31,9 @@ class ChangeContractPaymentAction
       $payload  = json_decode($request->getContent(), true);
 
       /**
-       * @var \ControleOnline\Entity\SalesOrder $order  
+       * @var \ControleOnline\Entity\Order $order  
        */
-      $order = $this->manager->getRepository(SalesOrder::class)->findOneBy(
+      $order = $this->manager->getRepository(Order::class)->findOneBy(
         ['contract' => $data->getId()]
       );
 

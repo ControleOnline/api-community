@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use ControleOnline\Entity\PurchasingInvoiceTax AS InvoiceTax;
+use ControleOnline\Entity\InvoiceTax AS InvoiceTax;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpFoundation\Request;
