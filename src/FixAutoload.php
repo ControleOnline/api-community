@@ -21,17 +21,18 @@ class FixAutoload
     public static function postInstall()
     {
         self::replaceInComposerFiles();
-        self::removeOldFolders();
+        self::deleteDirectory(__DIR__ . '/../vendor/controleonline');
     }
 
-    private static function removeOldFolders($file = '')
+    public static function deleteDirectory($path)
     {
-        $path = __DIR__ . '/../vendor/controleonline/' . $file;
         if (is_dir($path)) {
-            $files = glob($path . '/*');
+            $files = glob($path . '/{.,}*', GLOB_BRACE);
             foreach ($files as $file) {
                 if (is_dir($file)) {
-                    self::removeOldFolders($file);
+                    if (basename($file) !== '.' && basename($file) !== '..') {
+                        self::deleteDirectory($file);
+                    }
                 } else {
                     unlink($file);
                 }
@@ -41,6 +42,8 @@ class FixAutoload
             unlink($path);
         }
     }
+
+
 
     private static function replaceInComposerFiles()
     {
