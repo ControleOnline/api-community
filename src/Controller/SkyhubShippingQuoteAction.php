@@ -36,7 +36,7 @@ class SkyhubShippingQuoteAction
     private $security = null;
 
     /**
-     * @var \ControleOnline\Repository\InvoiceRepository
+     * @var \ControleOnline\Repository\ReceiveInvoiceRepository
      */
     private $repository = null;
 
@@ -46,7 +46,7 @@ class SkyhubShippingQuoteAction
     {
         $this->manager    = $entityManager;
         $this->security   = $security;
-        $this->repository = $this->manager->getRepository(\ControleOnline\Entity\Invoice::class);
+        $this->repository = $this->manager->getRepository(\ControleOnline\Entity\ReceiveInvoice::class);
     }
 
     public function __invoke(Request $request): JsonResponse

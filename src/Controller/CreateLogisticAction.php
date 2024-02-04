@@ -5,7 +5,7 @@ namespace App\Controller;
 use ControleOnline\Entity\OrderLogistic;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Repository\OrderLogisticRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
@@ -62,7 +62,7 @@ class CreateLogisticAction
       // $provider = $this->manager->getRepository(People::class)->find($payload['provider']);
       // $orderLogistic->setStatus($provider);
       
-      // $order = $this->manager->getRepository(Order::class)->find($payload['orderId']);
+      // $order = $this->manager->getRepository(SalesOrder::class)->find($payload['orderId']);
       // $orderLogistic->setStatus($order);
       
       // $this->manager->persist($orderLogistic);

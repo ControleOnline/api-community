@@ -4,9 +4,10 @@ namespace App\Controller;
 
 use App\Controller\AbstractCustomResourceAction;
 use App\Library\Utils\Address;
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\PeopleDomain;
 use ControleOnline\Entity\User;
+use ControleOnline\Entity\Order;
 use ControleOnline\Repository\TaxesRepository;
 use App\Library\Quote\View\Group as ViewGroup;
 use App\Library\Quote\Core\DataBag;
@@ -29,7 +30,7 @@ class QuoteRemoteAction extends AbstractCustomResourceAction
 
   public function index(): ?array
   {
-    $order = $this->entity(Order::class, $this->payload()->orderId);
+    $order = $this->entity(SalesOrder::class, $this->payload()->orderId);
     if ($order === null) {
       throw new \Exception('Order was not found', 404);
     }

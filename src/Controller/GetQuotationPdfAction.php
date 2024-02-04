@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use ControleOnline\Entity\Quotation;
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\PeopleDomain;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -65,7 +65,7 @@ class GetQuotationPdfAction
         $destinationUf = $destinationCity->getState();
 
         /**
-         * @var Order $order
+         * @var SalesOrder $order
          */
         $order = $data->getOrder();
 

@@ -81,7 +81,7 @@ class GetQuotationOptionalTaxesAction
   private function getParams(Quotation $quotation): TaxesData
   {
     /**
-     * @var \ControleOnline\Entity\Order
+     * @var \ControleOnline\Entity\SalesOrder
      */
     $order    = $quotation->getOrder();
     $oaddress = $this->getAddressData($order->getAddressOrigin());

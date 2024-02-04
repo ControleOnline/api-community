@@ -6,10 +6,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Doctrine\ORM\EntityManagerInterface;
 
-use ControleOnline\Entity\Order as Order;
+use ControleOnline\Entity\SalesOrder as Order;
 use ControleOnline\Entity\People;
 
-class UpdateOrderRemoteAction
+class UpdateSalesOrderRemoteAction
 {
     /**
      * Entity Manager

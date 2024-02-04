@@ -2,19 +2,19 @@
 
 namespace App\Library\Tag\Html;
 
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\SalesOrder;
 use App\Library\Tag\AbstractTag;
 use Proner\PhpPimaco\Pimaco;
 use Proner\PhpPimaco\Tag;
 
 class HtmlClient extends AbstractTag
 {
-    public function getPdf(Order $orderData)
+    public function getPdf(SalesOrder $orderData)
     {
         return $this->getPdfTagData($orderData);
     }
 
-    protected function getPdfTagData(Order $orderData)
+    protected function getPdfTagData(SalesOrder $orderData)
     {
         $params = $this->_getOrdersTemplateParams($orderData);
         $twigFile = 'tag/A4Tag.html.twig';

@@ -11,7 +11,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-use ControleOnline\Entity\Order AS Order;
+use ControleOnline\Entity\PurchasingOrder AS Order;
 use ControleOnline\Entity\People;
 use Symfony\Component\Routing\Annotation\Route;
 

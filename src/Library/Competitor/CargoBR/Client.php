@@ -2,7 +2,7 @@
 
 namespace App\Library\Competitor\CargoBR;
 
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\SalesOrder;
 use App\Library\Rates\Exception\ClientRequestException;
 use Exception;
 use GuzzleHttp\Client as GuzzleHttpClient;
@@ -15,7 +15,7 @@ class Client
   private $url = 'https://api.cargobr.com';
 
 
-  public function quote(Order $order)
+  public function quote(SalesOrder $order)
   {
 
 

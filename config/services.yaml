@@ -32,18 +32,17 @@ services:
               event: prePersist
               entity: App\Entity\CompanyExpense
               lazy: true
-
 imports:
-    - { resource: "../vendor/controleonline/multi-tenancy/config/config.yaml" }
-    - { resource: "../vendor/controleonline/products/config/config.yaml" }
-    - { resource: "../vendor/controleonline/common/config/config.yaml" }
-    - { resource: "../vendor/controleonline/financial/config/config.yaml" }
-    - { resource: "../vendor/controleonline/contract/config/config.yaml" }
-    - { resource: "../vendor/controleonline/dashboard/config/config.yaml" }
-    - { resource: "../vendor/controleonline/ead/config/config.yaml" }
-    - { resource: "../vendor/controleonline/orders/config/config.yaml" }
-    - { resource: "../vendor/controleonline/people/config/config.yaml" }
-    - { resource: "../vendor/controleonline/queue/config/config.yaml" }
-    - { resource: "../vendor/controleonline/logistic/config/config.yaml" }
-    - { resource: "../vendor/controleonline/users/config/config.yaml" }
-    - { resource: "../vendor/controleonline/tasks/config/config.yaml" }
+    - { resource: "../modules/controleonline/multi-tenancy/config/config.yaml" }
+    - { resource: "../modules/controleonline/products/config/config.yaml" }
+    - { resource: "../modules/controleonline/common/config/config.yaml" }
+    - { resource: "../modules/controleonline/financial/config/config.yaml" }
+    - { resource: "../modules/controleonline/contract/config/config.yaml" }
+    - { resource: "../modules/controleonline/dashboard/config/config.yaml" }
+    - { resource: "../modules/controleonline/ead/config/config.yaml" }
+    - { resource: "../modules/controleonline/orders/config/config.yaml" }
+    - { resource: "../modules/controleonline/people/config/config.yaml" }
+    - { resource: "../modules/controleonline/queue/config/config.yaml" }
+    - { resource: "../modules/controleonline/logistic/config/config.yaml" }
+    - { resource: "../modules/controleonline/users/config/config.yaml" }
+    - { resource: "../modules/controleonline/tasks/config/config.yaml" }

@@ -12,7 +12,7 @@ use ControleOnline\Entity\MyContract;
 use ControleOnline\Entity\Contract;
 use ControleOnline\Entity\MyContractModel;
 use ControleOnline\Entity\MyContractPeople;
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Repository\ContractRepository;
 
 class CreateContractAction
@@ -86,9 +86,9 @@ class CreateContractAction
                 throw new BadRequestHttpException('peoplePayer not found');
 
             /**
-             * @var Order $order
+             * @var SalesOrder $order
              */
-            $order = $this->manager->getRepository(Order::class)->findOneBy(array(
+            $order = $this->manager->getRepository(SalesOrder::class)->findOneBy(array(
                 "id" => $orderId
             ));
 

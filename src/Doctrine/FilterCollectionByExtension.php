@@ -11,27 +11,34 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Doctrine\ORM\EntityManagerInterface;
 
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\PurchasingOrder;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\People;
+use ControleOnline\Entity\ReceiveInvoice;
+use ControleOnline\Entity\PayInvoice;
 use ControleOnline\Entity\Phone;
 use ControleOnline\Entity\User;
 use ControleOnline\Entity\Address;
 use ControleOnline\Entity\Client;
+use ControleOnline\Entity\ComissionInvoice;
+use ControleOnline\Entity\ComissionOrder;
 use ControleOnline\Entity\Document;
+use ControleOnline\Entity\Status;
 use ControleOnline\Entity\Email;
 use ControleOnline\Entity\PeopleClient;
 use ControleOnline\Entity\PeopleEmployee;
 use ControleOnline\Entity\PeopleSalesman;
+use ControleOnline\Entity\PeopleCarrier;
 use ControleOnline\Entity\MyContract;
 use ControleOnline\Entity\ProductOld as Product;
 use ControleOnline\Entity\PeopleDomain;
 use ControleOnline\Entity\Provider;
+use ControleOnline\Entity\CompanyExpense;
 use ControleOnline\Entity\Category;
 use ControleOnline\Entity\Hardware;
 use ControleOnline\Entity\Invoice;
-use ControleOnline\Entity\OrderInvoice;
+use ControleOnline\Entity\PurchasingOrderInvoice;
 use App\Service\PeopleRoleService;
-use ControleOnline\Entity\OrderLogistic;
 
 final class FilterCollectionByExtension
 implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
@@ -55,6 +62,26 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
     $this->request  = $requestStack->getCurrentRequest();
     $this->manager  = $entityManager;
     $this->roles    = $roles;
+    $this->entities = [
+      PurchasingOrder::class,
+      SalesOrder::class,
+      Document::class,
+      Email::class,
+      User::class,
+      Address::class,
+      Phone::class,
+      People::class,
+      Client::class,
+      ComissionInvoice::class,
+      ComissionOrder::class,
+      MyContract::class,
+      Product::class,
+      Provider::class,
+      CompanyExpense::class,
+      Category::class,
+      PayInvoice::class,
+      Hardware::class,
+    ];
   }
 
   public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, $resourceClass, $operationName = null)
@@ -69,47 +96,83 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 
   private function addWhere(QueryBuilder $queryBuilder, $resourceClass, $applyTo): void
   {
+    if (!in_array($resourceClass, $this->entities)) {
+      return;
+    }
 
+    if (empty($this->security->getUser()))
+      return;
+
+    if ($this->security->isGranted('ROLE_ADMIN')) {
+      return;
+    }
 
     $rootAlias = $queryBuilder->getRootAliases()[0];
 
     switch ($resourceClass) {
 
-      case Invoice::class:
-        $myCompanies   = $this->getMyCompanies();
-        $receiver = $this->request->query->get('receiver', null);
-        if ($receiver) {
-          $queryBuilder->andWhere(sprintf('%s.receiver ', $rootAlias) . ' IN(:receiver)');
-          $queryBuilder->andWhere(sprintf('%s.receiver ', $rootAlias) . ' IN(:myCompanies)');
-          $queryBuilder->setParameter('receiver',  preg_replace("/[^0-9]/", "", $receiver));
-          $queryBuilder->setParameter('myCompanies', $myCompanies);
-        }
 
-        $payer = $this->request->query->get('payer', null);
-        if ($payer) {
-          $queryBuilder->andWhere(sprintf('%s.payer ', $rootAlias) . ' IN(:payer)');
-          $queryBuilder->andWhere(sprintf('%s.payer ', $rootAlias) . ' IN(:myCompanies)');
-          $queryBuilder->setParameter('payer',  preg_replace("/[^0-9]/", "", $payer));
-          $queryBuilder->setParameter('myCompanies',  $myCompanies);
+
+
+      case PayInvoice::class:
+        $payer   = $this->getMyCompanies();
+        $company = $this->request->query->get('company', null);
+        $queryBuilder->andWhere(sprintf('%s.payer IN(:payer)', $rootAlias));
+        $queryBuilder->setParameter('payer', $payer);
+
+        if ($company) {
+          $queryBuilder->andWhere(sprintf('%s.payer IN(:company)', $rootAlias));
+          $queryBuilder->setParameter('company', preg_replace("/[^0-9]/", "",$company));
         }
 
         break;
-      case OrderLogistic::class:
-        $queryBuilder->innerJoin(Order::class, 'O', 'WITH', sprintf('O.id = %s.SalesOrder', $rootAlias));
-        $queryBuilder->andWhere('O.client IN (:client) OR O.provider IN (:provider)');
-        $queryBuilder->setParameter('client', $this->getMyCompanies());
-        $queryBuilder->setParameter('provider', $this->getMyCompanies());
-        break;
+      case PurchasingOrder::class:
 
-      case  Order::class:
         $queryBuilder->andWhere(sprintf('%s.client IN (:client) OR %s.provider IN (:provider)', $rootAlias, $rootAlias));
-        $queryBuilder->setParameter('client', $this->getMyCompanies());
-        $queryBuilder->setParameter('provider', $this->getMyCompanies());
+
+        $queryBuilder->setParameter('client', $this->getMyCompany());
+        $queryBuilder->setParameter('provider', $this->getMyCompany());
+
         break;
+
+      case ComissionOrder::class:
+
+        $client = $this->getMyProvider();
+
+        $queryBuilder->andWhere(sprintf('%s.client = :client', $rootAlias));
+        $queryBuilder->andWhere(sprintf('%s.provider IN (:provider)', $rootAlias));
+
+        $queryBuilder->setParameter('client', $client);
+        $queryBuilder->setParameter('provider', $this->getMyCompanies());
+
+        break;
+
 
       case Hardware::class:
         $queryBuilder->andWhere(sprintf('%s.company IN(:company)', $rootAlias));
         $queryBuilder->setParameter('company', $this->isFilteringByMyCompany() ?  $this->getMyCompany() : $this->getMyCompanies());
+        break;
+
+      case SalesOrder::class:
+        $queryBuilder->andWhere(sprintf('%s.provider IN(:provider)', $rootAlias));
+        $queryBuilder->setParameter('provider', $this->isFilteringByMyCompany() ?  $this->getMyCompany() : $this->getMyCompanies());
+        break;
+
+      case ComissionInvoice::class:
+
+        $provider = $this->getMyCompanies();
+        $client   = $this->getMyProvider();
+
+        $queryBuilder->innerJoin(sprintf('%s.order', $rootAlias), 'I');
+        $queryBuilder->innerJoin('I.order', 'O');
+        $queryBuilder->andWhere('O.provider IN(:provider)');
+        $queryBuilder->andWhere('O.orderType = :orderType');
+        $queryBuilder->andWhere('O.client = :client');
+        $queryBuilder->setParameter('provider', $provider);
+        $queryBuilder->setParameter('client', $client);
+        $queryBuilder->setParameter('orderType', 'comission');
+
+
         break;
 
       case Document::class:
@@ -204,8 +267,8 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 
         $invoice_id = $this->request->query->get('invoiceId', null);
         if (!empty($invoice_id)) {
-          $queryBuilder->innerJoin(Order::class, 'PO', 'WITH', sprintf('PO.provider = %s.id', $rootAlias));
-          $queryBuilder->innerJoin(OrderInvoice::class, 'POI', 'WITH', 'POI.order = PO.id');
+          $queryBuilder->innerJoin(PurchasingOrder::class, 'PO', 'WITH', sprintf('PO.provider = %s.id', $rootAlias));
+          $queryBuilder->innerJoin(PurchasingOrderInvoice::class, 'POI', 'WITH', 'POI.order = PO.id');
           //$queryBuilder->innerJoin(Invoice::class, 'I', 'WITH', 'I.id = POI.invoice');
           $queryBuilder->andWhere('POI.invoice IN(:invoice)');
           $queryBuilder->setParameter('invoice', $invoice_id);
@@ -215,6 +278,24 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 
         break;
 
+      case CompanyExpense::class:
+
+        $subquery = $this->manager->createQueryBuilder()
+          ->select('IDENTITY(peopleEmployee.company)')
+          ->from(PeopleEmployee::class, 'peopleEmployee')
+          ->where("peopleEmployee.employee = :my_employee");
+
+        $queryBuilder->andWhere(
+          $this->manager->createQueryBuilder()
+            ->expr()->in(
+              sprintf('%s.company', $rootAlias),
+              $subquery->getDQL()
+            )
+        );
+
+        $queryBuilder->setParameter('my_employee', $this->security->getUser()->getPeople());
+
+        break;
 
       case Category::class:
 

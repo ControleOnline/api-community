@@ -7,6 +7,7 @@ use ControleOnline\Entity\Address;
 use ControleOnline\Entity\Invoice;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\People;
+use ControleOnline\Entity\ReceiveInvoice;
 use App\Service\AddressService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
@@ -57,7 +58,7 @@ class InterClient
     private $address;
 
     /**
-     * @param Invoice $invoice
+     * @param ReceiveInvoice $invoice
      * @param array $configs
      * @param KernelInterface $appKernel
      * @param EntityManager $entityManager
@@ -86,9 +87,9 @@ class InterClient
         $invoiceId = $this->invoice->getId();
 
         /**
-         * @var Invoice $invEtt
+         * @var ReceiveInvoice $invEtt
          */
-        $invEtt = $this->em->getRepository(Invoice::class)->find($invoiceId);
+        $invEtt = $this->em->getRepository(ReceiveInvoice::class)->find($invoiceId);
         if (empty($invEtt)) {
             throw new Exception("Não foi possível localizar a fatura com o ID: " . $invoiceId);
         }
@@ -365,9 +366,9 @@ class InterClient
     private function checkBilletPaidApiInter($contaBanco, $invoiceId): string
     {
         /**
-         * @var Invoice $invEtt
+         * @var ReceiveInvoice $invEtt
          */
-        $invEtt = $this->em->getRepository(Invoice::class)->find($invoiceId);
+        $invEtt = $this->em->getRepository(ReceiveInvoice::class)->find($invoiceId);
         if (empty($invEtt)) {
             throw new Exception("Não foi possível localizar a fatura com o ID: " . $invoiceId . " --> Method: checkBilletPaidApiInter()");
         }

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\Quotation;
 use App\Library\Competitor\CargoBR\Client as CargoClient;
 use App\Library\Competitor\GoFretes\Client as GoClient;
@@ -27,7 +27,7 @@ class GetCompetitorAction
         $this->manager = $manager;
     }
 
-    public function __invoke(Order $data, Request $request): JsonResponse
+    public function __invoke(SalesOrder $data, Request $request): JsonResponse
     {
 
         try {

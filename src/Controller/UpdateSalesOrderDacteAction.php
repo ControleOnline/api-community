@@ -5,15 +5,15 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 
-use ControleOnline\Entity\Order as Order;
-use ControleOnline\Entity\OrderInvoiceTax as OrderInvoiceTax;
-use ControleOnline\Entity\InvoiceTax as InvoiceTax;
+use ControleOnline\Entity\SalesOrder as Order;
+use ControleOnline\Entity\SalesOrderInvoiceTax as OrderInvoiceTax;
+use ControleOnline\Entity\SalesInvoiceTax as InvoiceTax;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Address;
 use App\Service\AddressService;
 
-class UpdateOrderDacteAction
+class UpdateSalesOrderDacteAction
 {
     /**
      * Entity Manager
@@ -84,14 +84,14 @@ class UpdateOrderDacteAction
 
       // create invoice order relationship
 
-      $OrderInvoiceTax = new OrderInvoiceTax();
+      $purchasingOrderInvoiceTax = new OrderInvoiceTax();
 
-      $OrderInvoiceTax->setOrder      ($order);
-      $OrderInvoiceTax->setInvoiceTax ($invoiceTax);
-      $OrderInvoiceTax->setInvoiceType(57);
-      $OrderInvoiceTax->setIssuer     ($order->getQuote()->getCarrier());
+      $purchasingOrderInvoiceTax->setOrder      ($order);
+      $purchasingOrderInvoiceTax->setInvoiceTax ($invoiceTax);
+      $purchasingOrderInvoiceTax->setInvoiceType(57);
+      $purchasingOrderInvoiceTax->setIssuer     ($order->getQuote()->getCarrier());
 
-      $this->manager->persist($OrderInvoiceTax);
+      $this->manager->persist($purchasingOrderInvoiceTax);
 
       // change order status
 

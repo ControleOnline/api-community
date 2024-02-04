@@ -18,7 +18,7 @@ use ControleOnline\Entity\User;
 use ControleOnline\Entity\Email;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Quotation;
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\Status;
 use ControleOnline\Repository\TaxesRepository;
 use ControleOnline\Repository\QuoteRepository;
@@ -169,7 +169,7 @@ class GetQuoteHandler implements MessageHandlerInterface
 
       if (isset($this->params['mainOrder'])) {
 
-        $mainOrder = $this->manager->getRepository(Order::class)->find($this->params['mainOrder']);
+        $mainOrder = $this->manager->getRepository(SalesOrder::class)->find($this->params['mainOrder']);
         $origin = $mainOrder->getAddressOrigin();
         $destination = $mainOrder->getAddressDestination();
         $retrieveContact = $mainOrder->getRetrieveContact();
@@ -179,7 +179,7 @@ class GetQuoteHandler implements MessageHandlerInterface
         $provider = $mainOrder->getProvider();
 
 
-        $order = $this->manager->getRepository(Order::class)->find($result['orderId']);
+        $order = $this->manager->getRepository(SalesOrder::class)->find($result['orderId']);
         $order->setClient($mainOrder->getClient());
         $order->setMainOrderId($mainOrder->getId());
         $order->setPayer($mainOrder->getPayer());
@@ -204,7 +204,7 @@ class GetQuoteHandler implements MessageHandlerInterface
 
         if ($this->params['quoteType'] == 're-delivery') {
           $order->setStatus($this->manager->getRepository(Status::class)->findOneBy(['status' =>  'waiting payment']));
-          $invoiceTax = $mainOrder->getClientInvoiceTax();
+          $invoiceTax = $mainOrder->getClientSalesInvoiceTax();
           if ($invoiceTax) {
             $order->addAInvoiceTax($invoiceTax);
             $mainOrder->removeInvoiceTax($invoiceTax);
@@ -396,7 +396,7 @@ class GetQuoteHandler implements MessageHandlerInterface
       $this->isBuyer($companies);
       $this->haveActivePlan($companies);
 
-      $Orders = $this->manager->getRepository(Order::class)
+      $salesOrders = $this->manager->getRepository(SalesOrder::class)
         ->createQueryBuilder('O')
         ->select('COUNT(O.id) AS count')
         ->where('O.status IN (:status)')
@@ -411,7 +411,7 @@ class GetQuoteHandler implements MessageHandlerInterface
         ->getQuery()->getResult();
 
       $this->plan['quoted'] = 0;
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
         $this->plan['quoted'] = $order['count'];
         if ($order['count'] > $this->free_limit) {
           $this->plan['exceeded'] = true;
@@ -432,7 +432,7 @@ class GetQuoteHandler implements MessageHandlerInterface
   private function isBuyer($client)
   {
     $this->plan['buyer'] = false;
-    $Orders = $this->manager->getRepository(Order::class)
+    $salesOrders = $this->manager->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select('COUNT(O.id) AS count')
       ->where('O.status NOT IN (:status)')
@@ -447,7 +447,7 @@ class GetQuoteHandler implements MessageHandlerInterface
       ->getQuery()->getResult();
 
     $this->plan['purchased'] = 0;
-    foreach ($Orders as $order) {
+    foreach ($salesOrders as $order) {
       $this->plan['purchased'] = $order['count'];
       if ($order['count'] >= 1) {
         $this->plan['buyer'] = true;

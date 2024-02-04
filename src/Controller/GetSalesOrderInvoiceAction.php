@@ -7,13 +7,13 @@ use ControleOnline\Entity\DocumentType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use ControleOnline\Entity\Order AS Order;
+use ControleOnline\Entity\SalesOrder AS Order;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Quotation;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Comparison;
 
-class GetOrderInvoiceAction
+class GetSalesOrderInvoiceAction
 {
     /**
      * Entity Manager
@@ -35,7 +35,7 @@ class GetOrderInvoiceAction
             $invoiceTax = [];
 
             /**
-             * @var \ControleOnline\Entity\OrderInvoiceTax $invoice
+             * @var \ControleOnline\Entity\SalesOrderInvoiceTax $invoice
              */
             foreach ($data->getInvoiceTax() AS $invoice) {
                 $invoiceTax[] = [

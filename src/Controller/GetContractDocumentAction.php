@@ -14,7 +14,7 @@ use ControleOnline\Entity\City;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Address;
 use ControleOnline\Entity\MyContract;
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\SchoolTeamSchedule;
 use ControleOnline\Entity\Team;
 use ControleOnline\Entity\Particulars;

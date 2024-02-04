@@ -14,7 +14,7 @@ use ControleOnline\Entity\Document;
 use ControleOnline\Entity\District;
 use ControleOnline\Entity\Language;
 use ControleOnline\Entity\DocumentType;
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\Quotation;
 use Doctrine\ORM\EntityManagerInterface;
@@ -74,9 +74,9 @@ class SaveAcceptOrderPayerAction extends AbstractController
                 throw new BadRequestHttpException('Quote is not found');
             }
             /**
-             * @var Order $order
+             * @var SalesOrder $order
              */
-            $order = $this->manager->getRepository(Order::class)
+            $order = $this->manager->getRepository(SalesOrder::class)
                 ->find($quote->getOrder()->getId());
 
             if (empty($order)) {
@@ -435,7 +435,7 @@ class SaveAcceptOrderPayerAction extends AbstractController
     }
 
 
-    protected function getStatus(Order $order)
+    protected function getStatus(SalesOrder $order)
     {
         if ($order->getStatus()->getStatus() == 'quote' || $order->getStatus()->getStatus() == 'proposal sent' || !$order->getDeliveryPeople()) {
             return $this->manager->getRepository(Status::class)

@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\Security;
 use \App\Library\Rates\RateServiceFactory;
 
 use ControleOnline\Entity\File as FileEntity;
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\Label;
 
 class CreateNewLabel
@@ -72,10 +72,10 @@ class CreateNewLabel
 
             if (empty($label)) {
 
-                $repoOrder = $this->manager->getRepository(Order::class);
+                $repoOrder = $this->manager->getRepository(SalesOrder::class);
 
                 /**
-                 * @var Order $order
+                 * @var SalesOrder $order
                  */
                 $order = $repoOrder->findOneBy(array("id" => $orderId));
 
@@ -773,10 +773,10 @@ class CreateNewLabel
         ];
 
 
-        $repoOrder = $this->manager->getRepository(Order::class);
+        $repoOrder = $this->manager->getRepository(SalesOrder::class);
 
         /**
-         * @var Order $order
+         * @var SalesOrder $order
          */
         $order = $repoOrder->findOneBy(array("id" => $label->getOrderId()));
 

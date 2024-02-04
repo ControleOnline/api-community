@@ -19,7 +19,8 @@ use ControleOnline\Entity\DeliveryRegionCity;
 use ControleOnline\Entity\DeliveryTax;
 use ControleOnline\Entity\DeliveryTaxGroup;
 use ControleOnline\Entity\Status;
-use ControleOnline\Entity\InvoiceTax;
+use ControleOnline\Entity\PurchasingInvoiceTax;
+use ControleOnline\Entity\SalesInvoiceTax;
 use ControleOnline\Service\DatabaseSwitchService;
 
 class FixCommand extends Command
@@ -121,10 +122,10 @@ class FixCommand extends Command
   protected function fixClientInvoiceKey(OutputInterface $output, $limit)
   {
 
-    $InvoiceTax = $this->manager->getRepository(InvoiceTax::class)
+    $salesInvoiceTax = $this->manager->getRepository(SalesInvoiceTax::class)
       ->createQueryBuilder('IT')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\OrderInvoiceTax', 'SIT', 'WITH', 'SIT.invoiceTax = IT.id AND SIT.invoiceType=:invoiceType')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoiceTax', 'SIT', 'WITH', 'SIT.invoiceTax = IT.id AND SIT.invoiceType=:invoiceType')
       ->where('IT.invoiceNumber =:invoice_number')
       ->orWhere('IT.invoiceNumber IS NULL')
       ->orWhere('IT.invoiceKey =:invoice_key')
@@ -141,7 +142,7 @@ class FixCommand extends Command
 
     $a = 0;
 
-    foreach ($InvoiceTax as $invoiceTax) {
+    foreach ($salesInvoiceTax as $invoiceTax) {
       $nf = $invoiceTax->getInvoice();
 
       if ($nf) {
@@ -165,7 +166,7 @@ class FixCommand extends Command
             '',
           ]);
 
-          $exists = null; //$this->manager->getRepository(InvoiceTax::class)->findOneBy(['invoiceKey' => $chave]);
+          $exists = null; //$this->manager->getRepository(SalesInvoiceTax::class)->findOneBy(['invoiceKey' => $chave]);
           if (!$exists) {
             if ($chave)
               $invoiceTax->setInvoiceKey($chave);
@@ -182,10 +183,10 @@ class FixCommand extends Command
 
   protected function fixInvoiceKey(OutputInterface $output, $limit)
   {
-    $InvoiceTax = $this->manager->getRepository(InvoiceTax::class)
+    $salesInvoiceTax = $this->manager->getRepository(SalesInvoiceTax::class)
       ->createQueryBuilder('IT')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\OrderInvoiceTax', 'SIT', 'WITH', 'SIT.invoiceTax = IT.id AND SIT.invoiceType=:invoiceType')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoiceTax', 'SIT', 'WITH', 'SIT.invoiceTax = IT.id AND SIT.invoiceType=:invoiceType')
       ->where('IT.invoiceNumber =:invoice_number')
       ->orWhere('IT.invoiceNumber IS NULL')
       ->orWhere('IT.invoiceKey =:invoice_key')
@@ -200,7 +201,7 @@ class FixCommand extends Command
       ->getQuery()->getResult();
 
 
-    foreach ($InvoiceTax as $invoiceTax) {
+    foreach ($salesInvoiceTax as $invoiceTax) {
       $nf = $invoiceTax->getInvoice();
 
       if ($nf) {
@@ -222,7 +223,7 @@ class FixCommand extends Command
             '',
           ]);
 
-          $exists = null; //$this->manager->getRepository(InvoiceTax::class)->findOneBy(['invoiceKey' => $chave]);
+          $exists = null; //$this->manager->getRepository(SalesInvoiceTax::class)->findOneBy(['invoiceKey' => $chave]);
           if (!$exists) {
             if ($chave)
               $invoiceTax->setInvoiceKey($chave);

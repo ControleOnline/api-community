@@ -122,9 +122,11 @@
             "echo '{\"directory\" : \"public/vendor/\"}' > .bowerrc"
         ],
         "post-install-cmd": [
+            "App\\FixAutoload::postInstall",
             "@auto-scripts"
         ],
         "post-update-cmd": [
+            "App\\FixAutoload::postInstall",
             "@auto-scripts"
         ]
     },

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\SalesOrder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use App\Library\Utils\Formatter;
@@ -26,24 +26,24 @@ class _TemplateViewerController extends AbstractController
         switch ($templateName) {
             case 'email/invoice-outdated':
                 /**
-                 * @var \ControleOnline\Entity\Order
+                 * @var \ControleOnline\Entity\SalesOrder
                  */
-                $Order     = $manager->getRepository(Order::class)->find(243);
-                $Invoice = $Order->getInvoice()->first() ? $Order->getInvoice()->first()->getInvoice() : null;
+                $salesOrder     = $manager->getRepository(SalesOrder::class)->find(243);
+                $receiveInvoice = $salesOrder->getInvoice()->first() ? $salesOrder->getInvoice()->first()->getInvoice() : null;
                 $invoiceNumber  = null;
                 $invoiceOrders  = [];
 
-                if ($Invoice != null && $Invoice->getServiceInvoiceTax()->first()) {
-                    if ($Invoice->getServiceInvoiceTax()->first())
-                        $invoiceNumber = $Invoice->getServiceInvoiceTax()->first()
+                if ($receiveInvoice != null && $receiveInvoice->getServiceInvoiceTax()->first()) {
+                    if ($receiveInvoice->getServiceInvoiceTax()->first())
+                        $invoiceNumber = $receiveInvoice->getServiceInvoiceTax()->first()
                             ->getServiceInvoiceTax()->getInvoiceNumber();
                 }
 
-                if ($Invoice != null) {
+                if ($receiveInvoice != null) {
                     /**
-                     * @var \ControleOnline\Entity\OrderInvoice $orderInvoice
+                     * @var \ControleOnline\Entity\SalesOrderInvoice $orderInvoice
                      */
-                    foreach ($Invoice->getOrder() as $orderInvoice) {
+                    foreach ($receiveInvoice->getOrder() as $orderInvoice) {
                         $order = $orderInvoice->getOrder();
 
                         $invoiceOrders[] = [
@@ -59,26 +59,26 @@ class _TemplateViewerController extends AbstractController
                 $params  =  [
                     'api_domain'      => 'https://'.$_SERVER['HTTP_HOST'],
                     'app_domain'      => 'https://cotafacil.freteclick.com.br',
-                    'order_id'        => $Order->getId(),
-                    'invoice_id'      => $Invoice != null ? $Invoice->getId() : 0,
+                    'order_id'        => $salesOrder->getId(),
+                    'invoice_id'      => $receiveInvoice != null ? $receiveInvoice->getId() : 0,
                     'invoice_number'  => $invoiceNumber,
-                    'invoice_price'   => $Invoice != null ? 'R$' . number_format($Invoice->getPrice(), 2, ',', '.') : 0,
-                    'invoice_duedate' => $Invoice != null ? $Invoice->getDueDate()->format('d/m/Y') : '',
+                    'invoice_price'   => $receiveInvoice != null ? 'R$' . number_format($receiveInvoice->getPrice(), 2, ',', '.') : 0,
+                    'invoice_duedate' => $receiveInvoice != null ? $receiveInvoice->getDueDate()->format('d/m/Y') : '',
                     'invoice_orders'  => $invoiceOrders,
                 ];
             break;
 
             case 'email/retrieve-request':
                 /**
-                 * @var \ControleOnline\Entity\Order
+                 * @var \ControleOnline\Entity\SalesOrder
                  */
-                $Order   = $manager->getRepository(Order::class)->find(222);
-                $provider     = $Order->getProvider();
+                $salesOrder   = $manager->getRepository(SalesOrder::class)->find(222);
+                $provider     = $salesOrder->getProvider();
                 $providerDoc  = '';
                 $retrieveData = [                    
-                    'people_type'    => $Order->getRetrievePeople()->getPeopleType(),
-                    'people_name'    => $Order->getRetrievePeople()->getName(),
-                    'people_alias'   => $Order->getRetrievePeople()->getAlias(),
+                    'people_type'    => $salesOrder->getRetrievePeople()->getPeopleType(),
+                    'people_name'    => $salesOrder->getRetrievePeople()->getName(),
+                    'people_alias'   => $salesOrder->getRetrievePeople()->getAlias(),
                     'people_doc'     => '',
                     'people_contact' => [
                         'name'   => '',
@@ -97,9 +97,9 @@ class _TemplateViewerController extends AbstractController
                     ],
                 ];
                 $deliveryData = [                    
-                    'people_type'  => $Order->getDeliveryPeople()->getPeopleType(),
-                    'people_name'  => $Order->getDeliveryPeople()->getName(),
-                    'people_alias' => $Order->getDeliveryPeople()->getAlias(),
+                    'people_type'  => $salesOrder->getDeliveryPeople()->getPeopleType(),
+                    'people_name'  => $salesOrder->getDeliveryPeople()->getName(),
+                    'people_alias' => $salesOrder->getDeliveryPeople()->getAlias(),
                     'people_doc'   => '',
                     'contact'      => [
                         'name'   => '',
@@ -126,8 +126,8 @@ class _TemplateViewerController extends AbstractController
 
                 // provider
 
-                if ($Order->getProvider() && $Order->getProvider()->getDocument()) {
-                    foreach ($Order->getProvider()->getDocument() as $document) {
+                if ($salesOrder->getProvider() && $salesOrder->getProvider()->getDocument()) {
+                    foreach ($salesOrder->getProvider()->getDocument() as $document) {
                         if ($document->getDocumentType()->getDocumentType() == 'CNPJ') {
                             $providerDoc = Formatter::document($document->getDocument());
                         }
@@ -136,39 +136,39 @@ class _TemplateViewerController extends AbstractController
 
                 // retrieve
 
-                if ($Order->getRetrievePeople()->getPeopleType() == 'J')
-                    if ($Order->getRetrievePeople() && $Order->getRetrievePeople()->getDocument()) {
-                        foreach ($Order->getRetrievePeople()->getDocument() as $document) {
+                if ($salesOrder->getRetrievePeople()->getPeopleType() == 'J')
+                    if ($salesOrder->getRetrievePeople() && $salesOrder->getRetrievePeople()->getDocument()) {
+                        foreach ($salesOrder->getRetrievePeople()->getDocument() as $document) {
                             if ($document->getDocumentType()->getDocumentType() == 'CNPJ') {
                                 $retrieveData['people_doc'] = Formatter::document($document->getDocument());
                             }
                         }
                     }
 
-                if ($Order->getRetrievePeople()->getPeopleType() == 'F')
-                    if ($Order->getRetrievePeople() && $Order->getRetrievePeople()->getDocument()) {
-                        foreach ($Order->getRetrievePeople()->getDocument() as $document) {
+                if ($salesOrder->getRetrievePeople()->getPeopleType() == 'F')
+                    if ($salesOrder->getRetrievePeople() && $salesOrder->getRetrievePeople()->getDocument()) {
+                        foreach ($salesOrder->getRetrievePeople()->getDocument() as $document) {
                             if ($document->getDocumentType()->getDocumentType() == 'CPF') {
                             $retrieveData['people_doc'] = Formatter::document($document->getDocument());
                             }
                         }
                     }
 
-                if ($Order->getRetrieveContact()) {
-                    $retrieveData['people_contact']['name' ] = $Order->getRetrieveContact()->getName();
-                    $retrieveData['people_contact']['alias'] = $Order->getRetrieveContact()->getAlias();
+                if ($salesOrder->getRetrieveContact()) {
+                    $retrieveData['people_contact']['name' ] = $salesOrder->getRetrieveContact()->getName();
+                    $retrieveData['people_contact']['alias'] = $salesOrder->getRetrieveContact()->getAlias();
 
                     /**
                      * @var \ControleOnline\Entity\Email $email
                      */
-                    foreach ($Order->getRetrieveContact()->getEmail() as $email) {
+                    foreach ($salesOrder->getRetrieveContact()->getEmail() as $email) {
                         $retrieveData['people_contact']['emails'][] = $email->getEmail();
                     }
 
                     /**
                      * @var \ControleOnline\Entity\Phone $phone
                      */
-                    foreach ($Order->getRetrieveContact()->getPhone() as $phone) {
+                    foreach ($salesOrder->getRetrieveContact()->getPhone() as $phone) {
                         $retrieveData['people_contact']['phones'][] = [
                             'ddd'   => $phone->getDdd(),
                             'phone' => $phone->getPhone(),
@@ -176,7 +176,7 @@ class _TemplateViewerController extends AbstractController
                     }
                 }
 
-                if ($oaddress = $Order->getAddressOrigin()) {
+                if ($oaddress = $salesOrder->getAddressOrigin()) {
                     $street   = $oaddress->getStreet();
                     $district = $street->getDistrict();
                     $city     = $district->getCity();
@@ -195,39 +195,39 @@ class _TemplateViewerController extends AbstractController
 
                 // delivery
 
-                if ($Order->getDeliveryPeople()->getPeopleType() == 'J')
-                    if ($Order->getDeliveryPeople() && $Order->getDeliveryPeople()->getDocument()) {
-                        foreach ($Order->getDeliveryPeople()->getDocument() as $document) {
+                if ($salesOrder->getDeliveryPeople()->getPeopleType() == 'J')
+                    if ($salesOrder->getDeliveryPeople() && $salesOrder->getDeliveryPeople()->getDocument()) {
+                        foreach ($salesOrder->getDeliveryPeople()->getDocument() as $document) {
                             if ($document->getDocumentType()->getDocumentType() == 'CNPJ') {
                                 $deliveryData['people_doc'] = Formatter::document($document->getDocument());
                             }
                         }
                     }
 
-                if ($Order->getDeliveryPeople()->getPeopleType() == 'F')
-                    if ($Order->getDeliveryPeople() && $Order->getDeliveryPeople()->getDocument()) {
-                        foreach ($Order->getDeliveryPeople()->getDocument() as $document) {
+                if ($salesOrder->getDeliveryPeople()->getPeopleType() == 'F')
+                    if ($salesOrder->getDeliveryPeople() && $salesOrder->getDeliveryPeople()->getDocument()) {
+                        foreach ($salesOrder->getDeliveryPeople()->getDocument() as $document) {
                             if ($document->getDocumentType()->getDocumentType() == 'CPF') {
                                 $deliveryData['people_doc'] = Formatter::document($document->getDocument());
                             }
                         }
                     }
 
-                if ($Order->getDeliveryContact()) {
-                    $deliveryData['contact']['name' ] = $Order->getDeliveryContact()->getName();
-                    $deliveryData['contact']['alias'] = $Order->getDeliveryContact()->getAlias();
+                if ($salesOrder->getDeliveryContact()) {
+                    $deliveryData['contact']['name' ] = $salesOrder->getDeliveryContact()->getName();
+                    $deliveryData['contact']['alias'] = $salesOrder->getDeliveryContact()->getAlias();
 
                     /**
                      * @var \ControleOnline\Entity\Email $email
                      */
-                    foreach ($Order->getDeliveryContact()->getEmail() as $email) {
+                    foreach ($salesOrder->getDeliveryContact()->getEmail() as $email) {
                         $deliveryData['contact']['emails'][] = $email->getEmail();
                     }
 
                     /**
                      * @var \ControleOnline\Entity\Phone $phone
                      */
-                    foreach ($Order->getDeliveryContact()->getPhone() as $phone) {
+                    foreach ($salesOrder->getDeliveryContact()->getPhone() as $phone) {
                         $deliveryData['contact']['phones'][] = [
                             'ddd'   => $phone->getDdd(),
                             'phone' => $phone->getPhone(),
@@ -235,7 +235,7 @@ class _TemplateViewerController extends AbstractController
                     }
                 }
 
-                if ($daddress = $Order->getAddressDestination()) {
+                if ($daddress = $salesOrder->getAddressDestination()) {
                     $street   = $daddress->getStreet();
                     $district = $street->getDistrict();
                     $city     = $district->getCity();
@@ -256,16 +256,16 @@ class _TemplateViewerController extends AbstractController
 
                 // order product
 
-                $orderProduct['cubage'] = number_format($Order->getCubage(), 3, ',', '.');
-                $orderProduct['type'  ] = $Order->getProductType();
-                $orderProduct['total' ] = 'R$' . number_format($Order->getInvoiceTotal(), 2, ',', '.');
+                $orderProduct['cubage'] = number_format($salesOrder->getCubage(), 3, ',', '.');
+                $orderProduct['type'  ] = $salesOrder->getProductType();
+                $orderProduct['total' ] = 'R$' . number_format($salesOrder->getInvoiceTotal(), 2, ',', '.');
 
                 // order package
 
                 /**
                  * @var \ControleOnline\Entity\OrderPackage $package
                  */
-                foreach ($Order->getOrderPackage() as $package) {
+                foreach ($salesOrder->getOrderPackage() as $package) {
                     $orderPackages[] = [
                         'qtd'    => $package->getQtd(),
                         'weight' => str_replace('.', ',', $package->getWeight()) . ' kg',
@@ -289,11 +289,11 @@ class _TemplateViewerController extends AbstractController
 
             case 'email/invoice-tax-instructions':
                 /**
-                 * @var \ControleOnline\Entity\Order
+                 * @var \ControleOnline\Entity\SalesOrder
                  */
-                $Order = $manager->getRepository(Order::class)->find(222);
+                $salesOrder = $manager->getRepository(SalesOrder::class)->find(222);
                 $provider   = [
-                    'name'     => $Order->getProvider()->getName(),
+                    'name'     => $salesOrder->getProvider()->getName(),
                     'document' => '',
                 ];
                 $carrier    = [
@@ -316,7 +316,7 @@ class _TemplateViewerController extends AbstractController
                 /**
                  * @var \ControleOnline\Entity\People $_carrier
                  */
-                if ($Order->getQuote() && ($_carrier = $Order->getQuote()->getCarrier())) {
+                if ($salesOrder->getQuote() && ($_carrier = $salesOrder->getQuote()->getCarrier())) {
                     $carrier['name'] = $_carrier->getName();
 
                     foreach ($_carrier->getDocument() as $document) {
@@ -351,8 +351,8 @@ class _TemplateViewerController extends AbstractController
 
                 // provider
 
-                if ($Order->getProvider() && $Order->getProvider()->getDocument()) {
-                    foreach ($Order->getProvider()->getDocument() as $document) {
+                if ($salesOrder->getProvider() && $salesOrder->getProvider()->getDocument()) {
+                    foreach ($salesOrder->getProvider()->getDocument() as $document) {
                         if ($document->getDocumentType()->getDocumentType() == 'CNPJ') {
                             $provider['document'] = Formatter::document($document->getDocument());
                         }
@@ -360,7 +360,7 @@ class _TemplateViewerController extends AbstractController
                 }
 
                 $params   =  [
-                    'order_id' => $Order->getId(),
+                    'order_id' => $salesOrder->getId(),
                     'provider' => $provider,
                     'carrier'  => $carrier,
                 ];

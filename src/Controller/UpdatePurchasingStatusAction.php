@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use ControleOnline\Entity\Status;
 use Doctrine\ORM\EntityManagerInterface;
-use ControleOnline\Entity\Order as Order;
+use ControleOnline\Entity\PurchasingOrder as Order;
 use Symfony\Component\HttpFoundation\Request;
 
 class UpdatePurchasingStatusAction

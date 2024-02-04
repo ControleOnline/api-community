@@ -12,7 +12,7 @@ use App\Service\UserCompanyService;
 use App\Resource\DeleteInvoice;
 use ControleOnline\Entity\User;
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\Invoice;
+use ControleOnline\Entity\ReceiveInvoice;
 
 class DeleteInvoiceVoter extends Voter
 {
@@ -67,7 +67,7 @@ class DeleteInvoiceVoter extends Voter
 
     private function canDelete(DeleteInvoice $deleteInvoice, User $user)
     {
-      $invoice = $this->manager->find(Invoice::class, $deleteInvoice->id);
+      $invoice = $this->manager->find(ReceiveInvoice::class, $deleteInvoice->id);
       if ($invoice === null) {
         return false;
       }

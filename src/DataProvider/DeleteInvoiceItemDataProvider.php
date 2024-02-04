@@ -5,7 +5,7 @@ use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use ApiPlatform\Core\Exception\ResourceClassNotSupportedException;
 use App\Resource\DeleteInvoice;
-use ControleOnline\Entity\Invoice;
+use ControleOnline\Entity\ReceiveInvoice;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -33,7 +33,7 @@ final class DeleteInvoiceItemDataProvider implements
     string $resourceClass, $id, string $operationName = null, array $context = []
   ): ?DeleteInvoice
   {
-    if ($this->manager->find(Invoice::class, $id) === null) {
+    if ($this->manager->find(ReceiveInvoice::class, $id) === null) {
       return null;
     }
 

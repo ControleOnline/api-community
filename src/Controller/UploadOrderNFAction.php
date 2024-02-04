@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use ControleOnline\Entity\InvoiceTax as InvoiceTax;
-use ControleOnline\Entity\Order as Order;
-use ControleOnline\Entity\OrderInvoiceTax;
+use ControleOnline\Entity\PurchasingInvoiceTax as InvoiceTax;
+use ControleOnline\Entity\PurchasingOrder as Order;
+use ControleOnline\Entity\PurchasingOrderInvoiceTax;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\People;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,7 +84,7 @@ class UploadOrderNFAction
 
         // verify relationship
 
-        $_orderInvoiceTax = $this->manager->getRepository(OrderInvoiceTax::class)
+        $_orderInvoiceTax = $this->manager->getRepository(PurchasingOrderInvoiceTax::class)
             ->findOneBy([
                 'issuer'      => $order->getClient(),
                 'invoiceType' => $this->invoiceType,
@@ -93,7 +93,7 @@ class UploadOrderNFAction
 
         // in case invoice_tax file has been uploaded
 
-        if ($_orderInvoiceTax instanceof OrderInvoiceTax) {
+        if ($_orderInvoiceTax instanceof PurchasingOrderInvoiceTax) {
 
             // update invoice tax
 
@@ -121,14 +121,14 @@ class UploadOrderNFAction
 
             // create invoice order relationship
 
-            $OrderInvoiceTax = new OrderInvoiceTax();
+            $PurchasingOrderInvoiceTax = new PurchasingOrderInvoiceTax();
 
-            $OrderInvoiceTax->setOrder($order);
-            $OrderInvoiceTax->setInvoiceTax($invoiceTax);
-            $OrderInvoiceTax->setInvoiceType($this->invoiceType);
-            $OrderInvoiceTax->setIssuer($order->getClient());
+            $PurchasingOrderInvoiceTax->setOrder($order);
+            $PurchasingOrderInvoiceTax->setInvoiceTax($invoiceTax);
+            $PurchasingOrderInvoiceTax->setInvoiceType($this->invoiceType);
+            $PurchasingOrderInvoiceTax->setIssuer($order->getClient());
 
-            $this->manager->persist($OrderInvoiceTax);
+            $this->manager->persist($PurchasingOrderInvoiceTax);
 
             // change order status
 

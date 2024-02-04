@@ -6,9 +6,9 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use ControleOnline\Entity\Order as Order;
-use ControleOnline\Entity\InvoiceTax;
-use ControleOnline\Entity\OrderInvoiceTax;
+use ControleOnline\Entity\SalesOrder as Order;
+use ControleOnline\Entity\SalesInvoiceTax;
+use ControleOnline\Entity\SalesOrderInvoiceTax;
 use ControleOnline\Entity\Config;
 use NFePHP\CTe\Make;
 use NFePHP\CTe\Tools;
@@ -404,14 +404,14 @@ class CreateDacteAction
             $xml = $cte->getXML();
             $xml = $this->sign($xml);
 
-            $invoiceTax = new InvoiceTax();
+            $invoiceTax = new SalesInvoiceTax();
             $invoiceTax->setInvoice($xml);
             $invoiceTax->setInvoiceNumber($numeroCTE);
             $this->manager->persist($invoiceTax);
             $this->manager->flush();
 
 
-            $orderInvoiceTax = new OrderInvoiceTax();
+            $orderInvoiceTax = new SalesOrderInvoiceTax();
             $orderInvoiceTax->setOrder($data);
             $orderInvoiceTax->setInvoiceType(57);
             $orderInvoiceTax->setInvoiceTax($invoiceTax);

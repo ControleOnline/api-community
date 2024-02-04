@@ -1,3 +1,42 @@
 [submodule "public/vendor/pdf.js"]
 	path = public/vendor/pdf.js
 	url = https://github.com/mozilla/pdf.js.git
+[submodule "modules/controleonline/users"]
+	path = modules/controleonline/users
+	url = https://github.com/ControleOnline/api-platform-users.git
+[submodule "modules/controleonline/tasks"]
+	path = modules/controleonline/tasks
+	url = https://github.com/ControleOnline/api-platform-tasks.git
+[submodule "modules/controleonline/queue"]
+	path = modules/controleonline/queue
+	url = https://github.com/ControleOnline/api-platform-queue.git
+[submodule "modules/controleonline/products"]
+	path = modules/controleonline/products
+	url = https://github.com/ControleOnline/api-platform-products.git
+[submodule "modules/controleonline/people"]
+	path = modules/controleonline/people
+	url = https://github.com/ControleOnline/api-platform-people.git
+[submodule "modules/controleonline/orders"]
+	path = modules/controleonline/orders
+	url = https://github.com/ControleOnline/api-platform-orders.git
+[submodule "modules/controleonline/logistic"]
+	path = modules/controleonline/logistic
+	url = https://github.com/ControleOnline/api-platform-logistic.git
+[submodule "modules/controleonline/financial"]
+	path = modules/controleonline/financial
+	url = https://github.com/ControleOnline/api-platform-financial.git
+[submodule "modules/controleonline/ead"]
+	path = modules/controleonline/ead
+	url = https://github.com/ControleOnline/api-platform-ead.git
+[submodule "modules/controleonline/dashboard"]
+	path = modules/controleonline/dashboard
+	url = https://github.com/ControleOnline/api-platform-dashboard.git
+[submodule "modules/controleonline/common"]
+	path = modules/controleonline/common
+	url = https://github.com/ControleOnline/api-platform-common.git
+[submodule "modules/controleonline/contract"]
+	path = modules/controleonline/contract
+	url = https://github.com/ControleOnline/api-platform-contract.git
+[submodule "modules/controleonline/multi-tenancy"]
+	path = modules/controleonline/multi-tenancy
+	url = https://github.com/ControleOnline/api-platform-multi-tenancy.git

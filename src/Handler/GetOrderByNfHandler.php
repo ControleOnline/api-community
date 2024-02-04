@@ -9,10 +9,10 @@ use Symfony\Component\Security\Core\Security;
 
 
 use ControleOnline\Entity\OrderNf;
-use ControleOnline\Entity\InvoiceTax;
-use ControleOnline\Entity\Order;
-use ControleOnline\Entity\OrderInvoiceTax;
-use ControleOnline\Repository\OrderRepository;
+use ControleOnline\Entity\SalesInvoiceTax;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\SalesOrderInvoiceTax;
+use ControleOnline\Repository\SalesOrderRepository;
 
 class GetOrderByNfHandler implements MessageHandlerInterface
 {
@@ -26,7 +26,7 @@ class GetOrderByNfHandler implements MessageHandlerInterface
   /**
    * People Repository
    *
-   * @var \ControleOnline\Repository\OrderRepository
+   * @var \ControleOnline\Repository\SalesOrderRepository
    */
   private $order;
 
@@ -40,9 +40,9 @@ class GetOrderByNfHandler implements MessageHandlerInterface
   public function __construct(EntityManagerInterface $manager, Security $security)
   {
     $this->manager          = $manager;
-    $this->order            =  $manager->getRepository(Order::class);
-    $this->invoiceTax       =  $manager->getRepository(InvoiceTax::class);
-    $this->orderInvoiceTax  =  $manager->getRepository(OrderInvoiceTax::class);
+    $this->order            =  $manager->getRepository(SalesOrder::class);
+    $this->invoiceTax       =  $manager->getRepository(SalesInvoiceTax::class);
+    $this->orderInvoiceTax  =  $manager->getRepository(SalesOrderInvoiceTax::class);
 
     $this->myUser      = $security->getUser();
   }

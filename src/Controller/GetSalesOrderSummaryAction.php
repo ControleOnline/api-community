@@ -7,10 +7,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use ControleOnline\Entity\Quotation;
-use ControleOnline\Entity\Order as Order;
+use ControleOnline\Entity\SalesOrder as Order;
 use ControleOnline\Entity\People;
 
-class GetOrderSummaryAction
+class GetSalesOrderSummaryAction
 {
     /**
      * Entity Manager

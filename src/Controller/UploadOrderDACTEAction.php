@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use ControleOnline\Entity\InvoiceTax AS InvoiceTax;
-use ControleOnline\Entity\Order AS Order;
-use ControleOnline\Entity\OrderInvoiceTax;
+use ControleOnline\Entity\PurchasingInvoiceTax AS InvoiceTax;
+use ControleOnline\Entity\PurchasingOrder AS Order;
+use ControleOnline\Entity\PurchasingOrderInvoiceTax;
 use ControleOnline\Entity\Status;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -79,12 +79,12 @@ class UploadOrderDACTEAction
         // verify if DACTE belongs to order
 
         $invoiceTaxs = $order->getInvoiceTax()->filter(
-            function (OrderInvoiceTax $invoiceOrder) {
+            function (PurchasingOrderInvoiceTax $invoiceOrder) {
                 return $invoiceOrder->getInvoiceType() == 55;
             }
         );
         /**
-         * @var OrderInvoiceTax $invoiceTax
+         * @var PurchasingOrderInvoiceTax $invoiceTax
          */
         if (($invoiceTax = $invoiceTaxs->first()) === false)
             throw new \Exception('Este pedido não tem nota fiscal associada');
@@ -103,24 +103,24 @@ class UploadOrderDACTEAction
 
         // create invoice order relationship
 
-        $OrderInvoiceTax = new OrderInvoiceTax();
+        $PurchasingOrderInvoiceTax = new PurchasingOrderInvoiceTax();
 
-        $OrderInvoiceTax->setOrder      ($order);
-        $OrderInvoiceTax->setInvoiceTax ($invoiceTax);
-        $OrderInvoiceTax->setInvoiceType($this->invoiceType);
-        $OrderInvoiceTax->setIssuer     ($order->getQuote()->getCarrier());
+        $PurchasingOrderInvoiceTax->setOrder      ($order);
+        $PurchasingOrderInvoiceTax->setInvoiceTax ($invoiceTax);
+        $PurchasingOrderInvoiceTax->setInvoiceType($this->invoiceType);
+        $PurchasingOrderInvoiceTax->setIssuer     ($order->getQuote()->getCarrier());
 
-        $this->manager->persist($OrderInvoiceTax);
+        $this->manager->persist($PurchasingOrderInvoiceTax);
 
         // validate duplicity
 
-        $_orderInvoiceTax = $this->manager->getRepository(OrderInvoiceTax::class)
+        $_orderInvoiceTax = $this->manager->getRepository(PurchasingOrderInvoiceTax::class)
             ->findOneBy([
                 'issuer'      => $order->getQuote()->getCarrier(),
                 'invoiceType' => $this->invoiceType,
                 'order'       => $order,
             ]);
-        if ($_orderInvoiceTax instanceof OrderInvoiceTax)
+        if ($_orderInvoiceTax instanceof PurchasingOrderInvoiceTax)
             throw new BadRequestHttpException('Já existe um DACTE registrado');
 
         // change order status

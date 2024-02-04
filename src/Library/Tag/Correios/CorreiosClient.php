@@ -11,7 +11,7 @@ use \PhpSigep\Model\Remetente;
 use \PhpSigep\Model\SolicitaEtiquetas;
 use \PhpSigep\Model\Dimensao;
 use \PhpSigep\Model\ServicoDePostagem;
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\People;
 use App\Library\Tag\AbstractTag;
 
@@ -61,7 +61,7 @@ class CorreiosClient  extends AbstractTag
         Bootstrap::start($config);
     }
 
-    public function getPdf(Order $orderData)
+    public function getPdf(SalesOrder $orderData)
     {
         $people = $orderData->getProvider();
 
@@ -78,7 +78,7 @@ class CorreiosClient  extends AbstractTag
         }
     }
 
-    protected function getPdfTagData(Order $orderData)
+    protected function getPdfTagData(SalesOrder $orderData)
     {
         // remover após corrigir problema da biblioteca
         error_reporting(0);

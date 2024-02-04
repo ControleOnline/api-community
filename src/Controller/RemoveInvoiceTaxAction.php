@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use ControleOnline\Entity\InvoiceTax;
-use ControleOnline\Entity\Order;
-
+use ControleOnline\Entity\SalesInvoiceTax;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\PurchasingOrder;
 use ControleOnline\Entity\Status;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,7 @@ class RemoveInvoiceTaxAction
         $this->manager = $entityManager;
     }
 
-    public function __invoke(Order $data, Request $request): JsonResponse
+    public function __invoke(SalesOrder $data, Request $request): JsonResponse
     {
         $payload = json_decode($request->getContent(), true);
 
@@ -39,15 +39,15 @@ class RemoveInvoiceTaxAction
 
         try {
             $this->manager->getConnection()->beginTransaction();
-            $puschasingOrder = $this->manager->getRepository(Order::class)->findOneBy(['mainOrder' => $data->getId()]);
+            $puschasingOrder = $this->manager->getRepository(PurchasingOrder::class)->findOneBy(['mainOrder' => $data->getId()]);
             if ($puschasingOrder)
                 $this->manager->remove($puschasingOrder);
             else
                 throw new \Exception('Puschasing Order not found', 400);
 
-            $InvoiceTax = $this->manager->getRepository(InvoiceTax::class)->find($payload['invoiceTax']);
-            if ($InvoiceTax)
-                $this->manager->remove($InvoiceTax);
+            $salesInvoiceTax = $this->manager->getRepository(SalesInvoiceTax::class)->find($payload['invoiceTax']);
+            if ($salesInvoiceTax)
+                $this->manager->remove($salesInvoiceTax);
             else
                 throw new \Exception('Sales Invoice Tax not found', 400);
 
@@ -81,7 +81,7 @@ class RemoveInvoiceTaxAction
         /*
         // create invoice
 
-        $invoice = $data instanceof Order ? (new Invoice) : (new Invoice);
+        $invoice = $data instanceof SalesOrder ? (new ReceiveInvoice) : (new PayInvoice);
 
         $invoice->setPrice  ($payload['price']);
         $invoice->setDueDate(\DateTime::createFromFormat('Y-m-d', $payload['dueDate']));
@@ -94,7 +94,7 @@ class RemoveInvoiceTaxAction
 
         // create order invoice
 
-        $orderInvoice = $data instanceof Order ? (new OrderInvoice) : (new OrderInvoice);
+        $orderInvoice = $data instanceof SalesOrder ? (new SalesOrderInvoice) : (new PurchasingOrderInvoice);
 
         $orderInvoice->setOrder  ($data);
         $orderInvoice->setInvoice($invoice);

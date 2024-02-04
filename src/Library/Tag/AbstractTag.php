@@ -3,7 +3,7 @@
 namespace App\Library\Tag;
 
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\SalesOrder;
 use App\Library\Utils\Formatter;
 use Picqer\Barcode\BarcodeGeneratorHTML;
 use Picqer\Barcode\BarcodeGeneratorPNG;
@@ -37,18 +37,18 @@ abstract class AbstractTag
     $this->request = $request;
   }
 
-  protected function _getOrdersTemplateParams(Order $order): array
+  protected function _getOrdersTemplateParams(SalesOrder $order): array
   {
     /**
-     * @var \ControleOnline\Entity\Order
+     * @var \ControleOnline\Entity\SalesOrder
      */
-    $Order   = $order;
-    $provider     = $Order->getProvider();
+    $salesOrder   = $order;
+    $provider     = $salesOrder->getProvider();
     $providerDoc  = '';
     $retrieveData = [
-      'people_type'    => $Order->getRetrievePeople()->getPeopleType(),
-      'people_name'    => $Order->getRetrievePeople()->getName(),
-      'people_alias'   => $Order->getRetrievePeople()->getAlias(),
+      'people_type'    => $salesOrder->getRetrievePeople()->getPeopleType(),
+      'people_name'    => $salesOrder->getRetrievePeople()->getName(),
+      'people_alias'   => $salesOrder->getRetrievePeople()->getAlias(),
       'people_doc'     => '',
       'contact' => [
         'name'   => '',
@@ -67,9 +67,9 @@ abstract class AbstractTag
       ],
     ];
     $deliveryData = [
-      'people_type'  => $Order->getDeliveryPeople()->getPeopleType(),
-      'people_name'  => $Order->getDeliveryPeople()->getName(),
-      'people_alias' => $Order->getDeliveryPeople()->getAlias(),
+      'people_type'  => $salesOrder->getDeliveryPeople()->getPeopleType(),
+      'people_name'  => $salesOrder->getDeliveryPeople()->getName(),
+      'people_alias' => $salesOrder->getDeliveryPeople()->getAlias(),
       'people_doc'   => '',
       'contact'      => [
         'name'   => '',
@@ -96,8 +96,8 @@ abstract class AbstractTag
 
     // provider
 
-    if ($Order->getProvider() && $Order->getProvider()->getDocument()) {
-      foreach ($Order->getProvider()->getDocument() as $document) {
+    if ($salesOrder->getProvider() && $salesOrder->getProvider()->getDocument()) {
+      foreach ($salesOrder->getProvider()->getDocument() as $document) {
         if ($document->getDocumentType()->getDocumentType() == 'CNPJ') {
           $providerDoc = Formatter::document($document->getDocument());
         }
@@ -106,39 +106,39 @@ abstract class AbstractTag
 
     // retrieve
 
-    if ($Order->getRetrievePeople()->getPeopleType() == 'J')
-      if ($Order->getRetrievePeople() && $Order->getRetrievePeople()->getDocument()) {
-        foreach ($Order->getRetrievePeople()->getDocument() as $document) {
+    if ($salesOrder->getRetrievePeople()->getPeopleType() == 'J')
+      if ($salesOrder->getRetrievePeople() && $salesOrder->getRetrievePeople()->getDocument()) {
+        foreach ($salesOrder->getRetrievePeople()->getDocument() as $document) {
           if ($document->getDocumentType()->getDocumentType() == 'CNPJ') {
             $retrieveData['people_doc'] = Formatter::document($document->getDocument());
           }
         }
       }
 
-    if ($Order->getRetrievePeople()->getPeopleType() == 'F')
-      if ($Order->getRetrievePeople() && $Order->getRetrievePeople()->getDocument()) {
-        foreach ($Order->getRetrievePeople()->getDocument() as $document) {
+    if ($salesOrder->getRetrievePeople()->getPeopleType() == 'F')
+      if ($salesOrder->getRetrievePeople() && $salesOrder->getRetrievePeople()->getDocument()) {
+        foreach ($salesOrder->getRetrievePeople()->getDocument() as $document) {
           if ($document->getDocumentType()->getDocumentType() == 'CPF') {
             $retrieveData['people_doc'] = Formatter::document($document->getDocument());
           }
         }
       }
 
-    if ($Order->getRetrieveContact()) {
-      $retrieveData['contact']['name'] = $Order->getRetrieveContact()->getName();
-      $retrieveData['contact']['alias'] = $Order->getRetrieveContact()->getAlias();
+    if ($salesOrder->getRetrieveContact()) {
+      $retrieveData['contact']['name'] = $salesOrder->getRetrieveContact()->getName();
+      $retrieveData['contact']['alias'] = $salesOrder->getRetrieveContact()->getAlias();
 
       /**
        * @var \ControleOnline\Entity\Email $email
        */
-      foreach ($Order->getRetrieveContact()->getEmail() as $email) {
+      foreach ($salesOrder->getRetrieveContact()->getEmail() as $email) {
         $retrieveData['contact']['emails'][] = $email->getEmail();
       }
 
       /**
        * @var \ControleOnline\Entity\Phone $phone
        */
-      foreach ($Order->getRetrieveContact()->getPhone() as $phone) {
+      foreach ($salesOrder->getRetrieveContact()->getPhone() as $phone) {
         $retrieveData['contact']['phones'][] = [
           'ddd'   => $phone->getDdd(),
           'phone' => $phone->getPhone(),
@@ -146,7 +146,7 @@ abstract class AbstractTag
       }
     }
 
-    if ($oaddress = $Order->getAddressOrigin()) {
+    if ($oaddress = $salesOrder->getAddressOrigin()) {
       $street   = $oaddress->getStreet();
       $district = $street->getDistrict();
       $city     = $district->getCity();
@@ -166,40 +166,40 @@ abstract class AbstractTag
 
     // delivery
 
-    if ($Order->getDeliveryPeople()->getPeopleType() == 'J')
-      if ($Order->getDeliveryPeople() && $Order->getDeliveryPeople()->getDocument()) {
-        foreach ($Order->getDeliveryPeople()->getDocument() as $document) {
+    if ($salesOrder->getDeliveryPeople()->getPeopleType() == 'J')
+      if ($salesOrder->getDeliveryPeople() && $salesOrder->getDeliveryPeople()->getDocument()) {
+        foreach ($salesOrder->getDeliveryPeople()->getDocument() as $document) {
           if ($document->getDocumentType()->getDocumentType() == 'CNPJ') {
             $deliveryData['people_doc'] = Formatter::document($document->getDocument());
           }
         }
       }
 
-    if ($Order->getDeliveryPeople()->getPeopleType() == 'F')
-      if ($Order->getDeliveryPeople() && $Order->getDeliveryPeople()->getDocument()) {
-        foreach ($Order->getDeliveryPeople()->getDocument() as $document) {
+    if ($salesOrder->getDeliveryPeople()->getPeopleType() == 'F')
+      if ($salesOrder->getDeliveryPeople() && $salesOrder->getDeliveryPeople()->getDocument()) {
+        foreach ($salesOrder->getDeliveryPeople()->getDocument() as $document) {
           if ($document->getDocumentType()->getDocumentType() == 'CPF') {
             $deliveryData['people_doc'] = Formatter::document($document->getDocument());
           }
         }
       }
 
-    if ($Order->getDeliveryContact()) {
+    if ($salesOrder->getDeliveryContact()) {
 
-      $deliveryData['contact']['name'] = $Order->getDeliveryContact()->getName();
-      $deliveryData['contact']['alias'] = $Order->getDeliveryContact()->getAlias();
+      $deliveryData['contact']['name'] = $salesOrder->getDeliveryContact()->getName();
+      $deliveryData['contact']['alias'] = $salesOrder->getDeliveryContact()->getAlias();
 
       /**
        * @var \ControleOnline\Entity\Email $email
        */
-      foreach ($Order->getDeliveryContact()->getEmail() as $email) {
+      foreach ($salesOrder->getDeliveryContact()->getEmail() as $email) {
         $deliveryData['contact']['emails'][] = $email->getEmail();
       }
 
       /**
        * @var \ControleOnline\Entity\Phone $phone
        */
-      foreach ($Order->getDeliveryContact()->getPhone() as $phone) {
+      foreach ($salesOrder->getDeliveryContact()->getPhone() as $phone) {
         $deliveryData['contact']['phones'][] = [
           'ddd'   => $phone->getDdd(),
           'phone' => $phone->getPhone(),
@@ -207,7 +207,7 @@ abstract class AbstractTag
       }
     }
 
-    if ($daddress = $Order->getAddressDestination()) {
+    if ($daddress = $salesOrder->getAddressDestination()) {
       $street   = $daddress->getStreet();
       $district = $street->getDistrict();
       $city     = $district->getCity();
@@ -227,9 +227,9 @@ abstract class AbstractTag
 
     // order product
 
-    $orderProduct['cubage'] = number_format($Order->getCubage(), 3, ',', '.');
-    $orderProduct['type']   = $Order->getProductType();
-    $orderProduct['total']  = 'R$' . number_format($Order->getInvoiceTotal(), 2, ',', '.');
+    $orderProduct['cubage'] = number_format($salesOrder->getCubage(), 3, ',', '.');
+    $orderProduct['type']   = $salesOrder->getProductType();
+    $orderProduct['total']  = 'R$' . number_format($salesOrder->getInvoiceTotal(), 2, ',', '.');
 
     // order package
 
@@ -237,8 +237,8 @@ abstract class AbstractTag
      * @var \ControleOnline\Entity\OrderPackage $package
      */
 
-    $pkgTotal = $Order->getOrderPackage() ? 0 : 1;
-    foreach ($Order->getOrderPackage() as $package) {
+    $pkgTotal = $salesOrder->getOrderPackage() ? 0 : 1;
+    foreach ($salesOrder->getOrderPackage() as $package) {
       $pkgTotal += $package->getQtd();
 
       $orderPackages[] = [
@@ -252,26 +252,26 @@ abstract class AbstractTag
 
     // added invoice number
 
-    $carrier = $Order->getQuote()->getCarrier();
+    $carrier = $salesOrder->getQuote()->getCarrier();
 
 
     /**
-     * @var \ControleOnline\Entity\InvoiceTax $Invoice
+     * @var \ControleOnline\Entity\SalesInvoiceTax $receiveInvoice
      */
-    $Invoice = $Order->getClientInvoiceTax();
+    $receiveInvoice = $salesOrder->getClientInvoiceTax();
     $barCode = new BarcodeGeneratorPNG();
-    $invoiceKey = $Invoice->getInvoiceKey();
+    $invoiceKey = $receiveInvoice->getInvoiceKey();
     $invoiceKeyBarCode = base64_encode($barCode->getBarcode($invoiceKey, $barCode::TYPE_CODE_128));
 
 
     return [
-      'hash'           => md5($Order->getClient()->getId()),
-      'secret'         => md5($Order->getPayer()->getId()),
+      'hash'           => md5($salesOrder->getClient()->getId()),
+      'secret'         => md5($salesOrder->getPayer()->getId()),
       'api_domain'     => 'https://' . $_SERVER['HTTP_HOST'],
       'provider_logo'  => '/files/download/' . $provider->getFile()->getId(),
       'carrier_logo'   => '/files/download/' . $carrier->getFile()->getId(),
       'carrier_alias'  => $carrier->getAlias(),
-      'sales_order'    => $Order->getId(),
+      'sales_order'    => $salesOrder->getId(),
       'provider_name'  => $provider->getName(),
       'pkg_total'      => $this->request->query->get('pkg-total', $pkgTotal),
       'invoice_key'    => $invoiceKey,
@@ -281,8 +281,8 @@ abstract class AbstractTag
       'delivery_data'  => $deliveryData,
       'order_product'  => $orderProduct,
       'order_packages' => $orderPackages,
-      'invoice_id'     => $Invoice->getId(),
-      'invoice_number' => $Invoice->getInvoiceNumber(),
+      'invoice_id'     => $receiveInvoice->getId(),
+      'invoice_number' => $receiveInvoice->getInvoiceNumber(),
     ];
   }
 
@@ -309,7 +309,7 @@ abstract class AbstractTag
     return $path;
   }
 
-  abstract public function getPdf(Order $orderData);
+  abstract public function getPdf(SalesOrder $orderData);
 
-  abstract protected function getPdfTagData(Order $orderData);
+  abstract protected function getPdfTagData(SalesOrder $orderData);
 }

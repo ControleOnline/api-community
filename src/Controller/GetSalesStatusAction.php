@@ -5,13 +5,13 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use ControleOnline\Entity\Order as Order;
+use ControleOnline\Entity\SalesOrder as Order;
 use ControleOnline\Entity\Quotation;
 use \ControleOnline\Entity\People;
 use ControleOnline\Entity\QuoteDetail;
 use ControleOnline\Entity\CarrierIntegration;
 
-class GetStatusAction
+class GetSalesStatusAction
 {
     /**
      * Entity Manager
@@ -42,7 +42,7 @@ class GetStatusAction
         $productType = $data->getProductType();
 
         /**
-         * @var \ControleOnline\Entity\OrderInvoiceTax $invoice
+         * @var \ControleOnline\Entity\SalesOrderInvoiceTax $invoice
          */
 
         $invoiceTax = [];
@@ -54,18 +54,18 @@ class GetStatusAction
             ];
         }
 
-        $OrderPrice = null;
-        $OrderId = null;
+        $purchasingOrderPrice = null;
+        $purchasingOrderId = null;
 
-        $Order = $this->manager->getRepository(Order::class)
+        $purchasingOrder = $this->manager->getRepository(Order::class)
             ->findBy([
                 'mainOrder' => $orderId,
                 'orderType' => 'purchase'
             ]);
 
-        if (!empty($Order)) {
-            $OrderPrice = $Order[0]->getPrice();
-            $OrderId = $Order[0]->getId();
+        if (!empty($purchasingOrder)) {
+            $purchasingOrderPrice = $purchasingOrder[0]->getPrice();
+            $purchasingOrderId = $purchasingOrder[0]->getId();
         }
 
 
@@ -131,7 +131,7 @@ class GetStatusAction
                 ->getQuery()
                 ->getResult();
 
-            if ($details && !empty($details) && $OrderPrice) {
+            if ($details && !empty($details) && $purchasingOrderPrice) {
                 $correctPercentage = $details[0]->getPrice() > 0 ? $details[0]->getPrice() : 25;
                 $correctMinimum = $details[0]->getMinimumPrice();
             }
@@ -139,7 +139,7 @@ class GetStatusAction
              * Valor por fora
              */
             $correctValue =  $correctPercentage > 0 ? ($data->getPrice() * ($correctPercentage / 100)) : 0;
-            $realPecentage =  $data->getPrice() > 0 ? ((($data->getPrice() -  $OrderPrice) / $data->getPrice()) * 100) : 0;
+            $realPecentage =  $data->getPrice() > 0 ? ((($data->getPrice() -  $purchasingOrderPrice) / $data->getPrice()) * 100) : 0;
 
             /**
              * @var People carrier
@@ -177,10 +177,10 @@ class GetStatusAction
         }
 
         $order = [
-            '@context'  => '/contexts/Order',
+            '@context'  => '/contexts/SalesOrder',
             '@id'       => sprintf('/sales/orders/%s', $orderId),
             'id'        => $orderId,
-            '@type'     => 'Order',
+            '@type'     => 'SalesOrder',
             'app'    => $data->getApp(),
             'client'    => [
                 '@id'   => sprintf('/people/%s', $data->getClient()->getId()),
@@ -212,10 +212,10 @@ class GetStatusAction
             'price'              => $data->getPrice(),
             'other_informations' => $data->getOtherInformations(true),
             'realPecentage'      => $realPecentage ?: 0,
-            'purchasingPrice'    => $OrderPrice,
+            'purchasingPrice'    => $purchasingOrderPrice,
             'correctValue'       => $correctValue, //$correctMinimum > $correctValue ? $correctMinimum : $correctValue,
             'correctPercentage'  => $correctPercentage ?: 0,
-            'OrderId'  => $OrderId,
+            'purchasingOrderId'  => $purchasingOrderId,
             'mainOrderId'        => $data->getMainOrderId(),
             'childOrders'        => $childOrders,
             'invoiceTax'         => $invoiceTax,

@@ -15,11 +15,16 @@ use App\Service\MauticService;
 use App\Service\EmailService;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Order;
-use ControleOnline\Entity\Invoice;
-use ControleOnline\Entity\OrderInvoice;
-use ControleOnline\Entity\InvoiceTax;
+use ControleOnline\Entity\ReceiveInvoice;
+use ControleOnline\Entity\PayInvoice;
+use ControleOnline\Entity\SalesOrder;
+use ControleOnline\Entity\PurchasingOrder;
+use ControleOnline\Entity\SalesOrderInvoice;
+use ControleOnline\Entity\PurchasingInvoiceTax;
+use ControleOnline\Entity\SalesInvoiceTax;
 use ControleOnline\Entity\Status;
-use ControleOnline\Entity\OrderInvoiceTax;
+use ControleOnline\Entity\PurchasingOrderInvoiceTax;
+use ControleOnline\Entity\SalesOrderInvoiceTax;
 use ControleOnline\Entity\Document;
 use ControleOnline\Entity\PeopleSalesman;
 use ControleOnline\Entity\PeopleClient;
@@ -185,7 +190,7 @@ class OrderNotifierCommand extends Command
    */
   private function getRetrievedOrders(int $limit, int $datelimit = null): ?array
   {
-    $Orders = $this->em->getRepository(Order::class)
+    $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
       ->innerJoin('\ControleOnline\Entity\OrderTracking', 'T', 'WITH', 'T.order = O.id')
@@ -200,10 +205,10 @@ class OrderNotifierCommand extends Command
       ->getQuery()
       ->getResult();
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
     else {
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
         $orders[] = (object) [
           'order'    => $order->getId(),
           'carrier'  => $order->getQuote() ? $order->getQuote()->getCarrier()->getName() : '',
@@ -223,7 +228,7 @@ class OrderNotifierCommand extends Command
             'onError' => function () use ($order) {
             },
             'onSuccess' => function () use ($order) {
-              $order = $this->em->find(Order::class, $order);
+              $order = $this->em->find(SalesOrder::class, $order);
               $order->setStatus($this->em->getRepository(Status::class)->findOneBy(['status' => 'retrieved', 'context' => 'order']));
               $order->setNotified(0);
               $this->em->persist($order);
@@ -241,7 +246,7 @@ class OrderNotifierCommand extends Command
 
   private function getAutoCloseOrders(int $limit, int $datelimit = null): ?array
   {
-    $Orders = $this->em->getRepository(Order::class)
+    $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
       ->innerJoin('\ControleOnline\Entity\Quotation', 'Q', 'WITH', 'Q.order = O.id')
@@ -255,10 +260,10 @@ class OrderNotifierCommand extends Command
       ->getQuery()
       ->getResult();
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
     else {
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
         $orders[] = (object) [
           'order'    => $order->getId(),
           'carrier'  => $order->getQuote() ? $order->getQuote()->getCarrier()->getName() : '',
@@ -278,7 +283,7 @@ class OrderNotifierCommand extends Command
             'onError' => function () use ($order) {
             },
             'onSuccess' => function () use ($order) {
-              $order = $this->em->find(Order::class, $order);
+              $order = $this->em->find(SalesOrder::class, $order);
               $order->setStatus($this->em->getRepository(Status::class)->findOneBy(['status' => 'delivered', 'context' => 'order']));
               $order->setNotified(0);
               $this->em->persist($order);
@@ -293,7 +298,7 @@ class OrderNotifierCommand extends Command
 
   private function getCloseOrders(int $limit, int $datelimit = null): ?array
   {
-    $Orders = $this->em->getRepository(Order::class)
+    $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
       ->innerJoin('\ControleOnline\Entity\OrderTracking', 'T', 'WITH', 'T.order = O.id')
@@ -308,10 +313,10 @@ class OrderNotifierCommand extends Command
       ->getQuery()
       ->getResult();
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
     else {
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
         $orders[] = (object) [
           'order'    => $order->getId(),
           'carrier'  => $order->getQuote() ? $order->getQuote()->getCarrier()->getName() : '',
@@ -331,7 +336,7 @@ class OrderNotifierCommand extends Command
             'onError' => function () use ($order) {
             },
             'onSuccess' => function () use ($order) {
-              $order = $this->em->find(Order::class, $order);
+              $order = $this->em->find(SalesOrder::class, $order);
               $order->setStatus($this->em->getRepository(Status::class)->findOneBy(['status' => 'delivered', 'context' => 'order']));
               $order->setNotified(0);
               $this->em->persist($order);
@@ -350,7 +355,7 @@ class OrderNotifierCommand extends Command
   private function getCancelPendingOrders(int $limit, int $datelimit = 20): ?array
   {
 
-    $qry = $this->em->getRepository(Order::class)
+    $qry = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
       ->where('O.status IN(:status)')
@@ -362,12 +367,12 @@ class OrderNotifierCommand extends Command
       ->groupBy('O.id')
       ->setMaxResults($limit)
       ->getQuery();
-    $Orders = $qry->getResult();
+    $salesOrders = $qry->getResult();
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
     else {
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
         $orders[] = (object) [
           'order'    => $order->getId(),
           'carrier'  => $order->getQuote() ? $order->getQuote()->getCarrier()->getName() : '',
@@ -387,7 +392,7 @@ class OrderNotifierCommand extends Command
             'onError' => function () use ($order) {
             },
             'onSuccess' => function () use ($order) {
-              $order = $this->em->find(Order::class, $order);
+              $order = $this->em->find(SalesOrder::class, $order);
               $order->setStatus($this->em->getRepository(Status::class)->findOneBy(['status' => 'expired', 'context' => 'order']));
               $order->setNotified(0);
               $this->em->persist($order);
@@ -465,13 +470,13 @@ class OrderNotifierCommand extends Command
                 $this->em->persist($logisticOrder);
                 $this->em->flush($logisticOrder);
 
-                $logistic->setOrder($logisticOrder);
+                $logistic->setPurchasingOrder($logisticOrder);
                 $this->em->persist($logistic);
                 $this->em->flush($logistic);
 
 
 
-                $invoice = new Invoice();
+                $invoice = new ReceiveInvoice();
                 $invoice->setPrice($order->getPrice());
                 $invoice->setDueDate($this->getDueDate($order->getClient()));
                 $invoice->setStatus($this->em->getRepository(Status::class)->findOneBy(['status' => ['waiting payment'], 'context' => 'invoice']));
@@ -485,7 +490,7 @@ class OrderNotifierCommand extends Command
                   ])
                 );
 
-                $orderInvoice = new OrderInvoice();
+                $orderInvoice = new SalesOrderInvoice();
                 $orderInvoice->setInvoice($invoice);
                 $orderInvoice->setOrder($logisticOrder);
                 $orderInvoice->setRealPrice($logisticOrder->getPrice());
@@ -513,11 +518,11 @@ class OrderNotifierCommand extends Command
   private function getPutOnTheWayOrders(int $limit, int $datelimit = 20): ?array
   {
 
-    $qry = $this->em->getRepository(Order::class)
+    $qry = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\OrderInvoiceTax', 'SOI', 'WITH', 'SOI.order = O.id')
-      ->innerJoin('\ControleOnline\Entity\InvoiceTax', 'RI', 'WITH', 'SOI.invoiceTax = RI.id AND SOI.invoiceType = 57')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoiceTax', 'SOI', 'WITH', 'SOI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\SalesInvoiceTax', 'RI', 'WITH', 'SOI.invoiceTax = RI.id AND SOI.invoiceType = 57')
       ->where('O.status IN (:status)')
       ->setParameters(array(
         'status' => $this->em->getRepository(Status::class)->findBy(['status' => ['retrieved', 'waiting retrieve'], 'context' => 'order'])
@@ -526,11 +531,11 @@ class OrderNotifierCommand extends Command
       ->setMaxResults($limit)
       ->getQuery();
 
-    $Orders = $qry->getResult();
-    if (count($Orders) == 0)
+    $salesOrders = $qry->getResult();
+    if (count($salesOrders) == 0)
       return null;
     else {
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
         $orders[] = (object) [
           'order'    => $order->getId(),
           'carrier'  => $order->getQuote() ? $order->getQuote()->getCarrier()->getName() : '',
@@ -550,7 +555,7 @@ class OrderNotifierCommand extends Command
             'onError' => function () use ($order) {
             },
             'onSuccess' => function () use ($order) {
-              $order = $this->em->find(Order::class, $order);
+              $order = $this->em->find(SalesOrder::class, $order);
               $order->setStatus($this->em->getRepository(Status::class)->findOneBy(['status' => ['on the way'], 'context' => 'order']));
               $this->em->persist($order);
               $this->em->flush();
@@ -569,11 +574,11 @@ class OrderNotifierCommand extends Command
   private function getRemoveCanceledInvoicesOrders(int $limit, int $datelimit = 20): ?array
   {
 
-    $qry = $this->em->getRepository(Order::class)
+    $qry = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\OrderInvoice', 'SOI', 'WITH', 'SOI.order = O.id')
-      ->innerJoin('\ControleOnline\Entity\Invoice', 'RI', 'WITH', 'SOI.invoice = RI.id AND RI.status NOT IN (:istatus)')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'SOI', 'WITH', 'SOI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\ReceiveInvoice', 'RI', 'WITH', 'SOI.invoice = RI.id AND RI.status NOT IN (:istatus)')
       ->where('O.status IN (:status)')
       ->setParameters(array(
         'status' => $this->em->getRepository(Status::class)->findBy(['status' => ['expired', 'canceled'], 'context' => 'order']),
@@ -583,12 +588,12 @@ class OrderNotifierCommand extends Command
       ->setMaxResults($limit)
       ->getQuery();
 
-    $Orders = $qry->getResult();
+    $salesOrders = $qry->getResult();
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
     else {
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
         $orders[] = (object) [
           'order'    => $order->getId(),
           'carrier'  => $order->getQuote() ? $order->getQuote()->getCarrier()->getName() : '',
@@ -608,7 +613,7 @@ class OrderNotifierCommand extends Command
             'onError' => function () use ($order) {
             },
             'onSuccess' => function () use ($order) {
-              $order = $this->em->find(Order::class, $order);
+              $order = $this->em->find(SalesOrder::class, $order);
               foreach ($order->getInvoice() as $invoice) {
                 if (count($invoice->getInvoice()->getOrder()) > 1) {
                   $this->recalculateInvoicePrice($invoice->getInvoice());
@@ -635,7 +640,7 @@ class OrderNotifierCommand extends Command
    */
   private function getCancelQuotesOrders(int $limit, int $datelimit = 15): ?array
   {
-    $qry = $this->em->getRepository(Order::class)
+    $qry = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
       ->where('O.status IN(:status)')
@@ -647,12 +652,12 @@ class OrderNotifierCommand extends Command
       ->groupBy('O.id')
       ->setMaxResults($limit)
       ->getQuery();
-    $Orders = $qry->getResult();
+    $salesOrders = $qry->getResult();
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
     else {
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
         $orders[] = (object) [
           'order'    => $order->getId(),
           'carrier'  => $order->getQuote() ? $order->getQuote()->getCarrier()->getName() : '',
@@ -672,7 +677,7 @@ class OrderNotifierCommand extends Command
             'onError' => function () use ($order) {
             },
             'onSuccess' => function () use ($order) {
-              $order = $this->em->find(Order::class, $order);
+              $order = $this->em->find(SalesOrder::class, $order);
               $order->setStatus($this->em->getRepository(Status::class)->findOneBy(['status' => 'expired', 'context' => 'order']));
               $order->setNotified(0);
               $this->em->persist($order);
@@ -733,7 +738,7 @@ class OrderNotifierCommand extends Command
 
     foreach ($result as $r) {
 
-      $order = $this->em->getRepository(Order::class)->find($r['id']);
+      $order = $this->em->getRepository(SalesOrder::class)->find($r['id']);
       $orders[] = (object) [
         'order'    => $order->getId(),
         'carrier'  => '',
@@ -809,7 +814,7 @@ class OrderNotifierCommand extends Command
 
     foreach ($result as $r) {
 
-      $order = $this->em->getRepository(Order::class)->find($r['id']);
+      $order = $this->em->getRepository(SalesOrder::class)->find($r['id']);
       $orders[] = (object) [
         'order'    => $order->getId(),
         'carrier'  => '',
@@ -844,7 +849,7 @@ class OrderNotifierCommand extends Command
 
   private function Analysis($order)
   {
-    $nf = $this->em->getRepository(OrderInvoiceTax::class)
+    $nf = $this->em->getRepository(PurchasingOrderInvoiceTax::class)
       ->findOneBy([
         'invoiceType' => '55',
         'order' => $order
@@ -942,7 +947,7 @@ class OrderNotifierCommand extends Command
     $tasks = $this->em->getRepository(Task::class)
       ->createQueryBuilder('T')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\Order', 'O', 'WITH', 'T.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'T.order = O.id')
       ->innerJoin('\ControleOnline\Entity\Category', 'C', 'WITH', 'T.category = C.id')
       ->where('O.status NOT IN (:status)')
       ->andWhere('T.taskStatus NOT IN (:taskStatus)')
@@ -1018,7 +1023,7 @@ class OrderNotifierCommand extends Command
   private function getAutomaticAnalysisOrders(int $limit, int $datelimit = null): ?array
   {
 
-    $Orders = $this->em->getRepository(Order::class)
+    $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
       ->where('O.status IN(:status)')
@@ -1030,11 +1035,11 @@ class OrderNotifierCommand extends Command
       ->getQuery()->getResult();
 
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
     else {
 
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
 
         $orders[] = (object) [
           'order'    => $order->getId(),
@@ -1104,7 +1109,7 @@ class OrderNotifierCommand extends Command
                   $this->em->persist($order);
                   $this->em->flush();
                 } else {
-                  $order = $this->em->find(Order::class, $order);
+                  $order = $this->em->find(SalesOrder::class, $order);
                   $order->setStatus($this->em->getRepository(Status::class)->findOneBy(['status' => 'waiting retrieve', 'context' => 'order']));
                   $order->setNotified(0);
                   $this->em->persist($order);
@@ -1142,15 +1147,15 @@ class OrderNotifierCommand extends Command
    */
   protected function getGenerateCommissionOrders(int $limit, int $datelimit = null): ?array
   {
-    $Orders = $this->em->getRepository(Order::class)
+    $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->leftJoin('\ControleOnline\Entity\Order', 'CO', 'WITH', 'CO.mainOrder = O.id AND CO.orderType =:orderType')
-      ->innerJoin('\ControleOnline\Entity\Order', 'PO', 'WITH', 'PO.mainOrder = O.id AND PO.orderType =:pOrderType')
+      ->leftJoin('\ControleOnline\Entity\SalesOrder', 'CO', 'WITH', 'CO.mainOrder = O.id AND CO.orderType =:orderType')
+      ->innerJoin('\ControleOnline\Entity\PurchasingOrder', 'PO', 'WITH', 'PO.mainOrder = O.id AND PO.orderType =:pOrderType')
       ->innerJoin('\ControleOnline\Entity\PeopleSalesman', 'PS', 'WITH', 'PS.company = O.provider')
       ->innerJoin('\ControleOnline\Entity\PeopleClient', 'PC', 'WITH', 'PC.company_id = PS.salesman AND PC.client = O.client AND PC.commission > 0')
-      ->innerJoin('\ControleOnline\Entity\OrderInvoice', 'SI', 'WITH', 'SI.order = O.id')
-      ->innerJoin('\ControleOnline\Entity\Invoice', 'I', 'WITH', 'I.id = SI.invoice')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'SI', 'WITH', 'SI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\ReceiveInvoice', 'I', 'WITH', 'I.id = SI.invoice')
       ->where('O.status IN(:status)')
       ->andWhere('I.status IN(:istatus)')
       ->andWhere('CO.id IS NULL')
@@ -1164,10 +1169,10 @@ class OrderNotifierCommand extends Command
       ->setMaxResults($limit)
       ->getQuery()->getResult();
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
     else {
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
         $orders[] = (object) [
           'order'    => $order->getId(),
           'carrier'  => $order->getQuote() ? $order->getQuote()->getCarrier()->getName() : '',
@@ -1207,14 +1212,14 @@ class OrderNotifierCommand extends Command
                       ))
                       ->getQuery()->getResult()[0];
 
-                    $Order = $this->em->getRepository(Order::class)->findOneBy([
+                    $purchasingOrder = $this->em->getRepository(PurchasingOrder::class)->findOneBy([
                       'mainOrder' => $order,
                       'orderType' => 'purchase',
                     ]);
 
 
 
-                    $price = ($order->getPrice() - $Order->getPrice()) * $client->getCommission() / 100;
+                    $price = ($order->getPrice() - $purchasingOrder->getPrice()) * $client->getCommission() / 100;
                     $commissionOrder = clone $order;
                     $this->em->detach($commissionOrder);
                     $commissionOrder->resetId();
@@ -1254,20 +1259,20 @@ class OrderNotifierCommand extends Command
         throw new \Exception('Impossible get price of DACTE', 103);
         return;
     }
-    $Order = clone $order;
-    $this->em->detach($Order);
-    $Order->resetId();
-    $Order->setOrderType('purchase');
-    $Order->setMainOrder($order);
-    $Order->setClient($order->getQuote()->getProvider());
-    $Order->setPayer($order->getQuote()->getProvider());
-    $Order->setStatus($this->em->getRepository(Status::class)->findOneBy(['status' => 'delivered','context' => 'order']));
-    $Order->setProvider($provider);
-    $Order->setPrice($price);
-    $this->em->persist($Order);
-    $this->em->flush($Order);
+    $purchasingOrder = clone $order;
+    $this->em->detach($purchasingOrder);
+    $purchasingOrder->resetId();
+    $purchasingOrder->setOrderType('purchase');
+    $purchasingOrder->setMainOrder($order);
+    $purchasingOrder->setClient($order->getQuote()->getProvider());
+    $purchasingOrder->setPayer($order->getQuote()->getProvider());
+    $purchasingOrder->setStatus($this->em->getRepository(Status::class)->findOneBy(['status' => 'delivered','context' => 'order']));
+    $purchasingOrder->setProvider($provider);
+    $purchasingOrder->setPrice($price);
+    $this->em->persist($purchasingOrder);
+    $this->em->flush($purchasingOrder);
 
-    $carrierInvoiceTax = $this->em->getRepository(OrderInvoiceTax::class)->findOneBy([
+    $carrierInvoiceTax = $this->em->getRepository(PurchasingOrderInvoiceTax::class)->findOneBy([
       'order' => $order,
       'invoice_type' => '57',
     ]);
@@ -1279,13 +1284,13 @@ class OrderNotifierCommand extends Command
         $this->em->persist($carrierInvoiceTax);
         $this->em->flush($carrierInvoiceTax);
 
-        $OrderTax = new \ControleOnline\Entity\OrderInvoiceTax();
-        $OrderTax->setInvoiceTax($carrierInvoiceTax);
-        $OrderTax->setInvoiceType(57);
-        $OrderTax->setIssuer($Order->getProvider());
-        $OrderTax->setOrder($Order);
-        $this->em->persist($OrderTax);
-        $this->em->flush($OrderTax);
+        $purchasingOrderTax = new \ControleOnline\Entity\PurchasingOrderInvoiceTax();
+        $purchasingOrderTax->setInvoiceTax($carrierInvoiceTax);
+        $purchasingOrderTax->setInvoiceType(57);
+        $purchasingOrderTax->setIssuer($purchasingOrder->getProvider());
+        $purchasingOrderTax->setOrder($purchasingOrder);
+        $this->em->persist($purchasingOrderTax);
+        $this->em->flush($purchasingOrderTax);
 
     }
 
@@ -1295,7 +1300,7 @@ class OrderNotifierCommand extends Command
   /**
    * Cria os pedidos de compra com base na nota fiscal de compra
    */
-  protected function createOrderFromSaleOrder(Order $order, People $provider, $invoice)
+  protected function createPurchasingOrderFromSaleOrder(SalesOrder $order, People $provider, $invoice)
   {
     $cte = simplexml_load_string($invoice);
     $price = $cte->CTe->infCte->vPrest->vTPrest;
@@ -1303,48 +1308,48 @@ class OrderNotifierCommand extends Command
       throw new \Exception('Impossible get price of DACTE', 103);
       return;
     }
-    $Order = clone $order;
-    $this->em->detach($Order);
-    $Order->resetId();
-    $Order->setOrderType('purchase');
-    $Order->setMainOrder($order);
-    $Order->setClient($order->getQuote()->getProvider());
-    $Order->setPayer($order->getQuote()->getProvider());
-    $Order->setStatus($this->em->getRepository(Status::class)->findOneBy(['status' => 'delivered', 'context' => 'order']));
-    $Order->setProvider($provider);
-    $Order->setPrice($price);
-    $this->em->persist($Order);
-    $this->em->flush($Order);
+    $purchasingOrder = clone $order;
+    $this->em->detach($purchasingOrder);
+    $purchasingOrder->resetId();
+    $purchasingOrder->setOrderType('purchase');
+    $purchasingOrder->setMainOrder($order);
+    $purchasingOrder->setClient($order->getQuote()->getProvider());
+    $purchasingOrder->setPayer($order->getQuote()->getProvider());
+    $purchasingOrder->setStatus($this->em->getRepository(Status::class)->findOneBy(['status' => 'delivered', 'context' => 'order']));
+    $purchasingOrder->setProvider($provider);
+    $purchasingOrder->setPrice($price);
+    $this->em->persist($purchasingOrder);
+    $this->em->flush($purchasingOrder);
 
-    $carrierInvoiceTax = $this->em->getRepository(OrderInvoiceTax::class)->findOneBy([
+    $carrierInvoiceTax = $this->em->getRepository(PurchasingOrderInvoiceTax::class)->findOneBy([
       'order' => $order,
       'invoiceType' => '57',
     ]);
 
     if (!$carrierInvoiceTax) {
 
-      $carrierInvoiceTax = new InvoiceTax();
+      $carrierInvoiceTax = new PurchasingInvoiceTax();
       $carrierInvoiceTax->setInvoice($invoice);
       $carrierInvoiceTax->setInvoiceNumber($cte->CTe->infCte->ide->nCT);
       $this->em->persist($carrierInvoiceTax);
       $this->em->flush($carrierInvoiceTax);
 
-      $OrderTax = new OrderInvoiceTax();
-      $OrderTax->setInvoiceTax($carrierInvoiceTax);
-      $OrderTax->setInvoiceType(57);
-      $OrderTax->setIssuer($Order->getProvider());
-      $OrderTax->setOrder($this->em->getRepository(Order::class)->find($Order->getId()));
-      $this->em->persist($OrderTax);
-      $this->em->flush($OrderTax);
+      $purchasingOrderTax = new PurchasingOrderInvoiceTax();
+      $purchasingOrderTax->setInvoiceTax($carrierInvoiceTax);
+      $purchasingOrderTax->setInvoiceType(57);
+      $purchasingOrderTax->setIssuer($purchasingOrder->getProvider());
+      $purchasingOrderTax->setOrder($this->em->getRepository(PurchasingOrder::class)->find($purchasingOrder->getId()));
+      $this->em->persist($purchasingOrderTax);
+      $this->em->flush($purchasingOrderTax);
 
 
-      $OrderTax = new OrderInvoiceTax();
-      $OrderTax->setInvoiceTax($this->em->getRepository(InvoiceTax::class)->find($carrierInvoiceTax->getId()));
-      $OrderTax->setInvoiceType(57);
-      $OrderTax->setIssuer($Order->getProvider());
-      $OrderTax->setOrder($order);
-      $this->em->persist($OrderTax);
-      $this->em->flush($OrderTax);
+      $salesOrderTax = new SalesOrderInvoiceTax();
+      $salesOrderTax->setInvoiceTax($this->em->getRepository(SalesInvoiceTax::class)->find($carrierInvoiceTax->getId()));
+      $salesOrderTax->setInvoiceType(57);
+      $salesOrderTax->setIssuer($purchasingOrder->getProvider());
+      $salesOrderTax->setOrder($order);
+      $this->em->persist($salesOrderTax);
+      $this->em->flush($salesOrderTax);
     }
 
     return $carrierInvoiceTax;
@@ -1355,11 +1360,11 @@ class OrderNotifierCommand extends Command
   protected function getCloseTaskFromDivergenceOrders(int $limit, int $datelimit = null)
   {
 
-    $Orders = $this->em->getRepository(Order::class)
+    $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\OrderInvoice', 'OI', 'WITH', 'OI.order = O.id')
-      ->innerJoin('\ControleOnline\Entity\Invoice', 'I', 'WITH', 'OI.invoice = I.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\ReceiveInvoice', 'I', 'WITH', 'OI.invoice = I.id')
       ->innerJoin('\ControleOnline\Entity\Task', 'T', 'WITH', 'T.order = O.id')
       ->where('I.status IN (:status)')
       ->andWhere('T.taskStatus IN (:taskStatus)')
@@ -1372,13 +1377,13 @@ class OrderNotifierCommand extends Command
       ->getQuery()->getResult();
 
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
     else {
       /**
-       * @var \ControleOnline\Repository\Order $order
+       * @var \ControleOnline\Repository\SalesOrder $order
        */
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
         $orders[] = (object) [
           'order'    => $order->getId(),
           'carrier'  => $order->getQuote() ? $order->getQuote()->getCarrier()->getName() : '',
@@ -1443,7 +1448,7 @@ class OrderNotifierCommand extends Command
 
   protected function getTaskFromTrackingOrders(int $limit, int $datelimit = null)
   {
-    $Orders = $this->em->getRepository(Order::class)
+    $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
       ->innerJoin('\ControleOnline\Entity\OrderTracking', 'OT', 'WITH', 'OT.order = O.id')
@@ -1462,13 +1467,13 @@ class OrderNotifierCommand extends Command
       ))
       ->getQuery()->getResult();
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
     else {
       /**
-       * @var \ControleOnline\Repository\Order $order
+       * @var \ControleOnline\Repository\SalesOrder $order
        */
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
         $orders[] = (object) [
           'order'    => $order->getId(),
           'carrier'  => $order->getQuote() ? $order->getQuote()->getCarrier()->getName() : '',
@@ -1540,7 +1545,7 @@ class OrderNotifierCommand extends Command
   protected function getTaskFromActiveContractsOrders(int $limit, int $datelimit = null)
   {
 
-    $Orders = $this->em->getRepository(Order::class)
+    $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
       ->innerJoin('\ControleOnline\Entity\Contract', 'C', 'WITH', 'O.contract = C.id')
@@ -1555,13 +1560,13 @@ class OrderNotifierCommand extends Command
       ->getQuery()->getResult();
 
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
     else {
       /**
-       * @var \ControleOnline\Repository\Order $order
+       * @var \ControleOnline\Repository\SalesOrder $order
        */
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
         $orders[] = (object) [
           'order'    => $order->getId(),
           'carrier'  => $order->getQuote() ? $order->getQuote()->getCarrier()->getName() : '',
@@ -1639,11 +1644,11 @@ class OrderNotifierCommand extends Command
   protected function getTaskFromDivergenceOrders(int $limit, int $datelimit = null)
   {
 
-    $Orders = $this->em->getRepository(Order::class)
+    $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\OrderInvoice', 'OI', 'WITH', 'OI.order = O.id')
-      ->innerJoin('\ControleOnline\Entity\Invoice', 'I', 'WITH', 'OI.invoice = I.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\ReceiveInvoice', 'I', 'WITH', 'OI.invoice = I.id')
       ->leftJoin('\ControleOnline\Entity\Task', 'T', 'WITH', 'T.order = O.id AND T.category IN (:category)')
       ->where('I.status IN (:status)')
       ->having('COUNT(T.id) = 0')
@@ -1656,13 +1661,13 @@ class OrderNotifierCommand extends Command
       ->getQuery()->getResult();
 
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
     else {
       /**
-       * @var \ControleOnline\Repository\Order $order
+       * @var \ControleOnline\Repository\SalesOrder $order
        */
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
         $orders[] = (object) [
           'order'    => $order->getId(),
           'carrier'  => $order->getQuote() ? $order->getQuote()->getCarrier()->getName() : '',
@@ -1790,7 +1795,7 @@ class OrderNotifierCommand extends Command
     $quotes = $this->em->getRepository(Quotation::class)
       ->createQueryBuilder('Q')
       ->select('Q')
-      ->innerJoin(Order::class, 'O', 'WITH', 'O.id = Q.order')
+      ->innerJoin(SalesOrder::class, 'O', 'WITH', 'O.id = Q.order')
       ->andWhere('O.quote IS NULL')
       ->andWhere('O.orderType = :orderType')
       ->setParameters(['orderType' => 'sale'])
@@ -1825,9 +1830,9 @@ class OrderNotifierCommand extends Command
             },
           ],
           'events'   => [
-            'onError' => function () {
+            'onError' => function () use ($invoice) {
             },
-            'onSuccess' => function () {
+            'onSuccess' => function () use ($invoice) {
               try {
               } catch (\Exception $e) {
                 echo $e->getMessage();
@@ -1847,13 +1852,13 @@ class OrderNotifierCommand extends Command
   private function getInvoiceOrders(int $limit, int $datelimit = null): ?array
   {
     /**
-     * @var \ControleOnline\Repository\InvoiceRepository
+     * @var \ControleOnline\Repository\ReceiveInvoiceRepository
      */
-    $repository     = $this->em->getRepository(Invoice::class);
-    $Invoice = $repository->createQueryBuilder('I')
+    $repository     = $this->em->getRepository(ReceiveInvoice::class);
+    $receiveInvoice = $repository->createQueryBuilder('I')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\OrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-      ->innerJoin('\ControleOnline\Entity\Order', 'O', 'WITH', 'O.id = OI.order')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'O.id = OI.order')
       ->innerJoin('\ControleOnline\Entity\Config', 'C', 'WITH', 'C.people = O.provider')
       ->where('I.status IN (:status)')
       ->andWhere('I.notified =:notified')
@@ -1868,14 +1873,14 @@ class OrderNotifierCommand extends Command
       ->getQuery()
       ->getResult();
 
-    if (count($Invoice) == 0)
+    if (count($receiveInvoice) == 0)
       return null;
     else {
 
       /**
-       * @var \ControleOnline\Entity\Invoice $invoice
+       * @var \ControleOnline\Entity\ReceiveInvoice $invoice
        */
-      foreach ($Invoice as $invoice) {
+      foreach ($receiveInvoice as $invoice) {
         $order = $invoice->getOrder()[0]->getOrder();
 
         $orders[] = (object) [
@@ -1939,23 +1944,27 @@ class OrderNotifierCommand extends Command
   private function _getInvoiceOrdersTemplateParams(Order $order): array
   {
     /**
-     * @var \ControleOnline\Entity\Order
+     * @var \ControleOnline\Entity\SalesOrder
      */
-    $Order     = $order;
+    $salesOrder     = $order;
     /**
-     * @var \ControleOnline\Entity\Invoice $Invoice
+     * @var \ControleOnline\Entity\ReceiveInvoice $receiveInvoice
      */
-    $Invoice = $Order->getInvoice()->first() ? $Order->getInvoice()->first()->getInvoice() : null;
+    $receiveInvoice = $salesOrder->getInvoice()->first() ? $salesOrder->getInvoice()->first()->getInvoice() : null;
     $invoiceNumber  = null;
     $invoiceOrders  = [];
 
+    if ($receiveInvoice !== null) {
+      if ($receiveInvoice->getServiceInvoiceTax()->first() !== false)
+        $invoiceNumber = $receiveInvoice->getServiceInvoiceTax()->first()
+          ->getServiceInvoiceTax()->getInvoiceNumber();
+    }
 
-
-    if ($Invoice != null) {
+    if ($receiveInvoice != null) {
       /**
-       * @var \ControleOnline\Entity\OrderInvoice $orderInvoice
+       * @var \ControleOnline\Entity\SalesOrderInvoice $orderInvoice
        */
-      foreach ($Invoice->getOrder() as $orderInvoice) {
+      foreach ($receiveInvoice->getOrder() as $orderInvoice) {
         $order = $orderInvoice->getOrder();
 
         $invoiceOrders[] = [
@@ -1971,37 +1980,37 @@ class OrderNotifierCommand extends Command
     return [
       'api_domain'      => 'https://' . isset($_SERVER) && isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'api.freteclick.com.br',
       'app_domain'      => 'https://cotafacil.freteclick.com.br',
-      'order_id'        => $Order->getId(),
-      'invoice_id'      => $Invoice != null ? $Invoice->getId() : 0,
+      'order_id'        => $salesOrder->getId(),
+      'invoice_id'      => $receiveInvoice != null ? $receiveInvoice->getId() : 0,
       'invoice_number'  => $invoiceNumber,
-      'invoice_price'   => $Invoice != null ? 'R$' . number_format($Invoice->getPrice(), 2, ',', '.') : 0,
-      'invoice_duedate' => $Invoice != null ? $Invoice->getDueDate()->format('d/m/Y') : '',
+      'invoice_price'   => $receiveInvoice != null ? 'R$' . number_format($receiveInvoice->getPrice(), 2, ',', '.') : 0,
+      'invoice_duedate' => $receiveInvoice != null ? $receiveInvoice->getDueDate()->format('d/m/Y') : '',
       'invoice_orders'  => $invoiceOrders,
     ];
   }
 
-  private function recalculateInvoicePrice($Invoice)
+  private function recalculateInvoicePrice($receiveInvoice)
   {
     $price = 0;
 
     /**
-     * @var \ControleOnline\Entity\OrderInvoice $OrderInvoice
+     * @var \ControleOnline\Entity\SalesOrderInvoice $salesOrderInvoice
      */
-    foreach ($Invoice->getOrder() as $OrderInvoice) {
-      if (!in_array($OrderInvoice->getOrder()->getStatus()->getStatus(), ['canceled', 'expired'])) {
-        $price = $price + ($OrderInvoice->getRealPrice() > 0 ? $OrderInvoice->getRealPrice() : $OrderInvoice->getOrder()->getPrice());
+    foreach ($receiveInvoice->getOrder() as $salesOrderInvoice) {
+      if (!in_array($salesOrderInvoice->getOrder()->getStatus()->getStatus(), ['canceled', 'expired'])) {
+        $price = $price + ($salesOrderInvoice->getRealPrice() > 0 ? $salesOrderInvoice->getRealPrice() : $salesOrderInvoice->getOrder()->getPrice());
       }
     }
 
-    if ($OrderInvoice->getOrder()->getOrderType() == 'royalties') {
-      $minimum = $OrderInvoice->getOrder()->getClient()->getPeopleFranchisee()[0]->getMinimumRoyalties();
+    if ($salesOrderInvoice->getOrder()->getOrderType() == 'royalties') {
+      $minimum = $salesOrderInvoice->getOrder()->getClient()->getPeopleFranchisee()[0]->getMinimumRoyalties();
       $price = $minimum > $price ? $minimum : $price;
     }
 
     if ($price > 0) {
-      $Invoice->setPrice($price);
-      $this->em->persist($Invoice);
-      $this->em->flush($Invoice);
+      $receiveInvoice->setPrice($price);
+      $this->em->persist($receiveInvoice);
+      $this->em->flush($receiveInvoice);
     }
   }
 
@@ -2093,7 +2102,7 @@ class OrderNotifierCommand extends Command
     else {
       foreach ($result as $inv) {
 
-        $invoice = $this->em->find(Invoice::class,  $inv['invoice']);
+        $invoice = $this->em->find(PayInvoice::class,  $inv['invoice']);
         $order = $invoice->getOrder()[0]->getOrder();
 
         $orders[] = (object) [
@@ -2183,7 +2192,7 @@ class OrderNotifierCommand extends Command
     else {
       foreach ($result as $inv) {
 
-        $invoice = $this->em->find(Invoice::class,  $inv['invoice']);
+        $invoice = $this->em->find(PayInvoice::class,  $inv['invoice']);
         $order = $invoice->getOrder()[0]->getOrder();
 
         $orders[] = (object) [
@@ -2226,11 +2235,11 @@ class OrderNotifierCommand extends Command
   private function getCloseMonthlyBillingInvoiceOrders(int $limit, int $datelimit = null): ?array
   {
 
-    $Invoice =  $this->em->getRepository(Invoice::class)
+    $receiveInvoice =  $this->em->getRepository(ReceiveInvoice::class)
       ->createQueryBuilder('I')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\OrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-      ->innerJoin('\ControleOnline\Entity\Order', 'O', 'WITH', 'OI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
       ->innerJoin('\ControleOnline\Entity\People', 'P', 'WITH', 'O.payer = P.id')
       ->where('I.status IN(:status)')
       ->andWhere('OI.id IS NOT NULL')
@@ -2246,10 +2255,10 @@ class OrderNotifierCommand extends Command
       ->getQuery()
       ->getResult();
 
-    if (count($Invoice) == 0)
+    if (count($receiveInvoice) == 0)
       return null;
     else {
-      foreach ($Invoice as $invoice) {
+      foreach ($receiveInvoice as $invoice) {
         $order = $invoice->getOrder()[0]->getOrder();
         $orders[] = (object) [
           'order'    => $order->getId(),
@@ -2291,11 +2300,11 @@ class OrderNotifierCommand extends Command
   private function getCloseBiweeklyBillingInvoiceOrders(int $limit, int $datelimit = null): ?array
   {
 
-    $Invoice =  $this->em->getRepository(Invoice::class)
+    $receiveInvoice =  $this->em->getRepository(ReceiveInvoice::class)
       ->createQueryBuilder('I')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\OrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-      ->innerJoin('\ControleOnline\Entity\Order', 'O', 'WITH', 'OI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
       ->innerJoin('\ControleOnline\Entity\People', 'P', 'WITH', 'O.payer = P.id')
       ->where('I.status IN(:status)')
       ->andWhere('OI.id IS NOT NULL')
@@ -2311,10 +2320,10 @@ class OrderNotifierCommand extends Command
       ->getQuery()
       ->getResult();
 
-    if (count($Invoice) == 0)
+    if (count($receiveInvoice) == 0)
       return null;
     else {
-      foreach ($Invoice as $invoice) {
+      foreach ($receiveInvoice as $invoice) {
         $order = $invoice->getOrder()[0]->getOrder();
         $orders[] = (object) [
           'order'    => $order->getId(),
@@ -2356,11 +2365,11 @@ class OrderNotifierCommand extends Command
   private function getCloseWeeklyBillingInvoiceOrders(int $limit, int $datelimit = null): ?array
   {
 
-    $Invoice =  $this->em->getRepository(Invoice::class)
+    $receiveInvoice =  $this->em->getRepository(ReceiveInvoice::class)
       ->createQueryBuilder('I')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\OrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-      ->innerJoin('\ControleOnline\Entity\Order', 'O', 'WITH', 'OI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
       ->innerJoin('\ControleOnline\Entity\People', 'P', 'WITH', 'O.payer = P.id')
       ->where('I.status IN(:status)')
       ->andWhere('OI.id IS NOT NULL')
@@ -2376,10 +2385,10 @@ class OrderNotifierCommand extends Command
       ->getQuery()
       ->getResult();
 
-    if (count($Invoice) == 0)
+    if (count($receiveInvoice) == 0)
       return null;
     else {
-      foreach ($Invoice as $invoice) {
+      foreach ($receiveInvoice as $invoice) {
         $order = $invoice->getOrder()[0]->getOrder();
         $orders[] = (object) [
           'order'    => $order->getId(),
@@ -2422,11 +2431,11 @@ class OrderNotifierCommand extends Command
   private function getCloseDailyBillingInvoiceOrders(int $limit, int $datelimit = null): ?array
   {
 
-    $Invoice =  $this->em->getRepository(Invoice::class)
+    $receiveInvoice =  $this->em->getRepository(ReceiveInvoice::class)
       ->createQueryBuilder('I')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\OrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-      ->innerJoin('\ControleOnline\Entity\Order', 'O', 'WITH', 'OI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
       ->innerJoin('\ControleOnline\Entity\People', 'P', 'WITH', 'O.payer = P.id')
       ->where('I.status IN(:status)')
       ->andWhere('OI.id IS NOT NULL')
@@ -2442,10 +2451,10 @@ class OrderNotifierCommand extends Command
       ->getQuery()
       ->getResult();
 
-    if (count($Invoice) == 0)
+    if (count($receiveInvoice) == 0)
       return null;
     else {
-      foreach ($Invoice as $invoice) {
+      foreach ($receiveInvoice as $invoice) {
         $order = $invoice->getOrder()[0]->getOrder();
         $orders[] = (object) [
           'order'    => $order->getId(),
@@ -2489,12 +2498,12 @@ class OrderNotifierCommand extends Command
   {
 
 
-    $Order =  $this->em->getRepository(Order::class)
+    $salesOrder =  $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\OrderInvoiceTax', 'OIT', 'WITH', 'OIT.order = O.id')
-      ->innerJoin('\ControleOnline\Entity\OrderInvoiceTax', 'OITS', 'WITH', 'OITS.order = O.id')
-      ->leftJoin('\ControleOnline\Entity\Order', 'PO', 'WITH', 'PO.mainOrder = O.id')
+      ->innerJoin('\ControleOnline\Entity\PurchasingOrderInvoiceTax', 'OIT', 'WITH', 'OIT.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\PurchasingOrderInvoiceTax', 'OITS', 'WITH', 'OITS.order = O.id')
+      ->leftJoin('\ControleOnline\Entity\PurchasingOrder', 'PO', 'WITH', 'PO.mainOrder = O.id')
       ->where('O.orderType =:orderType')
       ->andWhere('PO.id IS NULL')
       ->andWhere('OIT.invoiceType =:invoice_type')
@@ -2510,10 +2519,10 @@ class OrderNotifierCommand extends Command
       ->setMaxResults($limit)
       ->getQuery()->getResult();
 
-    if (count($Order) == 0)
+    if (count($salesOrder) == 0)
       return null;
     else {
-      foreach ($Order as $order) {
+      foreach ($salesOrder as $order) {
         $orders[] = (object) [
           'order'    => $order->getId(),
           'carrier'  => $order->getQuote() ? $order->getQuote()->getCarrier()->getName() : '',
@@ -2523,33 +2532,33 @@ class OrderNotifierCommand extends Command
           'notifier' => [
             'send' => function () use ($order) {
               try {
-                $OrderInvoiceTax = $this->em->getRepository(OrderInvoiceTax::class)->findOneBy([
+                $PurchasingOrderInvoiceTax = $this->em->getRepository(PurchasingOrderInvoiceTax::class)->findOneBy([
                   'order' => $order,
                   'invoiceType' => '57'
                 ]);
-                if ($OrderInvoiceTax) {
-                  $Orders =  $this->em->getRepository(Order::class)
+                if ($PurchasingOrderInvoiceTax) {
+                  $purchasingOrders =  $this->em->getRepository(PurchasingOrder::class)
                     ->createQueryBuilder('O')
                     ->select()
-                    ->innerJoin('\ControleOnline\Entity\OrderInvoiceTax', 'OIT', 'WITH', 'OIT.order = O.id')
+                    ->innerJoin('\ControleOnline\Entity\PurchasingOrderInvoiceTax', 'OIT', 'WITH', 'OIT.order = O.id')
                     ->where('OIT.invoiceTax IN(:invoiceTax)')
                     ->andWhere('O.id NOT IN (:order)')
                     ->setParameters([
-                      'invoiceTax' => $OrderInvoiceTax->getInvoiceTax(),
+                      'invoiceTax' => $PurchasingOrderInvoiceTax->getInvoiceTax(),
                       'order' => $order
                     ])
                     ->groupBy('O.id')
                     ->getQuery()->getResult();
 
-                  if (count($Orders) > 0) {
-                    foreach ($Orders as $Order) {
-                      $Order->setMainOrder($order);
-                      $Order->setOrderType('purchase');
-                      $this->em->persist($Order);
-                      $this->em->flush($Order);
+                  if (count($purchasingOrders) > 0) {
+                    foreach ($purchasingOrders as $purchasingOrder) {
+                      $purchasingOrder->setMainOrder($order);
+                      $purchasingOrder->setOrderType('purchase');
+                      $this->em->persist($purchasingOrder);
+                      $this->em->flush($purchasingOrder);
                     }
                   } else {
-                    $this->createOrderFromSaleOrder($order, $order->getQuote()->getCarrier(), $OrderInvoiceTax->getInvoiceTax()->getInvoice());
+                    $this->createPurchasingOrderFromSaleOrder($order, $order->getQuote()->getCarrier(), $PurchasingOrderInvoiceTax->getInvoiceTax()->getInvoice());
                   }
                 }
                 return true;
@@ -2577,10 +2586,10 @@ class OrderNotifierCommand extends Command
   private function getGenerateInvoiceOrders(int $limit, int $datelimit = null): ?array
   {
 
-    $Order =  $this->em->getRepository(Order::class)
+    $salesOrder =  $this->em->getRepository(SalesOrder::class)
       ->createQueryBuilder('O')
       ->select()
-      ->leftJoin('\ControleOnline\Entity\OrderInvoice', 'OI', 'WITH', 'OI.order = O.id')
+      ->leftJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.order = O.id')
       ->where('O.status NOT IN(:status)')
       ->andWhere('O.status NOT IN(:nstatus)')
       ->andWhere('OI.id IS NULL')
@@ -2597,10 +2606,10 @@ class OrderNotifierCommand extends Command
       ->getResult();
 
 
-    if (count($Order) == 0)
+    if (count($salesOrder) == 0)
       return null;
     else {
-      foreach ($Order as $order) {
+      foreach ($salesOrder as $order) {
 
         $orders[] = (object) [
           'order'    => $order->getId(),
@@ -2612,11 +2621,11 @@ class OrderNotifierCommand extends Command
             'send' => function () use ($order) {
               try {
                 if ($order->getOrderType() == 'comission') {
-                  $qry = $this->em->getRepository(Invoice::class)
+                  $qry = $this->em->getRepository(ReceiveInvoice::class)
                     ->createQueryBuilder('I')
                     ->select()
-                    ->innerJoin('\ControleOnline\Entity\OrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-                    ->innerJoin('\ControleOnline\Entity\Order', 'O', 'WITH', 'OI.order = O.id')
+                    ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+                    ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
                     ->where('I.status IN(:status)')
                     ->andWhere('O.provider = :provider')
                     ->andWhere('O.payer = :payer')
@@ -2626,21 +2635,22 @@ class OrderNotifierCommand extends Command
                       'status' => $this->em->getRepository(Status::class)->findBy(['status' => ['open'], 'context' => 'invoice'])
                     ));
 
-                  $Invoice = $qry->groupBy('I.id')->getQuery()->getResult();
+                  $receiveInvoice = $qry->groupBy('I.id')->getQuery()->getResult();
 
-                  if (count($Invoice) > 0) {
+                  if (count($receiveInvoice) > 0) {
                     /**
-                     * @var \ControleOnline\Entity\Invoice $invoice
+                     * @var \ControleOnline\Entity\ReceiveInvoice $invoice
                      */
-                    $invoice = $Invoice[0];
+                    $invoice = $receiveInvoice[0];
                   } else {
-                    $invoice = new Invoice();
+                    $invoice = new ReceiveInvoice();
                     $invoice->setPrice($order->getPrice());
                     $invoice->setDueDate($this->getDueDate($order->getClient()));
                     $invoice->setStatus($this->em->getRepository(Status::class)->findOneBy(['status' => ['open'], 'context' => 'invoice']));
                   }
 
 
+                  $invoice->setDescription('Comissão');
                   $invoice->setCategory($invoice->getCategory() ?:
                     $this->em->getRepository(Category::class)->findOneBy([
                       'context'  => 'expense',
@@ -2649,19 +2659,19 @@ class OrderNotifierCommand extends Command
                     ]));
                 } else {
 
-                  $Invoice = [];
+                  $receiveInvoice = [];
                   $hasExceeded = [];
-                  $Order = $this->em->getRepository(OrderInvoiceTax::class)->findBy([
+                  $purchasingOrder = $this->em->getRepository(PurchasingOrderInvoiceTax::class)->findBy([
                     'order' => $order,
                     'invoiceType' => '55',
                   ]);
 
-                  if (count($Order) < 1) {
-                    $hasExceeded = $this->em->getRepository(Invoice::class)
+                  if (count($purchasingOrder) < 1) {
+                    $hasExceeded = $this->em->getRepository(ReceiveInvoice::class)
                       ->createQueryBuilder('I')
                       ->select()
-                      ->innerJoin('\ControleOnline\Entity\OrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-                      ->innerJoin('\ControleOnline\Entity\Order', 'O', 'WITH', 'OI.order = O.id')
+                      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+                      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
                       ->where('I.status IN(:status)')->andWhere('O.payer = :payer')
                       ->setParameters(array(
                         'payer' => $order->getPayer(),
@@ -2670,14 +2680,14 @@ class OrderNotifierCommand extends Command
                   }
 
                   if (count($hasExceeded) == 0) {
-                    $qry = $this->em->getRepository(Invoice::class)
+                    $qry = $this->em->getRepository(ReceiveInvoice::class)
                       ->createQueryBuilder('I')
                       ->select()
-                      ->innerJoin('\ControleOnline\Entity\OrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-                      ->innerJoin('\ControleOnline\Entity\Order', 'O', 'WITH', 'OI.order = O.id')
+                      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+                      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'OI.order = O.id')
                       ->where('I.status IN(:status)');
 
-                    if (count($Order) > 0) {
+                    if (count($purchasingOrder) > 0) {
                       $qry->andWhere('O.payer = :payer');
                       $qry->setParameters(array(
                         'payer' => $order->getPayer(),
@@ -2693,27 +2703,27 @@ class OrderNotifierCommand extends Command
                       ));
                     }
 
-                    $Invoice = $qry->groupBy('I.id')->getQuery()->getResult();
+                    $receiveInvoice = $qry->groupBy('I.id')->getQuery()->getResult();
 
 
-                    if (count($Invoice) > 0 && $order->getClient()->getBilling() < $Invoice[0]->getPrice() && $order->getOrderType() != 'comission') {
-                      $Invoice = $Invoice[0];
-                      $Invoice->setStatus($this->em->getRepository(Status::class)->findOneBy(['status' => ['exceeded billing'], 'context' => 'invoice']));
-                      $Invoice->setNotified(0);
-                      $this->em->persist($Invoice);
-                      $this->em->flush($Invoice);
-                      $Invoice = [];
-                      $hasExceeded[] = $Invoice;
+                    if (count($receiveInvoice) > 0 && $order->getClient()->getBilling() < $receiveInvoice[0]->getPrice() && $order->getOrderType() != 'comission') {
+                      $receiveInvoice = $receiveInvoice[0];
+                      $receiveInvoice->setStatus($this->em->getRepository(Status::class)->findOneBy(['status' => ['exceeded billing'], 'context' => 'invoice']));
+                      $receiveInvoice->setNotified(0);
+                      $this->em->persist($receiveInvoice);
+                      $this->em->flush($receiveInvoice);
+                      $receiveInvoice = [];
+                      $hasExceeded[] = $receiveInvoice;
                     }
                   }
 
-                  if (count($Invoice) > 0 && $order->getOrderType() != 'purchase') {
+                  if (count($receiveInvoice) > 0 && $order->getOrderType() != 'purchase') {
                     /**
-                     * @var \ControleOnline\Entity\Invoice $invoice
+                     * @var \ControleOnline\Entity\ReceiveInvoice $invoice
                      */
-                    $invoice = $Invoice[0];
+                    $invoice = $receiveInvoice[0];
                   } else {
-                    $invoice = new Invoice();
+                    $invoice = new ReceiveInvoice();
                     $invoice->setPrice($order->getPrice());
                     $invoice->setDueDate($this->getDueDate($order->getClient()));
 
@@ -2731,7 +2741,7 @@ class OrderNotifierCommand extends Command
 
                 $invoice->setNotified(0);
 
-
+                $invoice->setDescription('Frete');
                 $invoice->setCategory($invoice->getCategory() ?:
                   $this->em->getRepository(Category::class)->findOneBy([
                     'context'  => 'expense',
@@ -2741,7 +2751,7 @@ class OrderNotifierCommand extends Command
 
                 // create order invoice relationship
 
-                $orderInvoice = new OrderInvoice();
+                $orderInvoice = new SalesOrderInvoice();
                 $orderInvoice->setInvoice($invoice);
                 $orderInvoice->setOrder($order);
                 $orderInvoice->setRealPrice($order->getPrice());
@@ -2782,11 +2792,11 @@ class OrderNotifierCommand extends Command
 
     $date = \DateTime::createFromFormat('Y-m-d H:i:s', date('Y-m-d', strtotime(' -2 Weekdays')) . ' 00:00:00');
 
-    $Invoice =  $this->em->getRepository(Invoice::class)
+    $receiveInvoice =  $this->em->getRepository(ReceiveInvoice::class)
       ->createQueryBuilder('I')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\OrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-      ->innerJoin('\ControleOnline\Entity\Order', 'O', 'WITH', 'O.id = OI.order')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'O.id = OI.order')
       ->where('I.status IN(:status)')
       ->andWhere('I.dueDate < :due_date')
       ->setParameters(array(
@@ -2797,12 +2807,12 @@ class OrderNotifierCommand extends Command
       ->setMaxResults($limit)
       ->getQuery()->getResult();
 
-    if (count($Invoice) == 0)
+    if (count($receiveInvoice) == 0)
       return null;
     else {
-      foreach ($Invoice as $invoice) {
+      foreach ($receiveInvoice as $invoice) {
         /**
-         * @var \ControleOnline\Entity\Order
+         * @var \ControleOnline\Entity\SalesOrder
          */
         if ($invoice->getOrder()->first()) {
           $order = $invoice->getOrder()->first()->getOrder();
@@ -2846,7 +2856,7 @@ class OrderNotifierCommand extends Command
   private function getOutdatedInvoiceOrders(int $limit, int $datelimit = null): ?array
   {
 
-    $this->em->createQueryBuilder()->update(Invoice::class, 'I')
+    $this->em->createQueryBuilder()->update(ReceiveOrder::class, 'I')
       ->set('I.notified', 0)
       ->where('I.statusIN(:status)')
       ->andWhere('I.notified=:notified')
@@ -2856,12 +2866,12 @@ class OrderNotifierCommand extends Command
       ])
       ->getQuery()->execute();
 
-    if (count($Invoice) == 0)
+    if (count($receiveInvoice) == 0)
       return null;
     else {
-      foreach ($Invoice as $invoice) {
+      foreach ($receiveInvoice as $invoice) {
         /**
-         * @var \ControleOnline\Entity\Order
+         * @var \ControleOnline\Entity\SalesOrder
          */
         $order = $invoice->getOrder()[0]->getOrder();
         $orders[] = (object) [
@@ -2896,17 +2906,17 @@ class OrderNotifierCommand extends Command
    */
   private function getInvoiceTaxInstructionsOrders(int $limit, int $datelimit = null): ?array
   {
-    $Orders = $this->em->getRepository(Order::class)
+    $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->findBy([
         'status' => $this->em->getRepository(Status::class)->findOneBy(['status' => 'waiting client invoice tax', 'context' => 'order']),
         'notified' => 0
       ], null, $limit);
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
     else {
 
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
 
         $orders[] = (object) [
           'order'    => $order->getId(),
@@ -2944,11 +2954,11 @@ class OrderNotifierCommand extends Command
             },
             'onSuccess' => function () use ($order) {
 
-              $Order = $this->em->find(Order::class, $order->getId());
+              $salesOrder = $this->em->find(SalesOrder::class, $order->getId());
 
-              $Order->setNotified(1);
+              $salesOrder->setNotified(1);
 
-              $this->em->persist($Order);
+              $this->em->persist($salesOrder);
               $this->em->flush();
             },
           ],
@@ -2962,11 +2972,11 @@ class OrderNotifierCommand extends Command
   private function _getInvoiceTaxInstructionsOrdersTemplateParams(Order $order): array
   {
     /**
-     * @var \ControleOnline\Entity\Order
+     * @var \ControleOnline\Entity\SalesOrder
      */
-    $Order = $order;
+    $salesOrder = $order;
     $provider   = [
-      'name'     => $Order->getProvider()->getName(),
+      'name'     => $salesOrder->getProvider()->getName(),
       'document' => '',
     ];
     $carrier    = [
@@ -2989,7 +2999,7 @@ class OrderNotifierCommand extends Command
     /**
      * @var \ControleOnline\Entity\People $_carrier
      */
-    if ($Order->getQuote() && ($_carrier = $Order->getQuote()->getCarrier())) {
+    if ($salesOrder->getQuote() && ($_carrier = $salesOrder->getQuote()->getCarrier())) {
       $carrier['name'] = $_carrier->getName();
 
       foreach ($_carrier->getDocument() as $document) {
@@ -3024,8 +3034,8 @@ class OrderNotifierCommand extends Command
 
     // provider
 
-    if ($Order->getProvider() && $Order->getProvider()->getDocument()) {
-      foreach ($Order->getProvider()->getDocument() as $document) {
+    if ($salesOrder->getProvider() && $salesOrder->getProvider()->getDocument()) {
+      foreach ($salesOrder->getProvider()->getDocument() as $document) {
         if ($document->getDocumentType()->getDocumentType() == 'CNPJ') {
           $provider['document'] = Formatter::mask('##.###.###/####-##', $document->getDocument());
         }
@@ -3033,7 +3043,7 @@ class OrderNotifierCommand extends Command
     }
 
     return  [
-      'order_id' => $Order->getId(),
+      'order_id' => $salesOrder->getId(),
       'provider' => $provider,
       'carrier'  => $carrier,
     ];
@@ -3044,20 +3054,20 @@ class OrderNotifierCommand extends Command
    */
   private function getRetrieveOrders(int $limit, int $datelimit = null): ?array
   {
-    $Orders = $this->em->getRepository(Order::class)
+    $salesOrders = $this->em->getRepository(SalesOrder::class)
       ->findBy([
         'status' => $this->em->getRepository(Status::class)->findOneBy(['status' => 'waiting retrieve', 'context' => 'order']),
         'notified' => 0
       ], null, $limit);
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
     else {
 
       /**
-       * @var Order $order
+       * @var SalesOrder $order
        */
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
 
         $orders[] = (object) [
           'order'    => $order->getId(),
@@ -3154,15 +3164,15 @@ class OrderNotifierCommand extends Command
   private function _getOrdersTemplateParams(Order $order): array
   {
     /**
-     * @var \ControleOnline\Entity\Order
+     * @var \ControleOnline\Entity\SalesOrder
      */
-    $Order   = $order;
-    $provider     = $Order->getProvider();
+    $salesOrder   = $order;
+    $provider     = $salesOrder->getProvider();
     $providerDoc  = '';
     $retrieveData = [
-      'people_type'    => $Order->getRetrievePeople()->getPeopleType(),
-      'people_name'    => $Order->getRetrievePeople()->getName(),
-      'people_alias'   => $Order->getRetrievePeople()->getAlias(),
+      'people_type'    => $salesOrder->getRetrievePeople()->getPeopleType(),
+      'people_name'    => $salesOrder->getRetrievePeople()->getName(),
+      'people_alias'   => $salesOrder->getRetrievePeople()->getAlias(),
       'people_doc'     => '',
       'contact' => [
         'name'   => '',
@@ -3181,9 +3191,9 @@ class OrderNotifierCommand extends Command
       ],
     ];
     $deliveryData = [
-      'people_type'  => $Order->getDeliveryPeople()->getPeopleType(),
-      'people_name'  => $Order->getDeliveryPeople()->getName(),
-      'people_alias' => $Order->getDeliveryPeople()->getAlias(),
+      'people_type'  => $salesOrder->getDeliveryPeople()->getPeopleType(),
+      'people_name'  => $salesOrder->getDeliveryPeople()->getName(),
+      'people_alias' => $salesOrder->getDeliveryPeople()->getAlias(),
       'people_doc'   => '',
       'contact'      => [
         'name'   => '',
@@ -3210,8 +3220,8 @@ class OrderNotifierCommand extends Command
 
     // provider
 
-    if ($Order->getProvider() && $Order->getProvider()->getDocument()) {
-      foreach ($Order->getProvider()->getDocument() as $document) {
+    if ($salesOrder->getProvider() && $salesOrder->getProvider()->getDocument()) {
+      foreach ($salesOrder->getProvider()->getDocument() as $document) {
         if ($document->getDocumentType()->getDocumentType() == 'CNPJ') {
           $providerDoc = Formatter::document($document->getDocument());
         }
@@ -3220,39 +3230,39 @@ class OrderNotifierCommand extends Command
 
     // retrieve
 
-    if ($Order->getRetrievePeople()->getPeopleType() == 'J')
-      if ($Order->getRetrievePeople() && $Order->getRetrievePeople()->getDocument()) {
-        foreach ($Order->getRetrievePeople()->getDocument() as $document) {
+    if ($salesOrder->getRetrievePeople()->getPeopleType() == 'J')
+      if ($salesOrder->getRetrievePeople() && $salesOrder->getRetrievePeople()->getDocument()) {
+        foreach ($salesOrder->getRetrievePeople()->getDocument() as $document) {
           if ($document->getDocumentType()->getDocumentType() == 'CNPJ') {
             $retrieveData['people_doc'] = Formatter::document($document->getDocument());
           }
         }
       }
 
-    if ($Order->getRetrievePeople()->getPeopleType() == 'F')
-      if ($Order->getRetrievePeople() && $Order->getRetrievePeople()->getDocument()) {
-        foreach ($Order->getRetrievePeople()->getDocument() as $document) {
+    if ($salesOrder->getRetrievePeople()->getPeopleType() == 'F')
+      if ($salesOrder->getRetrievePeople() && $salesOrder->getRetrievePeople()->getDocument()) {
+        foreach ($salesOrder->getRetrievePeople()->getDocument() as $document) {
           if ($document->getDocumentType()->getDocumentType() == 'CPF') {
             $retrieveData['people_doc'] = Formatter::document($document->getDocument());
           }
         }
       }
 
-    if ($Order->getRetrieveContact()) {
-      $retrieveData['contact']['name'] = $Order->getRetrieveContact()->getName();
-      $retrieveData['contact']['alias'] = $Order->getRetrieveContact()->getAlias();
+    if ($salesOrder->getRetrieveContact()) {
+      $retrieveData['contact']['name'] = $salesOrder->getRetrieveContact()->getName();
+      $retrieveData['contact']['alias'] = $salesOrder->getRetrieveContact()->getAlias();
 
       /**
        * @var \ControleOnline\Entity\Email $email
        */
-      foreach ($Order->getRetrieveContact()->getEmail() as $email) {
+      foreach ($salesOrder->getRetrieveContact()->getEmail() as $email) {
         $retrieveData['contact']['emails'][] = $email->getEmail();
       }
 
       /**
        * @var \ControleOnline\Entity\Phone $phone
        */
-      foreach ($Order->getRetrieveContact()->getPhone() as $phone) {
+      foreach ($salesOrder->getRetrieveContact()->getPhone() as $phone) {
         $retrieveData['contact']['phones'][] = [
           'ddd'   => $phone->getDdd(),
           'phone' => $phone->getPhone(),
@@ -3260,7 +3270,7 @@ class OrderNotifierCommand extends Command
       }
     }
 
-    if ($oaddress = $Order->getAddressOrigin()) {
+    if ($oaddress = $salesOrder->getAddressOrigin()) {
       $street   = $oaddress->getStreet();
       $district = $street->getDistrict();
       $city     = $district->getCity();
@@ -3280,40 +3290,40 @@ class OrderNotifierCommand extends Command
 
     // delivery
 
-    if ($Order->getDeliveryPeople()->getPeopleType() == 'J')
-      if ($Order->getDeliveryPeople() && $Order->getDeliveryPeople()->getDocument()) {
-        foreach ($Order->getDeliveryPeople()->getDocument() as $document) {
+    if ($salesOrder->getDeliveryPeople()->getPeopleType() == 'J')
+      if ($salesOrder->getDeliveryPeople() && $salesOrder->getDeliveryPeople()->getDocument()) {
+        foreach ($salesOrder->getDeliveryPeople()->getDocument() as $document) {
           if ($document->getDocumentType()->getDocumentType() == 'CNPJ') {
             $deliveryData['people_doc'] = Formatter::document($document->getDocument());
           }
         }
       }
 
-    if ($Order->getDeliveryPeople()->getPeopleType() == 'F')
-      if ($Order->getDeliveryPeople() && $Order->getDeliveryPeople()->getDocument()) {
-        foreach ($Order->getDeliveryPeople()->getDocument() as $document) {
+    if ($salesOrder->getDeliveryPeople()->getPeopleType() == 'F')
+      if ($salesOrder->getDeliveryPeople() && $salesOrder->getDeliveryPeople()->getDocument()) {
+        foreach ($salesOrder->getDeliveryPeople()->getDocument() as $document) {
           if ($document->getDocumentType()->getDocumentType() == 'CPF') {
             $deliveryData['people_doc'] = Formatter::document($document->getDocument());
           }
         }
       }
 
-    if ($Order->getDeliveryContact()) {
+    if ($salesOrder->getDeliveryContact()) {
 
-      $deliveryData['contact']['name'] = $Order->getDeliveryContact()->getName();
-      $deliveryData['contact']['alias'] = $Order->getDeliveryContact()->getAlias();
+      $deliveryData['contact']['name'] = $salesOrder->getDeliveryContact()->getName();
+      $deliveryData['contact']['alias'] = $salesOrder->getDeliveryContact()->getAlias();
 
       /**
        * @var \ControleOnline\Entity\Email $email
        */
-      foreach ($Order->getDeliveryContact()->getEmail() as $email) {
+      foreach ($salesOrder->getDeliveryContact()->getEmail() as $email) {
         $deliveryData['contact']['emails'][] = $email->getEmail();
       }
 
       /**
        * @var \ControleOnline\Entity\Phone $phone
        */
-      foreach ($Order->getDeliveryContact()->getPhone() as $phone) {
+      foreach ($salesOrder->getDeliveryContact()->getPhone() as $phone) {
         $deliveryData['contact']['phones'][] = [
           'ddd'   => $phone->getDdd(),
           'phone' => $phone->getPhone(),
@@ -3321,7 +3331,7 @@ class OrderNotifierCommand extends Command
       }
     }
 
-    if ($daddress = $Order->getAddressDestination()) {
+    if ($daddress = $salesOrder->getAddressDestination()) {
       $street   = $daddress->getStreet();
       $district = $street->getDistrict();
       $city     = $district->getCity();
@@ -3341,16 +3351,16 @@ class OrderNotifierCommand extends Command
 
     // order product
 
-    $orderProduct['cubage'] = number_format($Order->getCubage(), 3, ',', '.');
-    $orderProduct['type']   = $Order->getProductType();
-    $orderProduct['total']  = 'R$' . number_format($Order->getInvoiceTotal(), 2, ',', '.');
+    $orderProduct['cubage'] = number_format($salesOrder->getCubage(), 3, ',', '.');
+    $orderProduct['type']   = $salesOrder->getProductType();
+    $orderProduct['total']  = 'R$' . number_format($salesOrder->getInvoiceTotal(), 2, ',', '.');
 
     // order package
 
     /**
      * @var \ControleOnline\Entity\OrderPackage $package
      */
-    foreach ($Order->getOrderPackage() as $package) {
+    foreach ($salesOrder->getOrderPackage() as $package) {
       $orderPackages[] = [
         'qtd'    => $package->getQtd(),
         'weight' => str_replace('.', ',', $package->getWeight()) . ' kg',
@@ -3363,11 +3373,11 @@ class OrderNotifierCommand extends Command
     // added invoice number
 
     /**
-     * @var \ControleOnline\Entity\InvoiceTax $Invoice
+     * @var \ControleOnline\Entity\SalesInvoiceTax $receiveInvoice
      */
-    $Invoice = $Order->getClientInvoiceTax();
+    $receiveInvoice = $salesOrder->getClientInvoiceTax();
 
-    $otherInformations = $Order->getOtherInformations(true);
+    $otherInformations = $salesOrder->getOtherInformations(true);
     $schedule = null;
     if (!empty($otherInformations) && isset($otherInformations->schedule) && isset($otherInformations->schedule->retrieve)) {
       $schedule = new DateTime($otherInformations->schedule->retrieve);
@@ -3376,11 +3386,11 @@ class OrderNotifierCommand extends Command
 
 
     return [
-      'hash'           => md5($Order->getClient()->getId()),
-      'secret'         => md5($Order->getPayer()->getId()),
+      'hash'           => md5($salesOrder->getClient()->getId()),
+      'secret'         => md5($salesOrder->getPayer()->getId()),
       'api_domain'     => 'https://' . isset($_SERVER) && isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'api.freteclick.com.br',
       'app_domain'     => 'https://cotafacil.freteclick.com.br',
-      'sales_order'    => $Order->getId(),
+      'sales_order'    => $salesOrder->getId(),
       'provider_name'  => $provider->getName(),
       'provider_doc'   => $providerDoc,
       'retrieve_data'  => $retrieveData,
@@ -3388,8 +3398,8 @@ class OrderNotifierCommand extends Command
       'order_product'  => $orderProduct,
       'order_packages' => $orderPackages,
       'schedule'       => $schedule ? $schedule->format('d/m/Y') : null,
-      'invoice_id'     => $Invoice ? $Invoice->getId() : null,
-      'invoice_number' => $Invoice ? $Invoice->getInvoiceNumber() : null,
+      'invoice_id'     => $receiveInvoice ? $receiveInvoice->getId() : null,
+      'invoice_number' => $receiveInvoice ? $receiveInvoice->getInvoiceNumber() : null,
     ];
   }
 
@@ -3417,13 +3427,13 @@ class OrderNotifierCommand extends Command
   private function getVerifyPaymentInvoiceOrders(int $limit, int $datelimit = null): ?array
   {
     /**
-     * @var \ControleOnline\Repository\InvoiceRepository
+     * @var \ControleOnline\Repository\ReceiveInvoiceRepository
      */
-    $repository = $this->em->getRepository(Invoice::class);
+    $repository = $this->em->getRepository(ReceiveInvoice::class);
     $invoices   = $repository->createQueryBuilder('I')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\OrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
-      ->innerJoin('\ControleOnline\Entity\Order', 'O', 'WITH', 'O.id = OI.order')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.invoice = I.id')
+      ->innerJoin('\ControleOnline\Entity\SalesOrder', 'O', 'WITH', 'O.id = OI.order')
       ->innerJoin('\ControleOnline\Entity\Config', 'C', 'WITH', 'C.people = O.provider')
       ->where('I.status IN (:status)')
       ->andWhere('C.config_key LIKE :config_key')
@@ -3451,7 +3461,7 @@ class OrderNotifierCommand extends Command
       foreach ($invoices as $invoice) {
 
         /**
-         * @var \ControleOnline\Entity\Order
+         * @var \ControleOnline\Entity\SalesOrder
          */
 
         if (($orderInvoice = $invoice->getOrder()->first()) === false)
@@ -3551,7 +3561,7 @@ class OrderNotifierCommand extends Command
    */
   private function getIssueInvoiceOrders(int $limit, int $datelimit = null): ?array
   {
-    $Orders = $this->em->getRepository(Order::class)->createQueryBuilder('O')
+    $salesOrders = $this->em->getRepository(SalesOrder::class)->createQueryBuilder('O')
       ->select()
       ->where('O.status IN (:status)')
       ->setParameters([
@@ -3561,12 +3571,12 @@ class OrderNotifierCommand extends Command
       ->getQuery()
       ->getResult();
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
 
     else {
       $orders = [];
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
         $orders[] = (object) [
           'order'    => $order->getId(),
           'carrier'  => $order->getQuote() ? $order->getQuote()->getCarrier()->getName() : '',
@@ -3607,10 +3617,10 @@ class OrderNotifierCommand extends Command
    */
   private function getVerifyPaymentOrders(int $limit, int $datelimit = null): ?array
   {
-    $Orders = $this->em->getRepository(Order::class)->createQueryBuilder('O')
+    $salesOrders = $this->em->getRepository(SalesOrder::class)->createQueryBuilder('O')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\OrderInvoice', 'OI', 'WITH', 'OI.order = O.id')
-      ->innerJoin('\ControleOnline\Entity\Invoice', 'I', 'WITH', 'I.id = OI.invoice')
+      ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'OI', 'WITH', 'OI.order = O.id')
+      ->innerJoin('\ControleOnline\Entity\ReceiveInvoice', 'I', 'WITH', 'I.id = OI.invoice')
       ->where('I.status IN (:istatus)')
       ->andWhere('O.status IN (:status)')
       ->setParameters([
@@ -3622,14 +3632,14 @@ class OrderNotifierCommand extends Command
       ->getQuery()
       ->getResult();
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
 
     else {
       $orders = [];
 
 
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
 
         $orders[] = (object) [
           'order'    => $order->getId(),
@@ -3666,7 +3676,7 @@ class OrderNotifierCommand extends Command
 
   private function getDocumentOrders(int $limit, int $datelimit = null): ?array
   {
-    $Orders = $this->em->getRepository(Order::class)->createQueryBuilder('O')
+    $salesOrders = $this->em->getRepository(SalesOrder::class)->createQueryBuilder('O')
       ->select()
       ->innerJoin('\ControleOnline\Entity\Contract', 'C', 'WITH', 'C.id = O.contract')
       ->where('C.contractStatus IN (:contractStatus)')
@@ -3678,14 +3688,14 @@ class OrderNotifierCommand extends Command
       ->getQuery()
       ->getResult();
 
-    if (count($Orders) == 0)
+    if (count($salesOrders) == 0)
       return null;
 
     else {
       $orders = [];
 
 
-      foreach ($Orders as $order) {
+      foreach ($salesOrders as $order) {
 
         $orders[] = (object) [
           'order'    => $order->getId(),
@@ -3744,7 +3754,7 @@ class OrderNotifierCommand extends Command
    */
   private function getProspectOrders(int $limit, int $datelimit = null): ?array
   {
-    $contacts = $this->em->getRepository(Order::class)->getByProspectContacts($limit);
+    $contacts = $this->em->getRepository(SalesOrder::class)->getByProspectContacts($limit);
 
     if (count($contacts) == 0)
       return null;
@@ -3786,7 +3796,7 @@ class OrderNotifierCommand extends Command
             'onError' => function () use ($orders) {
             },
             'onSuccess' => function () use ($contact) {
-              $order = $this->em->find(Order::class, $contact['order']);
+              $order = $this->em->find(SalesOrder::class, $contact['order']);
 
               $order->setNotified(1);
 

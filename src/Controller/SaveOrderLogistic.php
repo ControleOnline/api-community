@@ -14,7 +14,8 @@ use ControleOnline\Entity\DocumentType;
 use ControleOnline\Entity\Particulars;
 use ControleOnline\Entity\ParticularsType;
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\PurchasingOrder;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\User;
 use DateTime;
@@ -112,8 +113,8 @@ class SaveOrderLogistic
             
 
             if (isset($payload['order'])) {
-                $Order = $this->manager->getRepository(Order::class)->find($payload['order']);
-                $data->setOrder($Order);
+                $purchasingOrder = $this->manager->getRepository(SalesOrder::class)->find($payload['order']);
+                $data->setOrder($purchasingOrder);
             }
 
             if (isset($payload['provider'])) {
@@ -259,8 +260,8 @@ class SaveOrderLogistic
             
 
             if (isset($payload['order'])) {
-                $Order = $this->manager->getRepository(Order::class)->find($payload['order']);
-                $data->setOrder($Order);
+                $purchasingOrder = $this->manager->getRepository(SalesOrder::class)->find($payload['order']);
+                $data->setOrder($purchasingOrder);
             }
 
             if (isset($payload['provider'])) {

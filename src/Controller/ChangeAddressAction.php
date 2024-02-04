@@ -6,11 +6,12 @@ use ControleOnline\Entity\Address;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use ControleOnline\Entity\SalesOrder as Order;
 use ControleOnline\Entity\Street;
 use ControleOnline\Entity\District;
 use ControleOnline\Entity\City;
 use ControleOnline\Entity\Cep;
-use ControleOnline\Entity\Order;
+use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\State;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 

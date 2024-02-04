@@ -7,12 +7,12 @@ use ControleOnline\Entity\DeliveryTax;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use ControleOnline\Entity\Order as Order;
+use ControleOnline\Entity\SalesOrder as Order;
 use ControleOnline\Entity\Quotation;
 use ControleOnline\Entity\Status;
 use Symfony\Component\Security\Core\Security;
 
-class GetOrderQuotationAction
+class GetSalesOrderQuotationAction
 {
     /**
      * Entity Manager

@@ -8,7 +8,7 @@ use ControleOnline\Entity\Quotation;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use ControleOnline\Entity\Order as Order;
+use ControleOnline\Entity\SalesOrder as Order;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
