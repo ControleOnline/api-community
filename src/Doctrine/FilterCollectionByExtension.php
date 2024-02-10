@@ -14,8 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use ControleOnline\Entity\PurchasingOrder;
 use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\ReceiveInvoice;
-use ControleOnline\Entity\PayInvoice;
+use ControleOnline\Entity\Invoice;
 use ControleOnline\Entity\Phone;
 use ControleOnline\Entity\User;
 use ControleOnline\Entity\Address;
@@ -36,7 +35,6 @@ use ControleOnline\Entity\Provider;
 use ControleOnline\Entity\CompanyExpense;
 use ControleOnline\Entity\Category;
 use ControleOnline\Entity\Hardware;
-use ControleOnline\Entity\Invoice;
 use ControleOnline\Entity\PurchasingOrderInvoice;
 use App\Service\PeopleRoleService;
 
@@ -44,8 +42,6 @@ final class FilterCollectionByExtension
 implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
   private $security;
-
-  private $entities;
 
   private $request;
 
@@ -62,26 +58,6 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
     $this->request  = $requestStack->getCurrentRequest();
     $this->manager  = $entityManager;
     $this->roles    = $roles;
-    $this->entities = [
-      PurchasingOrder::class,
-      SalesOrder::class,
-      Document::class,
-      Email::class,
-      User::class,
-      Address::class,
-      Phone::class,
-      People::class,
-      Client::class,
-      ComissionInvoice::class,
-      ComissionOrder::class,
-      MyContract::class,
-      Product::class,
-      Provider::class,
-      CompanyExpense::class,
-      Category::class,
-      PayInvoice::class,
-      Hardware::class,
-    ];
   }
 
   public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, $resourceClass, $operationName = null)
@@ -96,9 +72,6 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 
   private function addWhere(QueryBuilder $queryBuilder, $resourceClass, $applyTo): void
   {
-    if (!in_array($resourceClass, $this->entities)) {
-      return;
-    }
 
     if (empty($this->security->getUser()))
       return;
@@ -110,22 +83,16 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
     $rootAlias = $queryBuilder->getRootAliases()[0];
 
     switch ($resourceClass) {
+      case Invoice::class:
+        $this->invoice($queryBuilder, $resourceClass, $applyTo, $rootAlias);
+        break;
 
+      case Hardware::class:
 
-
-
-      case PayInvoice::class:
-        $payer   = $this->getMyCompanies();
-        $company = $this->request->query->get('company', null);
-        $queryBuilder->andWhere(sprintf('%s.payer IN(:payer)', $rootAlias));
-        $queryBuilder->setParameter('payer', $payer);
-
-        if ($company) {
-          $queryBuilder->andWhere(sprintf('%s.payer IN(:company)', $rootAlias));
-          $queryBuilder->setParameter('company', preg_replace("/[^0-9]/", "",$company));
-        }
+        $this->hardware($queryBuilder, $resourceClass, $applyTo, $rootAlias);
 
         break;
+
       case PurchasingOrder::class:
 
         $queryBuilder->andWhere(sprintf('%s.client IN (:client) OR %s.provider IN (:provider)', $rootAlias, $rootAlias));
@@ -148,10 +115,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
         break;
 
 
-      case Hardware::class:
-        $queryBuilder->andWhere(sprintf('%s.company IN(:company)', $rootAlias));
-        $queryBuilder->setParameter('company', $this->isFilteringByMyCompany() ?  $this->getMyCompany() : $this->getMyCompanies());
-        break;
+
 
       case SalesOrder::class:
         $queryBuilder->andWhere(sprintf('%s.provider IN(:provider)', $rootAlias));
@@ -400,5 +364,33 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
   private function isFilteringByMyCompany(): bool
   {
     return empty($this->request->query->get('myCompany', null)) === false;
+  }
+
+
+  private function hardware(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
+  {
+    if ($company = $this->request->query->get('myCompany', null)) {
+      $queryBuilder->andWhere(sprintf('%s.company IN(:company)', $rootAlias));
+      $queryBuilder->setParameter('company', preg_replace("/[^0-9]/", "", $company));
+    }
+    $queryBuilder->andWhere(sprintf('%s.company IN(:companies)', $rootAlias));
+    $queryBuilder->setParameter('companies', $this->getMyCompanies());
+  }
+
+  private function invoice(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
+  {
+    $companies   = $this->getMyCompanies();
+    $queryBuilder->andWhere(sprintf('%s.payer IN(:companies) OR %s.payer IN(:companies)', $rootAlias, $rootAlias));
+    $queryBuilder->setParameter('companies', $companies);
+
+    if ($payer = $this->request->query->get('payer', null)) {
+      $queryBuilder->andWhere(sprintf('%s.payer IN(:payer)', $rootAlias));
+      $queryBuilder->setParameter('payer', preg_replace("/[^0-9]/", "", $payer));
+    }
+
+    if ($receiver = $this->request->query->get('receiver', null)) {
+      $queryBuilder->andWhere(sprintf('%s.receiver IN(:receiver)', $rootAlias));
+      $queryBuilder->setParameter('receiver', preg_replace("/[^0-9]/", "", $receiver));
+    }
   }
 }

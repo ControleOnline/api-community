@@ -256,11 +256,11 @@ abstract class AbstractTag
 
 
     /**
-     * @var \ControleOnline\Entity\SalesInvoiceTax $receiveInvoice
+     * @var \ControleOnline\Entity\SalesInvoiceTax $Invoice
      */
-    $receiveInvoice = $salesOrder->getClientInvoiceTax();
+    $Invoice = $salesOrder->getClientInvoiceTax();
     $barCode = new BarcodeGeneratorPNG();
-    $invoiceKey = $receiveInvoice->getInvoiceKey();
+    $invoiceKey = $Invoice->getInvoiceKey();
     $invoiceKeyBarCode = base64_encode($barCode->getBarcode($invoiceKey, $barCode::TYPE_CODE_128));
 
 
@@ -281,8 +281,8 @@ abstract class AbstractTag
       'delivery_data'  => $deliveryData,
       'order_product'  => $orderProduct,
       'order_packages' => $orderPackages,
-      'invoice_id'     => $receiveInvoice->getId(),
-      'invoice_number' => $receiveInvoice->getInvoiceNumber(),
+      'invoice_id'     => $Invoice->getId(),
+      'invoice_number' => $Invoice->getInvoiceNumber(),
     ];
   }
 

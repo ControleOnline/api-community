@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use ControleOnline\Service\DatabaseSwitchService;
 
 use ControleOnline\Entity\PurchasingOrder;
-use ControleOnline\Entity\PayInvoice;
+use ControleOnline\Entity\Invoice;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\PurchasingOrderInvoice;
 
@@ -131,7 +131,7 @@ class CompanyExpenseInvoiceCommand extends Command
       ->innerJoin('o.invoice', 'oi')
       ->innerJoin('oi.invoice', 'i')
       ->leftJoin('o.invoice', 'oin')
-      ->leftJoin('\ControleOnline\Entity\PayInvoice', 'ni', 'WITH', '(ni.id = oin.invoice AND ni.dueDate >= :todayDate AND ni.dueDate < :toDate)')
+      ->leftJoin('\ControleOnline\Entity\Invoice', 'ni', 'WITH', '(ni.id = oin.invoice AND ni.dueDate >= :todayDate AND ni.dueDate < :toDate)')
       ->where('i.paymentMode = 0')
       ->having('COUNT(ni.id) = 0')
       ->andWhere("o.orderType = 'purchase'")
@@ -160,7 +160,7 @@ class CompanyExpenseInvoiceCommand extends Command
 
       $baseInvoice = $expense->getOneInvoice();
 
-      if ($baseInvoice instanceof PayInvoice) {
+      if ($baseInvoice instanceof Invoice) {
         $currentDuedate = new \DateTime(
           date(sprintf('Y-m-%s 00:00:00', $baseInvoice->getDuedate()->format('d')))
         );

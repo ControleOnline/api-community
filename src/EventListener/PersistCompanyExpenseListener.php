@@ -9,7 +9,7 @@ use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\Status;
 
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\ReceiveInvoice;
+use ControleOnline\Entity\Invoice;
 use ControleOnline\Entity\SalesOrderInvoice;
 
 class PersistCompanyExpenseListener
@@ -35,7 +35,7 @@ class PersistCompanyExpenseListener
 
     // create first payment
 
-    $firstInvoice = new ReceiveInvoice();
+    $firstInvoice = new Invoice();
     $firstInvoice->setPrice   ($companyExpense->getAmount());
     $firstInvoice->setDueDate ($companyExpense->getDuedate());
     $firstInvoice->setStatus  ($istatus);
@@ -68,7 +68,7 @@ class PersistCompanyExpenseListener
       // create invoices
 
       for ($p = 2; $p <= $companyExpense->getParcels(); $p++) {
-        $invoice = new ReceiveInvoice();
+        $invoice = new Invoice();
         $invoice->setPrice   ($amount);
         $invoice->setDueDate ((clone $duedate));
         $invoice->setStatus  ($istatus);

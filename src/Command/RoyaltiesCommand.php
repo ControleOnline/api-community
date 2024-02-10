@@ -14,7 +14,7 @@ use App\Service\MauticService;
 use App\Service\EmailService;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Order;
-use ControleOnline\Entity\ReceiveInvoice;
+use ControleOnline\Entity\Invoice;
 use ControleOnline\Entity\SalesOrder;
 use ControleOnline\Entity\PurchasingOrder;
 use ControleOnline\Entity\SalesOrderInvoice;
@@ -159,7 +159,7 @@ class RoyaltiesCommand extends Command
       ->leftJoin('\ControleOnline\Entity\SalesOrder', 'CO', 'WITH', 'CO.mainOrder = O.id AND CO.orderType =:orderType')
       ->innerJoin('\ControleOnline\Entity\PeopleFranchisee', 'PS', 'WITH', 'PS.franchisee = O.provider')
       ->innerJoin('\ControleOnline\Entity\SalesOrderInvoice', 'SI', 'WITH', 'SI.order = O.id')
-      ->innerJoin('\ControleOnline\Entity\ReceiveInvoice', 'I', 'WITH', 'I.id = SI.invoice')
+      ->innerJoin('\ControleOnline\Entity\Invoice', 'I', 'WITH', 'I.id = SI.invoice')
       ->where('O.status =:status')
       ->andWhere('I.status =:istatus')
       ->andWhere('CO.id IS NULL')

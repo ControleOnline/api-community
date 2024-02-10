@@ -90,7 +90,7 @@ class UpdateQuotationAddTaxAction
     /**
      * Verify if invoice is paid or has billet
      *
-     * @param  \ControleOnline\Entity\ReceiveInvoice $invoice
+     * @param  \ControleOnline\Entity\Invoice $invoice
      * @param  \ControleOnline\Entity\SalesOrder     $order
      * @return boolean
      */
@@ -111,7 +111,7 @@ class UpdateQuotationAddTaxAction
         if (!in_array($order->getStatus()->getStatus(), [
             'automatic analysis', 'analysis', 'waiting client invoice tax', 'quote', 'canceled', 'expired'
         ])) {
-            $newInvoice   = new \ControleOnline\Entity\ReceiveInvoice();
+            $newInvoice   = new \ControleOnline\Entity\Invoice();
             $newInvoice->setPrice($value);
             $newInvoice->setDueDate(\DateTime::createFromFormat('Y-m-d', date('Y-m-d', strtotime(' +2 Weekdays'))));
             $newInvoice->setStatus(
@@ -139,7 +139,7 @@ class UpdateQuotationAddTaxAction
         $order   = $quotation->getOrder();
 
         /**
-         * @var \ControleOnline\Entity\ReceiveInvoice $invoice
+         * @var \ControleOnline\Entity\Invoice $invoice
          */
         $invoice = $order->getInvoice()->first() ? $order->getInvoice()->first()->getInvoice() : null;
         if (count($order->getInvoice()) == 1) {
@@ -369,7 +369,7 @@ class UpdateQuotationAddTaxAction
 
     /**
      *
-     * @param  \ControleOnline\Entity\ReceiveInvoice $invoice
+     * @param  \ControleOnline\Entity\Invoice $invoice
      * @param  \ControleOnline\Entity\SalesOrder     $order
      * @return boolean
      */

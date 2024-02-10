@@ -81,7 +81,7 @@ class RemoveInvoiceTaxAction
         /*
         // create invoice
 
-        $invoice = $data instanceof SalesOrder ? (new ReceiveInvoice) : (new PayInvoice);
+        $invoice = $data instanceof SalesOrder ? (new Invoice) : (new Invoice);
 
         $invoice->setPrice  ($payload['price']);
         $invoice->setDueDate(\DateTime::createFromFormat('Y-m-d', $payload['dueDate']));

@@ -29,21 +29,21 @@ class _TemplateViewerController extends AbstractController
                  * @var \ControleOnline\Entity\SalesOrder
                  */
                 $salesOrder     = $manager->getRepository(SalesOrder::class)->find(243);
-                $receiveInvoice = $salesOrder->getInvoice()->first() ? $salesOrder->getInvoice()->first()->getInvoice() : null;
+                $Invoice = $salesOrder->getInvoice()->first() ? $salesOrder->getInvoice()->first()->getInvoice() : null;
                 $invoiceNumber  = null;
                 $invoiceOrders  = [];
 
-                if ($receiveInvoice != null && $receiveInvoice->getServiceInvoiceTax()->first()) {
-                    if ($receiveInvoice->getServiceInvoiceTax()->first())
-                        $invoiceNumber = $receiveInvoice->getServiceInvoiceTax()->first()
+                if ($Invoice != null && $Invoice->getServiceInvoiceTax()->first()) {
+                    if ($Invoice->getServiceInvoiceTax()->first())
+                        $invoiceNumber = $Invoice->getServiceInvoiceTax()->first()
                             ->getServiceInvoiceTax()->getInvoiceNumber();
                 }
 
-                if ($receiveInvoice != null) {
+                if ($Invoice != null) {
                     /**
                      * @var \ControleOnline\Entity\SalesOrderInvoice $orderInvoice
                      */
-                    foreach ($receiveInvoice->getOrder() as $orderInvoice) {
+                    foreach ($Invoice->getOrder() as $orderInvoice) {
                         $order = $orderInvoice->getOrder();
 
                         $invoiceOrders[] = [
@@ -60,10 +60,10 @@ class _TemplateViewerController extends AbstractController
                     'api_domain'      => 'https://'.$_SERVER['HTTP_HOST'],
                     'app_domain'      => 'https://cotafacil.freteclick.com.br',
                     'order_id'        => $salesOrder->getId(),
-                    'invoice_id'      => $receiveInvoice != null ? $receiveInvoice->getId() : 0,
+                    'invoice_id'      => $Invoice != null ? $Invoice->getId() : 0,
                     'invoice_number'  => $invoiceNumber,
-                    'invoice_price'   => $receiveInvoice != null ? 'R$' . number_format($receiveInvoice->getPrice(), 2, ',', '.') : 0,
-                    'invoice_duedate' => $receiveInvoice != null ? $receiveInvoice->getDueDate()->format('d/m/Y') : '',
+                    'invoice_price'   => $Invoice != null ? 'R$' . number_format($Invoice->getPrice(), 2, ',', '.') : 0,
+                    'invoice_duedate' => $Invoice != null ? $Invoice->getDueDate()->format('d/m/Y') : '',
                     'invoice_orders'  => $invoiceOrders,
                 ];
             break;
