@@ -21,6 +21,7 @@
         "controleonline/logistic": "dev-master",
         "controleonline/tasks": "dev-master",
         "controleonline/users": "dev-master",
+        "controleonline/legacy": "dev-master",
         "ctodobom/api-inter": "dev-master",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.4",
@@ -145,7 +146,8 @@
                 "controleonline/queue",
                 "controleonline/quote",
                 "controleonline/tasks",
-                "controleonline/users"
+                "controleonline/users",
+                "controleonline/legacy"
             ]
         },
         "symfony": {

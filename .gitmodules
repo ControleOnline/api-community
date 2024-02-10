@@ -40,3 +40,6 @@
 [submodule "modules/controleonline/multi-tenancy"]
 	path = modules/controleonline/multi-tenancy
 	url = https://github.com/ControleOnline/api-platform-multi-tenancy.git
+[submodule "modules/controleonline/legacy"]
+	path = modules/controleonline/legacy
+	url = https://github.com/ControleOnline/api-platform-legacy.git
