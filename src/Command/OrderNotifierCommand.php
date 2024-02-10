@@ -37,7 +37,7 @@ use ControleOnline\Entity\Import;
 use ControleOnline\Entity\Quotation;
 use ControleOnline\Entity\Task;
 use ControleOnline\Entity\Category;
-use ControleOnline\Entity\OrderLogistic;
+
 use ControleOnline\Entity\TaskInteration;
 use ControleOnline\Service\DatabaseSwitchService;
 
@@ -408,110 +408,6 @@ class OrderNotifierCommand extends Command
 
 
 
-  /**
-   * Cria as invoices da logística
-   */
-  private function getCreateLogisticInvoiceOrders(int $limit = 10, int $datelimit = 20): ?array
-  {
-
-    $qry = $this->em->getRepository(OrderLogistic::class)
-      ->createQueryBuilder('OL')
-      ->select()
-      ->where('OL.status IN(:status)')
-      ->andWhere('OL.purchasing_order IS NULL')
-      ->andWhere('OL.provider IS NOT NULL')
-      ->setParameters(array(
-        'status' => $this->em->getRepository(Status::class)->findBy(['realStatus' => 'closed', 'context' => 'logistic']),
-      ))
-      ->groupBy('OL.id')
-      ->setMaxResults($limit)
-      ->getQuery();
-
-
-    $OrderLogistic = $qry->getResult();
-
-
-    if (count($OrderLogistic) == 0)
-      return null;
-    else {
-      foreach ($OrderLogistic as $logistic) {
-        $order = $logistic->getOrder();
-        $orders[] = (object) [
-          'order'    => $order->getId(),
-          'carrier'  => $order->getQuote() ? $order->getQuote()->getCarrier()->getName() : '',
-          'company'  => $order->getProvider()->getName(),
-          'receiver' => $order->getClient() ? $order->getClient()->getName() : null,
-          'subject'  => 'Create logistic order',
-          'notifier' => [
-            'send' => function () use ($order) {
-              try {
-                return true;
-              } catch (\Exception $e) {
-                return false;
-              }
-            },
-          ],
-          'events'   => [
-            'onError' => function () use ($order, $logistic) {
-            },
-            'onSuccess' => function () use ($order, $logistic) {
-              try {
-
-                $logisticOrder = clone $order;
-                $this->em->detach($logisticOrder);
-                $logisticOrder->resetId();
-                $logisticOrder->setOrderType('purchase');
-                $logisticOrder->setMainOrder($order);
-                $logisticOrder->setClient($order->getProvider());
-                $logisticOrder->setPayer($order->getProvider());
-                $logisticOrder->setProvider($logistic->getProvider());
-                $logisticOrder->setPrice($logistic->getAmountPaid());
-                $logisticOrder->setParkingDate($order->getParkingDate());
-                $this->em->persist($logisticOrder);
-                $this->em->flush($logisticOrder);
-
-                $logistic->setPurchasingOrder($logisticOrder);
-                $this->em->persist($logistic);
-                $this->em->flush($logistic);
-
-
-
-                $invoice = new ReceiveInvoice();
-                $invoice->setPrice($order->getPrice());
-                $invoice->setDueDate($this->getDueDate($order->getClient()));
-                $invoice->setStatus($this->em->getRepository(Status::class)->findOneBy(['status' => ['waiting payment'], 'context' => 'invoice']));
-                $invoice->setNotified(0);
-                $invoice->setDescription('Frete');
-                $invoice->setCategory(
-                  $this->em->getRepository(Category::class)->findOneBy([
-                    'context'  => 'expense',
-                    'name'    => 'Frete',
-                    'company' => [$order->getProvider(), $order->getClient()]
-                  ])
-                );
-
-                $orderInvoice = new SalesOrderInvoice();
-                $orderInvoice->setInvoice($invoice);
-                $orderInvoice->setOrder($logisticOrder);
-                $orderInvoice->setRealPrice($logisticOrder->getPrice());
-
-                $invoice->addOrder($orderInvoice);
-
-                $this->em->persist($invoice);
-                $this->em->flush($invoice);
-
-                $this->em->persist($orderInvoice);
-                $this->em->flush($orderInvoice);
-              } catch (\Exception $e) {
-                echo $e->getMessage();
-              }
-            },
-          ],
-        ];
-      }
-    }
-    return $orders;
-  }
 
 
 

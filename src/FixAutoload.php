@@ -4,8 +4,6 @@ namespace App;
 
 class FixAutoload
 {
-
-
     private static function getPaths()
     {
         return [
@@ -42,8 +40,6 @@ class FixAutoload
             unlink($path);
         }
     }
-
-
 
     private static function replaceInComposerFiles()
     {
