@@ -21,6 +21,7 @@ class GetDefaultCompanyAction
   private $em = null;
   private $roles;
   private $domain;
+  private $company;
 
   public function __construct(Security $security, EntityManagerInterface $entityManager, PeopleRoleService $roles)
   {
@@ -35,38 +36,40 @@ class GetDefaultCompanyAction
      * @var string $domain
      */
     $domain = $request->get('app-domain', null);
-    $this->domain = $this->getDomain($domain);
 
     try {
 
+      $this->domain = $this->getDomain($domain);
+      $this->getCompany();
+      
       $defaultCompany = [];
       $configs = [];
       $allConfigs = [];
       $user = $this->security->getUser();
-      $company = $this->getCompany();
-      $permissions = $user ? $this->roles->getAllRolesByCompany($user->getPeople(), $company->getPeople()) : ['guest'];
 
-      if ($company) {
+      $permissions = $user ? $this->roles->getAllRolesByCompany($user->getPeople(), $this->company->getPeople()) : ['guest'];
+
+      if ($this->company) {
         $allConfigs = $this->em->getRepository(Config::class)->findBy([
-          'people'      => $company->getPeople()->getId(),
+          'people'      =>  $this->company->getPeople()->getId(),
           'visibility'  => 'public'
         ]);
 
         foreach ($allConfigs as $config) {
           $configs[$config->getConfigKey()] = $config->getConfigValue();
         }
-        
+
         $defaultCompany = [
-          'id'         => $company->getPeople()->getId(),
-          'alias'      => $company->getPeople()->getAlias(),
+          'id'         => $this->company->getPeople()->getId(),
+          'alias'      => $this->company->getPeople()->getAlias(),
           'configs'    => $configs,
-          'domainType' => $company->getDomainType(),
+          'domainType' => $this->company->getDomainType(),
           'permissions' => $permissions,
           'theme'       => $this->getTheme(),
-          'logo'       => $company->getPeople()->getFile() ? [
-            'id'     => $company->getPeople()->getFile()->getId(),
+          'logo'       => $this->company->getPeople()->getFile() ? [
+            'id'     => $this->company->getPeople()->getFile()->getId(),
             'domain' => $_SERVER['HTTP_HOST'],
-            'url'    => '/files/download/' . $company->getPeople()->getFile()->getId()
+            'url'    => '/files/download/' . $this->company->getPeople()->getFile()->getId()
           ] : null,
         ];
       }
@@ -91,21 +94,20 @@ class GetDefaultCompanyAction
       ]);
     }
   }
-  private function getCompany(): ?PeopleDomain
+  private function getCompany()
   {
-    $company = $this->em->getRepository(PeopleDomain::class)->findOneBy(['domain' => $this->domain]);
-    return $company;
+    $this->company = $this->em->getRepository(PeopleDomain::class)->findOneBy(['domain' => $this->domain]);
   }
 
   private function getTheme()
   {
     return [
-      'theme' =>  $this->domain->getTheme()->getTheme(),
-      'colors' =>  $this->domain->getTheme()->getColors(),
-      'background'  =>  $this->domain->getTheme()->getBackground() ? [
-        'id'     =>  $this->domain->getTheme()->getBackground()->getId(),
+      'theme' =>  $this->company->getTheme()->getTheme(),
+      'colors' =>  $this->company->getTheme()->getColors(),
+      'background'  =>  $this->company->getTheme()->getBackground() ? [
+        'id'     =>  $this->company->getTheme()->getBackground(),
         'domain' => $_SERVER['HTTP_HOST'],
-        'url'    => '/files/download/' .  $this->domain->getTheme()->getBackground()->getId()
+        'url'    => '/files/download/' .  $this->company->getTheme()->getBackground()
       ] : null,
     ];
   }
