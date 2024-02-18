@@ -35,6 +35,7 @@ use ControleOnline\Entity\Provider;
 use ControleOnline\Entity\CompanyExpense;
 use ControleOnline\Entity\Category;
 use ControleOnline\Entity\Hardware;
+use ControleOnline\Entity\Orders;
 use ControleOnline\Entity\PurchasingOrderInvoice;
 use App\Service\PeopleRoleService;
 
@@ -90,6 +91,12 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
       case Hardware::class:
 
         $this->hardware($queryBuilder, $resourceClass, $applyTo, $rootAlias);
+
+        break;
+
+      case Orders::class:
+
+        $this->orders($queryBuilder, $resourceClass, $applyTo, $rootAlias);
 
         break;
 
@@ -366,7 +373,22 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
     return empty($this->request->query->get('myCompany', null)) === false;
   }
 
+  private function orders(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
+  {
+    $companies   = $this->getMyCompanies();
+    $queryBuilder->andWhere(sprintf('%s.client IN(:companies) OR %s.provider IN(:companies)', $rootAlias, $rootAlias));
+    $queryBuilder->setParameter('companies', $companies);
 
+    if ($provider = $this->request->query->get('provider', null)) {
+      $queryBuilder->andWhere(sprintf('%s.provider IN(:provider)', $rootAlias));
+      $queryBuilder->setParameter('provider', preg_replace("/[^0-9]/", "", $provider));
+    }
+
+    if ($client = $this->request->query->get('client', null)) {
+      $queryBuilder->andWhere(sprintf('%s.client IN(:client)', $rootAlias));
+      $queryBuilder->setParameter('client', preg_replace("/[^0-9]/", "", $client));
+    }
+  }
   private function hardware(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
   {
     if ($company = $this->request->query->get('myCompany', null)) {
