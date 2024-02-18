@@ -20,6 +20,7 @@ api_platform:
         xml: ["application/xml", "text/xml"]
         yaml: ["application/x-yaml"]
         csv: ["text/csv"]
+        css: ["text/css"]
         html: ["text/html"]
     mapping:
         paths:
