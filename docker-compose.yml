@@ -1,35 +1,49 @@
 version : '3.4'
 
 services:
-  fclick-api:
-    image         : rchdev/phpache-server:latest
-    container_name: fcapi-server
-    build         :
-      context: ./
-    volumes       :
-      - ./:/var/www/html/back:rw
-    restart       : "no"
-    stdin_open    : true
-    tty           : true
-    ports         :
-      - "8081:80"
-
-  database:
-    image: mysql:5.7
-    container_name: mysql57-server
-    environment:
-      - MYSQL_ROOT_PASSWORD=123456
-      - MYSQL_DATABASE=fclick-api
+  php:
+    build:
+      context: .
+      network: host
+    restart: unless-stopped
     volumes:
-      - db:/var/lib/mysql
-    ports:
-      - "3306:3306"
+      - php_socket:/var/run/php
+      - ./:/nelsys-api
+      - ./docker/php/ssl/openssl.cnf:/etc/ssl/openssl.cnf
+      - ./docker/php/php-fpm.d/www.conf:/usr/local/etc/php-fpm.d/nelsys.conf
+      - ./docker/php/conf.d/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+      - ./docker/php/conf.d/symfony.dev.ini:/usr/local/etc/php/conf.d/symfony.ini
+    # - ./docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+    networks:
+      - default
 
-  adminer:
-    image: adminer
-    restart: always
+  nginx:
+    image: nginx:1.12.1
+    tty: true
     ports:
-      - 8080:8080
+      - "80:80"
+    volumes:
+      - ./public:/nelsys-api/public
+      - ./docker/nginx/www.conf:/etc/nginx/conf.d/www.conf
+    networks:
+      - default
 
-volumes :
-  db: {}
+  node:
+    image: node
+    working_dir: /app
+    tty: true
+    extra_hosts:
+      - "nelsys-api.local:172.18.0.3"
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./front:/app
+    networks:
+      - default
+        
+volumes:
+  php_socket:
+
+networks:
+  default:
+    driver: bridge
