@@ -426,7 +426,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 
     if ($payer = $this->request->query->get('people', null)) {
       $queryBuilder->andWhere(sprintf('%s.people IN(:people)', $rootAlias));
-      $queryBuilder->setParameter('payer', preg_replace("/[^0-9]/", "", $payer));
+      $queryBuilder->setParameter('people', preg_replace("/[^0-9]/", "", $payer));
     }
   }
 }
