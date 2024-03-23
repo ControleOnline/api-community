@@ -402,7 +402,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
   private function invoice(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
   {
     $companies   = $this->getMyCompanies();
-    $queryBuilder->andWhere(sprintf('%s.payer IN(:companies) OR %s.payer IN(:companies)', $rootAlias, $rootAlias));
+    $queryBuilder->andWhere(sprintf('%s.payer IN(:companies) OR %s.receiver IN(:companies)', $rootAlias, $rootAlias));
     $queryBuilder->setParameter('companies', $companies);
 
     if ($payer = $this->request->query->get('payer', null)) {
@@ -414,5 +414,6 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
       $queryBuilder->andWhere(sprintf('%s.receiver IN(:receiver)', $rootAlias));
       $queryBuilder->setParameter('receiver', preg_replace("/[^0-9]/", "", $receiver));
     }
+
   }
 }
