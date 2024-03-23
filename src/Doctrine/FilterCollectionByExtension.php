@@ -34,10 +34,12 @@ use ControleOnline\Entity\PeopleDomain;
 use ControleOnline\Entity\Provider;
 use ControleOnline\Entity\CompanyExpense;
 use ControleOnline\Entity\Category;
-use ControleOnline\Entity\Hardware;
 use ControleOnline\Entity\Orders;
 use ControleOnline\Entity\PurchasingOrderInvoice;
 use App\Service\PeopleRoleService;
+use ControleOnline\Entity\Display;
+use ControleOnline\Entity\PaymentType;
+use ControleOnline\Entity\Wallet;
 
 final class FilterCollectionByExtension
 implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
@@ -84,20 +86,20 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
     $rootAlias = $queryBuilder->getRootAliases()[0];
 
     switch ($resourceClass) {
+      case Wallet::class:
+        $this->checkPeople($queryBuilder, $resourceClass, $applyTo, $rootAlias);
+        break;
+      case PaymentType::class:
+        $this->checkPeople($queryBuilder, $resourceClass, $applyTo, $rootAlias);
+        break;
       case Invoice::class:
         $this->invoice($queryBuilder, $resourceClass, $applyTo, $rootAlias);
         break;
-
-      case Hardware::class:
-
-        $this->hardware($queryBuilder, $resourceClass, $applyTo, $rootAlias);
-
+      case Display::class:
+        $this->display($queryBuilder, $resourceClass, $applyTo, $rootAlias);
         break;
-
       case Orders::class:
-
         $this->orders($queryBuilder, $resourceClass, $applyTo, $rootAlias);
-
         break;
 
       case PurchasingOrder::class:
@@ -389,7 +391,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
       $queryBuilder->setParameter('client', preg_replace("/[^0-9]/", "", $client));
     }
   }
-  private function hardware(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
+  private function display(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
   {
     if ($company = $this->request->query->get('myCompany', null)) {
       $queryBuilder->andWhere(sprintf('%s.company IN(:company)', $rootAlias));
@@ -414,6 +416,17 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
       $queryBuilder->andWhere(sprintf('%s.receiver IN(:receiver)', $rootAlias));
       $queryBuilder->setParameter('receiver', preg_replace("/[^0-9]/", "", $receiver));
     }
+  }
 
+  private function checkPeople(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
+  {
+    $companies   = $this->getMyCompanies();
+    $queryBuilder->andWhere(sprintf('%s.people IN(:companies)', $rootAlias, $rootAlias));
+    $queryBuilder->setParameter('companies', $companies);
+
+    if ($payer = $this->request->query->get('people', null)) {
+      $queryBuilder->andWhere(sprintf('%s.people IN(:people)', $rootAlias));
+      $queryBuilder->setParameter('payer', preg_replace("/[^0-9]/", "", $payer));
+    }
   }
 }
