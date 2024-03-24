@@ -822,7 +822,7 @@ class ContractDocument
         /*
         // get owners
 
-        $owners = $company->getPeopleEmployee()->filter(function ($peopleEmployee) {
+        $owners = $company->getCompany()->filter(function ($peopleEmployee) {
             return $peopleEmployee->getPeopleRole() == 'owner';
         });;
 
@@ -830,7 +830,7 @@ class ContractDocument
             $ownersContact = [];
 
             foreach ($owners as $owner) {
-                $ownerContact = $this->getContactByPeople($owner->getEmployee());
+                $ownerContact = $this->getContactByPeople($owner->getPeople());
 
                 // name
 
@@ -839,7 +839,7 @@ class ContractDocument
                 // particulars
 
                 $particulars = $this->manager->getRepository(Particulars::class)
-                    ->getParticularsByPeopleAndContext($owner->getEmployee(), 'contract_document');
+                    ->getParticularsByPeopleAndContext($owner->getPeople(), 'contract_document');
                 if (!empty($particulars)) {
                     $particularsValues = [];
 

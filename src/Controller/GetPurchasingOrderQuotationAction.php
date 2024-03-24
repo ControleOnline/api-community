@@ -165,8 +165,8 @@ class GetPurchasingOrderQuotationAction
     {
         $people = $data->getRetrievePeople();
         if (!$people || $people->getEmail()->count() == 0) {
-            $employee = $data->getClient()->getPeopleEmployee();
-            $people = $employee->count() > 0 ? $employee->first()->getEmployee() : null;
+            $employee = $data->getClient()->getCompany();
+            $people = $employee->count() > 0 ? $employee->first()->getPeople() : null;
         }
 
         if (!$people || $people->getEmail()->count() == 0) {

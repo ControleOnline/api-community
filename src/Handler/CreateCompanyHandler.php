@@ -94,7 +94,7 @@ class CreateCompanyHandler implements MessageHandlerInterface
 
       // verify if company has employees
 
-      if ($cpeople->getPeopleEmployee()->count() > 0)
+      if ($cpeople->getCompany()->count() > 0)
         throw new \Exception('This company already exists');
 
       // if company exists but it doesnt have any employees

@@ -226,9 +226,9 @@ class UpdateClientAction
 
     private function contactBelongsToClient(People $contact): bool
     {
-        $isMyContact = $this->client->getPeopleEmployee()->exists(
+        $isMyContact = $this->client->getCompany()->exists(
             function ($key, $element) use ($contact) {
-                return $element->getEmployee() === $contact;
+                return $element->getPeople() === $contact;
             }
         );
 

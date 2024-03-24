@@ -240,9 +240,9 @@ class GetClientCompanyAction
     $contact = null;
 
     if ($client->getPeopleType() == 'J') {
-      if (!$client->getPeopleEmployee()->isEmpty()) {
-        $employee = $client->getPeopleEmployee()->first();
-        $contact  = $this->getContact($employee->getEmployee());
+      if (!$client->getCompany()->isEmpty()) {
+        $employee = $client->getCompany()->first();
+        $contact  = $this->getContact($employee->getPeople());
       }
     }
     else {

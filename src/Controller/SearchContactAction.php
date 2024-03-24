@@ -174,7 +174,7 @@ class SearchContactAction
                     'email' => $emailText,
                     'phone' => $phoneText,
                 ] : null)
-            ] : $this->getEmployeesContact($people),
+            ] : $this->getPeoplesContact($people),
         ];
     }
 
@@ -223,7 +223,7 @@ class SearchContactAction
         ];
     }
 
-    private function getEmployeesContact(People $people): array
+    private function getPeoplesContact(People $people): array
     {
         $employees = [];
 
@@ -232,14 +232,14 @@ class SearchContactAction
 
         // if company has employees
 
-        if ($people->getPeopleEmployee()->count() > 0) {
+        if ($people->getCompany()->count() > 0) {
 
-            foreach ($people->getPeopleEmployee() as $peopleEmployee) {
+            foreach ($people->getCompany() as $peopleEmployee) {
                 // TODO: Corrigir o cadastro do cliente e deixar o contato ativo!
                 //  if ($peopleEmployee->getEnabled() == false)
                 //      continue;
 
-                $employee = $peopleEmployee->getEmployee();
+                $employee = $peopleEmployee->getPeople();
                 $contact  = $this->getContact($employee);
 
                 if (is_array($contact))

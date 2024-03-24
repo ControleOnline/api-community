@@ -74,10 +74,10 @@ class VerifyPeopleStatusAction extends AbstractController
 
                   // is it super admin?
 
-                  // $isSuper = $mainCompany->getPeopleEmployee()
+                  // $isSuper = $mainCompany->getCompany()
                   //     ->exists(
                   //         function ($key, PeopleEmployee $peopleEmployee) use ($data) {
-                  //             return $peopleEmployee->getEmployee() === $data;
+                  //             return $peopleEmployee->getPeople() === $data;
                   //         }
                   //     );
                   // if ($isSuper) {

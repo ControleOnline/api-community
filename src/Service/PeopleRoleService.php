@@ -89,10 +89,10 @@ class PeopleRoleService
     $mainCompany = $this->getMainCompany();
 
     if ($company->getId() == $mainCompany->getId()) {
-      $isSuper = $mainCompany->getPeopleEmployee()
+      $isSuper = $mainCompany->getCompany()
         ->exists(
           function ($key, PeopleEmployee $peopleEmployee) use ($people) {
-            return $peopleEmployee->getEmployee()->getId() === $people->getId();
+            return $peopleEmployee->getPeople()->getId() === $people->getId();
           }
         );
 
@@ -105,8 +105,8 @@ class PeopleRoleService
     $isFranchisee = $mainCompany->getPeopleFranchisor()
       ->exists(
         function ($key, PeopleFranchisee $peopleFranchisee) use ($people, $company) {
-          foreach ($peopleFranchisee->getFranchisee()->getPeopleEmployee() as $peopleEmployee) {
-            if ($peopleEmployee->getCompany()->getId() == $company->getId() &&  $peopleEmployee->getEmployee()->getId() === $people->getId()) {
+          foreach ($peopleFranchisee->getFranchisee()->getCompany() as $peopleEmployee) {
+            if ($peopleEmployee->getCompany()->getId() == $company->getId() &&  $peopleEmployee->getPeople()->getId() === $people->getId()) {
               return  true;
             }
           }
@@ -118,10 +118,10 @@ class PeopleRoleService
       $peopleRole[] = 'admin';
     }
 
-    $isClient = $company->getPeopleEmployee()
+    $isClient = $company->getCompany()
       ->exists(
         function ($key, PeopleEmployee $peopleEmployee) use ($people) {
-          return $peopleEmployee->getEmployee()->getId() === $people->getId();
+          return $peopleEmployee->getPeople()->getId() === $people->getId();
         }
       );
 

@@ -94,8 +94,8 @@ class PeopleVoter extends Voter
 
         // allowed if is my employee
 
-        if (!$user->getPeople()->getPeopleEmployee()->isEmpty()) {
-            $isMyEmployee = $user->getPeople()->getPeopleEmployee()->exists(
+        if (!$user->getPeople()->getCompany()->isEmpty()) {
+            $isMyEmployee = $user->getPeople()->getCompany()->exists(
                 function ($key, $element) use ($people) {
                     return $element->getCompany() === $people;
                 }

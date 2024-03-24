@@ -71,7 +71,7 @@ class AdminPersonEmployeesAction
             $methods = [
                 Request::METHOD_PUT    => 'createEmployee',
                 Request::METHOD_DELETE => 'deleteEmployee',
-                Request::METHOD_GET    => 'getEmployees',
+                Request::METHOD_GET    => 'getPeoples',
             ];
 
             $payload   = json_decode($this->request->getContent(), true);
@@ -207,18 +207,18 @@ class AdminPersonEmployeesAction
         }
     }
 
-    private function getEmployees(Person $person, ?array $payload = null): array
+    private function getPeoples(Person $person, ?array $payload = null): array
     {
         $employees = [];
 
-        foreach ($person->getPeopleEmployee() as $peopleEmployee) {
-            $email = $peopleEmployee->getEmployee()->getEmail()->first();
+        foreach ($person->getCompany() as $peopleEmployee) {
+            $email = $peopleEmployee->getPeople()->getEmail()->first();
 
             $employees[] = [
                 'people_company_id' => $peopleEmployee->getId(),
-                'id'    => $peopleEmployee->getEmployee()->getId(),
-                'name'  => $peopleEmployee->getEmployee()->getName(),
-                'alias' => $peopleEmployee->getEmployee()->getAlias(),
+                'id'    => $peopleEmployee->getPeople()->getId(),
+                'name'  => $peopleEmployee->getPeople()->getName(),
+                'alias' => $peopleEmployee->getPeople()->getAlias(),
                 'email' => $email !== false ? $email->getEmail() : null,
             ];
         }

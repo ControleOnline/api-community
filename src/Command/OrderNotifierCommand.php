@@ -1789,7 +1789,7 @@ class OrderNotifierCommand extends Command
               try {
                 $company  = $order->getClient();
 
-                $emailTo  = $company->getPeopleEmployee()[0]->getEmployee()->getEmail()[0]->getEmail();
+                $emailTo  = $company->getCompany()[0]->getPeople()->getEmail()[0]->getEmail();
                 $twigFile = 'email/invoice.html.twig';
 
                 // if invoice billing is outdated change twig template
@@ -2824,7 +2824,7 @@ class OrderNotifierCommand extends Command
               try {
                 $params   = [];
                 $company  = $order->getClient();
-                $emailTo  = $company->getPeopleEmployee()[0]->getEmployee()->getEmail()[0]->getEmail();
+                $emailTo  = $company->getCompany()[0]->getPeople()->getEmail()[0]->getEmail();
                 $twigFile = 'email/invoice-tax-instructions.html.twig';
 
                 if ($company === null)
@@ -2983,17 +2983,17 @@ class OrderNotifierCommand extends Command
                 $params   = [];
                 $carrier  = $order->getQuote()->getCarrier();
 
-                if (count($carrier->getPeopleEmployee()) == 0) {
+                if (count($carrier->getCompany()) == 0) {
                   throw new \Exception('Company employee not found', 102);
                   return false;
                 }
 
-                if (count($carrier->getPeopleEmployee()[0]->getEmployee()->getEmail()) == 0) {
+                if (count($carrier->getCompany()[0]->getPeople()->getEmail()) == 0) {
                   throw new \Exception('Employee email not found', 102);
                   return false;
                 }
 
-                //$emailTo  = $company->getPeopleEmployee()[0]->getEmployee()->getEmail()[0]->getEmail();
+                //$emailTo  = $company->getCompany()[0]->getPeople()->getEmail()[0]->getEmail();
                 $emailTo = [];
 
                 foreach ($carrier->getEmail() as $email) {
@@ -3002,8 +3002,8 @@ class OrderNotifierCommand extends Command
                   }
                 }
 
-                foreach ($carrier->getPeopleEmployee() as $employee) {
-                  foreach ($employee->getEmployee()->getEmail() as $email) {
+                foreach ($carrier->getCompany() as $employee) {
+                  foreach ($employee->getPeople()->getEmail() as $email) {
                     if (in_array('retrieve', (array)$email->getTypes()) || empty((array)$email->getTypes())) {
                       $emailTo[] = $email->getEmail();
                     }
