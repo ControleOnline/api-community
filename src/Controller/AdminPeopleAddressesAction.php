@@ -6,12 +6,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
-
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\Email;
-use ControleOnline\Entity\People;
+use ControleOnline\Entity\Address;
+use App\Service\AddressService;
 
-class AdminPeopleEmailsAction
+class AdminPeopleAddressesAction
 {
     /**
      * Entity Manager
@@ -28,6 +27,13 @@ class AdminPeopleEmailsAction
     private $request  = null;
 
     /**
+     * Address Service
+     *
+     * @var \App\Service\AddressService
+     */
+    private $address   = null;
+
+    /**
      * Security
      *
      * @var Security
@@ -41,9 +47,10 @@ class AdminPeopleEmailsAction
      */
     private $currentUser = null;
 
-    public function __construct(EntityManagerInterface $manager, Security $security)
+    public function __construct(EntityManagerInterface $manager, AddressService $address, Security $security)
     {
         $this->manager     = $manager;
+        $this->address     = $address;
         $this->security    = $security;
         $this->currentUser = $security->getUser();
     }
@@ -55,9 +62,9 @@ class AdminPeopleEmailsAction
         try {
 
             $methods = [
-                Request::METHOD_PUT    => 'createEmail',
-                Request::METHOD_DELETE => 'deleteEmail',
-                Request::METHOD_GET    => 'getEmails'  ,
+                Request::METHOD_PUT    => 'createAddress',
+                Request::METHOD_DELETE => 'deleteAddress',
+                Request::METHOD_GET    => 'getAddress'   ,
             ];
 
             $payload   = json_decode($this->request->getContent(), true);
@@ -87,39 +94,24 @@ class AdminPeopleEmailsAction
         }
     }
 
-    private function createEmail(People $people, array $payload): ?array
+    private function createAddress(People $people, array $payload): ?array
     {
         try {
             $this->manager->getConnection()->beginTransaction();
 
-            if (!isset($payload['email']) || !filter_var($payload['email'], FILTER_VALIDATE_EMAIL)) {
-                throw new \InvalidArgumentException('Email value is not valid');
-            }
-
             $company = $this->manager->getRepository(People::class)->find($people->getId());
-            $email   = $this->manager->getRepository(Email::class)->findOneBy(['email' => $payload['email']]);
+            $address = $this->address->createFor($company, $payload);
 
-            if ($email instanceof Email) {
-                if ($email->getPeople() instanceof People) {
-                    throw new \InvalidArgumentException('O email já está em uso');
-                }
+            if ($address === null)
+                throw new \InvalidArgumentException('Ocorreu um erro ao tentar cadastrar o endereço');
 
-                $email->setPeople($company);
-            }
-            else {
-                $email = new Email();
-                $email->setEmail    ($payload['email']);
-                $email->setConfirmed(false);
-                $email->setPeople   ($company);
-            }
-
-            $this->manager->persist($email);
+            $this->manager->persist($address);
 
             $this->manager->flush();
             $this->manager->getConnection()->commit();
 
             return [
-                'id' => $email->getId()
+                'id' => $address->getId()
             ];
 
         } catch (\Exception $e) {
@@ -130,24 +122,26 @@ class AdminPeopleEmailsAction
         }
     }
 
-    private function deleteEmail(People $people, array $payload): bool
+    private function deleteAddress(People $people, array $payload): bool
     {
         try {
             $this->manager->getConnection()->beginTransaction();
 
             if (!isset($payload['id'])) {
-                throw new \InvalidArgumentException('Document id is not defined');
+                throw new \InvalidArgumentException('Address id is not defined');
             }
 
-            $company = $this->manager->getRepository(People::class)->find($people->getId());
-            
+            $company = $this->manager->getRepository(People::class)->find($people->getId());                        
 
-            $email = $this->manager->getRepository(Email::class)->findOneBy(['id' => $payload['id'], 'people' => $company]);
-            if (!$email instanceof Email) {
-                throw new \InvalidArgumentException('People email was not found');
+            $address = $this->manager->getRepository(Address::class)->findOneBy(['id' => $payload['id'], 'people' => $company]);
+
+            if (!$address instanceof Address) {
+                throw new \InvalidArgumentException('People address was not found');
             }
 
-            $this->manager->remove($email);
+            $address->setPeople(null);
+
+            $this->manager->persist($address);
 
             $this->manager->flush();
             $this->manager->getConnection()->commit();
@@ -162,17 +156,14 @@ class AdminPeopleEmailsAction
         }
     }
 
-    private function getEmails(People $people, ?array $payload = null): array
+    private function getAddress(People $people, ?array $payload = null): array
     {
-        $members = [];
-        $company = $this->manager->getRepository(People::class )->find($people->getId());
-        $emails  = $this->manager->getRepository(Email::class)->findBy(['people' => $company]);
+        $members   = [];
+        $company   = $this->manager->getRepository(People::class )->find($people->getId());
+        $addresses = $this->manager->getRepository(Address::class)->findBy(['people' => $company]);
 
-        foreach ($emails as $email) {
-            $members[] = [
-                'id'    => $email->getId(),
-                'email' => $email->getEmail(),
-            ];
+        foreach ($addresses as $address) {
+            $members[] = $this->address->addressToArray($address);
         }
 
         return [

@@ -8,11 +8,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\People;
-use ControleOnline\Entity\Address;
-use App\Service\AddressService;
+use ControleOnline\Entity\Phone;
 
-class AdminPeopleAddressesAction
+
+class AdminPeoplePhonesAction
 {
     /**
      * Entity Manager
@@ -29,13 +28,6 @@ class AdminPeopleAddressesAction
     private $request  = null;
 
     /**
-     * Address Service
-     *
-     * @var \App\Service\AddressService
-     */
-    private $address   = null;
-
-    /**
      * Security
      *
      * @var Security
@@ -49,10 +41,9 @@ class AdminPeopleAddressesAction
      */
     private $currentUser = null;
 
-    public function __construct(EntityManagerInterface $manager, AddressService $address, Security $security)
+    public function __construct(EntityManagerInterface $manager, Security $security)
     {
         $this->manager     = $manager;
-        $this->address     = $address;
         $this->security    = $security;
         $this->currentUser = $security->getUser();
     }
@@ -64,9 +55,9 @@ class AdminPeopleAddressesAction
         try {
 
             $methods = [
-                Request::METHOD_PUT    => 'createAddress',
-                Request::METHOD_DELETE => 'deleteAddress',
-                Request::METHOD_GET    => 'getAddress'   ,
+                Request::METHOD_PUT    => 'createPhone',
+                Request::METHOD_DELETE => 'deletePhone',
+                Request::METHOD_GET    => 'getPhones'  ,
             ];
 
             $payload   = json_decode($this->request->getContent(), true);
@@ -96,24 +87,36 @@ class AdminPeopleAddressesAction
         }
     }
 
-    private function createAddress(People $people, array $payload): ?array
+    private function createPhone(People $people, array $payload): ?array
     {
         try {
             $this->manager->getConnection()->beginTransaction();
 
             $company = $this->manager->getRepository(People::class)->find($people->getId());
-            $address = $this->address->createFor($company, $payload);
+            $phone   = $this->manager->getRepository(Phone::class)->findOneBy(['ddd' => $payload['ddd'], 'phone' => $payload['phone']]);
 
-            if ($address === null)
-                throw new \InvalidArgumentException('Ocorreu um erro ao tentar cadastrar o endereço');
+            if ($phone instanceof Phone) {
+                if ($phone->getPeople() instanceof People) {
+                    throw new \InvalidArgumentException('O telefone já esta em uso');
+                }
 
-            $this->manager->persist($address);
+                $phone->setPeople($company);
+            }
+            else {
+                $phone = new Phone();
+                $phone->setDdd      ($payload['ddd']);
+                $phone->setPhone    ($payload['phone']);
+                $phone->setConfirmed(false);
+                $phone->setPeople   ($company);
+            }
+
+            $this->manager->persist($phone);
 
             $this->manager->flush();
             $this->manager->getConnection()->commit();
 
             return [
-                'id' => $address->getId()
+                'id' => $phone->getId()
             ];
 
         } catch (\Exception $e) {
@@ -124,26 +127,23 @@ class AdminPeopleAddressesAction
         }
     }
 
-    private function deleteAddress(People $people, array $payload): bool
+    private function deletePhone(People $people, array $payload): bool
     {
         try {
             $this->manager->getConnection()->beginTransaction();
 
             if (!isset($payload['id'])) {
-                throw new \InvalidArgumentException('Address id is not defined');
+                throw new \InvalidArgumentException('Document id is not defined');
             }
 
-            $company = $this->manager->getRepository(People::class)->find($people->getId());                        
-
-            $address = $this->manager->getRepository(Address::class)->findOneBy(['id' => $payload['id'], 'people' => $company]);
-
-            if (!$address instanceof Address) {
-                throw new \InvalidArgumentException('People address was not found');
+            $company = $this->manager->getRepository(People::class)->find($people->getId());
+            
+            $phone = $this->manager->getRepository(Phone::class)->findOneBy(['id' => $payload['id'], 'people' => $company]);
+            if (!$phone instanceof Phone) {
+                throw new \InvalidArgumentException('People phone was not found');
             }
 
-            $address->setPeople(null);
-
-            $this->manager->persist($address);
+            $this->manager->remove($phone);
 
             $this->manager->flush();
             $this->manager->getConnection()->commit();
@@ -158,14 +158,18 @@ class AdminPeopleAddressesAction
         }
     }
 
-    private function getAddress(People $people, ?array $payload = null): array
+    private function getPhones(People $people, ?array $payload = null): array
     {
-        $members   = [];
-        $company   = $this->manager->getRepository(People::class )->find($people->getId());
-        $addresses = $this->manager->getRepository(Address::class)->findBy(['people' => $company]);
+        $members = [];
+        $company = $this->manager->getRepository(People::class )->find($people->getId());
+        $phones  = $this->manager->getRepository(Phone::class)->findBy(['people' => $company]);
 
-        foreach ($addresses as $address) {
-            $members[] = $this->address->addressToArray($address);
+        foreach ($phones as $phone) {
+            $members[] = [
+                'id'    => $phone->getId(),
+                'ddd'   => $phone->getDdd(),
+                'phone' => $phone->getPhone(),
+            ];
         }
 
         return [

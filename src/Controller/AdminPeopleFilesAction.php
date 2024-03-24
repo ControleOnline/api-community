@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Particulars;
-use ControleOnline\Entity\People;
 use ControleOnline\Entity\File as File;
 
 class AdminPeopleFilesAction

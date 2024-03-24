@@ -6,13 +6,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\Document;
-use ControleOnline\Entity\DocumentType;
-use ControleOnline\Entity\People;
+use ControleOnline\Entity\User;
 
-class AdminPeopleDocumentsAction
+class AdminPeopleUsersAction
 {
     /**
      * Entity Manager
@@ -42,11 +41,19 @@ class AdminPeopleDocumentsAction
      */
     private $currentUser = null;
 
-    public function __construct(EntityManagerInterface $manager, Security $security)
+    /**
+     * Password encoder
+     *
+     * @var UserPasswordEncoderInterface
+     */
+    private $encoder = null;
+
+    public function __construct(EntityManagerInterface $manager, Security $security, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->manager     = $manager;
         $this->security    = $security;
         $this->currentUser = $security->getUser();
+        $this->encoder     = $passwordEncoder;
     }
 
     public function __invoke(People $data, Request $request): JsonResponse
@@ -56,9 +63,9 @@ class AdminPeopleDocumentsAction
         try {
 
             $methods = [
-                Request::METHOD_PUT    => 'createDocument',
-                Request::METHOD_DELETE => 'deleteDocument',
-                Request::METHOD_GET    => 'getDocuments'  ,
+                Request::METHOD_PUT    => 'createUser',
+                Request::METHOD_DELETE => 'deleteUser',
+                Request::METHOD_GET    => 'getUsers'  ,
             ];
 
             $payload   = json_decode($this->request->getContent(), true);
@@ -88,47 +95,37 @@ class AdminPeopleDocumentsAction
         }
     }
 
-    private function createDocument(People $people, array $payload): ?array
+    private function createUser(People $people, array $payload): ?array
     {
         try {
             $this->manager->getConnection()->beginTransaction();
 
+            if (!isset($payload['username']) || empty($payload['username'])) {
+                throw new \InvalidArgumentException('Username param is not valid');
+            }
+
+            if (!isset($payload['password']) || empty($payload['password'])) {
+                throw new \InvalidArgumentException('Password param is not valid');
+            }
+
             $company = $this->manager->getRepository(People::class)->find($people->getId());
-            $doctype = $this->manager->getRepository(DocumentType::class)->find($payload['type']);
-            if ($doctype === null) {
-                throw new \InvalidArgumentException('Document type not found');
+            $user    = $this->manager->getRepository(User::class)->findOneBy(['username' => $payload['username']]);
+            if ($user instanceof User) {
+                throw new \InvalidArgumentException('O username já esta em uso');
             }
 
-            $document = $this->manager->getRepository(Document::class)
-                ->findOneBy([
-                    'document'     => $payload['document'],
-                    'documentType' => $doctype,
-                ]);
-            if ($document instanceof Document) {
-                throw new \InvalidArgumentException('O documento já está em uso');
-            }
+            $user = new User();
+            $user->setUsername($payload['username']);
+            $user->setHash    ($this->encoder->encodePassword($user, $payload['password']));
+            $user->setPeople  ($company);
 
-            $document = $this->manager->getRepository(Document::class)
-                ->findOneBy([
-                    'documentType' => $doctype,
-                    'people'       => $company,
-                ]);
-            if ($document instanceof Document) {
-                throw new \InvalidArgumentException('Este tipo de documento já foi cadastrado');
-            }
-
-            $document = new Document();
-            $document->setDocument    ($payload['document']);
-            $document->setDocumentType($doctype);
-            $document->setPeople      ($company);
-
-            $this->manager->persist($document);
+            $this->manager->persist($user);
 
             $this->manager->flush();
             $this->manager->getConnection()->commit();
 
             return [
-                'id' => $document->getId()
+                'id' => $user->getId()
             ];
 
         } catch (\Exception $e) {
@@ -139,7 +136,7 @@ class AdminPeopleDocumentsAction
         }
     }
 
-    private function deleteDocument(People $people, array $payload): bool
+    private function deleteUser(People $people, array $payload): bool
     {
         try {
             $this->manager->getConnection()->beginTransaction();
@@ -148,13 +145,18 @@ class AdminPeopleDocumentsAction
                 throw new \InvalidArgumentException('Document id is not defined');
             }
 
-            $company   = $this->manager->getRepository(People::class)->find($people->getId());            
-            $document = $this->manager->getRepository(Document::class)->findOneBy(['id' => $payload['id'], 'people' => $company]);
-            if (!$document instanceof Document) {
-                throw new \InvalidArgumentException('People document was not found');
+            $company = $this->manager->getRepository(People::class)->find($people->getId());
+            $users   = $this->manager->getRepository(User::class)->findBy(['people' => $company]);
+            if (count($users) == 1) {
+                throw new \InvalidArgumentException('Deve existir pelo menos um usuário');
             }
 
-            $this->manager->remove($document);
+            $user    = $this->manager->getRepository(User::class)->findOneBy(['id' => $payload['id'], 'people' => $company]);
+            if (!$user instanceof User) {
+                throw new \InvalidArgumentException('People user was not found');
+            }
+
+            $this->manager->remove($user);
 
             $this->manager->flush();
             $this->manager->getConnection()->commit();
@@ -169,17 +171,17 @@ class AdminPeopleDocumentsAction
         }
     }
 
-    private function getDocuments(People $people, ?array $payload = null): array
+    private function getUsers(People $people, ?array $payload = null): array
     {
-        $members   = [];
-        $company   = $this->manager->getRepository(People::class )->find($people->getId());
-        $documents = $this->manager->getRepository(Document::class)->findBy(['people' => $company]);
+        $members = [];
+        $company = $this->manager->getRepository(People::class )->find($people->getId());
+        $users   = $this->manager->getRepository(User::class)->findBy(['people' => $company]);
 
-        foreach ($documents as $document) {
+        foreach ($users as $user) {
             $members[] = [
-                'id'       => $document->getId(),
-                'type'     => $document->getDocumentType()->getDocumentType(),
-                'document' => $document->getDocument(),
+                'id'       => $user->getId(),
+                'username' => $user->getUsername(),
+                'apiKey'   => $user->getApiKey(),
             ];
         }
 

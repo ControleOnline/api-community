@@ -8,10 +8,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\Phone;
-use ControleOnline\Entity\People;
+use ControleOnline\Entity\Document;
+use ControleOnline\Entity\DocumentType;
 
-class AdminPeoplePhonesAction
+
+class AdminPeopleDocumentsAction
 {
     /**
      * Entity Manager
@@ -55,9 +56,9 @@ class AdminPeoplePhonesAction
         try {
 
             $methods = [
-                Request::METHOD_PUT    => 'createPhone',
-                Request::METHOD_DELETE => 'deletePhone',
-                Request::METHOD_GET    => 'getPhones'  ,
+                Request::METHOD_PUT    => 'createDocument',
+                Request::METHOD_DELETE => 'deleteDocument',
+                Request::METHOD_GET    => 'getDocuments'  ,
             ];
 
             $payload   = json_decode($this->request->getContent(), true);
@@ -87,36 +88,47 @@ class AdminPeoplePhonesAction
         }
     }
 
-    private function createPhone(People $people, array $payload): ?array
+    private function createDocument(People $people, array $payload): ?array
     {
         try {
             $this->manager->getConnection()->beginTransaction();
 
             $company = $this->manager->getRepository(People::class)->find($people->getId());
-            $phone   = $this->manager->getRepository(Phone::class)->findOneBy(['ddd' => $payload['ddd'], 'phone' => $payload['phone']]);
-
-            if ($phone instanceof Phone) {
-                if ($phone->getPeople() instanceof People) {
-                    throw new \InvalidArgumentException('O telefone já esta em uso');
-                }
-
-                $phone->setPeople($company);
-            }
-            else {
-                $phone = new Phone();
-                $phone->setDdd      ($payload['ddd']);
-                $phone->setPhone    ($payload['phone']);
-                $phone->setConfirmed(false);
-                $phone->setPeople   ($company);
+            $doctype = $this->manager->getRepository(DocumentType::class)->find($payload['type']);
+            if ($doctype === null) {
+                throw new \InvalidArgumentException('Document type not found');
             }
 
-            $this->manager->persist($phone);
+            $document = $this->manager->getRepository(Document::class)
+                ->findOneBy([
+                    'document'     => $payload['document'],
+                    'documentType' => $doctype,
+                ]);
+            if ($document instanceof Document) {
+                throw new \InvalidArgumentException('O documento já está em uso');
+            }
+
+            $document = $this->manager->getRepository(Document::class)
+                ->findOneBy([
+                    'documentType' => $doctype,
+                    'people'       => $company,
+                ]);
+            if ($document instanceof Document) {
+                throw new \InvalidArgumentException('Este tipo de documento já foi cadastrado');
+            }
+
+            $document = new Document();
+            $document->setDocument    ($payload['document']);
+            $document->setDocumentType($doctype);
+            $document->setPeople      ($company);
+
+            $this->manager->persist($document);
 
             $this->manager->flush();
             $this->manager->getConnection()->commit();
 
             return [
-                'id' => $phone->getId()
+                'id' => $document->getId()
             ];
 
         } catch (\Exception $e) {
@@ -127,7 +139,7 @@ class AdminPeoplePhonesAction
         }
     }
 
-    private function deletePhone(People $people, array $payload): bool
+    private function deleteDocument(People $people, array $payload): bool
     {
         try {
             $this->manager->getConnection()->beginTransaction();
@@ -136,14 +148,13 @@ class AdminPeoplePhonesAction
                 throw new \InvalidArgumentException('Document id is not defined');
             }
 
-            $company = $this->manager->getRepository(People::class)->find($people->getId());
-            
-            $phone = $this->manager->getRepository(Phone::class)->findOneBy(['id' => $payload['id'], 'people' => $company]);
-            if (!$phone instanceof Phone) {
-                throw new \InvalidArgumentException('People phone was not found');
+            $company   = $this->manager->getRepository(People::class)->find($people->getId());            
+            $document = $this->manager->getRepository(Document::class)->findOneBy(['id' => $payload['id'], 'people' => $company]);
+            if (!$document instanceof Document) {
+                throw new \InvalidArgumentException('People document was not found');
             }
 
-            $this->manager->remove($phone);
+            $this->manager->remove($document);
 
             $this->manager->flush();
             $this->manager->getConnection()->commit();
@@ -158,17 +169,17 @@ class AdminPeoplePhonesAction
         }
     }
 
-    private function getPhones(People $people, ?array $payload = null): array
+    private function getDocuments(People $people, ?array $payload = null): array
     {
-        $members = [];
-        $company = $this->manager->getRepository(People::class )->find($people->getId());
-        $phones  = $this->manager->getRepository(Phone::class)->findBy(['people' => $company]);
+        $members   = [];
+        $company   = $this->manager->getRepository(People::class )->find($people->getId());
+        $documents = $this->manager->getRepository(Document::class)->findBy(['people' => $company]);
 
-        foreach ($phones as $phone) {
+        foreach ($documents as $document) {
             $members[] = [
-                'id'    => $phone->getId(),
-                'ddd'   => $phone->getDdd(),
-                'phone' => $phone->getPhone(),
+                'id'       => $document->getId(),
+                'type'     => $document->getDocumentType()->getDocumentType(),
+                'document' => $document->getDocument(),
             ];
         }
 

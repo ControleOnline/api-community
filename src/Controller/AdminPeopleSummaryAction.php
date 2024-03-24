@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\People;
 use ControleOnline\Entity\User;
 use ControleOnline\Entity\Particulars;
 use ControleOnline\Entity\ParticularsType;

@@ -10,7 +10,6 @@ use Symfony\Component\Security\Core\Security;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\DeliveryRegion;
 use ControleOnline\Entity\DeliveryRegionCity;
-use ControleOnline\Entity\People;
 use ControleOnline\Entity\City;
 use ControleOnline\Entity\State;
 

@@ -9,8 +9,6 @@ use Symfony\Component\Security\Core\Security;
 
 use ControleOnline\Entity\PeopleLink;
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\People;
-use ControleOnline\Entity\User;
 use ControleOnline\Entity\Document;
 use App\Service\PeopleService;
 use ControleOnline\Entity\PeopleClient;

@@ -6,13 +6,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\User;
-use ControleOnline\Entity\People;
+use ControleOnline\Entity\Email;
 
-class AdminPeopleUsersAction
+class AdminPeopleEmailsAction
 {
     /**
      * Entity Manager
@@ -42,19 +40,11 @@ class AdminPeopleUsersAction
      */
     private $currentUser = null;
 
-    /**
-     * Password encoder
-     *
-     * @var UserPasswordEncoderInterface
-     */
-    private $encoder = null;
-
-    public function __construct(EntityManagerInterface $manager, Security $security, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(EntityManagerInterface $manager, Security $security)
     {
         $this->manager     = $manager;
         $this->security    = $security;
         $this->currentUser = $security->getUser();
-        $this->encoder     = $passwordEncoder;
     }
 
     public function __invoke(People $data, Request $request): JsonResponse
@@ -64,9 +54,9 @@ class AdminPeopleUsersAction
         try {
 
             $methods = [
-                Request::METHOD_PUT    => 'createUser',
-                Request::METHOD_DELETE => 'deleteUser',
-                Request::METHOD_GET    => 'getUsers'  ,
+                Request::METHOD_PUT    => 'createEmail',
+                Request::METHOD_DELETE => 'deleteEmail',
+                Request::METHOD_GET    => 'getEmails'  ,
             ];
 
             $payload   = json_decode($this->request->getContent(), true);
@@ -96,37 +86,39 @@ class AdminPeopleUsersAction
         }
     }
 
-    private function createUser(People $people, array $payload): ?array
+    private function createEmail(People $people, array $payload): ?array
     {
         try {
             $this->manager->getConnection()->beginTransaction();
 
-            if (!isset($payload['username']) || empty($payload['username'])) {
-                throw new \InvalidArgumentException('Username param is not valid');
-            }
-
-            if (!isset($payload['password']) || empty($payload['password'])) {
-                throw new \InvalidArgumentException('Password param is not valid');
+            if (!isset($payload['email']) || !filter_var($payload['email'], FILTER_VALIDATE_EMAIL)) {
+                throw new \InvalidArgumentException('Email value is not valid');
             }
 
             $company = $this->manager->getRepository(People::class)->find($people->getId());
-            $user    = $this->manager->getRepository(User::class)->findOneBy(['username' => $payload['username']]);
-            if ($user instanceof User) {
-                throw new \InvalidArgumentException('O username já esta em uso');
+            $email   = $this->manager->getRepository(Email::class)->findOneBy(['email' => $payload['email']]);
+
+            if ($email instanceof Email) {
+                if ($email->getPeople() instanceof People) {
+                    throw new \InvalidArgumentException('O email já está em uso');
+                }
+
+                $email->setPeople($company);
+            }
+            else {
+                $email = new Email();
+                $email->setEmail    ($payload['email']);
+                $email->setConfirmed(false);
+                $email->setPeople   ($company);
             }
 
-            $user = new User();
-            $user->setUsername($payload['username']);
-            $user->setHash    ($this->encoder->encodePassword($user, $payload['password']));
-            $user->setPeople  ($company);
-
-            $this->manager->persist($user);
+            $this->manager->persist($email);
 
             $this->manager->flush();
             $this->manager->getConnection()->commit();
 
             return [
-                'id' => $user->getId()
+                'id' => $email->getId()
             ];
 
         } catch (\Exception $e) {
@@ -137,7 +129,7 @@ class AdminPeopleUsersAction
         }
     }
 
-    private function deleteUser(People $people, array $payload): bool
+    private function deleteEmail(People $people, array $payload): bool
     {
         try {
             $this->manager->getConnection()->beginTransaction();
@@ -147,17 +139,14 @@ class AdminPeopleUsersAction
             }
 
             $company = $this->manager->getRepository(People::class)->find($people->getId());
-            $users   = $this->manager->getRepository(User::class)->findBy(['people' => $company]);
-            if (count($users) == 1) {
-                throw new \InvalidArgumentException('Deve existir pelo menos um usuário');
+            
+
+            $email = $this->manager->getRepository(Email::class)->findOneBy(['id' => $payload['id'], 'people' => $company]);
+            if (!$email instanceof Email) {
+                throw new \InvalidArgumentException('People email was not found');
             }
 
-            $user    = $this->manager->getRepository(User::class)->findOneBy(['id' => $payload['id'], 'people' => $company]);
-            if (!$user instanceof User) {
-                throw new \InvalidArgumentException('People user was not found');
-            }
-
-            $this->manager->remove($user);
+            $this->manager->remove($email);
 
             $this->manager->flush();
             $this->manager->getConnection()->commit();
@@ -172,17 +161,16 @@ class AdminPeopleUsersAction
         }
     }
 
-    private function getUsers(People $people, ?array $payload = null): array
+    private function getEmails(People $people, ?array $payload = null): array
     {
         $members = [];
         $company = $this->manager->getRepository(People::class )->find($people->getId());
-        $users   = $this->manager->getRepository(User::class)->findBy(['people' => $company]);
+        $emails  = $this->manager->getRepository(Email::class)->findBy(['people' => $company]);
 
-        foreach ($users as $user) {
+        foreach ($emails as $email) {
             $members[] = [
-                'id'       => $user->getId(),
-                'username' => $user->getUsername(),
-                'apiKey'   => $user->getApiKey(),
+                'id'    => $email->getId(),
+                'email' => $email->getEmail(),
             ];
         }
 

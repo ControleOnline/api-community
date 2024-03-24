@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\People;
 use ControleOnline\Entity\File as File;
 use App\Library\Utils\File as FileName;
 

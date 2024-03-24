@@ -10,7 +10,6 @@ use Symfony\Component\Security\Core\Security;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Document;
 use ControleOnline\Entity\DocumentType;
-use ControleOnline\Entity\People;
 
 class AdminPeopleBillingAction
 {
