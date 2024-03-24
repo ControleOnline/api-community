@@ -61,7 +61,7 @@ class SearchContactAction
                 $currentUser  = $this->user;
                 $clientPeople = $this->em->getRepository(People::class)->find($company);
 
-                $isMyCompany = $currentUser->getPeople()->getPeopleCompany()->exists(
+                $isMyCompany = $currentUser->getPeople()->getLink()->exists(
                     function ($key, $element) use ($clientPeople) {
                         return $element->getCompany() === $clientPeople;
                     }
@@ -94,7 +94,7 @@ class SearchContactAction
     
                     $people = $data;
     
-                    if (($peopleLink = $people->getPeopleCompany()->first()) !== false) {
+                    if (($peopleLink = $people->getLink()->first()) !== false) {
                         if ($peopleLink->getCompany() instanceof People)
                             $people = $peopleLink->getCompany();
                     }

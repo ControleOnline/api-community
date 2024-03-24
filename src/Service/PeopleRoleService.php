@@ -73,7 +73,7 @@ class PeopleRoleService
         return ['guest'];
       }
     } else {
-      $peopleCompany = $people->getPeopleCompany()->first();
+      $peopleCompany = $people->getLink()->first();
       if ($peopleCompany === false) {
         return ['guest'];
       }
@@ -130,7 +130,7 @@ class PeopleRoleService
     }
 
 
-    $isClient = $people->getPeopleCompany()
+    $isClient = $people->getLink()
       ->exists(
         function ($key, PeopleLink $peopleLink) use ($company) {
           return $this->manager->getRepository(PeopleClient::class)->findOneBy(

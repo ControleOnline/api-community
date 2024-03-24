@@ -143,10 +143,10 @@ class SearchContactCompanyAction
     private function getCompanyByContact(People $contact, $myCompany): array
     {
         $company = [];
-        if (count($contact->getPeopleCompany()) == 1) {
-            $company = $contact->getPeopleCompany()->first()->getCompany();
-        } elseif (count($contact->getPeopleCompany()) > 1) {
-            foreach ($contact->getPeopleCompany() as $companies) {
+        if (count($contact->getLink()) == 1) {
+            $company = $contact->getLink()->first()->getCompany();
+        } elseif (count($contact->getLink()) > 1) {
+            foreach ($contact->getLink() as $companies) {
                 $mycompanies[] = [
                     'id' => $companies->getCompany()->getId(),
                     'name' => $companies->getCompany()->getName(),
@@ -157,7 +157,7 @@ class SearchContactCompanyAction
                 }
             }
             if (!$company) {
-                $company = $contact->getPeopleCompany()->first()->getCompany();
+                $company = $contact->getLink()->first()->getCompany();
             }
         } else {
             $company = new People();

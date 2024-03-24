@@ -294,7 +294,7 @@ class AdminPeopleCompaniesAction
   {
     $companies = [];
 
-    foreach ($people->getPeopleCompany() as $peopleCompany) {
+    foreach ($people->getLink() as $peopleCompany) {
       $email    = $peopleCompany->getCompany()->getEmail()->first();
       $document = false;
 
@@ -351,7 +351,7 @@ class AdminPeopleCompaniesAction
 
       if ($this->peopleRoles->isSalesman($this->currentUser->getPeople())) {
         $companies = $this->currentUser->getPeople() ?
-          $this->currentUser->getPeople()->getPeopleCompany() : null;
+          $this->currentUser->getPeople()->getLink() : null;
 
         if (empty($companies) || $companies->first() === false) {
           throw new \Exception('Salesman without companies');

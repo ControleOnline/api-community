@@ -382,7 +382,7 @@ class GetQuoteHandler implements MessageHandlerInterface
     $this->free_limit;
     if ($this->people instanceof People) {
       $companies = [];
-      foreach ($this->people->getPeopleCompany() as $company) {
+      foreach ($this->people->getLink() as $company) {
         if (!$quote->myCompany)
           $companies[] = $company->getCompany();
         else 

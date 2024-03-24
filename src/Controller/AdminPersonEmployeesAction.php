@@ -263,7 +263,7 @@ class AdminPeopleEmployeesAction
 
             if ($this->peopleRoles->isSalesman($this->currentUser->getPeople())) {
                 $companies = $this->currentUser->getPeople() ?
-                    $this->currentUser->getPeople()->getPeopleCompany() : null;
+                    $this->currentUser->getPeople()->getLink() : null;
 
                 if (empty($companies) || $companies->first() === false) {
                     throw new \Exception('Salesman without companies');

@@ -304,8 +304,8 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
     $currentUser  = $this->security->getUser();
     $companies    = [];
 
-    if (!$currentUser->getPeople()->getPeopleCompany()->isEmpty()) {
-      foreach ($currentUser->getPeople()->getPeopleCompany() as $company) {
+    if (!$currentUser->getPeople()->getLink()->isEmpty()) {
+      foreach ($currentUser->getPeople()->getLink() as $company) {
         $companies[] = $company->getCompany();
       }
     }
@@ -320,7 +320,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 
     if ($companyId === null) {
       $companies = $this->security->getUser()->getPeople() ?
-        $this->security->getUser()->getPeople()->getPeopleCompany() : null;
+        $this->security->getUser()->getPeople()->getLink() : null;
 
       if (empty($companies) || $companies->first() === false)
         return null;
@@ -334,7 +334,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 
       // verify if client is a company of current user
 
-      $isMyCompany = $this->security->getUser()->getPeople()->getPeopleCompany()->exists(
+      $isMyCompany = $this->security->getUser()->getPeople()->getLink()->exists(
         function ($key, $element) use ($company) {
           return $element->getCompany() === $company;
         }

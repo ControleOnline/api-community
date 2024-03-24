@@ -57,7 +57,7 @@ class UploadOrderNFAction
         if ($request->get('myCompany', null) === null)
             throw new BadRequestHttpException('Issuer Id is not defined');
 
-        $company = $this->getPeopleCompany($request->get('myCompany'));
+        $company = $this->getLink($request->get('myCompany'));
         if ($company === null)
             throw new BadRequestHttpException('Company not found');
 
@@ -171,7 +171,7 @@ class UploadOrderNFAction
         return $content;
     }
 
-    private function getPeopleCompany(?int $companyId): ?People
+    private function getLink(?int $companyId): ?People
     {
         if (empty($companyId))
             return null;
@@ -186,7 +186,7 @@ class UploadOrderNFAction
 
             // verify if companyPeople is a company of current user
 
-            $isMyCompany = $currentUser->getPeople()->getPeopleCompany()->exists(
+            $isMyCompany = $currentUser->getPeople()->getLink()->exists(
                 function ($key, $element) use ($companyPeople) {
                     return $element->getCompany() === $companyPeople;
                 }

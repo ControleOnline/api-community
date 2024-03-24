@@ -44,7 +44,7 @@ class GetPeopleMeAction
 
     private function getMyCompanyId(): ?int
     {
-        $companies = $this->currentUser->getPeople()->getPeopleCompany();
+        $companies = $this->currentUser->getPeople()->getLink();
 
         if ($companies->first() === false)
             return null;

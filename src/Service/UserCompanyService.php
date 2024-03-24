@@ -29,7 +29,7 @@ class UserCompanyService
   {
     if ($companyId === null) {
       $companies = $this->security->getUser()->getPeople() ?
-        $this->security->getUser()->getPeople()->getPeopleCompany() : null;
+        $this->security->getUser()->getPeople()->getLink() : null;
 
       if (empty($companies) || $companies->first() === false)
         return null;
@@ -50,7 +50,7 @@ class UserCompanyService
 
   public function isMyCompany(People $company): bool
   {
-    return $this->security->getUser()->getPeople()->getPeopleCompany()->exists(
+    return $this->security->getUser()->getPeople()->getLink()->exists(
       function ($key, $element) use ($company) {
         return $element->getCompany() === $company;
       }

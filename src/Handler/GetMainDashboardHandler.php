@@ -58,7 +58,7 @@ class GetMainDashboardHandler implements MessageHandlerInterface
 
   private function peopleIsMyCompany(People $company): bool
   {
-    $isMyCompany = $this->myUser->getPeople()->getPeopleCompany()->exists(
+    $isMyCompany = $this->myUser->getPeople()->getLink()->exists(
       function ($key, $element) use ($company) {
         return $element->getCompany() === $company;
       }

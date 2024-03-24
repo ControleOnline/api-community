@@ -114,7 +114,7 @@ class RecoveryAccessHandler implements MessageHandlerInterface
 
   private function getCompanyId(User $user): ?int
   {
-    $peopleLink = $user->getPeople()->getPeopleCompany()->first();
+    $peopleLink = $user->getPeople()->getLink()->first();
 
     if ($peopleLink !== false && $peopleLink->getCompany() instanceof People)
       return $peopleLink->getCompany()->getId();

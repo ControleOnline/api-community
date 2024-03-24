@@ -231,7 +231,7 @@ class NuvemshopOrderPaidAction extends AbstractController
 
     private function getMyCompany(): ?People
     {
-      $companies = $this->security->getToken()->getUser()->getPeople()->getPeopleCompany();
+      $companies = $this->security->getToken()->getUser()->getPeople()->getLink();
 
       if ($companies->first() === false)
           return null;

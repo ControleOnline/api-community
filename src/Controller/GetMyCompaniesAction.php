@@ -55,7 +55,7 @@ class GetMyCompaniesAction
       $permissions = [];
 
 
-      $getPeopleCompanies = $userPeople->getPeopleCompany();
+      $getPeopleCompanies = $userPeople->getLink();
 
       /**
        * @var \ControleOnline\Entity\PeopleLink $peopleCompany

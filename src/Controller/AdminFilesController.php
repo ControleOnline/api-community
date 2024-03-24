@@ -191,7 +191,7 @@ class AdminFilesController extends AbstractController
         /**
          * @var PeopleLink $peopleCompany
          */
-        foreach ($userPeople->getPeopleCompany() as $peopleCompany) {
+        foreach ($userPeople->getLink() as $peopleCompany) {
             if ($peopleCompany->getEnabled()) {
                 $people = $peopleCompany->getCompany();
                 if ($companyId === (string)$people->getId()) {

@@ -41,7 +41,7 @@ class VerifyPeopleStatusAction extends AbstractController
 
               // is it salesman?
 
-              $peopleCompany = $data->getPeopleCompany()->first();
+              $peopleCompany = $data->getLink()->first();
               $isSalesman = false;
               if ($peopleCompany !== false) {
                 //return $this->json(['error' => 'People without companies'], 400);

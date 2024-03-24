@@ -147,7 +147,7 @@ class GetClientCompanyAction
 
   private function getMySalesCompany(): People
   {
-    return ($this->currentUser->getPeople()->getPeopleCompany()->first())
+    return ($this->currentUser->getPeople()->getLink()->first())
       ->getCompany();
   }
 

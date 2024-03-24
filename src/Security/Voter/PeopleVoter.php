@@ -81,8 +81,8 @@ class PeopleVoter extends Voter
 
         // allowed if is my company
 
-        if (!$user->getPeople()->getPeopleCompany()->isEmpty()) {
-            $isMyCompany = $user->getPeople()->getPeopleCompany()->exists(
+        if (!$user->getPeople()->getLink()->isEmpty()) {
+            $isMyCompany = $user->getPeople()->getLink()->exists(
                 function ($key, $element) use ($people) {
                     return $element->getCompany() === $people;
                 }
