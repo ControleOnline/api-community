@@ -9,9 +9,9 @@ use Symfony\Component\Security\Core\Security;
 
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Phone;
-use ControleOnline\Entity\Person;
+use ControleOnline\Entity\People;
 
-class AdminPersonPhonesAction
+class AdminPeoplePhonesAction
 {
     /**
      * Entity Manager
@@ -48,7 +48,7 @@ class AdminPersonPhonesAction
         $this->currentUser = $security->getUser();
     }
 
-    public function __invoke(Person $data, Request $request): JsonResponse
+    public function __invoke(People $data, Request $request): JsonResponse
     {
         $this->request = $request;
 
@@ -87,12 +87,12 @@ class AdminPersonPhonesAction
         }
     }
 
-    private function createPhone(Person $person, array $payload): ?array
+    private function createPhone(People $people, array $payload): ?array
     {
         try {
             $this->manager->getConnection()->beginTransaction();
 
-            $company = $this->manager->getRepository(People::class)->find($person->getId());
+            $company = $this->manager->getRepository(People::class)->find($people->getId());
             $phone   = $this->manager->getRepository(Phone::class)->findOneBy(['ddd' => $payload['ddd'], 'phone' => $payload['phone']]);
 
             if ($phone instanceof Phone) {
@@ -127,7 +127,7 @@ class AdminPersonPhonesAction
         }
     }
 
-    private function deletePhone(Person $person, array $payload): bool
+    private function deletePhone(People $people, array $payload): bool
     {
         try {
             $this->manager->getConnection()->beginTransaction();
@@ -136,11 +136,11 @@ class AdminPersonPhonesAction
                 throw new \InvalidArgumentException('Document id is not defined');
             }
 
-            $company = $this->manager->getRepository(People::class)->find($person->getId());
+            $company = $this->manager->getRepository(People::class)->find($people->getId());
             
             $phone = $this->manager->getRepository(Phone::class)->findOneBy(['id' => $payload['id'], 'people' => $company]);
             if (!$phone instanceof Phone) {
-                throw new \InvalidArgumentException('Person phone was not found');
+                throw new \InvalidArgumentException('People phone was not found');
             }
 
             $this->manager->remove($phone);
@@ -158,10 +158,10 @@ class AdminPersonPhonesAction
         }
     }
 
-    private function getPhones(Person $person, ?array $payload = null): array
+    private function getPhones(People $people, ?array $payload = null): array
     {
         $members = [];
-        $company = $this->manager->getRepository(People::class )->find($person->getId());
+        $company = $this->manager->getRepository(People::class )->find($people->getId());
         $phones  = $this->manager->getRepository(Phone::class)->findBy(['people' => $company]);
 
         foreach ($phones as $phone) {

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use ControleOnline\Entity\Filesb;
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleLink;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\User;
 use DateTime;
@@ -189,7 +189,7 @@ class AdminFilesController extends AbstractController
          */
         $userPeople = $currentUser->getPeople();
         /**
-         * @var PeopleEmployee $peopleCompany
+         * @var PeopleLink $peopleCompany
          */
         foreach ($userPeople->getPeopleCompany() as $peopleCompany) {
             if ($peopleCompany->getEnabled()) {

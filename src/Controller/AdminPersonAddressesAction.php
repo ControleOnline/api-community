@@ -8,11 +8,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\Person;
+use ControleOnline\Entity\People;
 use ControleOnline\Entity\Address;
 use App\Service\AddressService;
 
-class AdminPersonAddressesAction
+class AdminPeopleAddressesAction
 {
     /**
      * Entity Manager
@@ -57,7 +57,7 @@ class AdminPersonAddressesAction
         $this->currentUser = $security->getUser();
     }
 
-    public function __invoke(Person $data, Request $request): JsonResponse
+    public function __invoke(People $data, Request $request): JsonResponse
     {
         $this->request = $request;
 
@@ -96,12 +96,12 @@ class AdminPersonAddressesAction
         }
     }
 
-    private function createAddress(Person $person, array $payload): ?array
+    private function createAddress(People $people, array $payload): ?array
     {
         try {
             $this->manager->getConnection()->beginTransaction();
 
-            $company = $this->manager->getRepository(People::class)->find($person->getId());
+            $company = $this->manager->getRepository(People::class)->find($people->getId());
             $address = $this->address->createFor($company, $payload);
 
             if ($address === null)
@@ -124,7 +124,7 @@ class AdminPersonAddressesAction
         }
     }
 
-    private function deleteAddress(Person $person, array $payload): bool
+    private function deleteAddress(People $people, array $payload): bool
     {
         try {
             $this->manager->getConnection()->beginTransaction();
@@ -133,12 +133,12 @@ class AdminPersonAddressesAction
                 throw new \InvalidArgumentException('Address id is not defined');
             }
 
-            $company = $this->manager->getRepository(People::class)->find($person->getId());                        
+            $company = $this->manager->getRepository(People::class)->find($people->getId());                        
 
             $address = $this->manager->getRepository(Address::class)->findOneBy(['id' => $payload['id'], 'people' => $company]);
 
             if (!$address instanceof Address) {
-                throw new \InvalidArgumentException('Person address was not found');
+                throw new \InvalidArgumentException('People address was not found');
             }
 
             $address->setPeople(null);
@@ -158,10 +158,10 @@ class AdminPersonAddressesAction
         }
     }
 
-    private function getAddress(Person $person, ?array $payload = null): array
+    private function getAddress(People $people, ?array $payload = null): array
     {
         $members   = [];
-        $company   = $this->manager->getRepository(People::class )->find($person->getId());
+        $company   = $this->manager->getRepository(People::class )->find($people->getId());
         $addresses = $this->manager->getRepository(Address::class)->findBy(['people' => $company]);
 
         foreach ($addresses as $address) {

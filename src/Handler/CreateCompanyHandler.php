@@ -13,7 +13,7 @@ use ControleOnline\Entity\DocumentType;
 use ControleOnline\Entity\Language;
 use ControleOnline\Entity\User;
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleLink;
 use ControleOnline\Entity\PeopleClient;
 use ControleOnline\Entity\PeopleDomain;
 use ControleOnline\Entity\Country;
@@ -48,7 +48,7 @@ class CreateCompanyHandler implements MessageHandlerInterface
     $this->memo    = new \App\Library\Utils\Memory();
   }
 
-  public function __invoke(Company $company)
+  public function __invoke(People $company)
   {
     try {
       $this->manager->getConnection()->beginTransaction();
@@ -83,7 +83,7 @@ class CreateCompanyHandler implements MessageHandlerInterface
     }
   }
 
-  private function createCompany(Company $company): People
+  private function createCompany(People $company): People
   {
     if (!$this->user->getPeople() instanceof People)
       throw new \Exception('People user is not linked');
@@ -99,8 +99,8 @@ class CreateCompanyHandler implements MessageHandlerInterface
 
       // if company exists but it doesnt have any employees
 
-      $employee = new PeopleEmployee();
-      $employee->setEmployee($this->user->getPeople());
+      $employee = new PeopleLink();
+      $employee->setPeople($this->user->getPeople());
       $employee->setCompany ($cpeople);
       $employee->setEnabled (1);
       $this->manager->persist($employee);
@@ -115,8 +115,8 @@ class CreateCompanyHandler implements MessageHandlerInterface
 
       $this->memo->add('client', $people);
 
-      $employee = new PeopleEmployee();
-      $employee->setEmployee($this->user->getPeople());
+      $employee = new PeopleLink();
+      $employee->setPeople($this->user->getPeople());
       $employee->setCompany ($people);
       $employee->setEnabled (1);
       $this->manager->persist($employee);
@@ -176,7 +176,7 @@ class CreateCompanyHandler implements MessageHandlerInterface
     return $peopleClient;
   }
 
-  private function getPeopleFromDocument(Company $company): People
+  private function getPeopleFromDocument(People $company): People
   {
     if ($this->getDocumentType($company->document) == self::DOC_CNPJ) {
       $people = new People();

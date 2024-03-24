@@ -10,10 +10,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Particulars;
-use ControleOnline\Entity\Person;
+use ControleOnline\Entity\People;
 use ControleOnline\Entity\File as File;
 
-class AdminPersonFilesAction
+class AdminPeopleFilesAction
 {
     /**
      * Entity Manager
@@ -50,7 +50,7 @@ class AdminPersonFilesAction
         $this->currentUser = $security->getUser();
     }
 
-    public function __invoke(Person $data, Request $request): JsonResponse
+    public function __invoke(People $data, Request $request): JsonResponse
     {
         $this->request = $request;
 
@@ -88,7 +88,7 @@ class AdminPersonFilesAction
         }
     }
 
-    private function deleteFile(Person $person, array $payload): bool
+    private function deleteFile(People $people, array $payload): bool
     {
         try {
             $this->manager->getConnection()->beginTransaction();
@@ -97,7 +97,7 @@ class AdminPersonFilesAction
                 throw new \InvalidArgumentException('File id is not defined');
             }
 
-            $company    = $this->manager->getRepository(People::class)->find($person->getId());
+            $company    = $this->manager->getRepository(People::class)->find($people->getId());
             $particular = $this->manager->getRepository(Particulars::class)->find($payload['id']);
             if ($particular === null) {
                 throw new \InvalidArgumentException('File was not found');
@@ -138,11 +138,11 @@ class AdminPersonFilesAction
         }
     }
 
-    private function getFiles(Person $person, ?array $payload = null): array
+    private function getFiles(People $people, ?array $payload = null): array
     {
         $particulars = [];
 
-        $company = $this->manager->getRepository(People::class)->find($person->getId());
+        $company = $this->manager->getRepository(People::class)->find($people->getId());
         $files   = $this->manager->getRepository(Particulars::class)->getParticularsByPeopleAndFieldType($company, ['file']);
 
         if (!empty($files)) {

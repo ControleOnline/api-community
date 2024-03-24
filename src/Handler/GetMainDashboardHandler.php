@@ -119,7 +119,7 @@ class GetMainDashboardHandler implements MessageHandlerInterface
 
     return $repository->createQueryBuilder('P')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.company = P.id')
+      ->innerJoin('\ControleOnline\Entity\PeopleLink', 'PE', 'WITH', 'PE.company = P.id')
       ->where('PE.employee = :employee')
       ->setParameters([
           'employee' => $this->myUser->getPeople()

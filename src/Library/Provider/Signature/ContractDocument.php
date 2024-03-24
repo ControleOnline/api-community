@@ -822,8 +822,8 @@ class ContractDocument
         /*
         // get owners
 
-        $owners = $company->getCompany()->filter(function ($peopleEmployee) {
-            return $peopleEmployee->getPeopleRole() == 'owner';
+        $owners = $company->getCompany()->filter(function ($peopleLink) {
+            return $peopleLink->getPeopleRole() == 'owner';
         });;
 
         if (!$owners->isEmpty()) {

@@ -6,7 +6,7 @@ use ControleOnline\Entity\People;
 use ControleOnline\Entity\PeopleClient;
 use ControleOnline\Entity\PeopleDomain;
 use ControleOnline\Entity\PeopleSalesman;
-use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleLink;
 use ControleOnline\Entity\PeopleFranchisee;
 use ControleOnline\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -91,8 +91,8 @@ class PeopleRoleService
     if ($company->getId() == $mainCompany->getId()) {
       $isSuper = $mainCompany->getCompany()
         ->exists(
-          function ($key, PeopleEmployee $peopleEmployee) use ($people) {
-            return $peopleEmployee->getPeople()->getId() === $people->getId();
+          function ($key, PeopleLink $peopleLink) use ($people) {
+            return $peopleLink->getPeople()->getId() === $people->getId();
           }
         );
 
@@ -105,8 +105,8 @@ class PeopleRoleService
     $isFranchisee = $mainCompany->getPeopleFranchisor()
       ->exists(
         function ($key, PeopleFranchisee $peopleFranchisee) use ($people, $company) {
-          foreach ($peopleFranchisee->getFranchisee()->getCompany() as $peopleEmployee) {
-            if ($peopleEmployee->getCompany()->getId() == $company->getId() &&  $peopleEmployee->getPeople()->getId() === $people->getId()) {
+          foreach ($peopleFranchisee->getFranchisee()->getCompany() as $peopleLink) {
+            if ($peopleLink->getCompany()->getId() == $company->getId() &&  $peopleLink->getPeople()->getId() === $people->getId()) {
               return  true;
             }
           }
@@ -120,8 +120,8 @@ class PeopleRoleService
 
     $isClient = $company->getCompany()
       ->exists(
-        function ($key, PeopleEmployee $peopleEmployee) use ($people) {
-          return $peopleEmployee->getPeople()->getId() === $people->getId();
+        function ($key, PeopleLink $peopleLink) use ($people) {
+          return $peopleLink->getPeople()->getId() === $people->getId();
         }
       );
 
@@ -132,10 +132,10 @@ class PeopleRoleService
 
     $isClient = $people->getPeopleCompany()
       ->exists(
-        function ($key, PeopleEmployee $peopleEmployee) use ($company) {
+        function ($key, PeopleLink $peopleLink) use ($company) {
           return $this->manager->getRepository(PeopleClient::class)->findOneBy(
             [
-              'client' => $peopleEmployee->getCompany(),
+              'client' => $peopleLink->getCompany(),
               'company_id' => $company->getId()
             ]
           );

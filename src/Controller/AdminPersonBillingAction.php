@@ -10,9 +10,9 @@ use Symfony\Component\Security\Core\Security;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Document;
 use ControleOnline\Entity\DocumentType;
-use ControleOnline\Entity\Person;
+use ControleOnline\Entity\People;
 
-class AdminPersonBillingAction
+class AdminPeopleBillingAction
 {
     /**
      * Entity Manager
@@ -49,7 +49,7 @@ class AdminPersonBillingAction
         $this->currentUser = $security->getUser();
     }
 
-    public function __invoke(Person $data, Request $request): JsonResponse
+    public function __invoke(People $data, Request $request): JsonResponse
     {
         $this->request = $request;
 
@@ -87,12 +87,12 @@ class AdminPersonBillingAction
         }
     }
 
-    private function updateBilling(Person $person, array $payload): bool
+    private function updateBilling(People $people, array $payload): bool
     {
         try {
             $this->manager->getConnection()->beginTransaction();
 
-            $company = $this->manager->getRepository(People::class)->find($person->getId());
+            $company = $this->manager->getRepository(People::class)->find($people->getId());
 
             // update billing
 
@@ -147,9 +147,9 @@ class AdminPersonBillingAction
         }
     }
 
-    private function getBilling(Person $person, ?array $payload = null): array
+    private function getBilling(People $people, ?array $payload = null): array
     {
-        $company = $this->manager->getRepository(People::class )->find($person->getId());
+        $company = $this->manager->getRepository(People::class )->find($people->getId());
 
         return [
             'billing'     => $company->getBilling(),

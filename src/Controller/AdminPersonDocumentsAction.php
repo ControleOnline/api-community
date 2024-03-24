@@ -10,9 +10,9 @@ use Symfony\Component\Security\Core\Security;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Document;
 use ControleOnline\Entity\DocumentType;
-use ControleOnline\Entity\Person;
+use ControleOnline\Entity\People;
 
-class AdminPersonDocumentsAction
+class AdminPeopleDocumentsAction
 {
     /**
      * Entity Manager
@@ -49,7 +49,7 @@ class AdminPersonDocumentsAction
         $this->currentUser = $security->getUser();
     }
 
-    public function __invoke(Person $data, Request $request): JsonResponse
+    public function __invoke(People $data, Request $request): JsonResponse
     {
         $this->request = $request;
 
@@ -88,12 +88,12 @@ class AdminPersonDocumentsAction
         }
     }
 
-    private function createDocument(Person $person, array $payload): ?array
+    private function createDocument(People $people, array $payload): ?array
     {
         try {
             $this->manager->getConnection()->beginTransaction();
 
-            $company = $this->manager->getRepository(People::class)->find($person->getId());
+            $company = $this->manager->getRepository(People::class)->find($people->getId());
             $doctype = $this->manager->getRepository(DocumentType::class)->find($payload['type']);
             if ($doctype === null) {
                 throw new \InvalidArgumentException('Document type not found');
@@ -139,7 +139,7 @@ class AdminPersonDocumentsAction
         }
     }
 
-    private function deleteDocument(Person $person, array $payload): bool
+    private function deleteDocument(People $people, array $payload): bool
     {
         try {
             $this->manager->getConnection()->beginTransaction();
@@ -148,10 +148,10 @@ class AdminPersonDocumentsAction
                 throw new \InvalidArgumentException('Document id is not defined');
             }
 
-            $company   = $this->manager->getRepository(People::class)->find($person->getId());            
+            $company   = $this->manager->getRepository(People::class)->find($people->getId());            
             $document = $this->manager->getRepository(Document::class)->findOneBy(['id' => $payload['id'], 'people' => $company]);
             if (!$document instanceof Document) {
-                throw new \InvalidArgumentException('Person document was not found');
+                throw new \InvalidArgumentException('People document was not found');
             }
 
             $this->manager->remove($document);
@@ -169,10 +169,10 @@ class AdminPersonDocumentsAction
         }
     }
 
-    private function getDocuments(Person $person, ?array $payload = null): array
+    private function getDocuments(People $people, ?array $payload = null): array
     {
         $members   = [];
-        $company   = $this->manager->getRepository(People::class )->find($person->getId());
+        $company   = $this->manager->getRepository(People::class )->find($people->getId());
         $documents = $this->manager->getRepository(Document::class)->findBy(['people' => $company]);
 
         foreach ($documents as $document) {

@@ -9,9 +9,9 @@ use Symfony\Component\Security\Core\Security;
 
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Email;
-use ControleOnline\Entity\Person;
+use ControleOnline\Entity\People;
 
-class AdminPersonEmailsAction
+class AdminPeopleEmailsAction
 {
     /**
      * Entity Manager
@@ -48,7 +48,7 @@ class AdminPersonEmailsAction
         $this->currentUser = $security->getUser();
     }
 
-    public function __invoke(Person $data, Request $request): JsonResponse
+    public function __invoke(People $data, Request $request): JsonResponse
     {
         $this->request = $request;
 
@@ -87,7 +87,7 @@ class AdminPersonEmailsAction
         }
     }
 
-    private function createEmail(Person $person, array $payload): ?array
+    private function createEmail(People $people, array $payload): ?array
     {
         try {
             $this->manager->getConnection()->beginTransaction();
@@ -96,7 +96,7 @@ class AdminPersonEmailsAction
                 throw new \InvalidArgumentException('Email value is not valid');
             }
 
-            $company = $this->manager->getRepository(People::class)->find($person->getId());
+            $company = $this->manager->getRepository(People::class)->find($people->getId());
             $email   = $this->manager->getRepository(Email::class)->findOneBy(['email' => $payload['email']]);
 
             if ($email instanceof Email) {
@@ -130,7 +130,7 @@ class AdminPersonEmailsAction
         }
     }
 
-    private function deleteEmail(Person $person, array $payload): bool
+    private function deleteEmail(People $people, array $payload): bool
     {
         try {
             $this->manager->getConnection()->beginTransaction();
@@ -139,12 +139,12 @@ class AdminPersonEmailsAction
                 throw new \InvalidArgumentException('Document id is not defined');
             }
 
-            $company = $this->manager->getRepository(People::class)->find($person->getId());
+            $company = $this->manager->getRepository(People::class)->find($people->getId());
             
 
             $email = $this->manager->getRepository(Email::class)->findOneBy(['id' => $payload['id'], 'people' => $company]);
             if (!$email instanceof Email) {
-                throw new \InvalidArgumentException('Person email was not found');
+                throw new \InvalidArgumentException('People email was not found');
             }
 
             $this->manager->remove($email);
@@ -162,10 +162,10 @@ class AdminPersonEmailsAction
         }
     }
 
-    private function getEmails(Person $person, ?array $payload = null): array
+    private function getEmails(People $people, ?array $payload = null): array
     {
         $members = [];
-        $company = $this->manager->getRepository(People::class )->find($person->getId());
+        $company = $this->manager->getRepository(People::class )->find($people->getId());
         $emails  = $this->manager->getRepository(Email::class)->findBy(['people' => $company]);
 
         foreach ($emails as $email) {

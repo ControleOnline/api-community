@@ -10,9 +10,9 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\User;
-use ControleOnline\Entity\Person;
+use ControleOnline\Entity\People;
 
-class AdminPersonUsersAction
+class AdminPeopleUsersAction
 {
     /**
      * Entity Manager
@@ -57,7 +57,7 @@ class AdminPersonUsersAction
         $this->encoder     = $passwordEncoder;
     }
 
-    public function __invoke(Person $data, Request $request): JsonResponse
+    public function __invoke(People $data, Request $request): JsonResponse
     {
         $this->request = $request;
 
@@ -96,7 +96,7 @@ class AdminPersonUsersAction
         }
     }
 
-    private function createUser(Person $person, array $payload): ?array
+    private function createUser(People $people, array $payload): ?array
     {
         try {
             $this->manager->getConnection()->beginTransaction();
@@ -109,7 +109,7 @@ class AdminPersonUsersAction
                 throw new \InvalidArgumentException('Password param is not valid');
             }
 
-            $company = $this->manager->getRepository(People::class)->find($person->getId());
+            $company = $this->manager->getRepository(People::class)->find($people->getId());
             $user    = $this->manager->getRepository(User::class)->findOneBy(['username' => $payload['username']]);
             if ($user instanceof User) {
                 throw new \InvalidArgumentException('O username já esta em uso');
@@ -137,7 +137,7 @@ class AdminPersonUsersAction
         }
     }
 
-    private function deleteUser(Person $person, array $payload): bool
+    private function deleteUser(People $people, array $payload): bool
     {
         try {
             $this->manager->getConnection()->beginTransaction();
@@ -146,7 +146,7 @@ class AdminPersonUsersAction
                 throw new \InvalidArgumentException('Document id is not defined');
             }
 
-            $company = $this->manager->getRepository(People::class)->find($person->getId());
+            $company = $this->manager->getRepository(People::class)->find($people->getId());
             $users   = $this->manager->getRepository(User::class)->findBy(['people' => $company]);
             if (count($users) == 1) {
                 throw new \InvalidArgumentException('Deve existir pelo menos um usuário');
@@ -154,7 +154,7 @@ class AdminPersonUsersAction
 
             $user    = $this->manager->getRepository(User::class)->findOneBy(['id' => $payload['id'], 'people' => $company]);
             if (!$user instanceof User) {
-                throw new \InvalidArgumentException('Person user was not found');
+                throw new \InvalidArgumentException('People user was not found');
             }
 
             $this->manager->remove($user);
@@ -172,10 +172,10 @@ class AdminPersonUsersAction
         }
     }
 
-    private function getUsers(Person $person, ?array $payload = null): array
+    private function getUsers(People $people, ?array $payload = null): array
     {
         $members = [];
-        $company = $this->manager->getRepository(People::class )->find($person->getId());
+        $company = $this->manager->getRepository(People::class )->find($people->getId());
         $users   = $this->manager->getRepository(User::class)->findBy(['people' => $company]);
 
         foreach ($users as $user) {

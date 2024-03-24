@@ -43,9 +43,9 @@ class PrestaShopAction extends AbstractController
             $User = $this->em->getRepository(User::class)->findOneBy(['apiKey' => $apiKey]);
             $People = $User->getPeople();
 
-            if (($PeopleEmployee = $People->getPeopleCompany()->first()) !== false) {
-                if ($PeopleEmployee->getCompany() instanceof People)
-                    $People = $PeopleEmployee->getCompany();
+            if (($PeopleLink = $People->getPeopleCompany()->first()) !== false) {
+                if ($PeopleLink->getCompany() instanceof People)
+                    $People = $PeopleLink->getCompany();
             }
 
             $Quotation = $this->em->getRepository(Quotation::class)->findOneBy(['id' => $req['quote']]);

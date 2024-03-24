@@ -10,11 +10,11 @@ use Symfony\Component\Security\Core\Security;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\DeliveryRegion;
 use ControleOnline\Entity\DeliveryRegionCity;
-use ControleOnline\Entity\Person;
+use ControleOnline\Entity\People;
 use ControleOnline\Entity\City;
 use ControleOnline\Entity\State;
 
-class AdminPersonRegionsAction
+class AdminPeopleRegionsAction
 {
     /**
      * Entity Manager
@@ -51,7 +51,7 @@ class AdminPersonRegionsAction
         $this->currentUser = $security->getUser();
     }
 
-    public function __invoke(Person $data, int $regionId = null, Request $request): JsonResponse
+    public function __invoke(People $data, int $regionId = null, Request $request): JsonResponse
     {
         $this->request = $request;
 
@@ -90,12 +90,12 @@ class AdminPersonRegionsAction
         }
     }
 
-    private function createRegion(Person $person, array $payload): ?array
+    private function createRegion(People $people, array $payload): ?array
     {
         try {
             $this->manager->getConnection()->beginTransaction();
 
-            $company = $this->manager->getRepository(People::class)->find($person->getId());
+            $company = $this->manager->getRepository(People::class)->find($people->getId());
             $region  = $this->manager->getRepository(DeliveryRegion::class)->findOneBy(['region' => $payload['regionName'], 'people' => $company]);
 
             if ($region instanceof DeliveryRegion) {
@@ -146,15 +146,15 @@ class AdminPersonRegionsAction
         }
     }
 
-    private function updateRegion(Person $person, array $payload): ?array
+    private function updateRegion(People $people, array $payload): ?array
     {
         try {
             $this->manager->getConnection()->beginTransaction();
 
-            $company = $this->manager->getRepository(People::class)->find($person->getId());
+            $company = $this->manager->getRepository(People::class)->find($people->getId());
             $region  = $this->manager->getRepository(DeliveryRegion::class)->findOneBy(['id' => $this->request->get('regionId'), 'people' => $company]);
             if ($region === null) {
-              throw new \InvalidArgumentException('Person Region not found');
+              throw new \InvalidArgumentException('People Region not found');
             }
 
             if (isset($payload['regionName']) && !empty($payload['regionName'])) {
@@ -268,7 +268,7 @@ class AdminPersonRegionsAction
         }
     }
 
-    private function deleteRegion(Person $person, array $payload): bool
+    private function deleteRegion(People $people, array $payload): bool
     {
         try {
             $this->manager->getConnection()->beginTransaction();
@@ -277,7 +277,7 @@ class AdminPersonRegionsAction
                 throw new \InvalidArgumentException('Region id is not defined');
             }
 
-            $company = $this->manager->getRepository(People::class)->find($person->getId());
+            $company = $this->manager->getRepository(People::class)->find($people->getId());
             $regions = $this->manager->getRepository(DeliveryRegion::class)->findBy(['people' => $company]);
             if (count($regions) == 1) {
                 throw new \InvalidArgumentException('Deve existir pelo menos uma praça');
@@ -285,7 +285,7 @@ class AdminPersonRegionsAction
 
             $region  = $this->manager->getRepository(DeliveryRegion::class)->findOneBy(['id' => $payload['id'], 'people' => $company]);
             if (!$region instanceof DeliveryRegion) {
-                throw new \InvalidArgumentException('Person region was not found');
+                throw new \InvalidArgumentException('People region was not found');
             }
 
             $this->manager->remove($region);
@@ -307,7 +307,7 @@ class AdminPersonRegionsAction
         }
     }
 
-    private function getRegions(Person $person, ?array $payload = null): array
+    private function getRegions(People $people, ?array $payload = null): array
     {
       $page     = $this->request->query->get('page'  , 1);
       $limit    = $this->request->query->get('limit' , 10);
@@ -317,7 +317,7 @@ class AdminPersonRegionsAction
       ];
 
       $members = [];
-      $people  = $this->manager->getRepository(People::class )->find($person->getId());
+      $people  = $this->manager->getRepository(People::class )->find($people->getId());
       $regions = $this->manager->getRepository(DeliveryRegion::class)
         ->getAllPeopleRegions($people, null, $paginate);
 

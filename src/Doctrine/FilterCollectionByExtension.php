@@ -25,7 +25,7 @@ use ControleOnline\Entity\Document;
 use ControleOnline\Entity\Status;
 use ControleOnline\Entity\Email;
 use ControleOnline\Entity\PeopleClient;
-use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleLink;
 use ControleOnline\Entity\PeopleSalesman;
 use ControleOnline\Entity\PeopleCarrier;
 use ControleOnline\Entity\MyContract;
@@ -176,7 +176,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
         if ($applyTo == 'justoneitem') {
           $subquery = $this->manager->createQueryBuilder()
             ->select('IDENTITY(people_employee.company)')
-            ->from(PeopleEmployee::class, 'people_employee')
+            ->from(PeopleLink::class, 'people_employee')
             ->andWhere('people_employee.employee = :my_people');
 
           $queryBuilder->innerJoin(PeopleClient::class, 'people_client', 'WITH', sprintf('people_client.client = %s.id', $rootAlias));
@@ -254,9 +254,9 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
       case CompanyExpense::class:
 
         $subquery = $this->manager->createQueryBuilder()
-          ->select('IDENTITY(peopleEmployee.company)')
-          ->from(PeopleEmployee::class, 'peopleEmployee')
-          ->where("peopleEmployee.employee = :my_employee");
+          ->select('IDENTITY(peopleLink.company)')
+          ->from(PeopleLink::class, 'peopleLink')
+          ->where("peopleLink.employee = :my_employee");
 
         $queryBuilder->andWhere(
           $this->manager->createQueryBuilder()
@@ -278,9 +278,9 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
          */
 
         $subquery = $this->manager->createQueryBuilder()
-          ->select('IDENTITY(peopleEmployee.company)')
-          ->from(PeopleEmployee::class, 'peopleEmployee')
-          ->where("peopleEmployee.employee = :my_employee");
+          ->select('IDENTITY(peopleLink.company)')
+          ->from(PeopleLink::class, 'peopleLink')
+          ->where("peopleLink.employee = :my_employee");
 
         $queryBuilder->andWhere(
           $this->manager->createQueryBuilder()

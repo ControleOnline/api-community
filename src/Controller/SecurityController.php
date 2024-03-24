@@ -82,10 +82,10 @@ class SecurityController extends AbstractController
 
   private function getCompany(User $user): ?People
   {
-    $peopleEmployee = $user->getPeople()->getPeopleCompany()->first();
+    $peopleLink = $user->getPeople()->getPeopleCompany()->first();
 
-    if ($peopleEmployee !== false && $peopleEmployee->getCompany() instanceof People)
-      return $peopleEmployee->getCompany();
+    if ($peopleLink !== false && $peopleLink->getCompany() instanceof People)
+      return $peopleLink->getCompany();
   }
 
   private function getCompanyId(User $user): ?int

@@ -7,16 +7,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleLink;
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\Person;
+use ControleOnline\Entity\People;
 use ControleOnline\Entity\User;
 use ControleOnline\Entity\Document;
 use App\Service\PeopleService;
 use ControleOnline\Entity\PeopleClient;
 use App\Service\PeopleRoleService;
 
-class AdminPersonCompaniesAction
+class AdminPeopleCompaniesAction
 {
   /**
    * Entity Manager
@@ -62,7 +62,7 @@ class AdminPersonCompaniesAction
     $this->peopleRoles = $roles;
   }
 
-  public function __invoke(Person $data, Request $request): JsonResponse
+  public function __invoke(People $data, Request $request): JsonResponse
   {
     $this->request = $request;
 
@@ -105,7 +105,7 @@ class AdminPersonCompaniesAction
     }
   }
 
-  private function createCompany(Person $person, array $payload): ?array
+  private function createCompany(People $people, array $payload): ?array
   {
     try {
       $this->manager->getConnection()->beginTransaction();
@@ -123,7 +123,7 @@ class AdminPersonCompaniesAction
         throw new \InvalidArgumentException('Company document is not valid');
       }
 
-      $employee = $this->manager->getRepository(People::class)->find($person->getId());
+      $employee = $this->manager->getRepository(People::class)->find($people->getId());
       $company  = null;
       $document = $this->manager->getRepository(Document::class)->findOneBy(['document' => $payload['document']]);
       if ($document === null) {
@@ -147,10 +147,10 @@ class AdminPersonCompaniesAction
 
       // create contract
 
-      $contract = new PeopleEmployee();
+      $contract = new PeopleLink();
 
       $contract->setCompany($company);
-      $contract->setEmployee($employee);
+      $contract->setPeople($employee);
       $contract->setEnabled(true);
 
       $this->manager->persist($contract);
@@ -173,7 +173,7 @@ class AdminPersonCompaniesAction
     }
   }
 
-  private function updateCompany(Person $person, array $payload): ?array
+  private function updateCompany(People $people, array $payload): ?array
   {
     try {
       $this->manager->getConnection()->beginTransaction();
@@ -184,10 +184,10 @@ class AdminPersonCompaniesAction
         throw new \InvalidArgumentException('Company id is not defined');
       }
 
-      $employee = $this->manager->getRepository(People::class)->find($person->getId());
+      $employee = $this->manager->getRepository(People::class)->find($people->getId());
 
       $company  = $this->manager->getRepository(People::class)->find($payload['id']);
-      $company  = $this->manager->getRepository(PeopleEmployee::class)
+      $company  = $this->manager->getRepository(PeopleLink::class)
         ->findOneBy([
           'company'  => $company,
           'employee' => $employee
@@ -248,7 +248,7 @@ class AdminPersonCompaniesAction
     }
   }
 
-  private function deleteCompany(Person $person, array $payload): bool
+  private function deleteCompany(People $people, array $payload): bool
   {
     try {
       $this->manager->getConnection()->beginTransaction();
@@ -257,23 +257,23 @@ class AdminPersonCompaniesAction
         throw new \InvalidArgumentException('Company id is not defined');
       }
 
-      if ($person->getId() == $payload['id'])
+      if ($people->getId() == $payload['id'])
         throw new \InvalidArgumentException('Can not delete your own people company');
 
       $company = $this->manager->getRepository(People::class)->find($payload['id']);
       if ($company === null)
         throw new \InvalidArgumentException('Company not found');
 
-      $contract = $this->manager->getRepository(PeopleEmployee::class)
+      $contract = $this->manager->getRepository(PeopleLink::class)
         ->findOneBy([
           'company'  => $company,
-          'employee' => $person
+          'employee' => $people
         ]);
 
       if ($contract === null)
-        throw new \InvalidArgumentException('Person company relationship not found');
+        throw new \InvalidArgumentException('People company relationship not found');
 
-      // remove company people and PeopleEmployee
+      // remove company people and PeopleLink
 
       $this->manager->remove($company);
       $this->manager->remove($contract);
@@ -290,11 +290,11 @@ class AdminPersonCompaniesAction
     }
   }
 
-  private function getCompanies(Person $person, ?array $payload = null): array
+  private function getCompanies(People $people, ?array $payload = null): array
   {
     $companies = [];
 
-    foreach ($person->getPeopleCompany() as $peopleCompany) {
+    foreach ($people->getPeopleCompany() as $peopleCompany) {
       $email    = $peopleCompany->getCompany()->getEmail()->first();
       $document = false;
 

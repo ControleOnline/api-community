@@ -94,9 +94,9 @@ class SearchContactAction
     
                     $people = $data;
     
-                    if (($peopleEmployee = $people->getPeopleCompany()->first()) !== false) {
-                        if ($peopleEmployee->getCompany() instanceof People)
-                            $people = $peopleEmployee->getCompany();
+                    if (($peopleLink = $people->getPeopleCompany()->first()) !== false) {
+                        if ($peopleLink->getCompany() instanceof People)
+                            $people = $peopleLink->getCompany();
                     }
     
                 }
@@ -234,12 +234,12 @@ class SearchContactAction
 
         if ($people->getCompany()->count() > 0) {
 
-            foreach ($people->getCompany() as $peopleEmployee) {
+            foreach ($people->getCompany() as $peopleLink) {
                 // TODO: Corrigir o cadastro do cliente e deixar o contato ativo!
-                //  if ($peopleEmployee->getEnabled() == false)
+                //  if ($peopleLink->getEnabled() == false)
                 //      continue;
 
-                $employee = $peopleEmployee->getPeople();
+                $employee = $peopleLink->getPeople();
                 $contact  = $this->getContact($employee);
 
                 if (is_array($contact))

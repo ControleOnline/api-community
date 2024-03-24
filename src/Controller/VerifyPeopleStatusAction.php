@@ -5,7 +5,7 @@ namespace App\Controller;
 use ControleOnline\Entity\Contract;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\PeopleDomain;
-use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleLink;
 use ControleOnline\Entity\PeopleFranchisee;
 use ControleOnline\Entity\PeopleSalesman;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -76,8 +76,8 @@ class VerifyPeopleStatusAction extends AbstractController
 
                   // $isSuper = $mainCompany->getCompany()
                   //     ->exists(
-                  //         function ($key, PeopleEmployee $peopleEmployee) use ($data) {
-                  //             return $peopleEmployee->getPeople() === $data;
+                  //         function ($key, PeopleLink $peopleLink) use ($data) {
+                  //             return $peopleLink->getPeople() === $data;
                   //         }
                   //     );
                   // if ($isSuper) {

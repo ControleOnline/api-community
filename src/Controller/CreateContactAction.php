@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleLink;
 use App\Service\AddressService;
 use App\Service\PeopleService;
 
@@ -137,7 +137,7 @@ class CreateContactAction
 
         
 
-        if ($data['personType'] == 'PF' || !$data['name'] || !$data['alias']) {            
+        if ($data['peopleType'] == 'PF' || !$data['name'] || !$data['alias']) {            
 
             $company = $this->people->create([
                 'name'      => $data['contact']['name'],
@@ -186,8 +186,8 @@ class CreateContactAction
 
             // create contract
 
-            $contract = new PeopleEmployee();
-            $contract->setEmployee($contact);
+            $contract = new PeopleLink();
+            $contract->setPeople($contact);
             $contract->setCompany($company);
             $contract->setEnabled(true);
 

@@ -13,7 +13,7 @@ use ControleOnline\Entity\PeopleSalesman;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Document;
 use ControleOnline\Entity\Email;
-use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleLink;
 use App\Service\PeopleService;
 use App\Service\PeopleRoleService;
 
@@ -96,8 +96,8 @@ class CreateCustomerAction
 
 
             if ($employeeId) {
-                $prov = new PeopleEmployee();
-                $prov->setEmployee($this->manager->getRepository(People::class)->find($employeeId));
+                $prov = new PeopleLink();
+                $prov->setPeople($this->manager->getRepository(People::class)->find($employeeId));
                 $prov->setCompany($people);
                 $prov->setEnabled(1);
                 $this->manager->persist($prov);
@@ -388,7 +388,7 @@ class CreateCustomerAction
 
         $companies  = $repository->createQueryBuilder('P')
             ->select()
-            ->innerJoin('\ControleOnline\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.company = P.id')
+            ->innerJoin('\ControleOnline\Entity\PeopleLink', 'PE', 'WITH', 'PE.company = P.id')
             ->innerJoin('\ControleOnline\Entity\PeopleSalesman', 'PS', 'WITH', 'PS.salesman = PE.company')
             ->where('PE.employee = :employee')
             ->setParameters([

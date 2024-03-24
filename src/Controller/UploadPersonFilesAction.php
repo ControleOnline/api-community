@@ -15,7 +15,7 @@ use ControleOnline\Entity\ParticularsType;
 use ControleOnline\Entity\File as File;
 use App\Library\Utils\File as FileName;
 
-class UploadPersonFilesAction
+class UploadPeopleFilesAction
 {
     /**
      * Entity Manager
@@ -47,14 +47,14 @@ class UploadPersonFilesAction
                 throw new \InvalidArgumentException('The file was not uploaded');
             }
 
-            // validate person
+            // validate people
 
-            if (($person = $request->request->get('customer', null)) === null) {
-                throw new \InvalidArgumentException('Person id is not defined');
+            if (($people = $request->request->get('customer', null)) === null) {
+                throw new \InvalidArgumentException('People id is not defined');
             }
-            $company = $this->manager->getRepository(People::class)->find($person);
+            $company = $this->manager->getRepository(People::class)->find($people);
             if ($company === null) {
-                throw new \InvalidArgumentException('Person was not found');
+                throw new \InvalidArgumentException('People was not found');
             }
 
             // validate type

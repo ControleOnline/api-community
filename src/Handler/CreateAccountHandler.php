@@ -149,10 +149,10 @@ class CreateAccountHandler implements MessageHandlerInterface
 
     private function getCompanyId(User $user)
     {
-      $peopleEmployee = $user->getPeople()->getPeopleCompany()->first();
+      $peopleLink = $user->getPeople()->getPeopleCompany()->first();
 
-      if ($peopleEmployee !== false && $peopleEmployee->getCompany() instanceof People)
-        return $peopleEmployee->getCompany()->getId();
+      if ($peopleLink !== false && $peopleLink->getCompany() instanceof People)
+        return $peopleLink->getCompany()->getId();
 
       return null;
     }

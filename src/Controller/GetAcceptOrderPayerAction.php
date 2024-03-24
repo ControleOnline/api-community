@@ -166,7 +166,7 @@ class GetAcceptOrderPayerAction extends AbstractController
                         ],
                         "contractId" => $order->getContract() ? $order->getContract()->getId() : null,
                         "peopleId" => empty($payer) ? "" : $payer->getId(),
-                        "personType" => empty($payer) ? "PF" : ($payer->getPeopleType() == "J" ? "PJ" : "PF"),
+                        "peopleType" => empty($payer) ? "PF" : ($payer->getPeopleType() == "J" ? "PJ" : "PF"),
                         "name" => empty($payer) ? "" : $payer->getName(),
                         "alias" => empty($payer) ? "" : $payer->getAlias(),
                         "document" => $document,

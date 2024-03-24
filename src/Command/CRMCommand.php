@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Doctrine\ORM\EntityManagerInterface;
 use Twig\Environment;
 use App\Library\Utils\Formatter;
-use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleLink;
 use App\Service\MauticService;
 use ControleOnline\Entity\Task;
 use ControleOnline\Entity\People;
@@ -570,7 +570,7 @@ class CRMCommand extends Command
       ->createQueryBuilder('SO')
       ->select()
       ->leftJoin('\ControleOnline\Entity\Task', 'T', 'WITH', 'SO.client = T.client AND T.provider = SO.provider AND T.type = :taskType AND T.client IS NOT NULL')
-      ->leftJoin('\ControleOnline\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.employee = SO.client')
+      ->leftJoin('\ControleOnline\Entity\PeopleLink', 'PE', 'WITH', 'PE.employee = SO.client')
       ->andWhere('SO.client IS NOT NULL')
       ->andWhere('SO.orderType = :orderType')
       ->andWhere('SO.status IN (:status)')

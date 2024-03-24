@@ -7,16 +7,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleLink;
 use ControleOnline\Entity\People;
-use ControleOnline\Entity\Person;
+use ControleOnline\Entity\People;
 use ControleOnline\Entity\User;
 use ControleOnline\Entity\Email;
 use App\Service\PeopleService;
 use ControleOnline\Entity\PeopleClient;
 use App\Service\PeopleRoleService;
 
-class AdminPersonEmployeesAction
+class AdminPeopleEmployeesAction
 {
     /**
      * Entity Manager
@@ -62,7 +62,7 @@ class AdminPersonEmployeesAction
         $this->peopleRoles = $roles;
     }
 
-    public function __invoke(Person $data, Request $request): JsonResponse
+    public function __invoke(People $data, Request $request): JsonResponse
     {
         $this->request = $request;
 
@@ -99,7 +99,7 @@ class AdminPersonEmployeesAction
         }
     }
 
-    private function createEmployee(Person $person, array $payload): ?array
+    private function createEmployee(People $people, array $payload): ?array
     {
         try {
             $this->manager->getConnection()->beginTransaction();
@@ -108,7 +108,7 @@ class AdminPersonEmployeesAction
                 throw new \InvalidArgumentException('Email param is not defined');
             }
 
-            $company  = $this->manager->getRepository(People::class)->find($person->getId());
+            $company  = $this->manager->getRepository(People::class)->find($people->getId());
             $employee = null;
             $email    = $this->manager->getRepository(Email::class)->findOneBy(['email' => $payload['email']]);
             if ($email === null) {
@@ -152,10 +152,10 @@ class AdminPersonEmployeesAction
 
             // create contract
 
-            $contract = new PeopleEmployee();
+            $contract = new PeopleLink();
 
             $contract->setCompany($company);
-            $contract->setEmployee($employee);
+            $contract->setPeople($employee);
             $contract->setEnabled(true);
 
             $this->manager->persist($contract);
@@ -178,7 +178,7 @@ class AdminPersonEmployeesAction
         }
     }
 
-    private function deleteEmployee(Person $person, array $payload): bool
+    private function deleteEmployee(People $people, array $payload): bool
     {
         try {
             $this->manager->getConnection()->beginTransaction();
@@ -187,13 +187,13 @@ class AdminPersonEmployeesAction
                 throw new \InvalidArgumentException('Employee id is not defined');
             }
 
-            $peopleEmployee = $this->manager->getRepository(PeopleEmployee::class)
+            $peopleLink = $this->manager->getRepository(PeopleLink::class)
                 ->find($payload['id']);
 
-            if ($peopleEmployee === null)
-                throw new \InvalidArgumentException('Person employee relationship not found');
+            if ($peopleLink === null)
+                throw new \InvalidArgumentException('People employee relationship not found');
 
-            $this->manager->remove($peopleEmployee);
+            $this->manager->remove($peopleLink);
 
             $this->manager->flush();
             $this->manager->getConnection()->commit();
@@ -207,18 +207,18 @@ class AdminPersonEmployeesAction
         }
     }
 
-    private function getPeoples(Person $person, ?array $payload = null): array
+    private function getPeoples(People $people, ?array $payload = null): array
     {
         $employees = [];
 
-        foreach ($person->getCompany() as $peopleEmployee) {
-            $email = $peopleEmployee->getPeople()->getEmail()->first();
+        foreach ($people->getCompany() as $peopleLink) {
+            $email = $peopleLink->getPeople()->getEmail()->first();
 
             $employees[] = [
-                'people_company_id' => $peopleEmployee->getId(),
-                'id'    => $peopleEmployee->getPeople()->getId(),
-                'name'  => $peopleEmployee->getPeople()->getName(),
-                'alias' => $peopleEmployee->getPeople()->getAlias(),
+                'people_company_id' => $peopleLink->getId(),
+                'id'    => $peopleLink->getPeople()->getId(),
+                'name'  => $peopleLink->getPeople()->getName(),
+                'alias' => $peopleLink->getPeople()->getAlias(),
                 'email' => $email !== false ? $email->getEmail() : null,
             ];
         }

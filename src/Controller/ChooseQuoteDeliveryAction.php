@@ -123,7 +123,7 @@ class ChooseQuoteDeliveryAction extends ChooseQuoteAction
             throw new ItemNotFoundException('Quote order not found');
 
 
-        if ($params['myCompany'] && $params['delivery']['whereDelivery'] == 'MC' && $params['delivery']['personType'] == 'PJ') {
+        if ($params['myCompany'] && $params['delivery']['whereDelivery'] == 'MC' && $params['delivery']['peopleType'] == 'PJ') {
             $receiver = $this->manager->getRepository(People::class)->find($params['myCompany']);
         } elseif ($document) {
             $receiver = $this->manager->getRepository(People::class)->findOneBy([
@@ -131,7 +131,7 @@ class ChooseQuoteDeliveryAction extends ChooseQuoteAction
                     'document' => preg_replace('/[^0-9]/', '',  $params['document'])
                 ])
             ]);
-        } elseif ($params['delivery']['personType'] == 'PJ') {
+        } elseif ($params['delivery']['peopleType'] == 'PJ') {
 
             $lang = $this->manager->getRepository(Language::class)
                 ->findOneBy([

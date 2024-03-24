@@ -9,10 +9,10 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use ControleOnline\Entity\Person;
+use ControleOnline\Entity\People;
 use ControleOnline\Entity\File as File;
 
-class DownloadPersonFileAction
+class DownloadPeopleFileAction
 {
     /**
      * Entity Manager
@@ -34,7 +34,7 @@ class DownloadPersonFileAction
         $this->manager = $entityManager;
     }
 
-    public function __invoke(Person $data, int $fileId)
+    public function __invoke(People $data, int $fileId)
     {
         try {
 

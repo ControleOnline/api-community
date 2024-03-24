@@ -127,7 +127,7 @@ class SaveAcceptOrderPayerAction extends AbstractController
                 $payer = new People();
                 $payer->setEnabled(1);
                 $payer->setLanguage($lang);
-                $payer->setPeopleType($payload["personType"] == "PF" ? "F" : "J");
+                $payer->setPeopleType($payload["peopleType"] == "PF" ? "F" : "J");
             }
 
             $payer->setName($payload["name"]);
@@ -373,7 +373,7 @@ class SaveAcceptOrderPayerAction extends AbstractController
          */
         $docType = $this->manager->getRepository(DocumentType::class)
             ->findOneBy([
-                "documentType" => $payload["personType"] == "PF" ? "CPF" : "CNPJ"
+                "documentType" => $payload["peopleType"] == "PF" ? "CPF" : "CNPJ"
             ]);
         $document->setDocumentType($docType);
         $document->setDocument($payload["document"]);

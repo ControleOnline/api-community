@@ -190,7 +190,7 @@ class Contract
 
         $signer->setEmail($email->getEmail());
 
-        if ($people->isPerson()) {
+        if ($people->isPeople()) {
             $signer->setHasCPF(true);
 
             if (($document = $people->getOneDocument()) === null) {

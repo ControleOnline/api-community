@@ -6,7 +6,7 @@ use ControleOnline\Entity\Config;
 use ControleOnline\Entity\File;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\PeopleDomain;
-use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleLink;
 use ControleOnline\Entity\PeoplePackage;
 use ControleOnline\Entity\PeopleSalesman;
 use App\Service\PeopleRoleService;
@@ -58,7 +58,7 @@ class GetMyCompaniesAction
       $getPeopleCompanies = $userPeople->getPeopleCompany();
 
       /**
-       * @var \ControleOnline\Entity\PeopleEmployee $peopleCompany
+       * @var \ControleOnline\Entity\PeopleLink $peopleCompany
        */
       foreach ($getPeopleCompanies as $peopleCompany) {
 
@@ -138,7 +138,7 @@ class GetMyCompaniesAction
             }
           }
 
-          $peopleemployee =   $this->em->getRepository(PeopleEmployee::class)->findOneBy(['company' => $company, 'employee' => $userPeople]);
+          $peopleemployee =   $this->em->getRepository(PeopleLink::class)->findOneBy(['company' => $company, 'employee' => $userPeople]);
 
           $permissions[$company->getId()][] = 'salesman';
           $myCompanies[$company->getId()] = [

@@ -9,12 +9,12 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-use ControleOnline\Entity\Person;
+use ControleOnline\Entity\People;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\File as File;
 use App\Library\Utils\File as FileName;
 
-class UploadPersonImageAction
+class UploadPeopleImageAction
 {
   /**
    * Entity Manager
@@ -39,7 +39,7 @@ class UploadPersonImageAction
     $this->appKernel = $appKernel;
   }
 
-  public function __invoke(Person $data, Request $request): JsonResponse
+  public function __invoke(People $data, Request $request): JsonResponse
   {
     try {
       if (!($file = $request->files->get('file'))) {
@@ -50,7 +50,7 @@ class UploadPersonImageAction
         throw new \InvalidArgumentException('The file is not an file');
       }
 
-      $fileInfo  = $this->getPersonFileInfo($data, $file);
+      $fileInfo  = $this->getPeopleFileInfo($data, $file);
 
       $people    = $this->manager->getRepository(People::class)->find($data->getId());
       $fileFile = $people->getFile();
@@ -98,14 +98,14 @@ class UploadPersonImageAction
     }
   }
 
-  private function getPersonFileInfo(Person $person, UploadedFile $file): array
+  private function getPeopleFileInfo(People $people, UploadedFile $file): array
   {
     $fileInfo = pathinfo($file->getClientOriginalName());
 
     return [
-      'fileUrl'  => sprintf('/files/%s/%s', $person->getId(), $file->getClientOriginalName()),
+      'fileUrl'  => sprintf('/files/%s/%s', $people->getId(), $file->getClientOriginalName()),
       'fileName' => FileName::generateUniqueName($fileInfo['filename'], $fileInfo['extension']),
-      'userPath' => sprintf('data/files/users/profile/%s', $person->getId()),
+      'userPath' => sprintf('data/files/users/profile/%s', $people->getId()),
     ];
   }
 

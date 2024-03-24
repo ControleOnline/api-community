@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Security;
 
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\PeopleClient;
-use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleLink;
 use ControleOnline\Entity\PeopleSalesman;
 use App\Service\PeopleService;
 use App\Service\AddressService;
@@ -383,14 +383,14 @@ class CreateClientAction
 
         // create client contact relationship
 
-        $peopleEmployee = new PeopleEmployee();
-        $peopleEmployee->setCompany($client);
-        $peopleEmployee->setEmployee($contact);
-        $peopleEmployee->setEnabled(true);
+        $peopleLink = new PeopleLink();
+        $peopleLink->setCompany($client);
+        $peopleLink->setPeople($contact);
+        $peopleLink->setEnabled(true);
 
         $this->manager->persist($client);
         $this->manager->persist($contact);
-        $this->manager->persist($peopleEmployee);
+        $this->manager->persist($peopleLink);
 
         return $client;
     }
@@ -466,7 +466,7 @@ class CreateClientAction
 
         $companies  = $repository->createQueryBuilder('P')
             ->select()
-            ->innerJoin('\ControleOnline\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.company = P.id')
+            ->innerJoin('\ControleOnline\Entity\PeopleLink', 'PE', 'WITH', 'PE.company = P.id')
             ->innerJoin('\ControleOnline\Entity\PeopleSalesman', 'PS', 'WITH', 'PS.salesman = PE.company')
             ->where('PE.employee = :employee')
             ->setParameters([

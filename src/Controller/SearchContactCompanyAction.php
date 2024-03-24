@@ -13,7 +13,7 @@ use ControleOnline\Entity\Email;
 use ControleOnline\Entity\Phone;
 use ControleOnline\Entity\DocumentType;
 use ControleOnline\Entity\Address;
-use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleLink;
 use ControleOnline\Entity\Language;
 
 class SearchContactCompanyAction
@@ -172,8 +172,8 @@ class SearchContactCompanyAction
                     ])
             );
 
-            $people_employe = new PeopleEmployee();
-            $people_employe->setEmployee($contact);
+            $people_employe = new PeopleLink();
+            $people_employe->setPeople($contact);
             $people_employe->setCompany($company);
 
 

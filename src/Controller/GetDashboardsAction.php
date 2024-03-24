@@ -745,7 +745,7 @@ class GetDashboardsAction extends AbstractCustomResourceAction
 
     return $repository->createQueryBuilder('P')
       ->select()
-      ->innerJoin('\ControleOnline\Entity\PeopleEmployee', 'PE', 'WITH', 'PE.company = P.id')
+      ->innerJoin('\ControleOnline\Entity\PeopleLink', 'PE', 'WITH', 'PE.company = P.id')
       ->innerJoin('\ControleOnline\Entity\PeopleSalesman', 'PS', 'WITH', 'PS.salesman = PE.company')
       ->where('PE.employee = :employee')
       ->setParameters([

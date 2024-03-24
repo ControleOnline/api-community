@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Phone;
 use ControleOnline\Entity\User;
-use ControleOnline\Entity\PeopleEmployee;
+use ControleOnline\Entity\PeopleLink;
 use App\Service\AddressService;
 use App\Service\PeopleService;
 use App\Service\PeopleRoleService;
@@ -263,7 +263,7 @@ class UpdatePeopleProfileAction
 
   /**
    * Esta funcao foi adaptada para manter compatibilidade.
-   * @todo usar AdminPersonEmployeesAction
+   * @todo usar AdminPeopleEmployeesAction
    */
   private function handleEmployee(People $company, array $payload, string $operation)
   {
@@ -275,9 +275,9 @@ class UpdatePeopleProfileAction
 
           $employee = $this->people->create($payload, false);
 
-          $contract = new PeopleEmployee();
+          $contract = new PeopleLink();
           $contract->setCompany ($company);
-          $contract->setEmployee($employee);
+          $contract->setPeople($employee);
           $contract->setEnabled (true);
 
           $this->manager->persist($contract);
@@ -302,7 +302,7 @@ class UpdatePeopleProfileAction
         if ($employee === null)
           throw new ItemNotFoundException('Employee not found');
 
-        $contract = $this->manager->getRepository(PeopleEmployee::class)
+        $contract = $this->manager->getRepository(PeopleLink::class)
           ->findOneBy([
             'employee' => $employee,
             'company'  => $company
