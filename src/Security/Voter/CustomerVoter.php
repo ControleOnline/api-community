@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 use Doctrine\ORM\EntityManagerInterface;
 
-use App\Service\PeopleRoleService;
+use ControleOnline\Service\PeopleRoleService;
 
 class CustomerVoter extends Voter
 {

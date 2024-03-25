@@ -12,7 +12,7 @@ use ControleOnline\Entity\People;
 use ControleOnline\Entity\Email;
 use App\Service\PeopleService;
 use ControleOnline\Entity\PeopleClient;
-use App\Service\PeopleRoleService;
+use ControleOnline\Service\PeopleRoleService;
 
 class AdminPeopleEmployeesAction
 {

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use ControleOnline\Entity\People;
 use ControleOnline\Repository\PeopleRepository;
-use App\Service\PeopleRoleService;
+use ControleOnline\Service\PeopleRoleService;
 
 class GetProfessionalCollectionAction
 {
@@ -61,7 +61,7 @@ class GetProfessionalCollectionAction
         $company = $this->manager->getRepository(People::class)->find($company);
       }
       
-      $roles = $this->roles->getAllRolesByCompany($this->security->getUser()->getPeople(), $company);
+      $roles = $this->roles->getAllRoles($this->security->getUser()->getPeople());
       if (!in_array('super', $roles) && !in_array('franchisee', $roles) && !in_array('salesman', $roles)) {
         throw new \Exception('Access denied', 403);
       }

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use ControleOnline\Entity\SchoolClass;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\PeopleSalesman;
-use App\Service\PeopleRoleService;
+use ControleOnline\Service\PeopleRoleService;
 
 class GetSchoolProfessionalClassesCollectionAction
 {

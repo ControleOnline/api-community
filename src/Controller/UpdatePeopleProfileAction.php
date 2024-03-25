@@ -15,7 +15,7 @@ use ControleOnline\Entity\User;
 use ControleOnline\Entity\PeopleLink;
 use App\Service\AddressService;
 use App\Service\PeopleService;
-use App\Service\PeopleRoleService;
+use ControleOnline\Service\PeopleRoleService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 

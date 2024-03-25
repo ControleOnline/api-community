@@ -9,7 +9,7 @@ use ControleOnline\Entity\PeopleDomain;
 use ControleOnline\Entity\PeopleLink;
 use ControleOnline\Entity\PeoplePackage;
 use ControleOnline\Entity\PeopleSalesman;
-use App\Service\PeopleRoleService;
+use ControleOnline\Service\PeopleRoleService;
 use ControleOnline\Entity\PackageModules;
 use ControleOnline\Entity\Module;
 
@@ -72,7 +72,7 @@ class GetMyCompaniesAction
         $packages = $this->getPeoplePackages($people);
 
 
-        $permissions[$people->getId()] = $this->roles->getAllRolesByCompany($userPeople, $people);
+        $permissions[$people->getId()] = $this->roles->getAllRoles($userPeople);
 
         $allConfigs = $this->em->getRepository(Config::class)->findBy([
           'people'      => $people->getId(),
@@ -103,8 +103,7 @@ class GetMyCompaniesAction
         //}
       }
 
-
-      $peopleSalesman     = $this->em->getRepository(PeopleSalesman::class)->getMySaleCompanies($userPeople);
+      $peopleSalesman = $this->em->getRepository(People::class)->getPeopleLinks($userPeople, 'salesman');
 
       foreach ($peopleSalesman as $com) {
         $company = $this->em->getRepository(People::class)->find($com['people_id']);
@@ -264,7 +263,7 @@ class GetMyCompaniesAction
       return [
         'id'     => $company->getFile()->getId(),
         'domain' => $_SERVER['HTTP_HOST'],
-        'url'    => '/files/download/'.$company->getFile()->getId()
+        'url'    => '/files/download/' . $company->getFile()->getId()
       ];
 
     return null;

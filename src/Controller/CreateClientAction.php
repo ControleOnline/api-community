@@ -17,7 +17,7 @@ use ControleOnline\Entity\PeopleLink;
 use ControleOnline\Entity\PeopleSalesman;
 use App\Service\PeopleService;
 use App\Service\AddressService;
-use App\Service\PeopleRoleService;
+use ControleOnline\Service\PeopleRoleService;
 
 class CreateClientAction
 {

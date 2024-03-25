@@ -15,7 +15,7 @@ use ControleOnline\Entity\Document;
 use ControleOnline\Entity\Email;
 use ControleOnline\Entity\PeopleLink;
 use App\Service\PeopleService;
-use App\Service\PeopleRoleService;
+use ControleOnline\Service\PeopleRoleService;
 
 class CreateCustomerAction
 {

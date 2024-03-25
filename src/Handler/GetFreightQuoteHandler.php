@@ -25,7 +25,7 @@ use ControleOnline\Repository\QuoteRepository;
 use App\Library\Quote\View\Group as ViewGroup;
 use App\Library\Quote\Core\DataBag;
 use App\Library\Utils\Address;
-use App\Service\PeopleRoleService;
+use ControleOnline\Service\PeopleRoleService;
 
 
 use SDK\SDK;

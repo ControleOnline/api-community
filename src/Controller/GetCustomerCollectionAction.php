@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\PeopleSalesman;
 use ControleOnline\Repository\PeopleRepository;
-use App\Service\PeopleRoleService;
+use ControleOnline\Service\PeopleRoleService;
 
 class GetCustomerCollectionAction
 {
@@ -87,7 +87,7 @@ class GetCustomerCollectionAction
       $toDate   = $request->query->get('to', null);
       $table    = $request->query->get('table', "customer");
 
-      $myRoles   = $this->peopleRoles->getAllRolesByCompany($myPeople, $provider);
+      $myRoles   = $this->peopleRoles->getAllRoles($myPeople);
 
       $searchBy = $request->query->get('searchBy', null);
 

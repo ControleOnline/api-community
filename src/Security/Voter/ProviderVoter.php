@@ -7,7 +7,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 use Doctrine\ORM\EntityManagerInterface;
 
-use App\Service\PeopleRoleService;
+use ControleOnline\Service\PeopleRoleService;
 use ControleOnline\Entity\Provider;
 use ControleOnline\Entity\User;
 use ControleOnline\Entity\People;

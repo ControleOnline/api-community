@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use ControleOnline\Entity\Config;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\PeopleDomain;
-use App\Service\PeopleRoleService;
+use ControleOnline\Service\PeopleRoleService;
 
 class GetDefaultCompanyAction
 {
@@ -47,7 +47,7 @@ class GetDefaultCompanyAction
       $allConfigs = [];
       $user = $this->security->getUser();
 
-      $permissions = $user ? $this->roles->getAllRolesByCompany($user->getPeople(), $this->company->getPeople()) : ['guest'];
+      $permissions = $user ? $this->roles->getAllRoles($user->getPeople()) : ['guest'];
 
       if ($this->company) {
         $allConfigs = $this->em->getRepository(Config::class)->findBy([

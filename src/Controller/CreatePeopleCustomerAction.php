@@ -13,7 +13,7 @@ use ControleOnline\Entity\People;
 use ControleOnline\Entity\Document;
 use ControleOnline\Entity\Email;
 use App\Service\PeopleService;
-use App\Service\PeopleRoleService;
+use ControleOnline\Service\PeopleRoleService;
 use App\Service\AddressService;
 
 class CreatePeopleCustomerAction

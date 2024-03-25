@@ -36,7 +36,7 @@ use ControleOnline\Entity\CompanyExpense;
 use ControleOnline\Entity\Category;
 use ControleOnline\Entity\Orders;
 use ControleOnline\Entity\PurchasingOrderInvoice;
-use App\Service\PeopleRoleService;
+use ControleOnline\Service\PeopleRoleService;
 use ControleOnline\Entity\Display;
 use ControleOnline\Entity\PaymentType;
 use ControleOnline\Entity\Wallet;
