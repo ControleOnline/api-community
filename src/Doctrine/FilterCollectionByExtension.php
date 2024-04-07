@@ -157,20 +157,18 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
   private function checkLink(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
   {
 
-
+    $link   = $this->request->query->get('link',   null);
+    $company = $this->request->query->get('company', null);
+    
+    $queryBuilder->join(sprintf('%s.' . ($link ? 'company' : 'link'), $rootAlias), 'PeopleLink');
     $link_type = $this->request->query->get('link_type', 'client');
     $queryBuilder->andWhere('PeopleLink.link_type IN(:link_type)');
     $queryBuilder->setParameter('link_type', $link_type);
 
-    $link   = $this->request->query->get('link',   null);
-    $people = $this->request->query->get('people', null);
-
-    //if (!$people && !$link)
-      //throw new Exception("You need send people or link param to search any people", 301);
-
-    $queryBuilder->join(sprintf('%s.' . ($people ? 'people' : 'link'), $rootAlias), 'PeopleLink');
-    $queryBuilder->andWhere('PeopleLink.' . ($people ? 'people' : 'link') . ' IN(:people)');
-    $queryBuilder->setParameter('people', preg_replace("/[^0-9]/", "", $people));
+    if ($company || $link) {
+      $queryBuilder->andWhere('PeopleLink.' . ($link ? 'people' : 'company') . ' IN(:people)');
+      $queryBuilder->setParameter('people', preg_replace("/[^0-9]/", "", ($link ?: $company)));
+    }
   }
   private function checkCompany($type, QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
   {
