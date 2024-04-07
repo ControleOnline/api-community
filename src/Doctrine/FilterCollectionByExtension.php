@@ -156,15 +156,17 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
   }
   private function checkLink(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
   {
-
+    
     $link   = $this->request->query->get('link',   null);
     $company = $this->request->query->get('company', null);
-    
-    $queryBuilder->join(sprintf('%s.' . ($link ? 'company' : 'link'), $rootAlias), 'PeopleLink');
-    $link_type = $this->request->query->get('link_type', 'client');
-    $queryBuilder->andWhere('PeopleLink.link_type IN(:link_type)');
-    $queryBuilder->setParameter('link_type', $link_type);
+    $link_type = $this->request->query->get('link_type', null);
 
+    if ($link_type) {
+      $queryBuilder->join(sprintf('%s.' . ($link ? 'company' : 'link'), $rootAlias), 'PeopleLink');
+      $queryBuilder->andWhere('PeopleLink.link_type IN(:link_type)');
+      $queryBuilder->setParameter('link_type', $link_type);
+    }
+    
     if ($company || $link) {
       $queryBuilder->andWhere('PeopleLink.' . ($link ? 'people' : 'company') . ' IN(:people)');
       $queryBuilder->setParameter('people', preg_replace("/[^0-9]/", "", ($link ?: $company)));
