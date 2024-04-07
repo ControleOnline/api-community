@@ -11,36 +11,16 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Doctrine\ORM\EntityManagerInterface;
 
-use ControleOnline\Entity\PurchasingOrder;
-use ControleOnline\Entity\SalesOrder;
-use ControleOnline\Entity\People;
 use ControleOnline\Entity\Invoice;
-use ControleOnline\Entity\Phone;
-use ControleOnline\Entity\User;
-use ControleOnline\Entity\Address;
-use ControleOnline\Entity\Client;
-use ControleOnline\Entity\ComissionInvoice;
-use ControleOnline\Entity\ComissionOrder;
-use ControleOnline\Entity\Document;
-use ControleOnline\Entity\Status;
-use ControleOnline\Entity\Email;
-use ControleOnline\Entity\PeopleClient;
-use ControleOnline\Entity\PeopleLink;
-use ControleOnline\Entity\PeopleSalesman;
-use ControleOnline\Entity\PeopleCarrier;
-use ControleOnline\Entity\MyContract;
-use ControleOnline\Entity\ProductOld as Product;
-use ControleOnline\Entity\PeopleDomain;
-use ControleOnline\Entity\Provider;
-use ControleOnline\Entity\CompanyExpense;
-use ControleOnline\Entity\Category;
 use ControleOnline\Entity\Orders;
-use ControleOnline\Entity\PurchasingOrderInvoice;
 use ControleOnline\Service\PeopleRoleService;
 use ControleOnline\Entity\Display;
 use ControleOnline\Entity\PaymentType;
+use ControleOnline\Entity\People;
+use ControleOnline\Entity\Product;
 use ControleOnline\Entity\ProductGroup;
 use ControleOnline\Entity\Wallet;
+use Exception;
 
 final class FilterCollectionByExtension
 implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
@@ -98,6 +78,9 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
         break;
       case Invoice::class:
         $this->invoice($queryBuilder, $resourceClass, $applyTo, $rootAlias);
+        break;
+      case People::class:
+        $this->checkLink($queryBuilder, $resourceClass, $applyTo, $rootAlias);
         break;
       case Display::class:
         $this->checkCompany('company', $queryBuilder, $resourceClass, $applyTo, $rootAlias);
@@ -171,7 +154,24 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
       $queryBuilder->setParameter('receiver', preg_replace("/[^0-9]/", "", $receiver));
     }
   }
+  private function checkLink(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
+  {
 
+
+    $link_type = $this->request->query->get('link_type', 'client');
+    $queryBuilder->andWhere('PeopleLink.link_type IN(:link_type)');
+    $queryBuilder->setParameter('link_type', $link_type);
+
+    $link   = $this->request->query->get('link',   null);
+    $people = $this->request->query->get('people', null);
+
+    //if (!$people && !$link)
+      //throw new Exception("You need send people or link param to search any people", 301);
+
+    $queryBuilder->join(sprintf('%s.' . ($people ? 'people' : 'link'), $rootAlias), 'PeopleLink');
+    $queryBuilder->andWhere('PeopleLink.' . ($people ? 'people' : 'link') . ' IN(:people)');
+    $queryBuilder->setParameter('people', preg_replace("/[^0-9]/", "", $people));
+  }
   private function checkCompany($type, QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
   {
     $companies   = $this->getMyCompanies();
