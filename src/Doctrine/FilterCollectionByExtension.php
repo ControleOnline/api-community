@@ -126,10 +126,10 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 
   private function  orderProduct(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
   {
-    $queryBuilder->join(sprintf('%s.order', $rootAlias), 'o');
-    $queryBuilder->andWhere('o.client IN(:companies) OR o.provider IN(:companies)');
-    $companies   = $this->getMyCompanies();
-    $queryBuilder->setParameter('companies', $companies);
+    //$queryBuilder->join(sprintf('%s.order', $rootAlias), 'o');
+    //$queryBuilder->andWhere('o.client IN(:companies) OR o.provider IN(:companies)');
+    //$companies   = $this->getMyCompanies();
+    //$queryBuilder->setParameter('companies', $companies);
   }
 
   private function orders(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
