@@ -15,6 +15,7 @@ use ControleOnline\Entity\Invoice;
 use ControleOnline\Entity\Orders;
 use ControleOnline\Service\PeopleRoleService;
 use ControleOnline\Entity\Display;
+use ControleOnline\Entity\OrderProduct;
 use ControleOnline\Entity\PaymentType;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\Product;
@@ -88,6 +89,9 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
       case Orders::class:
         $this->orders($queryBuilder, $resourceClass, $applyTo, $rootAlias);
         break;
+      case OrderProduct::class:
+        $this->orderProduct($queryBuilder, $resourceClass, $applyTo, $rootAlias);
+        break;
       case ProductGroup::class:
         $this->checkProductGroup($queryBuilder, $resourceClass, $applyTo, $rootAlias);
         break;
@@ -118,6 +122,14 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
       $queryBuilder->andWhere('product.id = :product');
       $queryBuilder->setParameter('product', $product);
     }
+  }
+
+  private function  orderProduct(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
+  {
+    $queryBuilder->join(sprintf('%s.order', $rootAlias), 'order');
+    $queryBuilder->andWhere('order.client IN(:companies) OR order.provider IN(:companies)');
+    $companies   = $this->getMyCompanies();
+    $queryBuilder->setParameter('order', $companies);
   }
 
   private function orders(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
@@ -156,7 +168,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
   }
   private function checkLink(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
   {
-    
+
     $link   = $this->request->query->get('link',   null);
     $company = $this->request->query->get('company', null);
     $link_type = $this->request->query->get('link_type', null);
@@ -166,7 +178,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
       $queryBuilder->andWhere('PeopleLink.link_type IN(:link_type)');
       $queryBuilder->setParameter('link_type', $link_type);
     }
-    
+
     if ($company || $link) {
       $queryBuilder->andWhere('PeopleLink.' . ($link ? 'people' : 'company') . ' IN(:people)');
       $queryBuilder->setParameter('people', preg_replace("/[^0-9]/", "", ($link ?: $company)));
