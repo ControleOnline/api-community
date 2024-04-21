@@ -129,7 +129,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
     $queryBuilder->join(sprintf('%s.order', $rootAlias), 'order');
     $queryBuilder->andWhere('order.client IN(:companies) OR order.provider IN(:companies)');
     $companies   = $this->getMyCompanies();
-    $queryBuilder->setParameter('order', $companies);
+    $queryBuilder->setParameter('companies', $companies);
   }
 
   private function orders(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
