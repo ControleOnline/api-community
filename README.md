@@ -10,3 +10,9 @@ API - Controle Online
 - 2.5: API Platform
 
 X
+
+### Submodules
+```bash
+git submodule update --init --recursive
+git submodule update --recursive
+```
