@@ -136,7 +136,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
   {
     $companies   = $this->getMyCompanies();
 
-    if ($invoice = $this->request->query->get('invoice', null)) {
+    if ($invoice = $this->request->query->get('invoiceId', null)) {
       $queryBuilder->join(sprintf('%s.invoice', $rootAlias), 'OrderInvoice');
       $queryBuilder->andWhere(sprintf('OrderInvoice.invoice IN(:invoice)', $rootAlias, $rootAlias));
       $queryBuilder->setParameter('invoice', $invoice);
