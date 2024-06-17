@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Doctrine\ORM\EntityManagerInterface;
 
 use ControleOnline\Entity\Invoice;
-use ControleOnline\Entity\Orders;
+use ControleOnline\Entity\Order;
 use ControleOnline\Service\PeopleRoleService;
 use ControleOnline\Entity\Display;
 use ControleOnline\Entity\OrderProduct;
@@ -57,14 +57,14 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 
   private function addWhere(QueryBuilder $queryBuilder, $resourceClass, $applyTo): void
   {
-
+    /*
     if (empty($this->security->getUser()))
       return;
 
     if ($this->security->isGranted('ROLE_ADMIN')) {
       return;
     }
-
+    */
     $rootAlias = $queryBuilder->getRootAliases()[0];
 
     switch ($resourceClass) {
@@ -86,7 +86,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
       case Display::class:
         $this->checkCompany('company', $queryBuilder, $resourceClass, $applyTo, $rootAlias);
         break;
-      case Orders::class:
+      case Order::class:
         $this->orders($queryBuilder, $resourceClass, $applyTo, $rootAlias);
         break;
       case OrderProduct::class:
