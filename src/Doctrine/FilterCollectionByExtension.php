@@ -137,7 +137,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
     $companies   = $this->getMyCompanies();
 
     if ($invoice = $this->request->query->get('invoiceId', null)) {
-      $queryBuilder->join(sprintf('%s.invoice', $rootAlias), 'OrderInvoice');
+      $queryBuilder->join(sprintf('%s.order', $rootAlias), 'OrderInvoice');
       $queryBuilder->andWhere(sprintf('OrderInvoice.invoice IN(:invoice)', $rootAlias, $rootAlias));
       $queryBuilder->setParameter('invoice', $invoice);
     }
@@ -162,7 +162,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 
 
     if ($order = $this->request->query->get('orderId', null)) {
-      $queryBuilder->join(sprintf('%s.order', $rootAlias), 'OrderInvoice');
+      $queryBuilder->join(sprintf('%s.invoice', $rootAlias), 'OrderInvoice');
       $queryBuilder->andWhere(sprintf('OrderInvoice.order IN(:order)', $rootAlias, $rootAlias));
       $queryBuilder->setParameter('order', $order);
     }
