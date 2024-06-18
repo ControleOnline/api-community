@@ -159,6 +159,14 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 
   private function invoice(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
   {
+
+
+    if ($order = $this->request->query->get('orderId', null)) {
+      $queryBuilder->join(sprintf('%s.order', $rootAlias), 'OrderInvoice');
+      $queryBuilder->andWhere(sprintf('OrderInvoice.order IN(:order)', $rootAlias, $rootAlias));
+      $queryBuilder->setParameter('order', $order);
+    }
+
     $companies   = $this->getMyCompanies();
     $queryBuilder->andWhere(sprintf('%s.payer IN(:companies) OR %s.receiver IN(:companies)', $rootAlias, $rootAlias));
     $queryBuilder->setParameter('companies', $companies);
