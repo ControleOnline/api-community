@@ -179,6 +179,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
       $queryBuilder->andWhere(sprintf('%s.receiver IN(:receiver)', $rootAlias));
       $queryBuilder->setParameter('receiver', preg_replace("/[^0-9]/", "", $receiver));
     }
+    echo $queryBuilder->getQuery()->getSQL();
   }
   private function checkLink(QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null): void
   {
