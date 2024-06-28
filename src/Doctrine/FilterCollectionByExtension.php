@@ -75,7 +75,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
         $this->checkCompany('people', $queryBuilder, $resourceClass, $applyTo, $rootAlias);
         break;
       case Product::class:
-        $this->checkCompany('company', $queryBuilder, $resourceClass, $applyTo, $rootAlias);
+        //$this->checkCompany('company', $queryBuilder, $resourceClass, $applyTo, $rootAlias);
         break;
       case Invoice::class:
         $this->invoice($queryBuilder, $resourceClass, $applyTo, $rootAlias);
