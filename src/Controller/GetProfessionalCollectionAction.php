@@ -61,7 +61,7 @@ class GetProfessionalCollectionAction
         $company = $this->manager->getRepository(People::class)->find($company);
       }
       
-      $roles = $this->roles->getAllRoles($this->security->getUser()->getPeople());
+      $roles = $this->roles->getAllRoles($this->security->getUser());
       if (!in_array('super', $roles) && !in_array('franchisee', $roles) && !in_array('salesman', $roles)) {
         throw new \Exception('Access denied', 403);
       }

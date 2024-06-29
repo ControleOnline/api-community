@@ -482,7 +482,7 @@ class GetQuoteHandler implements MessageHandlerInterface
         throw new EmptyResultsException("This e-mail is in use by a another user. Please login.", 401);
     } elseif (!$email)
       return false;
-    elseif ($this->people->getId() != $email->getPeople()->getId() && !$this->roles->isFranchisee($this->people) && !$this->roles->isSuperAdmin($this->people))
+    elseif ($this->people->getId() != $email->getPeople()->getId())
       throw new EmptyResultsException("This e-mail is in use by a another user.", 401);
 
 

@@ -71,7 +71,7 @@ class GetSettingVoter extends Voter
 
     private function isUserAdminInCompany(GetSetting $getSetting, User $user): bool
     {
-      $roles = $this->roles->getAllRoles($user->getPeople());
+      $roles = $this->roles->getAllRoles($user);
 
       if (in_array('super', $roles) || in_array('franchisee', $roles)) {
         if (!empty($getSetting->id)) {

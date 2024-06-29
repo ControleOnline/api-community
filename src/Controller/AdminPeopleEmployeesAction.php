@@ -259,7 +259,7 @@ class AdminPeopleEmployeesAction
 
             // create salesman employee link            
 
-            if ($this->peopleRoles->isSalesman($this->currentUser->getPeople())) {
+            if ($this->peopleRoles->isSalesman($this->currentUser)) {
                 $companies = $this->currentUser->getPeople() ?
                     $this->currentUser->getPeople()->getLink() : null;
 

@@ -94,7 +94,7 @@ class CategoryVoter extends Voter
 
   private function isUserAdminInCompany(Category $category, User $user): bool
   {
-    $roles = $this->roles->getAllRoles($user->getPeople());
+    $roles = $this->roles->getAllRoles($user);
 
     if ($category->getCompany() === null)
       return false;

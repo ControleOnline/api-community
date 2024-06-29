@@ -48,8 +48,8 @@ class CustomerVoter extends Voter
         }
 
         if (
-            $this->peopleRoles->isSuperAdmin($user->getPeople()) ||
-            $this->peopleRoles->isFranchisee($user->getPeople())
+            $this->peopleRoles->isSuperAdmin($user) ||
+            $this->peopleRoles->isFranchisee($user)
         ) {
             return true;
         }

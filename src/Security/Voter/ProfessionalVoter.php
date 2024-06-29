@@ -46,7 +46,7 @@ class ProfessionalVoter extends Voter
             return false;
         }
 
-        $roles = $this->roles->getAllRoles($user->getPeople());
+        $roles = $this->roles->getAllRoles($user);
         if (!in_array('super', $roles) && !in_array('franchisee', $roles) && !in_array('salesman', $roles)) {
             return false;
         }

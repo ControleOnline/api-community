@@ -74,7 +74,7 @@ class ProviderVoter extends Voter
 
     private function canCreate(Provider $provider, User $user)
     {
-        $roles = $this->roles->getAllRoles($user->getPeople());
+        $roles = $this->roles->getAllRoles($user);
 
         if (in_array('super', $roles) || in_array('franchisee', $roles)) {
             return true;
@@ -85,7 +85,7 @@ class ProviderVoter extends Voter
 
     private function canRead(Provider $provider, User $user)
     {
-        $roles = $this->roles->getAllRoles($user->getPeople());
+        $roles = $this->roles->getAllRoles($user);
 
         if (in_array('super', $roles) || in_array('franchisee', $roles)) {
             return true;
@@ -96,7 +96,7 @@ class ProviderVoter extends Voter
 
     private function canEdit(Provider $provider, User $user)
     {
-        $roles = $this->roles->getAllRoles($user->getPeople());
+        $roles = $this->roles->getAllRoles($user);
 
         if (in_array('super', $roles) || in_array('franchisee', $roles)) {
             return true;
@@ -107,7 +107,7 @@ class ProviderVoter extends Voter
 
     private function canDelete(Provider $provider, User $user)
     {
-        $roles = $this->roles->getAllRoles($user->getPeople());
+        $roles = $this->roles->getAllRoles($user);
 
         if (in_array('super', $roles) || in_array('franchisee', $roles)) {
             return true;

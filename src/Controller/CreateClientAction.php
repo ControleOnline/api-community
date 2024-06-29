@@ -182,7 +182,7 @@ class CreateClientAction
         }
 
         if ($client !== null) {
-            if ($this->peopleRoles->isSalesman($this->currentUser->getPeople())) {
+            if ($this->peopleRoles->isSalesman($this->currentUser)) {
                 $this->makePeopleMyClient($client);
             }
         }

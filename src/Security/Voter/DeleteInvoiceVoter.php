@@ -81,7 +81,7 @@ class DeleteInvoiceVoter extends Voter
 
     private function isUserAdminInCompany(DeleteInvoice $deleteInvoice, User $user): bool
     {
-      $roles = $this->roles->getAllRoles($user->getPeople());
+      $roles = $this->roles->getAllRoles($user);
 
       if (in_array('super', $roles) || in_array('franchisee', $roles)) {
         if (!empty($deleteInvoice->company)) {

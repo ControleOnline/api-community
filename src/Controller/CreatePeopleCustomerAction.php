@@ -164,7 +164,7 @@ class CreatePeopleCustomerAction
 
 
 
-        return $this->peopleRoles->isSalesman($this->currentUser->getPeople()) ? $this->setPeopleAsMyCustomer($customer) : $customer;
+        return $this->peopleRoles->isSalesman($this->currentUser) ? $this->setPeopleAsMyCustomer($customer) : $customer;
     }
 
     private function createPFClient(array $data): People
