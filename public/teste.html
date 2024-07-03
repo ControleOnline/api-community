@@ -1,0 +1,28 @@
+<script>
+    // Criar uma nova conexão WebSocket
+    const socket = new WebSocket('ws://ws.controleonline.com:443');
+    
+    // Evento chamado quando a conexão é aberta
+    socket.onopen = function(event) {
+        console.log('Conexão aberta');
+        
+        // Enviar uma mensagem para o servidor
+        socket.send('Hello, WebSocket!');
+    };
+    
+    // Evento chamado quando uma mensagem é recebida do servidor
+    socket.onmessage = function(event) {
+        console.log('Mensagem recebida do servidor: ', event.data);
+    };
+    
+    // Evento chamado quando a conexão é fechada
+    socket.onclose = function(event) {
+        console.log('Conexão fechada');
+    };
+    
+    // Evento chamado em caso de erro
+    socket.onerror = function(error) {
+        console.log('Erro: ', error);
+    };
+    
+    </script>

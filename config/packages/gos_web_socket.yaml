@@ -10,5 +10,5 @@ gos_web_socket:
         router:
             resources:
                 -
-                    resource: '%kernel.project_dir%/config/pubsub/websocket/*'
+                    resource: '%kernel.project_dir%/var/cache/websocket/*'
                     type: 'glob'
