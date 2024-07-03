@@ -1,2 +1,2 @@
 RewriteEngine On
-RewriteRule ^(.*)$ http://localhost:8080/$1 [P,L]
+RewriteRule ^(.*)$ ws://localhost:8080/$1 [P,L]
