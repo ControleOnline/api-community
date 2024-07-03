@@ -31,6 +31,7 @@
         "fpdf/fpdf": "^1.83",
         "frete-click/php-sigep": "*",
         "freteclick/sdk": "^1.2",
+        "gos/web-socket-bundle": "^3.15",
         "guzzlehttp/guzzle": "^6.3",
         "league/oauth2-facebook": "^2.2",
         "league/oauth2-google": "^4.0",
