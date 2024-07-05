@@ -38,3 +38,4 @@ imports:
     - { resource: "../modules/controleonline/logistic/config/config.yaml" }
     - { resource: "../modules/controleonline/users/config/config.yaml" }
     - { resource: "../modules/controleonline/tasks/config/config.yaml" }
+    - { resource: "../modules/controleonline/accounting/config/config.yaml" }
