@@ -24,7 +24,6 @@ services:
         tags: ["controller.service_arguments"]
 
 imports:
-    - { resource: "../modules/controleonline/legacy/config/config.yaml" }
     - { resource: "../modules/controleonline/multi-tenancy/config/config.yaml" }
     - { resource: "../modules/controleonline/products/config/config.yaml" }
     - { resource: "../modules/controleonline/common/config/config.yaml" }

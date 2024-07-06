@@ -14,7 +14,6 @@
         "controleonline/dashboard": "dev-master",
         "controleonline/ead": "dev-master",
         "controleonline/financial": "dev-master",
-        "controleonline/legacy": "dev-master",
         "controleonline/logistic": "dev-master",
         "controleonline/multi-tenancy": "dev-master",
         "controleonline/orders": "dev-master",

@@ -45,6 +45,3 @@
 	path = modules/controleonline/accounting
 	url = https://github.com/ControleOnline/api-platform-accounting.git
 
-[submodule "modules/controleonline/legacy"]
-	path = modules/controleonline/legacy
-	url = https://github.com/ControleOnline/api-platform-legacy.git
