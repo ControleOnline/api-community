@@ -12,5 +12,5 @@ gos_web_socket:
                 -
                     resource: '%kernel.project_dir%/var/cache/websocket/*'
                     type: 'glob'
-    clients:
+    client:
         registry: true                    
