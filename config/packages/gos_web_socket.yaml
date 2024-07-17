@@ -11,4 +11,9 @@ gos_web_socket:
             resources:
                 -
                     resource: '%kernel.project_dir%/var/cache/websocket/*'
-                    type: 'glob'                
+                    type: 'glob'        
+    pushers:
+        my_pusher:
+            app_id: your_app_id
+            key: your_key
+            secret: your_secret                            
