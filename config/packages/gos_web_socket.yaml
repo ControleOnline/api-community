@@ -11,9 +11,4 @@ gos_web_socket:
             resources:
                 -
                     resource: '%kernel.project_dir%/var/cache/websocket/*'
-                    type: 'glob'        
-    pushers:
-        wamp:
-            enabled: true
-            host: 127.0.0.1
-            port: 1337                            
+                    type: 'glob'                
