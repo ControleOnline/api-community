@@ -14,8 +14,8 @@ gos_web_socket:
                     type: 'glob'        
     pushers:
         wamp:                 # Deprecated (Since gos/web-socket-bundle 3.1: The child node "wamp" at path "gos_web_socket.pushers" is deprecated and will be removed in GosWebSocketBundle 4.0. Use the symfony/messenger component instead.)
-        enabled:              true
-        host:                 127.0.0.1 # Required
-        port:                 8080 # Required
-        ssl:                  false
-        origin:               null                        
+            enabled:              true
+            host:                 127.0.0.1 # Required
+            port:                 8080 # Required
+            ssl:                  false
+            origin:               null                        
