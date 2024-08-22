@@ -9,12 +9,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use ControleOnline\Entity\Config;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\PeopleDomain;
+use ControleOnline\Service\DomainService;
 
 class GetAppConfigAction
 {
   private $em = null;
 
-  public function __construct(EntityManagerInterface $entityManager)
+  public function __construct(EntityManagerInterface $entityManager, private DomainService $domainService)
   {
     $this->em = $entityManager;
   }
@@ -26,7 +27,7 @@ class GetAppConfigAction
       $config  = [];
       $config_key = $request->get('config_key', null);
       $result = [];
-      $company = $this->getCompany($this->getDomain());
+      $company = $this->getCompany($this->domainService->getMainDomain());
       if ($company !== null) {
 
         $filters = [
@@ -75,10 +76,5 @@ class GetAppConfigAction
       return null;
 
     return $company->getPeople();
-  }
-
-  private function getDomain($domain = null): string
-  {
-    return $domain ?: $_SERVER['HTTP_HOST'];
   }
 }
