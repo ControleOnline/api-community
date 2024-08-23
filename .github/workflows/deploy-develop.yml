@@ -19,7 +19,7 @@ jobs:
           git submodule update --recursive --init
           git submodule update --recursive --remote
           composer install --no-suggest
-          tar -czf api.tar.gz ./../api-community
+          tar -czf api.tar.gz /home/runner/work/api-community/api-community
           mkdir deploy
           mv ./api.tar.gz ./deploy
       - name: Deploy
