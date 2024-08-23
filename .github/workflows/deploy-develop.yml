@@ -25,6 +25,6 @@ jobs:
           host: ${{ secrets.DEV_HOST }}
           user: ${{ secrets.DEV_USER }}
           password: ${{ secrets.DEV_PASS }}
-          localDir: "./dist/spa"
+          localDir: "./"
           remoteDir: "~/sistemas/api-community"
           forceSsl: true                             
