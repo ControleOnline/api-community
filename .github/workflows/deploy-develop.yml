@@ -12,6 +12,7 @@ jobs:
           node-version: "18.17.1"         
       - name: Creating Config
         run: |
+          mkdir -p ./var/cache/
           touch ./var/cache/websocket
       - name: Update Submodules
         run: |                 
