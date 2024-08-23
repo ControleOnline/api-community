@@ -1,0 +1,29 @@
+name: Deploy Project
+on:
+  push:
+    branches: [develop,master]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.17.1"         
+      - name: Creating Config
+        run: |
+          touch ./var/cache/websocket
+      - name: Update Submodules
+        run: |                 
+          git submodule update --recursive --init
+          git submodule update --recursive --remote
+          composer install --no-suggest
+      - name: Deploy
+        uses: locaweb/ftp-deploy@1.0.0
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          user: ${{ secrets.DEV_USER }}
+          password: ${{ secrets.DEV_PASS }}
+          localDir: "./dist/spa"
+          remoteDir: "~/sistemas/api-community"
+          forceSsl: true                             
