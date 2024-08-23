@@ -27,4 +27,4 @@ jobs:
           password: ${{ secrets.DEV_PASS }}
           localDir: "./"
           remoteDir: "~/sistemas/api-community"
-          forceSsl: true                             
+          forceSsl: false                             
