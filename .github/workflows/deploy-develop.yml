@@ -20,7 +20,7 @@ jobs:
           git submodule update --recursive --remote
           composer install --no-suggest
           cd ..
-          tar -czf api.tar.gz ./
+          tar -czf api.tar.gz ./api-community
           cd ./api-community
           mkdir deploy
           mv ./../api.tar.gz ./deploy
