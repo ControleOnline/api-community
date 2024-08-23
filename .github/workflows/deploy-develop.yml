@@ -19,12 +19,13 @@ jobs:
           git submodule update --recursive --init
           git submodule update --recursive --remote
           composer install --no-suggest
+          tar -czf api.tar.gz ./*
       - name: Deploy
         uses: locaweb/ftp-deploy@1.0.0
         with:
           host: ${{ secrets.DEV_HOST }}
           user: ${{ secrets.DEV_USER }}
           password: ${{ secrets.DEV_PASS }}
-          localDir: "./"
+          localDir: "./api.tar.gz"
           remoteDir: "~/sistemas/api-community"
           forceSsl: false                             
