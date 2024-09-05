@@ -93,7 +93,7 @@ class AdminPeopleEmployeesAction
                     'error'   => $e->getMessage(),
                     'success' => false,
                 ],
-            ]);
+            ],500);
         }
     }
 
