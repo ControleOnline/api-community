@@ -7,9 +7,9 @@
     "test": "tests"
   },
   "dependencies": {
+    "composer": "^4.1.0",
     "pdf.js": "^0.1.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
