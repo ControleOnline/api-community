@@ -38,7 +38,7 @@ class ChangeContractPaymentAction
       );
 
       if ($order) {
-        $data->setHtmlContent($payload['htmlContent']); // Adicione o novo conteúdo HTML
+        $data->setHtmlContent($payload['htmlContent']); // Adicione o novo conteúdo HTML (Kim, termina isso!)
         $order->addOtherInformations('paymentType', $payload['paymentType']);
         $this->manager->persist($data);
         $this->manager->persist($order);
