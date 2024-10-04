@@ -12,7 +12,6 @@ use App\Library\Provider\Signature\Exception\ProviderRequestException;
 use App\Library\Exception\MissingDataException;
 
 use App\Library\Provider\Signature\ContractDocument;
-use ControleOnline\Service\SignatureService;
 
 class Contract
 {
@@ -20,7 +19,6 @@ class Contract
     protected $signatureProvider;
     public function __construct(
         private EntityManagerInterface $manager,
-        private SignatureService       $signature,
     ) {}
 
 
