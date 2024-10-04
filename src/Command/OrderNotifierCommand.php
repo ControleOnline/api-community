@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Twig\Environment;
 use App\Library\Utils\Formatter;
 use Doctrine\ORM\Query\ResultSetMapping;
-use App\Service\SignatureService;
+use ControleOnline\Service\SignatureService;
 use App\Service\MauticService;
 use App\Service\EmailService;
 use ControleOnline\Entity\People;

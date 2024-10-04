@@ -3,41 +3,28 @@
 namespace App\Library\Provider\Signature;
 
 use ControleOnline\Entity\People;
+use ControleOnline\Entity\Contract as ContractEntity;
 use App\Library\Provider\Signature\Document;
 use App\Library\Provider\Signature\Signer;
-use App\Service\SignatureService;
 use Doctrine\ORM\EntityManagerInterface;
-use ControleOnline\Entity\MyContract;
 use App\Library\Provider\Signature\Exception\InvalidParameterException;
 use App\Library\Provider\Signature\Exception\ProviderRequestException;
 use App\Library\Exception\MissingDataException;
-use ControleOnline\Entity\PeopleDomain;
-use Dompdf\Dompdf;
-use Dompdf\Options;
-use App\Library\Provider\Signature\ContractDocument;
 
+use App\Library\Provider\Signature\ContractDocument;
+use ControleOnline\Service\SignatureService;
 
 class Contract
 {
-    protected $manager;
-
     protected $request;
-
-    protected $signature;
-
     protected $signatureProvider;
-
-
     public function __construct(
-        EntityManagerInterface $entityManager,
-        SignatureService       $signature
-    ) {
-        $this->manager   = $entityManager;
-        $this->signature = $signature;
-    }
+        private EntityManagerInterface $manager,
+        private SignatureService       $signature,
+    ) {}
 
 
-    public function sign(MyContract $data)
+    public function sign(ContractEntity $data)
     {
 
         $this->signatureProvider = $this->signature->getFactory();
@@ -48,21 +35,13 @@ class Contract
 
             try {
 
-                // config document
-                $contractDocument = new ContractDocument();
-                $contractDocument->setEntityManager($this->manager);
-                $contractDocument->setCompanyId($data->getContractPeople()
-                    ->filter(function ($contractPeople) {
-                        return $contractPeople->getPeopleType() == 'Provider';
-                    })[0]->getPeople()->getId());
 
-                $contractDocument->getContractContent($data);
 
                 $document = ($this->signatureProvider->createDocument())
                     ->setFileName(
                         sprintf('Contrato-%s', $this->getContractContractorSignerName($data))
                     )
-                    ->setContent($this->getContractPDFContent($data))
+                    ->setContent($data->getContractFile()->getContent())
                     ->setDeadlineAt(
                         (new \DateTime('now'))
                             ->add(new \DateInterval('P7D'))
@@ -96,7 +75,7 @@ class Contract
         }
         return $data;
     }
-    protected function addDocumentSignersFromContract(Document $document, MyContract $contract)
+    protected function addDocumentSignersFromContract(Document $document, ContractEntity $contract)
     {
         if ($contract->getContractPeople()->isEmpty()) {
             throw new MissingDataException('Este contrato não tem assinantes');
@@ -138,7 +117,7 @@ class Contract
         }
     }
 
-    protected function getContractContractorSignerName(MyContract $contract): string
+    protected function getContractContractorSignerName(ContractEntity $contract): string
     {
         $contractPayers = $contract->getContractPeople()
             ->filter(function ($contractPeople) {
@@ -153,27 +132,6 @@ class Contract
         return $contractPayers->first()->getPeople()->getFullName();
     }
 
-    protected function getContractPDFContent(MyContract $contract): string
-    {
-        $content = $contract->getHtmlContent();
-
-        if (empty($content)) {
-            throw new \Exception(
-                sprintf('Houve um erro ao gerar o PDF')
-            );
-        }
-
-        $options = new Options();
-        $options->set('isRemoteEnabled', true);
-
-        $dompdf = new Dompdf($options);
-        $dompdf->loadHtml($content);
-        $dompdf->setPaper('A4');
-        $dompdf->render();
-        $html = $dompdf->output();
-
-        return $html;
-    }
 
     protected function getSignerFromPeople(People $people, string $role): Signer
     {

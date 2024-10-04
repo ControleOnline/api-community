@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Service\SignatureService;
+use ControleOnline\Service\SignatureService;
 use ControleOnline\Entity\MyContract;
 use ControleOnline\Entity\People;
 use ControleOnline\Entity\SalesOrder;
