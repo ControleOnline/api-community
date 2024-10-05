@@ -3,12 +3,11 @@
 namespace App\Library\Provider\Signature\Clicksign\Resource;
 
 use GuzzleHttp\Client;
-use App\Library\Provider\Signature\Exception\ProviderRequestException;
-use App\Library\Provider\Signature\Exception\InvalidParameterException;
 use App\Library\Provider\Signature\Clicksign\Document;
 use App\Library\Provider\Signature\Clicksign\User;
 use App\Library\Provider\Signature\Clicksign\Signer;
 use ControleOnline\Entity\Contract;
+use Exception;
 
 class Documents
 {
@@ -52,11 +51,11 @@ class Documents
             ->setKey($result->document->key);
         }
 
-        throw new \Exception('Clicksign response format error');
+        throw new Exception('Clicksign response format error');
       }
 
-      throw new \Exception('Clicksign response status invalid');
-    } catch (\Exception $e) {
+      throw new Exception('Clicksign response status invalid');
+    } catch (Exception $e) {
       if (method_exists($e, 'hasResponse') && $e->hasResponse()) {
         $response = $e->getResponse();
 
@@ -65,12 +64,12 @@ class Documents
 
         if ($response->getStatusCode() === 422) {
           if (isset($contents->errors)) {
-            throw new InvalidParameterException($contents->errors[0]);
+            throw new Exception($contents->errors[0]);
           }
         }
       }
 
-      throw new ProviderRequestException($e->getMessage());
+      throw new Exception($e->getMessage());
     }
   }
 
@@ -96,11 +95,11 @@ class Documents
       if ($response->getStatusCode() === 200) {
         return json_decode($response->getBody());
 
-        throw new \Exception('Clicksign response format error');
+        throw new Exception('Clicksign response format error');
       }
 
-      throw new \Exception('Clicksign response status invalid');
-    } catch (\Exception $e) {
+      throw new Exception('Clicksign response status invalid');
+    } catch (Exception $e) {
       if (method_exists($e, 'hasResponse') && $e->hasResponse()) {
         $response = $e->getResponse();
 
@@ -109,12 +108,12 @@ class Documents
 
         if ($response->getStatusCode() === 422) {
           if (isset($contents->errors)) {
-            throw new InvalidParameterException($contents->errors[0]);
+            throw new Exception($contents->errors[0]);
           }
         }
       }
 
-      throw new ProviderRequestException($e->getMessage());
+      throw new Exception($e->getMessage());
     }
   }
 
@@ -156,11 +155,11 @@ class Documents
           return $document;
         }
 
-        throw new \Exception('Clicksign response format error');
+        throw new Exception('Clicksign response format error');
       }
 
-      throw new \Exception('Clicksign response status invalid');
-    } catch (\Exception $e) {
+      throw new Exception('Clicksign response status invalid');
+    } catch (Exception $e) {
       if (method_exists($e, 'hasResponse') && $e->hasResponse()) {
         $response = $e->getResponse();
 
@@ -169,12 +168,12 @@ class Documents
 
         if ($response->getStatusCode() === 422) {
           if (isset($contents->errors)) {
-            throw new InvalidParameterException($contents->errors[0]);
+            throw new Exception($contents->errors[0]);
           }
         }
       }
 
-      throw new ProviderRequestException($e->getMessage());
+      throw new Exception($e->getMessage());
     }
   }
 }

@@ -2,10 +2,9 @@
 namespace App\Library\Provider\Signature\Clicksign\Resource;
 
 use GuzzleHttp\Client;
-use App\Library\Provider\Signature\Exception\ProviderRequestException;
-use App\Library\Provider\Signature\Exception\InvalidParameterException;
 use App\Library\Provider\Signature\Clicksign\Signer;
 use App\Library\Provider\Signature\Clicksign\User;
+use Exception;
 
 class Notifications
 {
@@ -42,9 +41,9 @@ class Notifications
         return $signer;
       }
 
-      throw new \Exception('Clicksign response status invalid');
+      throw new Exception('Clicksign response status invalid');
 
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       if (method_exists($e, 'hasResponse') && $e->hasResponse()) {
         $response = $e->getResponse();
 
@@ -53,12 +52,12 @@ class Notifications
 
         if ($response->getStatusCode() === 422) {
           if (isset($contents->errors)) {
-            throw new InvalidParameterException($contents->errors[0]);
+            throw new Exception($contents->errors[0]);
           }
         }
       }
 
-      throw new ProviderRequestException($e->getMessage());
+      throw new Exception($e->getMessage());
     }
   }
 }

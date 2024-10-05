@@ -2,11 +2,10 @@
 namespace App\Library\Provider\Signature\Zapsign\Resource;
 
 use GuzzleHttp\Client;
-use App\Library\Provider\Signature\Exception\ProviderRequestException;
-use App\Library\Provider\Signature\Exception\InvalidParameterException;
 use App\Library\Provider\Signature\Zapsign\Document;
 use App\Library\Provider\Signature\Zapsign\User;
 use App\Library\Provider\Signature\Zapsign\Signer;
+use Exception;
 
 class Documents
 {
@@ -34,7 +33,7 @@ class Documents
 
       if ($withSigners) {
         if (!$document->hasSigners()) {
-          throw new InvalidParameterException('Zapsign signers list is empty');
+          throw new Exception('Zapsign signers list is empty');
         }
 
         $options['json']['signers'] = [];
@@ -68,12 +67,12 @@ class Documents
           ;
         }
 
-        throw new \Exception('Zapsign response format error');
+        throw new Exception('Zapsign response format error');
       }
 
-      throw new \Exception('Zapsign response status invalid');
+      throw new Exception('Zapsign response status invalid');
 
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       if (method_exists($e, 'hasResponse') && $e->hasResponse()) {
         $response = $e->getResponse();
 
@@ -82,12 +81,12 @@ class Documents
 
         if ($response->getStatusCode() === 422) {
           if (isset($contents->errors)) {
-            throw new InvalidParameterException($contents->errors[0]);
+            throw new Exception($contents->errors[0]);
           }
         }
       }
 
-      throw new ProviderRequestException($e->getMessage());
+      throw new Exception($e->getMessage());
     }
   }
 
@@ -122,9 +121,9 @@ class Documents
         return $document;
       }
 
-      throw new \Exception('Zapsign response status invalid');
+      throw new Exception('Zapsign response status invalid');
 
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       if (method_exists($e, 'hasResponse') && $e->hasResponse()) {
         $response = $e->getResponse();
 
@@ -133,12 +132,12 @@ class Documents
 
         if ($response->getStatusCode() === 422) {
           if (isset($contents->errors)) {
-            throw new InvalidParameterException($contents->errors[0]);
+            throw new Exception($contents->errors[0]);
           }
         }
       }
 
-      throw new ProviderRequestException($e->getMessage());
+      throw new Exception($e->getMessage());
     }
   }
 }

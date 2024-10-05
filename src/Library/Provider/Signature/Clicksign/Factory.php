@@ -9,6 +9,7 @@ use App\Library\Provider\Signature\Signer as SignatureSigner;
 use App\Library\Provider\Signature\Clicksign\Resource\Documents;
 use App\Library\Provider\Signature\Clicksign\Resource\Signers;
 use App\Library\Provider\Signature\Clicksign\Resource\Notifications;
+use Exception;
 
 class Factory extends AbstractProvider
 {
@@ -92,19 +93,19 @@ class Factory extends AbstractProvider
   public function verifyEventPayload(string $eventName, object $payload): string
   {
     if (!isset($payload->event)) {
-      throw new \Exception('Event parameter is not defined');
+      throw new Exception('Event parameter is not defined');
     }
 
     if ($payload->event->name != $this->events[$eventName]) {
-      throw new \Exception('Event type is unacceptable');
+      throw new Exception('Event type is unacceptable');
     }
 
     if (!isset($payload->document)) {
-      throw new \Exception('Document parameter is not defined');
+      throw new Exception('Document parameter is not defined');
     }
 
     if (!isset($payload->document->key)) {
-      throw new \Exception('Document key parameter is invalid');
+      throw new Exception('Document key parameter is invalid');
     }
 
     return $payload->document->key;
