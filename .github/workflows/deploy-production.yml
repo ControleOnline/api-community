@@ -23,5 +23,5 @@ jobs:
                   git pull origin production    
                   git submodule update --recursive --init
                   git submodule update --recursive --remote        
-                  php composer.phar install --no-suggest
+                  composer install --no-suggest
                   php bin/console tenant:migrations:migrate --no-interaction                                   
