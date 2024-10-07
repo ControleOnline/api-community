@@ -8,6 +8,7 @@ use App\Library\Provider\Signature\Document as SignatureDocument;
 use App\Library\Provider\Signature\Signer as SignatureSigner;
 use App\Library\Provider\Signature\Zapsign\Resource\Documents;
 use App\Library\Provider\Signature\Zapsign\Resource\Signers;
+use Exception;
 
 class Factory extends AbstractProvider
 {
@@ -49,23 +50,23 @@ class Factory extends AbstractProvider
   public function verifyEventPayload(string $eventName, object $payload): string
   {
     if (!isset($payload->event_type)) {
-      throw new \Exception('Event parameter is not defined');
+      throw new Exception('Event parameter is not defined');
     }
 
     if ($payload->event_type != $this->events[$eventName]) {
-      throw new \Exception('Event type is unacceptable');
+      throw new Exception('Event type is unacceptable');
     }
 
     if (!isset($payload->status)) {
-      throw new \Exception('Status parameter is not defined');
+      throw new Exception('Status parameter is not defined');
     }
 
     if ($payload->status != 'signed') {
-      throw new \Exception('Document status must be of type "signed"');
+      throw new Exception('Document status must be of type "signed"');
     }
 
     if (!isset($payload->token)) {
-      throw new \Exception('Document token parameter is not defined');
+      throw new Exception('Document token parameter is not defined');
     }
 
     return $payload->token;
