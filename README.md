@@ -15,6 +15,7 @@ git submodule update --recursive
   <img src="https://contrib.rocks/image?repo=ControleOnline/api-community" />
 </a>
 
+### Contacts
 <a href="https://chat.whatsapp.com/KtplmnuqcXK9nIETLcYBGt">
   <img src="https://static.whatsapp.net/rsrc.php/yZ/r/JvsnINJ2CZv.svg" />
 </a>
