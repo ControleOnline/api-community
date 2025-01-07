@@ -11,11 +11,21 @@ git submodule update --recursive
 ```
 
 
-### Top contributors
+### Front Ends
 
-<a href="https://github.com/ControleOnline/api-community/graphs/contributors" target="_blank">
-  <img src="https://contrib.rocks/image?repo=ControleOnline/api-community" />
+<a href="https://github.com/ControleOnline/controle-online" target="_blank">
+  <img src="https://www.controleonline.com/wp-content/uploads/2019/10/session_3_LOW.png" />
 </a>
+<a href="https://github.com/ControleOnline/pdv-community" target="_blank">
+  <img src="https://www.cielo.com.br/assets_cielo/cielo_store/features/mobile/cielo-lio.png" />
+</a>
+
+### Comercial Contacts
+
+<a href="https://www.controleonline.com/" target="_blank">
+  <img src="https://www.controleonline.com/wp-content/uploads/2018/09/logo_cc_sembranco.svg" />
+</a>
+
 
 
 ### Contact for Developers
@@ -24,9 +34,10 @@ git submodule update --recursive
   <img src="https://static.whatsapp.net/rsrc.php/yZ/r/JvsnINJ2CZv.svg" />
 </a>
 
+### Top contributors
 
-### Comercial Contacts
-
-<a href="https://www.controleonline.com/" target="_blank">
-  <img src="https://www.controleonline.com/wp-content/uploads/2018/09/logo_cc_sembranco.svg" />
+<a href="https://github.com/ControleOnline/api-community/graphs/contributors" target="_blank">
+  <img src="https://contrib.rocks/image?repo=ControleOnline/api-community" />
 </a>
+
+
