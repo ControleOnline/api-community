@@ -15,8 +15,14 @@ git submodule update --recursive
   <img src="https://contrib.rocks/image?repo=ControleOnline/api-community" />
 </a>
 
-### Contacts
+### Contact for Developers
+
 <a href="https://chat.whatsapp.com/KtplmnuqcXK9nIETLcYBGt">
   <img src="https://static.whatsapp.net/rsrc.php/yZ/r/JvsnINJ2CZv.svg" />
 </a>
 
+### Comercial Contacts
+
+<a href="https://www.controleonline.com/">
+  <img src="https://www.controleonline.com/wp-content/uploads/2018/09/logo_cc_sembranco.svg" />
+</a>
