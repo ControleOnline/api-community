@@ -3,13 +3,6 @@
 # API - Controle Online
 API - Controle Online
 
-### Tecnologias usadas
-
-- 5.7: MySQL
-- 7.3: PHP
-- 2.5: API Platform
-
-X
 
 ### Submodules
 ```bash
@@ -21,3 +14,8 @@ git submodule update --recursive
 <a href="https://github.com/ControleOnline/api-community/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ControleOnline/api-community" />
 </a>
+
+<a href="https://chat.whatsapp.com/KtplmnuqcXK9nIETLcYBGt">
+  <img src="https://static.whatsapp.net/rsrc.php/yZ/r/JvsnINJ2CZv.svg" />
+</a>
+
