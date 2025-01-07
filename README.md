@@ -14,7 +14,7 @@ git submodule update --recursive
 ### Front Ends
 
 <a href="https://github.com/ControleOnline/controle-online" target="_blank">
-  <img src="https://www.controleonline.com/wp-content/uploads/2019/10/session_3_LOW.png" />
+  <img src="https://www.controleonline.com/wp-content/uploads/2018/08/aplicaticos_app.png" />
 </a>
 <a href="https://github.com/ControleOnline/pdv-community" target="_blank">
   <img src="https://www.cielo.com.br/assets_cielo/cielo_store/features/mobile/cielo-lio.png" />
