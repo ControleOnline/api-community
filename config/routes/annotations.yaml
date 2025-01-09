@@ -1,3 +1,6 @@
 controllers:
     resource: ../../src/Controller/
     type: annotation
+controleonline_users:
+    resource: ../../modules/controleonline/users/src/Controller/
+    type: annotation
