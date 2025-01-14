@@ -44,16 +44,15 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
     $this->execute($resourceClass, $queryBuilder, $resourceClass, $applyTo, $rootAlias);
   }
 
-  private function execute($entity, QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null)
+  private function execute($class, QueryBuilder $queryBuilder, $resourceClass = null, $applyTo = null, $rootAlias = null)
   {
-    $class = get_class($entity);
+
     $serviceName = str_replace('Entity', 'Service', $class) . 'Service';
     $method = 'secutiryFilter';
     if ($this->container->has($serviceName)) {
       $service = $this->container->get($serviceName);
-      if (method_exists($service, $method)) {
-        $entity = $service->$method($queryBuilder, $resourceClass, $applyTo, $rootAlias);
-      }
+      if (method_exists($service, $method))
+        $service->$method($queryBuilder, $resourceClass, $applyTo, $rootAlias);
     }
   }
 }
