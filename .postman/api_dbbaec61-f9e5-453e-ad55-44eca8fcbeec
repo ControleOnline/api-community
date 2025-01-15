@@ -14,5 +14,6 @@ files[] = {"id":"11943197-dc06bd77-b9c0-4219-9299-288bccdf68a0","path":"Controle
 [config.relations.collections.metaData]
 
 [config.relations.apiDefinition]
+files[] = {"path":"index.json","metaData":{}}
 
 [config.relations.apiDefinition.metaData]
