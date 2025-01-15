@@ -1,0 +1,1600 @@
+{
+	"info": {
+		"_postman_id": "dc06bd77-b9c0-4219-9299-288bccdf68a0",
+		"name": "Controle Online",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "11943197-dc06bd77-b9c0-4219-9299-288bccdf68a0"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "order_products",
+					"id": "974b6e6f-753e-46e1-a52a-fc706de7e0ef",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{host}}/order_products/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"order_products",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "order_products",
+					"id": "fcb23cc1-8aca-4d5c-8629-a725969ede90",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"order\":\"orders/59624\",\n   \"product\":\"products/1\",\n   \"quantity\":1,\n   \"price\":35,\n   \"total\":35\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/order_products/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"order_products",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "products",
+					"id": "3775cbc5-aabc-4b77-a65f-2f3b37de40bd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/products/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"products",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "products/1",
+					"id": "397451e8-9be7-4110-b477-47a3907c46b5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/products/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "products/1 Copy",
+					"id": "203c98e5-e535-4b2e-9926-323cc68e7bf7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "c86c5ef8fab9e252a1cc94c78f372413",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "api-token",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/order_products/40",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"order_products",
+								"40"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "products/1 Copy",
+					"id": "39e69a5d-1f3d-4679-8fc0-15fa53616081",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/products/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "4da2e17c-a2d7-4acf-9192-3715e9962cff"
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "orders",
+					"id": "459c995e-6e77-4267-881a-2b8cfb03b09b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "app-domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/orders?client=/people/480",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"orders"
+							],
+							"query": [
+								{
+									"key": "client",
+									"value": "/people/480"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "orders",
+					"id": "189223f3-023c-47b3-b07d-4f959cf1eca3",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "app-domain",
+								"value": "app.lave-go.com",
+								"description": "app.lave-go.com",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"client\": null,\n    \"invoice\": [],\n    \"status\": \"/statuses/6\",\n    \"app\": \"Teste 02\",\n    \"otherInformations\": \"Online\",\n    \"provider\": \"/people/8\",\n    \"orderType\": \"sales\",\n    \"comments\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/orders",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "nfe",
+					"id": "81e151ac-cf3f-4c13-b67d-7eedf9c069be",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "app-domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"client\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/orders/59589/nfe?model=65",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"orders",
+								"59589",
+								"nfe"
+							],
+							"query": [
+								{
+									"key": "model",
+									"value": "65",
+									"type": "text"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "orders/1",
+					"id": "8dd8d51a-c011-4c17-ac54-7c5478f66fc2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/orders/59624",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"orders",
+								"59624"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "order_invoices",
+					"id": "fb80371e-0d95-47bd-be84-34e0623aeb9b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "c86c5ef8fab9e252a1cc94c78f372413",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "api-token",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "app-domain",
+								"value": "app.controleonline.com"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"order\": \"orders/76692\",\n    \"realPrice\":100,\n    \"invoice\":{\n        \"dueDate\": \"2024-06-11\",\n        \"payer\": \"/people/1\",\n        \"status\": \"/statuses/33\", \n        \"wallet\": \"/wallets/4\", \n        \"paymentType\": \"/payment_types/12\",\n        \"price\": 55.00,\n        \"receiver\": \"/people/529\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/order_invoices",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"order_invoices"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "d134b072-ef20-4c09-9fb8-323a9bc728d8"
+		},
+		{
+			"name": "Displays",
+			"item": [
+				{
+					"name": "displays",
+					"id": "ebd67fe4-1375-4b77-b38c-f0981ae6e5a9",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/products/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "4e841307-74e2-4ef0-91b8-49c5a9b57038"
+		},
+		{
+			"name": "Proposta",
+			"item": [
+				{
+					"name": "Proposta",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "08aec443-77f1-4bdb-9aba-fc8147192bdb",
+								"exec": [
+									"var template = `",
+									"<style type=\"text/css\">",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+									"    .tftable tr {background-color:#ffffff;}",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+									"    .tftable tr:hover {background-color:#e0ffff;}",
+									"</style>",
+									"",
+									"<table class=\"tftable\" border=\"1\">",
+									"    <tr>",
+									"        <th>PDF</th>",
+									"        <th>HTML</th>",
+									"    </tr>",
+									"    ",
+									"    <tr>",
+									"        <td>{{response.data.pdf}}</td>",
+									"        <td>{{response.data.html}}</td>",
+									"    </tr>",
+									"</table>",
+									"`;",
+									"",
+									"function constructVisualizerPayload() {",
+									"    var res = pm.response.json();",
+									"    ",
+									"    return {response: res.response};",
+									"}",
+									"",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "67f2a07f-89b1-4d64-a169-f783929009f7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/pdf",
+								"type": "text"
+							},
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/quotations/52178/get-pdf?myCompany=418&domain=app.atlastransportes.com",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"quotations",
+								"52178",
+								"get-pdf"
+							],
+							"query": [
+								{
+									"key": "myCompany",
+									"value": "418"
+								},
+								{
+									"key": "domain",
+									"value": "app.atlastransportes.com"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "f10400a4-a800-42ac-b2cb-c1e4c0403902"
+		},
+		{
+			"name": "LOGIN",
+			"item": [
+				{
+					"name": "Token",
+					"id": "11c192b0-9f25-443e-8d95-f8f9dcb1a4d1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "app-domain",
+								"value": "{{app-domain}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"cielo\",\r\n    \"password\": \"lavego@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/token",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My",
+					"id": "2e1f4b60-d7a0-41fc-9d57-5c06401b88d2",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/people/companies/my",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"people",
+								"companies",
+								"my"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "google",
+					"id": "3b8d8c12-88c3-49b3-8a13-4bbfc965283f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/ld+json"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9,pt;q=0.8,es;q=0.7"
+							},
+							{
+								"key": "app-domain",
+								"value": "app.controleonline.com"
+							},
+							{
+								"key": "content-length",
+								"value": "0"
+							},
+							{
+								"key": "content-type",
+								"value": "application/ld+json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.controleonline.com"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.controleonline.com/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+							}
+						],
+						"url": {
+							"raw": "https://api.controleonline.com/oauth/google/return?access_token=ya29.a0ARW5m74u_Eak7MEK67EpcH4LUTeiAjFiXkR-4sYNfXg2jcokFx3ySjoaNnfTOwckdzU-LVYK6O2Z3WxnHse3VqvFxWpcmdTzhMFgMvGJTgo2w7-waB_dApAVHfLQ3Kr2rOpT5bAAP-nnybny_i4auNoWYdk80D0GA8iOaCgYKAQwSARISFQHGX2MiBBX0Stlg56Iv5VzodabjKg0171",
+							"protocol": "https",
+							"host": [
+								"api",
+								"controleonline",
+								"com"
+							],
+							"path": [
+								"oauth",
+								"google",
+								"return"
+							],
+							"query": [
+								{
+									"key": "access_token",
+									"value": "ya29.a0ARW5m74u_Eak7MEK67EpcH4LUTeiAjFiXkR-4sYNfXg2jcokFx3ySjoaNnfTOwckdzU-LVYK6O2Z3WxnHse3VqvFxWpcmdTzhMFgMvGJTgo2w7-waB_dApAVHfLQ3Kr2rOpT5bAAP-nnybny_i4auNoWYdk80D0GA8iOaCgYKAQwSARISFQHGX2MiBBX0Stlg56Iv5VzodabjKg0171"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "c8ec877e-1ecf-46a7-ba06-314aaaf3c952"
+		},
+		{
+			"name": "Particulars",
+			"item": [
+				{
+					"name": "particulars_types",
+					"id": "8215f9a3-7027-4070-a236-4414c0e80396",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/particulars_types?context=clients",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"particulars_types"
+							],
+							"query": [
+								{
+									"key": "context",
+									"value": "clients"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "f5aba5a0-959d-45a1-be00-7847e4320f84"
+		},
+		{
+			"name": "Config",
+			"item": [
+				{
+					"name": "config",
+					"id": "3ac478ca-933a-4fdf-8162-8501abb80af0",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/products/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"products",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "9463b6d9-4d0b-4404-a9e2-633384c3b343"
+		},
+		{
+			"name": "Notification",
+			"item": [
+				{
+					"name": "notifications",
+					"id": "e0d60313-e5e2-4614-8cbf-784cf12c02e1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "app.lave-go.com",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{host}}/notifications/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notifications",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notifications",
+					"id": "579d3e71-5e33-436b-902b-e987a349bff3",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "app-domain",
+								"value": "{{app-domain}}",
+								"description": "app.lave-go.com",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"notification\": \"Pedido 33371 foi alterado\",\n    \"route\": \"OrderDetails\",\n    \"routeId\": 33371,\n    \"read\": false,\n    \"people\": \"/people/2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/notifications",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"notifications"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "81b7d158-55a3-44b1-9a81-fbea4f3b49de"
+		},
+		{
+			"name": "Report",
+			"item": [
+				{
+					"name": "order Hours",
+					"id": "1c3512c3-5e48-4fea-b844-044c28fdbf66",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "app.lave-go.com",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{host}}/orders/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"orders",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Qtd Vehicles",
+					"id": "58acd5fd-04dc-4efb-b130-adbb3cbd6ef3",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "app.lave-go.com",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{host}}/orders/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"orders",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "4001cea3-4bea-4ac1-9066-51d109f87989"
+		},
+		{
+			"name": "Translate",
+			"item": [
+				{
+					"name": "New Request",
+					"id": "fe3d4734-d2c0-43a1-939d-c31470468044",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "3fc32a9b-553c-4450-9202-94f9c74873fa"
+		},
+		{
+			"name": "Whatsapp",
+			"item": [
+				{
+					"name": "Sessions",
+					"item": [
+						{
+							"name": "Get QR Code",
+							"id": "b74f219d-4492-411c-9459-8965a4e53ce3",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/sessions/qr/:telefone",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"sessions",
+										"qr",
+										":telefone"
+									],
+									"variable": [
+										{
+											"key": "telefone",
+											"value": "{{telefone}}",
+											"description": "telefone da conexão no banco de dados"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Sessions",
+							"id": "a48c3ee3-aa60-4579-98c4-1c253a4e278c",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/sessions",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"sessions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Status",
+							"id": "41c9097d-ba4c-45df-b5a9-50601b684e6a",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/sessions/status/:telefone",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"sessions",
+										"status",
+										":telefone"
+									],
+									"variable": [
+										{
+											"key": "telefone",
+											"value": "+5511971140832"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Session",
+							"id": "cac34af1-995c-4354-9af2-52ac3af55c3b",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    /*\r\n     Caso não enviar o webhook no momento da criação da sessão,\r\n     poderá ser enviado pelo endpoint /sessions/add-webhook.\r\n     Se não enviar os webhooks em nenhum dos casos, \r\n     a API não irá alimentar o backend.\r\n    */\r\n    \"telefone\": \"5565984487400\",\r\n    \"webhooks\": { // <object> - optional\r\n        \"connection.update\": \"http://localhost:3030/update\",\r\n        \"messages.upsert\":  \"http://localhost:3030\",\r\n        \"messages.update\":  \"http://localhost:3030\",\r\n        \"messaging-history.set\":  \"http://localhost:3030\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/sessions/start",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"sessions",
+										"start"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Session",
+							"id": "864b774b-c414-487d-a3e3-254f5aa83a65",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"telefone\": \"<string> - required\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/sessions/remove",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"sessions",
+										"remove"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add WebHook",
+							"id": "704bbb16-7121-493b-bcb8-3a1b589caa7c",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    /*\r\n    types: listeners do baileys\r\n    | \"messages.upsert\"\r\n    | \"messages.update\"\r\n    | \"messaging-history.set\"\r\n    | \"connection.update\"*/\r\n\t\"telefone\": \"<string> - required\",\r\n\t\"webHookUrl\": \"<string> - <webhookUrl>\",\r\n\t\"type\": \"<string> - required\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/sessions/add-webhook",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"sessions",
+										"add-webhook"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "9e85beed-6db4-4cff-a29e-f0f4205cda9f"
+				},
+				{
+					"name": "Chats",
+					"item": [
+						{
+							"name": "Read Nessages",
+							"id": "36ce638b-284c-4378-aa0b-512ac78d9f14",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    {\r\n        \"remoteJid\": \"<string> - required\", // 1234\r\n        \"messageid\": \"<string> - required\" // 3EB0795479BEA2B44173E2\r\n    }\r\n    \r\n]\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/chats/:telefone/read",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"chats",
+										":telefone",
+										"read"
+									],
+									"variable": [
+										{
+											"key": "telefone",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "61a8dd9f-b963-463e-80aa-219f037b896a"
+				},
+				{
+					"name": "Contacts",
+					"item": [
+						{
+							"name": "List Contacts",
+							"id": "dff875d3-1295-4717-a7c1-8dba6f72ac34",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/contacts/:telefone/list",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"contacts",
+										":telefone",
+										"list"
+									],
+									"variable": [
+										{
+											"key": "telefone",
+											"value": "{{telefone}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check Contact",
+							"id": "c5954581-481e-45cf-88ff-5b998368e457",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"number\": \"5565984487400\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/contacts/:telefone/check",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"contacts",
+										":telefone",
+										"check"
+									],
+									"variable": [
+										{
+											"key": "telefone",
+											"value": "{{telefone}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Profile Picture",
+							"id": "4e8f8eba-f620-42b3-9a53-340b6e3b5454",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"number\": \"5565984487400\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/contacts/:telefone/profile-picture",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"contacts",
+										":telefone",
+										"profile-picture"
+									],
+									"variable": [
+										{
+											"key": "telefone",
+											"value": "{{telefone}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "2ffc931e-fbb3-4fad-9e5f-6c11356b5bc3"
+				},
+				{
+					"name": "Messages",
+					"item": [
+						{
+							"name": "Send Text",
+							"id": "f827b6c5-cb92-4c93-ba10-378255c26cc8",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"number\": \"<string> - required\", // 556599998888\r\n    \"message\": \"<string> - required\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/messages/:telefone/text",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"messages",
+										":telefone",
+										"text"
+									],
+									"variable": [
+										{
+											"key": "telefone",
+											"value": "{{telefone}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Send Media",
+							"id": "44839d18-24f4-4a27-8541-cf683ea50305",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "number",
+											"value": "5565984487400",
+											"description": "string - required",
+											"type": "text"
+										},
+										{
+											"key": "caption",
+											"value": "Teste Caption",
+											"description": "string - optional",
+											"type": "text"
+										},
+										{
+											"key": "file",
+											"description": "file - required",
+											"type": "file",
+											"src": "/home/robson/Imagens/Capturas de tela/Captura de tela de 2024-12-13 12-49-21.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/messages/:telefone/media",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"messages",
+										":telefone",
+										"media"
+									],
+									"variable": [
+										{
+											"key": "telefone",
+											"value": "{{telefone}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Messages Unread",
+							"id": "c6402848-a906-45db-9790-0359ac93f619",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/messages/:telefone/unread",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"messages",
+										":telefone",
+										"unread"
+									],
+									"variable": [
+										{
+											"key": "telefone",
+											"value": "{{telefone}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "dcc81ee1-a059-483d-ae67-42a4719c6ead",
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{token}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								],
+								"id": "ff0d97f3-ffe2-4555-b504-07e64c21de63"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								],
+								"id": "5a0ddd57-a634-4191-a804-1111ea387c96"
+							}
+						}
+					]
+				}
+			],
+			"id": "a8a0cda0-841d-42e2-96db-c9bed965c188"
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{api-token}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "api-token",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "905400b3-984e-4681-81d8-54949c8fa0bd",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "1ccd51d5-b6f2-4dfa-99f9-4ace486bee3b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
