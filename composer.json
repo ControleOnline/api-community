@@ -28,7 +28,7 @@
         "doctrine/doctrine-migrations-bundle": "^2.0",
         "doctrine/orm": "2.16.2",
         "dompdf/dompdf": "^1.0",
-        "endroid/qr-code": "^5.1",
+        "endroid/qr-code": "^6.0",
         "fpdf/fpdf": "^1.83",
         "gos/web-socket-bundle": "^3.15",
         "guzzlehttp/guzzle": "^6.3",
