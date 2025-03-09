@@ -1,5 +1,5 @@
 framework:
-    secret: '%env(APP_SECRET)%'
+    secret: "%env(APP_SECRET)%"
     #csrf_protection: true
     #http_method_override: true
 
@@ -14,3 +14,5 @@ framework:
     #fragments: true
     php_errors:
         log: true
+serializer:
+    enable_max_depth: true
