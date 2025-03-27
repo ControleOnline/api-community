@@ -48,7 +48,7 @@ implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
   {
 
     $serviceName = str_replace('Entity', 'Service', $class) . 'Service';
-    $method = 'secutiryFilter';
+    $method = 'securityFilter';
     if ($this->container->has($serviceName)) {
       $service = $this->container->get($serviceName);
       if (method_exists($service, $method))
