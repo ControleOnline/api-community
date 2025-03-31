@@ -16,4 +16,4 @@ framework:
         log: true
     serializer:
         default_context:
-            max_depth: 3
+            max_depth: 1
