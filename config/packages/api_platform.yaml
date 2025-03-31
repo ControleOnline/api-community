@@ -48,3 +48,5 @@ api_platform:
             enabled: true
     eager_loading:
         max_joins: 100
+    metadata:
+        cache: "none"
