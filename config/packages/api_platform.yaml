@@ -10,7 +10,7 @@ api_platform:
     enable_swagger_ui: true
     defaults:
         normalization_context:
-            max_depth: 3
+            max_depth: 1
             enable_max_depth: true
         skip_null_values: true
     metadata_backward_compatibility_layer: false
