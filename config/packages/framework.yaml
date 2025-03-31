@@ -15,4 +15,4 @@ framework:
     php_errors:
         log: true
     serializer:
-        default
+        circular_reference_handler: 'function($object) { return $object->getId(); }'
