@@ -15,4 +15,4 @@ framework:
     php_errors:
         log: true
     serializer:
-        enable_max_depth: true
+        default
