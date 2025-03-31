@@ -12,16 +12,15 @@ use Symfony\Component\Routing\RouteCollectionBuilder;
 class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
-    use MicroKernelTrait;
 
     private const CONFIG_EXTS = '.{php,xml,yaml,yml}';
-
 
     public function boot(): void
     {
         parent::boot();
-        !defined('APP_NAME') ? define('APP_NAME', $this->getContainer()->getParameter('app_name')) : false;
-        date_default_timezone_set($this->getContainer()->getParameter('timezone'));
+        $container = $this->getContainer();
+        !defined('APP_NAME') ? define('APP_NAME', $container->getParameter('app_name')) : false;
+        date_default_timezone_set($container->getParameter('timezone'));
     }
 
     public function registerBundles(): iterable
