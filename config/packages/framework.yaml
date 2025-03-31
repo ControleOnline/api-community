@@ -14,5 +14,3 @@ framework:
     #fragments: true
     php_errors:
         log: true
-    serializer:
-        circular_reference_handler: 'function($object) { return $object->getId(); }'
