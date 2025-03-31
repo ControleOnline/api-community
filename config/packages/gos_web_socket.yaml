@@ -1,0 +1,14 @@
+# config/packages/gos_web_socket.yaml
+gos_web_socket:
+    server:
+        # The host IP address on the server which connections for the websocket server are accepted.
+        host: 127.0.0.1
+
+        # The port on the server which connections for the websocket server are accepted.
+        port: 8080
+
+        router:
+            resources:
+                -
+                    resource: '%kernel.project_dir%/var/cache/websocket/*'
+                    type: 'glob'                        
