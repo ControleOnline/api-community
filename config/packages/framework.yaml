@@ -15,5 +15,4 @@ framework:
     php_errors:
         log: true
     serializer:
-        default_context:
-            circular_reference_limit: 1
+        enable_max_depth: true
