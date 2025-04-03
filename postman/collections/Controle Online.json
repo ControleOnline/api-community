@@ -31,13 +31,72 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/order_products/",
+							"raw": "{{host}}/order_products/?order=/orders/59722",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"order_products",
 								""
+							],
+							"query": [
+								{
+									"key": "order",
+									"value": "/orders/59722"
+								},
+								{
+									"key": "parentProduct",
+									"value": "/products/1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "product_group_products",
+					"id": "2852ecef-0985-484c-80e3-e44118ed21b0",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{host}}/product_group_products?productGroup=/product_groups/1&productType=component",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"product_group_products"
+							],
+							"query": [
+								{
+									"key": "productGroup",
+									"value": "/product_groups/1"
+								},
+								{
+									"key": "productType",
+									"value": "component"
+								},
+								{
+									"key": "parentProduct",
+									"value": "/products/1",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -60,13 +119,12 @@
 							{
 								"key": "Content-Type",
 								"value": "application/json",
-								"type": "text",
-								"disabled": true
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n   \"order\":\"orders/59624\",\n   \"product\":\"products/1\",\n   \"quantity\":1,\n   \"price\":35,\n   \"total\":35\n}",
+							"raw": "{\n    \"order\": \"/orders/59590\",\n    \"parentProduct\": \"/products/1\",\n    \"product\": \"/products/3\",\n    \"quantity\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -74,13 +132,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/order_products/",
+							"raw": "{{host}}/order_products",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"order_products",
-								""
+								"order_products"
 							]
 						}
 					},
@@ -102,13 +159,19 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/products/",
+							"raw": "{{host}}/products/?order[product]=ASC",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"products",
 								""
+							],
+							"query": [
+								{
+									"key": "order[product]",
+									"value": "ASC"
+								}
 							]
 						}
 					},
@@ -143,7 +206,7 @@
 					"response": []
 				},
 				{
-					"name": "products/1 Copy",
+					"name": "products/1",
 					"id": "203c98e5-e535-4b2e-9926-323cc68e7bf7",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -183,34 +246,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "products/1 Copy",
-					"id": "39e69a5d-1f3d-4679-8fc0-15fa53616081",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "App-Domain",
-								"value": "{{app-domain}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/products/1",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"products",
-								"1"
-							]
-						}
-					},
-					"response": []
 				}
 			],
 			"id": "4da2e17c-a2d7-4acf-9192-3715e9962cff"
@@ -234,7 +269,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/orders?client=/people/480",
+							"raw": "{{host}}/orders",
 							"host": [
 								"{{host}}"
 							],
@@ -244,7 +279,8 @@
 							"query": [
 								{
 									"key": "client",
-									"value": "/people/480"
+									"value": "/people/480",
+									"disabled": true
 								}
 							]
 						}
@@ -758,12 +794,12 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/products/",
+							"raw": "{{host}}/configs/",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"products",
+								"configs",
 								""
 							]
 						}
@@ -1558,6 +1594,485 @@
 				}
 			],
 			"id": "a8a0cda0-841d-42e2-96db-c9bed965c188"
+		},
+		{
+			"name": "Invoice",
+			"item": [
+				{
+					"name": "Webhook",
+					"item": [
+						{
+							"name": "Assas",
+							"id": "74f56749-e78d-4cd9-afb3-67a49d6c2747",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {},
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": \"evt_d545b50fbb17a226c5f4f4fd193922b7&827519019\",\r\n    \"event\": \"PAYMENT_CREATED\",\r\n    \"dateCreated\": \"2025-01-23 14:46:39\",\r\n    \"payment\": {\r\n        \"object\": \"payment\",\r\n        \"id\": \"pay_9p7zordjj15zfuka\",\r\n        \"dateCreated\": \"2025-01-23\",\r\n        \"customer\": \"cus_000088682713\",\r\n        \"paymentLink\": null,\r\n        \"value\": 10,\r\n        \"netValue\": 6.01,\r\n        \"grossValue\": null,\r\n        \"originalValue\": null,\r\n        \"interestValue\": null,\r\n        \"description\": \"Teste Webhook\",\r\n        \"billingType\": \"UNDEFINED\",\r\n        \"pixTransaction\": null,\r\n        \"status\": \"PENDING\",\r\n        \"dueDate\": \"2025-01-23\",\r\n        \"originalDueDate\": \"2025-01-23\",\r\n        \"paymentDate\": null,\r\n        \"clientPaymentDate\": null,\r\n        \"installmentNumber\": null,\r\n        \"invoiceUrl\": \"https://www.asaas.com/i/9p7zordjj15zfuka\",\r\n        \"invoiceNumber\": \"507519245\",\r\n        \"externalReference\": null,\r\n        \"deleted\": true,\r\n        \"anticipated\": false,\r\n        \"anticipable\": false,\r\n        \"creditDate\": null,\r\n        \"estimatedCreditDate\": null,\r\n        \"transactionReceiptUrl\": \"https://www.asaas.com/comprovantes/h/UEFZTUVOVF9ERUxFVEVEOnBheV85cDd6b3JkamoxNXpmdWth\",\r\n        \"nossoNumero\": \"285740878\",\r\n        \"bankSlipUrl\": \"https://www.asaas.com/b/pdf/9p7zordjj15zfuka\",\r\n        \"lastInvoiceViewedDate\": null,\r\n        \"lastBankSlipViewedDate\": null,\r\n        \"discount\": {\r\n            \"value\": 0,\r\n            \"limitDate\": null,\r\n            \"dueDateLimitDays\": 0,\r\n            \"type\": \"PERCENTAGE\"\r\n        },\r\n        \"fine\": {\r\n            \"value\": 5,\r\n            \"type\": \"PERCENTAGE\"\r\n        },\r\n        \"interest\": {\r\n            \"value\": 5,\r\n            \"type\": \"PERCENTAGE\"\r\n        },\r\n        \"postalService\": false,\r\n        \"custody\": null,\r\n        \"refunds\": null\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/webhook/asaas/return/1",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"webhook",
+										"asaas",
+										"return",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "e44f3dfc-0e16-4b75-b0c4-3d3c1e1f1221"
+				},
+				{
+					"name": "Pix",
+					"id": "93990008-7951-4d81-9207-3ca25444ce64",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {},
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/ld+json"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9,pt;q=0.8,es;q=0.7"
+							},
+							{
+								"key": "app-domain",
+								"value": "app.controleonline.com"
+							},
+							{
+								"key": "content-type",
+								"value": "application/ld+json"
+							},
+							{
+								"key": "dnt",
+								"value": "1"
+							},
+							{
+								"key": "origin",
+								"value": "https://app.controleonline.com"
+							},
+							{
+								"key": "priority",
+								"value": "u=1, i"
+							},
+							{
+								"key": "referer",
+								"value": "https://app.controleonline.com/"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Google Chrome\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\""
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							},
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "sec-fetch-dest",
+								"value": "empty"
+							},
+							{
+								"key": "sec-fetch-mode",
+								"value": "cors"
+							},
+							{
+								"key": "sec-fetch-site",
+								"value": "same-site"
+							},
+							{
+								"key": "user-agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"invoice\":4}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.controleonline.com/pix",
+							"protocol": "https",
+							"host": [
+								"api",
+								"controleonline",
+								"com"
+							],
+							"path": [
+								"pix"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Paylist",
+					"id": "9639962d-c1f7-4d5b-9d08-4c591a428940",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/ld+json"
+							},
+							{
+								"key": "accept-language",
+								"value": "en-US,en;q=0.9,pt;q=0.8,es;q=0.7"
+							},
+							{
+								"key": "app-domain",
+								"value": "{{app-domain}}"
+							},
+							{
+								"key": "content-type",
+								"value": "application/ld+json"
+							},
+							{
+								"key": "origin",
+								"value": "http://localhost:3003"
+							},
+							{
+								"key": "referer",
+								"value": "http://localhost:3003/"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/paylist?company=1&document=32115692861",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"paylist"
+							],
+							"query": [
+								{
+									"key": "company",
+									"value": "1"
+								},
+								{
+									"key": "document",
+									"value": "32115692861"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "invoices",
+					"id": "330fe429-0e44-41f8-984a-07bb29e9dc1d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/invoices/?order[id]=DESC&itemsPerPage=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"invoices",
+								""
+							],
+							"query": [
+								{
+									"key": "order[id]",
+									"value": "DESC"
+								},
+								{
+									"key": "itemsPerPage",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "inflow",
+					"id": "c34bfecf-e199-4d35-96c1-72fdef6cdc80",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/invoice/inflow?sourceWallet=6,7",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"invoice",
+								"inflow"
+							],
+							"query": [
+								{
+									"key": "sourceWallet",
+									"value": "6,7"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "240ce285-13c4-41e4-a98a-0d875c61a5ea"
+		},
+		{
+			"name": "Theme",
+			"item": [
+				{
+					"name": "CSS",
+					"id": "f4b95527-c044-4908-a8cf-d26e6e716a7d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "sec-ch-ua-platform",
+								"value": "\"Windows\""
+							},
+							{
+								"key": "Referer",
+								"value": "https://app.controleonline.com/"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36"
+							},
+							{
+								"key": "sec-ch-ua",
+								"value": "\"Chromium\";v=\"134\", \"Not:A-Brand\";v=\"24\", \"Google Chrome\";v=\"134\""
+							},
+							{
+								"key": "DNT",
+								"value": "1"
+							},
+							{
+								"key": "sec-ch-ua-mobile",
+								"value": "?0"
+							}
+						],
+						"url": {
+							"raw": "https://api.controleonline.com/themes-colors.css",
+							"protocol": "https",
+							"host": [
+								"api",
+								"controleonline",
+								"com"
+							],
+							"path": [
+								"themes-colors.css"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "a880ae54-167e-46c5-981a-c875fbda0f11"
+		},
+		{
+			"name": "Wallet",
+			"item": [
+				{
+					"name": "wallet",
+					"id": "8e8f25df-6749-4eb1-9aab-a57aee14ef6f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/wallets/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"wallets",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "wallet_payment_types",
+					"id": "4d2c6817-ae48-4b00-8919-77070fc97ec0",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/wallet_payment_types/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"wallet_payment_types",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "0b8352e5-83fd-41a0-8dc4-748f64d1e831"
+		},
+		{
+			"name": "Translates",
+			"item": [
+				{
+					"name": "translates",
+					"id": "5bd12430-b911-4b9d-9cf1-32d51478a972",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/translates?store=invoice&language.language=pt-br&people=/people/1&key=waiting payment",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"translates"
+							],
+							"query": [
+								{
+									"key": "store",
+									"value": "invoice"
+								},
+								{
+									"key": "language.language",
+									"value": "pt-br"
+								},
+								{
+									"key": "people",
+									"value": "/people/1"
+								},
+								{
+									"key": "key",
+									"value": "waiting payment",
+									"type": "text"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "b2a3ec13-0f3e-475d-8e52-beb421e38ed0"
+		},
+		{
+			"name": "Device",
+			"item": [
+				{
+					"name": "device",
+					"id": "0b650f52-3b61-43c8-9188-bc4f2f9e8e1a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/devices/?device=23f05c5809b750ec",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"devices",
+								""
+							],
+							"query": [
+								{
+									"key": "device",
+									"value": "23f05c5809b750ec",
+									"type": "text"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "442bde03-01f8-45f4-b070-b190707afc15"
 		}
 	],
 	"auth": {
@@ -1579,7 +2094,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "905400b3-984e-4681-81d8-54949c8fa0bd",
+				"id": "88f45edb-c558-4d54-ba37-a41cbce96a1d",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -1589,7 +2104,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "1ccd51d5-b6f2-4dfa-99f9-4ace486bee3b",
+				"id": "0e72cb43-0777-4ae9-bd04-94a23df1de29",
 				"type": "text/javascript",
 				"exec": [
 					""
