@@ -10,3 +10,6 @@ controleonline_financial:
 controleonline_orders:
     resource: ../../modules/controleonline/orders/src/Controller/
     type: annotation
+controleonline_products:
+    resource: ../../modules/controleonline/products/src/Controller/
+    type: annotation
