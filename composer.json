@@ -43,6 +43,7 @@
         "nfephp-org/sped-pos": "dev-master",
         "phpdocumentor/reflection-docblock": "^5.2",
         "phpoffice/phpspreadsheet": "^1.18",
+        "sensio/framework-extra-bundle": "*",
         "symfony/asset": "5.4.*",
         "symfony/console": "5.4.*",
         "symfony/dotenv": "5.4.*",
