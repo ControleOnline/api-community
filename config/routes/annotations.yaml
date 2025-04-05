@@ -4,3 +4,6 @@ controllers:
 controleonline_users:
     resource: ../../modules/controleonline/users/src/Controller/
     type: annotation
+controleonline_financial:
+    resource: ../../modules/controleonline/financial/src/Controller/
+    type: annotation
