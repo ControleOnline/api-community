@@ -7,3 +7,6 @@ controleonline_users:
 controleonline_financial:
     resource: ../../modules/controleonline/financial/src/Controller/
     type: annotation
+controleonline_orders:
+    resource: ../../modules/controleonline/orders/src/Controller/
+    type: annotation
