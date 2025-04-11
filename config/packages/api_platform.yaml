@@ -12,7 +12,6 @@ api_platform:
         normalization_context:
             enable_max_depth: true
         skip_null_values: true
-    metadata_backward_compatibility_layer: false
     formats:
         jsonld: ["application/ld+json"]
         jsonhal: ["application/hal+json"]
@@ -39,7 +38,6 @@ api_platform:
                 type: header
     collection:
         pagination:
-            client_items_per_page: true
             items_per_page_parameter_name: itemsPerPage
     graphql:
         graphiql:

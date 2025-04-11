@@ -1,29 +1,33 @@
 security:
-    encoders:
+    password_hashers:
         ControleOnline\Entity\User:
             algorithm: auto
+
     providers:
         app_user_provider:
             entity:
                 class: ControleOnline\Entity\User
+                property: username
+
     firewalls:
         dev:
-            pattern : ^/(_(profiler|wdt)|css|images|js)/
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
         main:
-            stateless : true
-            anonymous : lazy
-            provider  : app_user_provider
+            stateless: true
+            lazy: true
+            provider: app_user_provider
+            custom_authenticators:
+                - ControleOnline\Security\TokenAuthenticator
             json_login:
-                check_path   : /token
+                check_path: /token
                 username_path: username
                 password_path: password
-            guard:
-                authenticators:
-                    - App\Security\TokenAuthenticator
+
     role_hierarchy:
-        ROLE_SUPER : ROLE_ADMIN
-        ROLE_ADMIN : ROLE_CLIENT
+        ROLE_SUPER: ROLE_ADMIN
+        ROLE_ADMIN: ROLE_CLIENT
         ROLE_CLIENT: ROLE_USER
 
     access_control:

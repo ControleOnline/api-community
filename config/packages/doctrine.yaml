@@ -1,6 +1,5 @@
 doctrine:
     dbal:
-        # configure these for your database server
         driver: "%env(resolve:DATABASE_DRIVER)%"
         server_version: "5.7"
         charset: utf8mb4
@@ -16,6 +15,7 @@ doctrine:
             enum: string
         options:
             1002: 'SET sql_mode=(SELECT REPLACE(@@sql_mode, "ONLY_FULL_GROUP_BY", ""));SET TRANSACTION ISOLATION LEVEL READ COMMITTED;'
+
     orm:
         dql:
             numeric_functions:
@@ -30,7 +30,7 @@ doctrine:
         mappings:
             App:
                 is_bundle: false
-                type: annotation
+                type: attribute
                 dir: "%kernel.project_dir%/src/Entity"
                 prefix: 'App\Entity'
                 alias: App

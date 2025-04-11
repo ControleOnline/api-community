@@ -1,15 +1,15 @@
 controllers:
     resource: ../../src/Controller/
-    type: annotation
+    type: attribute
 controleonline_users:
     resource: ../../modules/controleonline/users/src/Controller/
-    type: annotation
+    type: attribute
 controleonline_financial:
     resource: ../../modules/controleonline/financial/src/Controller/
-    type: annotation
+    type: attribute
 controleonline_orders:
     resource: ../../modules/controleonline/orders/src/Controller/
-    type: annotation
+    type: attribute
 controleonline_products:
     resource: ../../modules/controleonline/products/src/Controller/
-    type: annotation
+    type: attribute
