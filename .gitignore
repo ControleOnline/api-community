@@ -72,3 +72,6 @@ node_modules/**/*
 .DS_Store
 
 /modules/controeonline/*
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###
