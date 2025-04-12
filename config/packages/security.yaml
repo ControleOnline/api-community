@@ -7,7 +7,7 @@ security:
         app_user_provider:
             entity:
                 class: ControleOnline\Entity\User
-                property: apiKey
+                property: username
 
     firewalls:
         dev:
