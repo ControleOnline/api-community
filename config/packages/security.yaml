@@ -7,7 +7,7 @@ security:
         app_user_provider:
             entity:
                 class: ControleOnline\Entity\User
-                property: username
+                property: apiKey
 
     firewalls:
         dev:
@@ -26,9 +26,11 @@ security:
                 password_path: password
 
     role_hierarchy:
-        ROLE_SUPER: ROLE_ADMIN
-        ROLE_ADMIN: ROLE_CLIENT
-        ROLE_CLIENT: ROLE_USER
-
+        ROLE_SUPER: ROLE_SUPER
+        ROLE_ADMIN: ROLE_ADMIN
+        ROLE_CLIENT: ROLE_CLIENT
     access_control:
-        - { path: ^/my_contracts/signatures-finished, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/$, roles: PUBLIC_ACCESS } 
+        - { path: ^/docs, roles: PUBLIC_ACCESS } 
+        - { path: ^/token, roles: PUBLIC_ACCESS } 
+        - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
