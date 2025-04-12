@@ -1,7 +1,7 @@
 security:
     password_hashers:
         ControleOnline\Entity\User:
-            algorithm: argon2id
+            algorithm: auto
 
     providers:
         app_user_provider:
