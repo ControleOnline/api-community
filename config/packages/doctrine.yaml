@@ -1,5 +1,6 @@
 doctrine:
     dbal:
+        logging: true
         driver: "%env(resolve:DATABASE_DRIVER)%"
         server_version: "5.7"
         charset: utf8mb4
