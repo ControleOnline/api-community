@@ -28,6 +28,7 @@
         "doctrine/orm": "^3.2",
         "dompdf/dompdf": "^3.0",
         "endroid/qr-code": "^5.0",
+        "nelmio/cors-bundle": "^2.5",
         "fpdf/fpdf": "^1.86",
         "guzzlehttp/guzzle": "^7.9",
         "justinrainbow/json-schema": "^5.2",
