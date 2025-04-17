@@ -10,10 +10,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "18.17.1"         
-      - name: Creating Config
-        run: |
-          mkdir -p ./var/cache/
-          touch ./var/cache/websocket
       - name: Update Submodules
         run: |                 
           git submodule update --recursive --init
