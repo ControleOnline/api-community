@@ -13,3 +13,6 @@ controleonline_orders:
 controleonline_products:
     resource: ../../modules/controleonline/products/src/Controller/
     type: attribute
+controleonline_websocket:
+    resource: ../../modules/controleonline/websocket-server/src/Controller/
+    type: attribute
