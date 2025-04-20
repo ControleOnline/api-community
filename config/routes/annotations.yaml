@@ -16,3 +16,6 @@ controleonline_products:
 controleonline_websocket:
     resource: ../../modules/controleonline/websocket-server/src/Controller/
     type: attribute
+controleonline_common:
+    resource: ../../modules/controleonline/common/src/Controller/
+    type: attribute    
