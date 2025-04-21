@@ -1,8 +1,10 @@
-# config/packages/messenger.yaml
 framework:
     messenger:
         transports:
-            gos_web_socket:
-                dsn: 'gos://localhost:8080' 
+            iFood:
+                dsn: "doctrine://default"
+                options:
+                    table_name: messenger_messages
+                    queue_name: iFood
         routing:
-            #'ControleOnline\Message\Notification': gos_web_socket
+            'ControleOnline\Message\iFood\OrderMessage': iFood
