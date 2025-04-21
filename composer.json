@@ -36,7 +36,6 @@
         "league/oauth2-google": "^4.0",
         "league/oauth2-instagram": "^3.1",
         "mautic/api-library": "^3.0",
-        "monolog/monolog": "^2.10",
         "nelmio/cors-bundle": "^2.5",
         "nfephp-org/sped-cte": "dev-master",
         "nfephp-org/sped-da": "dev-master",
@@ -54,6 +53,7 @@
         "symfony/http-client": "^7.0",
         "symfony/mailer": "^7.0",
         "symfony/messenger": "^7.0",
+        "symfony/monolog-bundle": "^3.10",
         "symfony/property-access": "^7.0",
         "symfony/property-info": "^7.0",
         "symfony/runtime": "^7.0",
@@ -66,7 +66,6 @@
         "symfony/var-dumper": "^7.0",
         "symfony/yaml": "^7.0",
         "tecnickcom/tcpdf": "^6.7",
-        "v5market/braspag-split-sdk-php": "^1.0",
         "vich/uploader-bundle": "^2.3",
         "webonyx/graphql-php": "^15.12"
     },
