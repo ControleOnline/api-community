@@ -36,6 +36,7 @@
         "league/oauth2-google": "^4.0",
         "league/oauth2-instagram": "^3.1",
         "mautic/api-library": "^3.0",
+        "monolog/monolog": "^2.10",
         "nelmio/cors-bundle": "^2.5",
         "nfephp-org/sped-cte": "dev-master",
         "nfephp-org/sped-da": "dev-master",
