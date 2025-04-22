@@ -43,9 +43,9 @@
 [submodule "modules/controleonline/accounting"]
 	path = modules/controleonline/accounting
 	url = https://github.com/ControleOnline/api-platform-accounting.git
-[submodule "modules/controleonline/websocket-server"]
-	path = modules/controleonline/websocket-server
-	url = https://github.com/ControleOnline/api-platform-websocket-server.git
 [submodule "modules/controleonline/integration"]
 	path = modules/controleonline/integration
 	url = https://github.com/ControleOnline/api-platform-integration.git
+[submodule "modules/controleonline/websocket-server"]
+	path = modules/controleonline/websocket-server
+	url = https://github.com/ControleOnline/api-platform-websocket-server.git
