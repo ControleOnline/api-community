@@ -29,15 +29,18 @@ security:
         ROLE_SUPER: ROLE_SUPER
         ROLE_ADMIN: ROLE_ADMIN
         ROLE_CLIENT: ROLE_CLIENT
+
     access_control:
         - { path: ^/$, roles: PUBLIC_ACCESS }
-        - { path: ^/docs, roles: PUBLIC_ACCESS }
-        - { path: ^/token, roles: PUBLIC_ACCESS }
-        - { path: ^/themes-colors.css, roles: PUBLIC_ACCESS }
-        - { path: ^/languages, roles: PUBLIC_ACCESS }
-        - { path: ^/people/company/default, roles: PUBLIC_ACCESS }
-        - { path: ^/translates, roles: PUBLIC_ACCESS }
-        - { path: ^/cart, roles: PUBLIC_ACCESS }
+        - { path: ^/docs$, roles: PUBLIC_ACCESS }
+        - { path: ^/token$, roles: PUBLIC_ACCESS }
+        - { path: ^/themes-colors.css$, roles: PUBLIC_ACCESS }
+        - { path: ^/languages$, roles: PUBLIC_ACCESS }
+        - { path: ^/people/company/default$, roles: PUBLIC_ACCESS }
+        - { path: ^/translates$, roles: PUBLIC_ACCESS }
+        - { path: ^/cart$, roles: PUBLIC_ACCESS }
         - { path: ^/files/.*$, roles: PUBLIC_ACCESS }
-        - { path: ^/webhook/, roles: PUBLIC_ACCESS } # Nova regra para todos os webhooks
+        - { path: ^/webhook/, roles: PUBLIC_ACCESS }
+        - { path: ^/pix$, roles: PUBLIC_ACCESS }
+        - { path: ^/bitcoin$, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
