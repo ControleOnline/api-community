@@ -1,0 +1,23 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true 
+    ControleOnline\:
+        resource: '../../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Resource,Migrations,Library,Tests,Kernel.php}'
+    ControleOnline\Repository\:
+        resource: '../../src/Repository'
+        tags: ['doctrine.repository_service']
+    ControleOnline\Controller\:
+        resource: '../../src/Controller'
+        tags: ['controller.service_arguments']
+    ControleOnline\Command\:
+        resource: '../../src/Command'
+        tags: ['console.command']
+    ControleOnline\Filter\:
+        resource: '../../src/Filter'            
+    ControleOnline\Message\iFood\OrderMessage:
+        autowire: false
+        autoconfigure: false
+        public: false

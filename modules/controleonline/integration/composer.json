@@ -1,0 +1,21 @@
+{
+    "name": "controleonline/integration",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "ControleOnline\\": "src/",
+            "ControleOnline\\Repository\\": "src/Repository/",
+            "ControleOnline\\Entity\\": "src/Entity/",
+            "ControleOnline\\Controller\\": "src/Controller/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Controle Online",
+            "email": "luiz.kim@controleonline.com"
+        }
+    ],
+    "require": {
+        "controleonline/common": "*"
+    }
+}

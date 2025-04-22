@@ -1,0 +1,4 @@
+imports:
+    - { resource: "./services/services.yaml" }
+    - { resource: "./packages/api_platform.yaml" }
+    - { resource: "./packages/doctrine.yaml" }
