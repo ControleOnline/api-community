@@ -8,6 +8,8 @@ parameters:
 api_platform:
     enable_re_doc: true
     enable_swagger_ui: true
+    ignore_paths:
+        - '^/webhook/'
     defaults:
         normalization_context:
             enable_max_depth: true
