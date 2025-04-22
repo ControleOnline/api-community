@@ -4,7 +4,7 @@ framework:
             iFood:
                 dsn: "doctrine://default"
                 options:
-                    table_name: messenger_messages
+                    table_name: integration
                     queue_name: iFood
         routing:
             'ControleOnline\Message\iFood\OrderMessage': iFood

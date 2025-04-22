@@ -38,5 +38,5 @@ imports:
     - { resource: "../modules/controleonline/users/config/config.yaml" }
     - { resource: "../modules/controleonline/tasks/config/config.yaml" }
     - { resource: "../modules/controleonline/accounting/config/config.yaml" }
-    - { resource: "../modules/controleonline/food/config/services/services.yaml" }
+    - { resource: "../modules/controleonline/integration/config/services/services.yaml" }
     - { resource: "../modules/controleonline/websocket-server/config/services/services.yaml" }

@@ -20,5 +20,5 @@ controleonline_common:
     resource: ../../modules/controleonline/common/src/Controller/
     type: attribute    
 controleonline_food:
-    resource: ../../modules/controleonline/food/src/Controller/
+    resource: ../../modules/controleonline/integration/src/Controller/
     type: attribute    
