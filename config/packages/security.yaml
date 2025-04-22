@@ -39,5 +39,5 @@ security:
         - { path: ^/translates, roles: PUBLIC_ACCESS }
         - { path: ^/cart, roles: PUBLIC_ACCESS }
         - { path: ^/files/.*$, roles: PUBLIC_ACCESS }
-        - { path: ^/ifood/webhook, roles: PUBLIC_ACCESS }
+        - { path: ^/webhook/, roles: PUBLIC_ACCESS } # Nova regra para todos os webhooks
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
