@@ -6,5 +6,11 @@ framework:
                 options:
                     table_name: integration
                     queue_name: iFood
+            Asaas:
+                dsn: "doctrine://default"
+                options:
+                    table_name: integration
+                    queue_name: Asaas
         routing:
             'ControleOnline\Message\iFood\OrderMessage': iFood
+            'ControleOnline\Message\Asaas\WebhookMessage': Asaas
