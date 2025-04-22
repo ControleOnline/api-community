@@ -1,11 +1,5 @@
 framework:
     messenger:
-        default_bus: messenger.bus.default
-        retry_strategy:
-            max_retries: 3
-            delay: 1000
-            multiplier: 2
-            max_delay: 10000
         transports:
             iFood:
                 dsn: "doctrine://default"
@@ -18,11 +12,10 @@ framework:
                     table_name: integration
                     queue_name: Asaas
             Websocket:
-                dsn: "doctrine://default"
+                dsn: 'doctrine://default'
                 options:
                     table_name: integration
-                    queue_name: Websocket
-
+                    queue_name: Websocket        
         routing:
             'ControleOnline\Message\iFood\OrderMessage': iFood
             'ControleOnline\Message\Asaas\WebhookMessage': Asaas
