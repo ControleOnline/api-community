@@ -6,16 +6,34 @@ framework:
                 options:
                     table_name: integration
                     queue_name: iFood
+                retry_strategy:
+                    max_retries: 3
+                    delay: 1000
+                    multiplier: 2
+                    max_delay: 10000
+
             Asaas:
                 dsn: "doctrine://default"
                 options:
                     table_name: integration
                     queue_name: Asaas
+                retry_strategy:
+                    max_retries: 3
+                    delay: 1000
+                    multiplier: 2
+                    max_delay: 10000
+
             Websocket:
-                dsn: 'doctrine://default'
+                dsn: "doctrine://default"
                 options:
                     table_name: integration
-                    queue_name: Websocket        
+                    queue_name: Websocket
+                retry_strategy:
+                    max_retries: 3
+                    delay: 1000
+                    multiplier: 2
+                    max_delay: 10000
+
         routing:
             'ControleOnline\Message\iFood\OrderMessage': iFood
             'ControleOnline\Message\Asaas\WebhookMessage': Asaas
