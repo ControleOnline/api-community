@@ -21,8 +21,10 @@ RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
 RewriteRule ^(.*) - [E=BASE:%1]
 RewriteRule ^(.*)$ %{ENV:BASE}/index.php [L]
 </IfModule>
+
 <IfModule mod_headers.c>
-    Header always set Content-Security-Policy: upgrade-insecure-requests
+    Header always set Content-Security-Policy: upgrade-insecure-requests env=!WEBSOCKET
+    SetEnvIf Upgrade websocket WEBSOCKET
 </IfModule>
 
 AddType text/javascript .js
