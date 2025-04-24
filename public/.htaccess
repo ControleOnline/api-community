@@ -5,28 +5,3 @@
     RewriteRule ^(.*)$ ws://localhost:8080/$1 [P,L,QSA]
     ProxyPassReverse / ws://localhost:8080/
 </IfModule>
-
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteCond %{HTTPS} off
-    RewriteCond %{HTTP:Upgrade} !=websocket [NC]
-    RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-    RewriteRule ^/ - [L]
-    RewriteCond %{REQUEST_FILENAME} -s [OR]
-    RewriteCond %{REQUEST_FILENAME} -l [OR]
-    RewriteCond %{REQUEST_FILENAME} -d
-    RewriteRule ^.*$ - [L]
-    RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
-    RewriteRule ^(.*) - [E=BASE:%1]
-    RewriteRule ^(.*)$ %{ENV:BASE}/index.php [L]
-</IfModule>
-
-<IfModule mod_headers.c>
-    # Aplicar Content-Security-Policy exatamente como solicitado, apenas para não-WebSocket
-    Header always set Content-Security-Policy: upgrade-insecure-requests env=!WEBSOCKET
-    SetEnvIf Upgrade websocket WEBSOCKET
-</IfModule>
-
-AddType text/javascript .js
-AddType text/javascript .mjs
