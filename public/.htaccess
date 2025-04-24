@@ -2,8 +2,8 @@
     RewriteEngine On
     RewriteCond %{HTTP:Upgrade} =websocket [NC]
     RewriteCond %{HTTP:Connection} =Upgrade [NC]
-    RewriteRule ^(.*)$ wss://localhost:8080/$1 [P,L,QSA]
-    ProxyPassReverse / wss://localhost:8080/
+    RewriteRule ^(.*)$ ws://localhost:8080/$1 [P,L,QSA]
+    ProxyPassReverse / ws://localhost:8080/
 </IfModule>
 
 <IfModule mod_rewrite.c>
