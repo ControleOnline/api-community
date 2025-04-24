@@ -1,13 +1,12 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
+    # Regras para WebSocket primeiro
     RewriteCond %{HTTP:Upgrade} =websocket [NC]
     RewriteCond %{HTTP:Connection} =Upgrade [NC]
     RewriteRule ^(.*)$ ws://localhost:8080/$1 [P,L,QSA]
     ProxyPassReverse / ws://localhost:8080/
-</IfModule>
 
-<IfModule mod_rewrite.c>
-    RewriteEngine On
+    # Resto das regras para HTTP/HTTPS
     RewriteCond %{HTTPS} off
     RewriteCond %{HTTP:Upgrade} !=websocket [NC]
     RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
