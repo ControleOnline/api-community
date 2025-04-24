@@ -7,8 +7,8 @@
 </IfModule>
 
 <IfModule mod_rewrite.c>
-RewriteEngine On
 RewriteCond %{HTTPS} off
+RewriteCond %{HTTP:Upgrade} !=websocket [NC]
 RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 RewriteEngine On
