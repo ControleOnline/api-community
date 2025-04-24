@@ -1,7 +1,6 @@
 <IfModule mod_rewrite.c>
 RewriteCond %{HTTP:Upgrade} =websocket [NC]
-RewriteCond %{HTTP:Connection} upgrade [NC]
-RewriteRule ^ws/(.*) ws://localhost:8080/$1 [P,L]
+RewriteRule ^(.*)$ ws://localhost:8080/$1 [P,L,QSA]
 </IfModule>
 
 <IfModule mod_rewrite.c>
