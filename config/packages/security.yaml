@@ -41,6 +41,7 @@ security:
         - { path: ^/cart$, roles: PUBLIC_ACCESS }
         - { path: ^/files/.*$, roles: PUBLIC_ACCESS }
         - { path: ^/webhook/, roles: PUBLIC_ACCESS }
+        - { path: ^/oauth/, roles: PUBLIC_ACCESS }
         - { path: ^/pix$, roles: PUBLIC_ACCESS }
         - { path: ^/bitcoin$, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
