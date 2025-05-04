@@ -73,10 +73,10 @@ class AddressService
     if (!isset($address['street']) || empty($address['street']))
       throw new \InvalidArgumentException('Parameter "address street" is missing');
 
-    if (!isset($address['postal_code']) || empty($address['postal_code']))
-      throw new \InvalidArgumentException('Parameter "address postal_code" is missing');
-    else if (preg_match('/^[0-9]{8}$/', $address['postal_code']) !== 1)
-      throw new \InvalidArgumentException('Parameter "address postal_code" is not valid');
+    if (!isset($address['postalCode']) || empty($address['postalCode']))
+      throw new \InvalidArgumentException('Parameter "address postalCode" is missing');
+    else if (preg_match('/^[0-9]{8}$/', $address['postalCode']) !== 1)
+      throw new \InvalidArgumentException('Parameter "address postalCode" is not valid');
 
     if (!isset($address['number']) || !is_numeric($address['number']))
       throw new \InvalidArgumentException('Parameter "address number" is missing');
@@ -140,12 +140,12 @@ class AddressService
     // search postal code
 
     $postalCode = $this->manager->getRepository(Cep::class)
-      ->findOneBy(['cep' => $this->fixPostalCode($components['postal_code'])]);
+      ->findOneBy(['cep' => $this->fixPostalCode($components['postalCode'])]);
 
     if ($postalCode === null) {
       $postalCode = new Cep();
 
-      $postalCode->setCep($components['postal_code']);
+      $postalCode->setCep($components['postalCode']);
 
       $this->manager->persist($postalCode);
     }
