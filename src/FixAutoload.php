@@ -18,8 +18,8 @@ class FixAutoload
 
     public static function postInstall()
     {
-        self::replaceInComposerFiles();
-        self::deleteDirectory(__DIR__ . '/../vendor/controleonline');
+        if ($_ENV['APP_ENV'] === 'dev')
+            self::replaceInComposerFiles();
     }
 
     public static function deleteDirectory($path)
@@ -52,5 +52,6 @@ class FixAutoload
                 file_put_contents($classmapFile, $modifiedContent);
             }
         }
+        self::deleteDirectory(__DIR__ . '/../vendor/controleonline');
     }
 }
