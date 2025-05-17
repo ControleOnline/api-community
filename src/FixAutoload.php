@@ -4,6 +4,14 @@ namespace App;
 
 class FixAutoload
 {
+
+    private static $envVars;
+    
+    public function __construct()
+    {
+        self::$envVars = self::readEnvFile(__DIR__ . '/../.env.local');
+    }
+
     private static function getPaths()
     {
         return [
@@ -18,10 +26,10 @@ class FixAutoload
 
     public static function postInstall()
     {
-        $envVars = self::readEnvFile(__DIR__ . '/../.env.local');
-        if (isset($envVars['APP_ENV']) && $envVars['APP_ENV'] === 'dev')
+        if (isset(self::$envVars['APP_ENV']) && self::$envVars['APP_ENV'] === 'dev')
             self::replaceInComposerFiles();
     }
+
     private static function readEnvFile(string $filePath): array
     {
         $envVariables = [];
@@ -32,16 +40,12 @@ class FixAutoload
 
         $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
         foreach ($lines as $line) {
-            // Ignora comentários e linhas de seção
             if (preg_match('/^\s*#/', $line) || preg_match('/^\s*###/', $line)) {
                 continue;
             }
-
-            // Processa linhas no formato CHAVE=VALOR
             if (preg_match('/^([A-Z0-9_]+)=(.*)$/', $line, $matches)) {
                 $key = $matches[1];
                 $value = $matches[2];
-                // Remove aspas simples ou duplas, se existirem
                 $value = trim($value, '"\'');
                 $envVariables[$key] = $value;
             }
@@ -49,6 +53,7 @@ class FixAutoload
 
         return $envVariables;
     }
+    
     public static function deleteDirectory($path)
     {
         if (is_dir($path)) {
