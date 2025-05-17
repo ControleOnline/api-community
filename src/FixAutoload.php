@@ -6,7 +6,7 @@ class FixAutoload
 {
 
     private static $envVars;
-    
+
     public function __construct()
     {
         self::$envVars = self::readEnvFile(__DIR__ . '/../.env.local');
@@ -26,8 +26,8 @@ class FixAutoload
 
     public static function postInstall()
     {
-        if (isset(self::$envVars['APP_ENV']) && self::$envVars['APP_ENV'] === 'dev')
-            self::replaceInComposerFiles();
+        //if (isset(self::$envVars['APP_ENV']) && self::$envVars['APP_ENV'] === 'dev')
+        self::replaceInComposerFiles();
     }
 
     private static function readEnvFile(string $filePath): array
@@ -53,7 +53,7 @@ class FixAutoload
 
         return $envVariables;
     }
-    
+
     public static function deleteDirectory($path)
     {
         if (is_dir($path)) {
