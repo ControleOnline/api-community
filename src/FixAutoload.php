@@ -18,10 +18,37 @@ class FixAutoload
 
     public static function postInstall()
     {
-        if ($_ENV['APP_ENV'] === 'dev')
+        $envVars = self::readEnvFile(__DIR__ . '/../.env.local');
+        if (isset($envVars['APP_ENV']) && $envVars['APP_ENV'] === 'dev')
             self::replaceInComposerFiles();
     }
+    private static function readEnvFile(string $filePath): array
+    {
+        $envVariables = [];
+        if (!file_exists($filePath)) {
+            error_log("Arquivo .env não encontrado: $filePath");
+            return $envVariables;
+        }
 
+        $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($lines as $line) {
+            // Ignora comentários e linhas de seção
+            if (preg_match('/^\s*#/', $line) || preg_match('/^\s*###/', $line)) {
+                continue;
+            }
+
+            // Processa linhas no formato CHAVE=VALOR
+            if (preg_match('/^([A-Z0-9_]+)=(.*)$/', $line, $matches)) {
+                $key = $matches[1];
+                $value = $matches[2];
+                // Remove aspas simples ou duplas, se existirem
+                $value = trim($value, '"\'');
+                $envVariables[$key] = $value;
+            }
+        }
+
+        return $envVariables;
+    }
     public static function deleteDirectory($path)
     {
         if (is_dir($path)) {
