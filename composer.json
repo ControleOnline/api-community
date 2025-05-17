@@ -24,6 +24,7 @@
         "controleonline/tasks": "dev-master",
         "controleonline/users": "dev-master",
         "controleonline/websocket-server": "dev-master",
+        "controleonline/whatsapp-sdk": "dev-master",
         "ctodobom/api-inter": "dev-master",
         "doctrine/annotations": "^2.0",
         "doctrine/doctrine-bundle": "^2.12",
