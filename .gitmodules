@@ -49,6 +49,6 @@
 [submodule "modules/controleonline/integration"]
 	path = modules/controleonline/integration
 	url = https://github.com/ControleOnline/api-platform-integration.git
-[submodule "modules/controleonline/whatsapp-sdk-php"]
-	path = modules/controleonline/whatsapp-sdk-php
+[submodule "modules/controleonline/whatsapp-sdk"]
+	path = modules/controleonline/whatsapp-sdk
 	url = https://github.com/ControleOnline/whatsapp-sdk-php.git
