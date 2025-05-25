@@ -52,3 +52,6 @@
 [submodule "modules/controleonline/whatsapp-sdk"]
 	path = modules/controleonline/whatsapp-sdk
 	url = https://github.com/ControleOnline/whatsapp-sdk-php.git
+[submodule "modules/controleonline/messages-sdk"]
+	path = modules/controleonline/messages-sdk
+	url = https://github.com/ControleOnline/messages-sdk-php.git
