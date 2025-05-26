@@ -55,6 +55,57 @@
 					"response": []
 				},
 				{
+					"name": "products/inventory/print",
+					"id": "15c8f54a-0d80-42f5-9a52-d5fe4ab90182",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"device\":\"6fb49e35e4036cd9\",\"people\": \"1\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/products/inventory/print",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"products",
+								"inventory",
+								"print"
+							],
+							"query": [
+								{
+									"key": "parentProduct",
+									"value": "/products/1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "product_group_products",
 					"id": "2852ecef-0985-484c-80e3-e44118ed21b0",
 					"protocolProfileBehavior": {
@@ -159,18 +210,41 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/products/?order[product]=ASC",
+							"raw": "{{host}}/products?productCategory.category=/categories/199&active=1&order[product]=ASC&order[description]=ASC&type[]=custom&type[]=product&type[]=manufactured",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"products",
-								""
+								"products"
 							],
 							"query": [
 								{
+									"key": "productCategory.category",
+									"value": "/categories/199"
+								},
+								{
+									"key": "active",
+									"value": "1"
+								},
+								{
 									"key": "order[product]",
 									"value": "ASC"
+								},
+								{
+									"key": "order[description]",
+									"value": "ASC"
+								},
+								{
+									"key": "type[]",
+									"value": "custom"
+								},
+								{
+									"key": "type[]",
+									"value": "product"
+								},
+								{
+									"key": "type[]",
+									"value": "manufactured"
 								}
 							]
 						}
@@ -269,7 +343,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/orders",
+							"raw": "{{host}}/orders?order.alterDate=DESC&provider=/people/4&itemsPerPage=50",
 							"host": [
 								"{{host}}"
 							],
@@ -278,8 +352,25 @@
 							],
 							"query": [
 								{
-									"key": "client",
-									"value": "/people/480",
+									"key": "order.alterDate",
+									"value": "DESC"
+								},
+								{
+									"key": "provider",
+									"value": "/people/4"
+								},
+								{
+									"key": "page",
+									"value": "4",
+									"disabled": true
+								},
+								{
+									"key": "itemsPerPage",
+									"value": "50"
+								},
+								{
+									"key": "id[gt]",
+									"value": "60245",
 									"disabled": true
 								}
 							]
@@ -385,13 +476,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/orders/59624",
+							"raw": "{{host}}/orders/63158",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
 								"orders",
-								"59624"
+								"63158"
 							]
 						}
 					},
@@ -973,46 +1064,6 @@
 					"name": "Sessions",
 					"item": [
 						{
-							"name": "Get QR Code",
-							"id": "b74f219d-4492-411c-9459-8965a4e53ce3",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/sessions/qr/:telefone",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"sessions",
-										"qr",
-										":telefone"
-									],
-									"variable": [
-										{
-											"key": "telefone",
-											"value": "{{telefone}}",
-											"description": "telefone da conexão no banco de dados"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "List Sessions",
 							"id": "a48c3ee3-aa60-4579-98c4-1c253a4e278c",
 							"protocolProfileBehavior": {
@@ -1024,7 +1075,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "{{token}}",
+											"value": "a933f94cd1589687ad38f67c8f864e44",
 											"type": "string"
 										}
 									]
@@ -1032,51 +1083,15 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/sessions",
+									"raw": "https://w.controleonline.com/sessions",
+									"protocol": "https",
 									"host": [
-										"{{baseUrl}}"
+										"w",
+										"controleonline",
+										"com"
 									],
 									"path": [
 										"sessions"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Status",
-							"id": "41c9097d-ba4c-45df-b5a9-50601b684e6a",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/sessions/status/:telefone",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"sessions",
-										"status",
-										":telefone"
-									],
-									"variable": [
-										{
-											"key": "telefone",
-											"value": "+5511971140832"
-										}
 									]
 								}
 							},
@@ -1090,20 +1105,19 @@
 							},
 							"request": {
 								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
+									"type": "noauth"
 								},
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "api-token",
+										"value": "{{api-token}}",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    /*\r\n     Caso não enviar o webhook no momento da criação da sessão,\r\n     poderá ser enviado pelo endpoint /sessions/add-webhook.\r\n     Se não enviar os webhooks em nenhum dos casos, \r\n     a API não irá alimentar o backend.\r\n    */\r\n    \"telefone\": \"5565984487400\",\r\n    \"webhooks\": { // <object> - optional\r\n        \"connection.update\": \"http://localhost:3030/update\",\r\n        \"messages.upsert\":  \"http://localhost:3030\",\r\n        \"messages.update\":  \"http://localhost:3030\",\r\n        \"messaging-history.set\":  \"http://localhost:3030\"\r\n    }\r\n}",
+									"raw": "{\r\n    \"phone\": \"551155555159\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1111,13 +1125,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/sessions/start",
+									"raw": "{{host}}/whatsapp/create-session",
 									"host": [
-										"{{baseUrl}}"
+										"{{host}}"
 									],
 									"path": [
-										"sessions",
-										"start"
+										"whatsapp",
+										"create-session"
 									]
 								}
 							},
@@ -1185,7 +1199,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    /*\r\n    types: listeners do baileys\r\n    | \"messages.upsert\"\r\n    | \"messages.update\"\r\n    | \"messaging-history.set\"\r\n    | \"connection.update\"*/\r\n\t\"telefone\": \"<string> - required\",\r\n\t\"webHookUrl\": \"<string> - <webhookUrl>\",\r\n\t\"type\": \"<string> - required\"\r\n}",
+									"raw": "{\r\n\t\"telefone\": \"<string> - required\",\r\n\t\"webHookUrl\": \"<string> - <webhookUrl>\",\r\n\t\"type\": \"<string> - required\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1223,7 +1237,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "{{token}}",
+											"value": "a933f94cd1589687ad38f67c8f864e44",
 											"type": "string"
 										}
 									]
@@ -1240,9 +1254,12 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/chats/:telefone/read",
+									"raw": "https://w.controleonline.com/chats/:telefone/read",
+									"protocol": "https",
 									"host": [
-										"{{baseUrl}}"
+										"w",
+										"controleonline",
+										"com"
 									],
 									"path": [
 										"chats",
@@ -1252,7 +1269,7 @@
 									"variable": [
 										{
 											"key": "telefone",
-											"value": "1"
+											"value": ""
 										}
 									]
 								}
@@ -1418,7 +1435,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "{{token}}",
+											"value": "a933f94cd1589687ad38f67c8f864e44",
 											"type": "string"
 										}
 									]
@@ -1427,7 +1444,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"number\": \"<string> - required\", // 556599998888\r\n    \"message\": \"<string> - required\"\r\n}",
+									"raw": "{\"number\":\"5511971140832\",\"message\":\"*\\ud83d\\udce6 FECHAMENTO DE CAIXA*\\n12\\/05\\/2025 21:35\\n\\n*Produtos vendidos:*\\n- 3x Ca\\u00e7ulinha (200 ml): R$ 12,00\\n- 3x Caf\\u00e9: R$ 7,50\\n- 1x Caf\\u00e9 com leite: R$ 2,50\\n- 5x Cocada: R$ 20,00\\n- 1x Halls: R$ 4,50\\n- 2x Refrigerante (350 ml): R$ 15,00\\n- 3x Refrigerante (600 ml): R$ 30,00\\n- 32x Salgados Assados: R$ 80,00\\n- 22x Salgados Fritos: R$ 55,00\\n- 4x Suco de m\\u00e1quina: R$ 10,00\\n\\n*Total em produtos:* R$ 236,50\\n\\n*Pagamentos:*\\nCAIXA:\\n- Dinheiro: R$ 91,00\\nSubtotal: R$ 91,00\\n\\nCIELO:\\n- D\\u00e9bito: R$ 46,50\\n- Cr\\u00e9dito \\u00e0 Vista: R$ 40,00\\n- PIX: R$ 59,00\\nSubtotal: R$ 145,50\\n\\n*Total recebido:* R$ 236,50\"}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1435,20 +1452,17 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/messages/:telefone/text",
+									"raw": "https://w.controleonline.com/messages/551131360353/text",
+									"protocol": "https",
 									"host": [
-										"{{baseUrl}}"
+										"w",
+										"controleonline",
+										"com"
 									],
 									"path": [
 										"messages",
-										":telefone",
+										"551131360353",
 										"text"
-									],
-									"variable": [
-										{
-											"key": "telefone",
-											"value": "{{telefone}}"
-										}
 									]
 								}
 							},
@@ -1528,7 +1542,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "{{token}}",
+											"value": "a933f94cd1589687ad38f67c8f864e44",
 											"type": "string"
 										}
 									]
@@ -1536,9 +1550,12 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/messages/:telefone/unread",
+									"raw": "https://w.controleonline.com/messages/:telefone/unread",
+									"protocol": "https",
 									"host": [
-										"{{baseUrl}}"
+										"w",
+										"controleonline",
+										"com"
 									],
 									"path": [
 										"messages",
@@ -1548,7 +1565,7 @@
 									"variable": [
 										{
 											"key": "telefone",
-											"value": "{{telefone}}"
+											"value": "551131360353"
 										}
 									]
 								}
@@ -1610,10 +1627,16 @@
 							},
 							"request": {
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "asaas-access-token",
+										"value": "2f78dd1603d6ad40cc0fca38db4d30d1",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"id\": \"evt_d545b50fbb17a226c5f4f4fd193922b7&827519019\",\r\n    \"event\": \"PAYMENT_CREATED\",\r\n    \"dateCreated\": \"2025-01-23 14:46:39\",\r\n    \"payment\": {\r\n        \"object\": \"payment\",\r\n        \"id\": \"pay_9p7zordjj15zfuka\",\r\n        \"dateCreated\": \"2025-01-23\",\r\n        \"customer\": \"cus_000088682713\",\r\n        \"paymentLink\": null,\r\n        \"value\": 10,\r\n        \"netValue\": 6.01,\r\n        \"grossValue\": null,\r\n        \"originalValue\": null,\r\n        \"interestValue\": null,\r\n        \"description\": \"Teste Webhook\",\r\n        \"billingType\": \"UNDEFINED\",\r\n        \"pixTransaction\": null,\r\n        \"status\": \"PENDING\",\r\n        \"dueDate\": \"2025-01-23\",\r\n        \"originalDueDate\": \"2025-01-23\",\r\n        \"paymentDate\": null,\r\n        \"clientPaymentDate\": null,\r\n        \"installmentNumber\": null,\r\n        \"invoiceUrl\": \"https://www.asaas.com/i/9p7zordjj15zfuka\",\r\n        \"invoiceNumber\": \"507519245\",\r\n        \"externalReference\": null,\r\n        \"deleted\": true,\r\n        \"anticipated\": false,\r\n        \"anticipable\": false,\r\n        \"creditDate\": null,\r\n        \"estimatedCreditDate\": null,\r\n        \"transactionReceiptUrl\": \"https://www.asaas.com/comprovantes/h/UEFZTUVOVF9ERUxFVEVEOnBheV85cDd6b3JkamoxNXpmdWth\",\r\n        \"nossoNumero\": \"285740878\",\r\n        \"bankSlipUrl\": \"https://www.asaas.com/b/pdf/9p7zordjj15zfuka\",\r\n        \"lastInvoiceViewedDate\": null,\r\n        \"lastBankSlipViewedDate\": null,\r\n        \"discount\": {\r\n            \"value\": 0,\r\n            \"limitDate\": null,\r\n            \"dueDateLimitDays\": 0,\r\n            \"type\": \"PERCENTAGE\"\r\n        },\r\n        \"fine\": {\r\n            \"value\": 5,\r\n            \"type\": \"PERCENTAGE\"\r\n        },\r\n        \"interest\": {\r\n            \"value\": 5,\r\n            \"type\": \"PERCENTAGE\"\r\n        },\r\n        \"postalService\": false,\r\n        \"custody\": null,\r\n        \"refunds\": null\r\n    }\r\n}",
+									"raw": "{\r\n \"dateCreated\": \"2025-05-04 14:41:55\",\r\n \"transfer\": {\r\n  \"object\": \"transfer\",\r\n  \"id\": \"22f0d248-53ae-4c6c-9805-1de9a9da0a09\",\r\n  \"value\": 86.77,\r\n  \"netValue\": 86.77,\r\n  \"transferFee\": 0,\r\n  \"dateCreated\": \"2025-05-04\",\r\n  \"status\": \"DONE\",\r\n  \"effectiveDate\": \"2025-05-04 14:41:58\",\r\n  \"confirmedDate\": \"2025-05-04\",\r\n  \"endToEndIdentifier\": \"E19540550202505041741HD2D152Q8CT\",\r\n  \"transactionReceiptUrl\": \"https://www.asaas.com/comprovantes/h/UElYX1RSQU5TQUNUSU9OX0RPTkU6MjBkMzAzYjUtNDU1Yy00NjA0LWIxNzEtZjBjZDY4NGE2OWYx%0A\",\r\n  \"operationType\": \"PIX\",\r\n  \"failReason\": null,\r\n  \"walletId\": null,\r\n  \"description\": null,\r\n  \"canBeCancelled\": false,\r\n  \"externalReference\": null,\r\n  \"authorized\": true,\r\n  \"scheduleDate\": null,\r\n  \"type\": \"BANK_ACCOUNT\",\r\n  \"bankAccount\": {\r\n   \"bank\": {\r\n    \"code\": null,\r\n    \"name\": \"ADYEN DO BRASIL INSTITUICAO DE PAGAMENTO LTDA.\",\r\n    \"ispb\": \"14796606\"\r\n   },\r\n   \"accountName\": null,\r\n   \"ownerName\": \"iFood\",\r\n   \"cpfCnpj\": \"14.380.200/0001-21\",\r\n   \"type\": \"PAYMENT_ACCOUNT\",\r\n   \"agency\": \"********\",\r\n   \"agencyDigit\": \"********\",\r\n   \"account\": \"********\",\r\n   \"accountDigit\": \"********\",\r\n   \"pixAddressKey\": \"373feef7-2528-40e8-a5d0-f521e77631d9\"\r\n  },\r\n  \"recurring\": null\r\n },\r\n \"id\": \"evt_e633de3138cfbe837b624a32f8b242a7&918700998\",\r\n \"event\": \"TRANSFER_CREATED\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1843,7 +1866,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/invoice/inflow?sourceWallet=6,7",
+							"raw": "{{host}}/invoice/inflow?receiver=31485&device.device=1769b92a72d56343",
 							"host": [
 								"{{host}}"
 							],
@@ -1853,8 +1876,87 @@
 							],
 							"query": [
 								{
-									"key": "sourceWallet",
-									"value": "6,7"
+									"key": "receiver",
+									"value": "31485"
+								},
+								{
+									"key": "device.device",
+									"value": "1769b92a72d56343"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cash-register",
+					"id": "06d706bd-f188-47e7-91fd-cdab97c38de6",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/cash-register?device=1769b92a72d56343&provider=31485",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cash-register"
+							],
+							"query": [
+								{
+									"key": "device",
+									"value": "1769b92a72d56343"
+								},
+								{
+									"key": "provider",
+									"value": "31485"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cash-register/close",
+					"id": "34f0e391-e39c-4ccc-a9df-c4864e587569",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/cash-register/close?device=1769b92a72d56343&provider=31485",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cash-register",
+								"close"
+							],
+							"query": [
+								{
+									"key": "device",
+									"value": "1769b92a72d56343"
+								},
+								{
+									"key": "provider",
+									"value": "31485"
 								}
 							]
 						}
@@ -2070,9 +2172,258 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "printers",
+					"id": "39bc95ef-4698-4eaa-8667-b9f50359a221",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/printers?people=2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"printers"
+							],
+							"query": [
+								{
+									"key": "people",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "device_configs",
+					"id": "c55f3a1b-38f6-4023-9090-de464a137eac",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/device_configs?people=/people/31485",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"device_configs"
+							],
+							"query": [
+								{
+									"key": "device.device",
+									"value": "6fb49e35e4036cd9",
+									"disabled": true
+								},
+								{
+									"key": "people",
+									"value": "/people/31485"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/devices/add-configs",
+					"id": "34e5a7a6-860f-4303-9aa1-b49045eb9983",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"configs\": \"{\\\"config-version\\\":\\\"47\\\",\\\"pos-type\\\":\\\"simple\\\",\\\"pos-gateway\\\":\\\"infinite-pay\\\"}\",\r\n    \"device.device\": \"6fb49e35e4036cd9\",\r\n    \"people\": \"/people/31485\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/device_configs/add-configs",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"device_configs",
+								"add-configs"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"id": "442bde03-01f8-45f4-b070-b190707afc15"
+		},
+		{
+			"name": "Websocket",
+			"item": [
+				{
+					"name": "websocket",
+					"id": "b7bc78cc-d5e0-4064-911a-65a551e02c3d",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Device",
+								"value": "bill",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"destination\": \"caeaa292179812d3\",\r\n    \"action\": \"print\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/websocket",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"websocket"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "70191796-f0e4-423e-a0b4-e9dff70aef48"
+		},
+		{
+			"name": "Print",
+			"item": [
+				{
+					"name": "spools",
+					"id": "2b8875c8-ee81-47b5-8b0c-94b9ffbed11f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Device",
+								"value": "bill",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"destination\": \"caeaa292179812d3\",\r\n    \"action\": \"print\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/spools?device.device=6fb49e35e4036cd9&status.realStatus=open",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"spools"
+							],
+							"query": [
+								{
+									"key": "device.device",
+									"value": "6fb49e35e4036cd9"
+								},
+								{
+									"key": "status.realStatus",
+									"value": "open"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "0fdf4194-d645-4394-a2fb-4787b71f147a"
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "New Request",
+					"id": "2a7b4917-a856-4d03-a4c4-5dcc153cbaaf",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/tasks?type=support&provider=%2Fpeople%2F1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "support"
+								},
+								{
+									"key": "provider",
+									"value": "%2Fpeople%2F1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "dba7e947-d82e-44c3-a256-4a41a9cda923"
 		}
 	],
 	"auth": {
