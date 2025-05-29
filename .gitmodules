@@ -55,3 +55,6 @@
 [submodule "modules/controleonline/messages-sdk"]
 	path = modules/controleonline/messages-sdk
 	url = https://github.com/ControleOnline/messages-sdk-php.git
+[submodule "modules/controleonline/spc-sdk"]
+	path = modules/controleonline/spc-sdk
+	url = https://github.com/ControleOnline/spc-sdk-php.git
