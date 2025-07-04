@@ -12,6 +12,8 @@ api_platform:
         normalization_context:
             enable_max_depth: true
         skip_null_values: true
+        extra_properties:
+            standard_put: true
     formats:
         jsonld: ["application/ld+json"]
         jsonhal: ["application/hal+json"]
