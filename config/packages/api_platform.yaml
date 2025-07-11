@@ -13,7 +13,7 @@ api_platform:
             enable_max_depth: true
         skip_null_values: true
         extra_properties:
-            standard_put: true
+            standard_put: false
     formats:
         jsonld: ["application/ld+json"]
         jsonhal: ["application/hal+json"]
