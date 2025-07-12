@@ -1,8 +1,4 @@
 parameters:
-    # Adds a fallback VARNISH_URL if the env var is not set.
-    # This allows you to run cache:warmup even if your
-    # environment variables are not available yet.
-    # You should not need to change this value.
     env(VARNISH_URL): ""
 
 api_platform:
@@ -12,6 +8,7 @@ api_platform:
         normalization_context:
             enable_max_depth: true
         skip_null_values: true
+        pagination_client_items_per_page: true
         extra_properties:
             standard_put: false
     formats:
@@ -26,10 +23,8 @@ api_platform:
         html: ["text/html"]
     mapping:
         paths:
-            [
-                "%kernel.project_dir%/src/Entity",
-                "%kernel.project_dir%/src/Resource",
-            ]
+            - "%kernel.project_dir%/src/Entity"
+            - "%kernel.project_dir%/src/Resource"
     title: API
     show_webby: false
     version: 1.0.0
