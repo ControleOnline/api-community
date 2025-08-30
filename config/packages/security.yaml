@@ -44,7 +44,6 @@ security:
         - { path: ^/oauth/, roles: PUBLIC_ACCESS }
         - { path: ^/pix$, roles: PUBLIC_ACCESS }
         - { path: ^/bitcoin$, roles: PUBLIC_ACCESS }
-        - { path: ^/categories$, roles: PUBLIC_ACCESS }
-        - { path: ^/products$, roles: PUBLIC_ACCESS }
-        - { path: ^/shop/category/$, roles: PUBLIC_ACCESS }        
+        - { path: ^/categories/.*$, roles: PUBLIC_ACCESS }
+        - { path: ^/products$, roles: PUBLIC_ACCESS }        
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
