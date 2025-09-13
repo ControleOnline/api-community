@@ -39,7 +39,5 @@ api_platform:
     graphql:
         graphiql:
             enabled: true
-        graphql_playground:
-            enabled: true
     eager_loading:
         max_joins: 100
