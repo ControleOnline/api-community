@@ -416,6 +416,38 @@
 					"response": []
 				},
 				{
+					"name": "add-products",
+					"id": "535a5f16-3838-478c-87db-15435db2dfc8",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\"product\": \"170\", \"quantity\": 2}, {\"product\": \"188\", \"quantity\": 2}]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/orders/64991/add-products",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"orders",
+								"64991",
+								"add-products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "nfe",
 					"id": "81e151ac-cf3f-4c13-b67d-7eedf9c069be",
 					"protocolProfileBehavior": {
@@ -560,12 +592,12 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/products/1",
+							"raw": "{{host}}/displays/1",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"products",
+								"displays",
 								"1"
 							]
 						}
@@ -574,100 +606,6 @@
 				}
 			],
 			"id": "4e841307-74e2-4ef0-91b8-49c5a9b57038"
-		},
-		{
-			"name": "Proposta",
-			"item": [
-				{
-					"name": "Proposta",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"id": "08aec443-77f1-4bdb-9aba-fc8147192bdb",
-								"exec": [
-									"var template = `",
-									"<style type=\"text/css\">",
-									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
-									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
-									"    .tftable tr {background-color:#ffffff;}",
-									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
-									"    .tftable tr:hover {background-color:#e0ffff;}",
-									"</style>",
-									"",
-									"<table class=\"tftable\" border=\"1\">",
-									"    <tr>",
-									"        <th>PDF</th>",
-									"        <th>HTML</th>",
-									"    </tr>",
-									"    ",
-									"    <tr>",
-									"        <td>{{response.data.pdf}}</td>",
-									"        <td>{{response.data.html}}</td>",
-									"    </tr>",
-									"</table>",
-									"`;",
-									"",
-									"function constructVisualizerPayload() {",
-									"    var res = pm.response.json();",
-									"    ",
-									"    return {response: res.response};",
-									"}",
-									"",
-									"pm.visualizer.set(template, constructVisualizerPayload());"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"id": "67f2a07f-89b1-4d64-a169-f783929009f7",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/pdf",
-								"type": "text"
-							},
-							{
-								"key": "App-Domain",
-								"value": "{{app-domain}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{host}}/quotations/52178/get-pdf?myCompany=418&domain=app.atlastransportes.com",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"quotations",
-								"52178",
-								"get-pdf"
-							],
-							"query": [
-								{
-									"key": "myCompany",
-									"value": "418"
-								},
-								{
-									"key": "domain",
-									"value": "app.atlastransportes.com"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"id": "f10400a4-a800-42ac-b2cb-c1e4c0403902"
 		},
 		{
 			"name": "LOGIN",
@@ -1071,11 +1009,16 @@
 							},
 							"request": {
 								"auth": {
-									"type": "bearer",
-									"bearer": [
+									"type": "apikey",
+									"apikey": [
 										{
-											"key": "token",
-											"value": "a933f94cd1589687ad38f67c8f864e44",
+											"key": "value",
+											"value": "{{api-token}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "api-token",
 											"type": "string"
 										}
 									]
@@ -1083,15 +1026,12 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://w.controleonline.com/sessions",
-									"protocol": "https",
+									"raw": "{{host}}/connections",
 									"host": [
-										"w",
-										"controleonline",
-										"com"
+										"{{host}}"
 									],
 									"path": [
-										"sessions"
+										"connections"
 									]
 								}
 							},
@@ -1435,7 +1375,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "a933f94cd1589687ad38f67c8f864e44",
+											"value": "a933f94cd1589687ad38f67c8f864e45",
 											"type": "string"
 										}
 									]
@@ -1444,7 +1384,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\"number\":\"5511971140832\",\"message\":\"*\\ud83d\\udce6 FECHAMENTO DE CAIXA*\\n12\\/05\\/2025 21:35\\n\\n*Produtos vendidos:*\\n- 3x Ca\\u00e7ulinha (200 ml): R$ 12,00\\n- 3x Caf\\u00e9: R$ 7,50\\n- 1x Caf\\u00e9 com leite: R$ 2,50\\n- 5x Cocada: R$ 20,00\\n- 1x Halls: R$ 4,50\\n- 2x Refrigerante (350 ml): R$ 15,00\\n- 3x Refrigerante (600 ml): R$ 30,00\\n- 32x Salgados Assados: R$ 80,00\\n- 22x Salgados Fritos: R$ 55,00\\n- 4x Suco de m\\u00e1quina: R$ 10,00\\n\\n*Total em produtos:* R$ 236,50\\n\\n*Pagamentos:*\\nCAIXA:\\n- Dinheiro: R$ 91,00\\nSubtotal: R$ 91,00\\n\\nCIELO:\\n- D\\u00e9bito: R$ 46,50\\n- Cr\\u00e9dito \\u00e0 Vista: R$ 40,00\\n- PIX: R$ 59,00\\nSubtotal: R$ 145,50\\n\\n*Total recebido:* R$ 236,50\"}",
+									"raw": "{\r\n    \"number\": \"5511973764794\",\r\n    \"message\": \"Teste via api\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1452,16 +1392,16 @@
 									}
 								},
 								"url": {
-									"raw": "https://w.controleonline.com/messages/551131360353/text",
+									"raw": "https://w.frethical.com/messages/5511978758119/text",
 									"protocol": "https",
 									"host": [
 										"w",
-										"controleonline",
+										"frethical",
 										"com"
 									],
 									"path": [
 										"messages",
-										"551131360353",
+										"5511978758119",
 										"text"
 									]
 								}
@@ -1941,7 +1881,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/cash-register/close?device=1769b92a72d56343&provider=31485",
+							"raw": "{{host}}/cash-register/close?device=19b63884fa7b0206&provider=2",
 							"host": [
 								"{{host}}"
 							],
@@ -1952,11 +1892,49 @@
 							"query": [
 								{
 									"key": "device",
-									"value": "1769b92a72d56343"
+									"value": "19b63884fa7b0206"
 								},
 								{
 									"key": "provider",
-									"value": "31485"
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cash-register/notify",
+					"id": "9a1092bd-729c-4a2e-8154-10030bbbb957",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/cash-register/notify?device=19b63884fa7b0206&provider=2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cash-register",
+								"notify"
+							],
+							"query": [
+								{
+									"key": "device",
+									"value": "19b63884fa7b0206"
+								},
+								{
+									"key": "provider",
+									"value": "2"
 								}
 							]
 						}
@@ -2245,7 +2223,7 @@
 					"response": []
 				},
 				{
-					"name": "/devices/add-configs",
+					"name": "contracts",
 					"id": "34e5a7a6-860f-4303-9aa1-b49045eb9983",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -2261,7 +2239,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"configs\": \"{\\\"config-version\\\":\\\"47\\\",\\\"pos-type\\\":\\\"simple\\\",\\\"pos-gateway\\\":\\\"infinite-pay\\\"}\",\r\n    \"device.device\": \"6fb49e35e4036cd9\",\r\n    \"people\": \"/people/31485\"\r\n}",
+							"raw": "{\"contractModel\":\"/models/2\",\"beneficiary\":\"/people/102814\",\r\n\"startDate\":\"2025-08-10\",\"endDate\":null,\"provider_id\":2,\"provider\":2}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2269,13 +2247,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{host}}/device_configs/add-configs",
+							"raw": "{{host}}/contracts",
 							"host": [
 								"{{host}}"
 							],
 							"path": [
-								"device_configs",
-								"add-configs"
+								"contracts"
 							]
 						}
 					},
@@ -2424,6 +2401,165 @@
 				}
 			],
 			"id": "dba7e947-d82e-44c3-a256-4a41a9cda923"
+		},
+		{
+			"name": "People",
+			"item": [
+				{
+					"name": "people",
+					"id": "05ee376b-2d7e-4d8a-b9cc-51ce6e31166c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/people?itemsPerPage=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"people"
+							],
+							"query": [
+								{
+									"key": "itemsPerPage",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "phone",
+					"id": "8a06ae81-3ee8-417f-91d0-63cd77a11e4e",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/phones?itemsPerPage=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"phones"
+							],
+							"query": [
+								{
+									"key": "itemsPerPage",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "ce856b24-acc5-4e54-af2c-598d701c181a"
+		},
+		{
+			"name": "Contracts",
+			"item": [
+				{
+					"name": "/devices/add-configs Copy 2",
+					"id": "ea434f5a-492d-4239-b9d7-6abe165b4849",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"configs\": \"{\\\"config-version\\\":\\\"47\\\",\\\"pos-type\\\":\\\"simple\\\",\\\"pos-gateway\\\":\\\"infinite-pay\\\"}\",\r\n    \"device.device\": \"6fb49e35e4036cd9\",\r\n    \"people\": \"/people/31485\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/device_configs/add-configs",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"device_configs",
+								"add-configs"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "845cc8f7-648a-4938-984a-bb7c7f7a7fc6"
+		},
+		{
+			"name": "Payments",
+			"item": [
+				{
+					"name": "/devices/add-configs Copy",
+					"id": "1639cd95-35ad-4083-b3c6-7e30da52b722",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"billingType\": \"CREDIT_CARD\",\r\n    \"value\": 5,\r\n    \"creditCard\": {\r\n        \"holderName\": \"LUIZ KIM DIAS FERREIRA\",\r\n        \"number\": \"123\",\r\n        \"expiryMonth\": \"08\",\r\n        \"expiryYear\": \"2034\",\r\n        \"ccv\": \"123\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/payment/asaas/70319",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"payment",
+								"asaas",
+								"70319"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "c72e6752-f673-46c5-85c1-5b3587a0afe5"
 		}
 	],
 	"auth": {
