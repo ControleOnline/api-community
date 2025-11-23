@@ -64,6 +64,6 @@ TXT;
             $body .= "\n📜 Stack Trace:\n" . $exception->getTraceAsString();
         }
 
-        $this->emailService->sendErrorNotification('Erro 500 Detetado', $body);
+        $this->emailService->sendErrorNotification('Erro 500 Detectado', $body);
     }
 }
