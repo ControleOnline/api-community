@@ -1147,9 +1147,9 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/sessions/add-webhook",
+									"raw": "{{host}}/sessions/add-webhook",
 									"host": [
-										"{{baseUrl}}"
+										"{{host}}"
 									],
 									"path": [
 										"sessions",
@@ -1163,228 +1163,34 @@
 					"id": "9e85beed-6db4-4cff-a29e-f0f4205cda9f"
 				},
 				{
-					"name": "Chats",
-					"item": [
-						{
-							"name": "Read Nessages",
-							"id": "36ce638b-284c-4378-aa0b-512ac78d9f14",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "a933f94cd1589687ad38f67c8f864e44",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "[\r\n    {\r\n        \"remoteJid\": \"<string> - required\", // 1234\r\n        \"messageid\": \"<string> - required\" // 3EB0795479BEA2B44173E2\r\n    }\r\n    \r\n]\r\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "https://w.controleonline.com/chats/:telefone/read",
-									"protocol": "https",
-									"host": [
-										"w",
-										"controleonline",
-										"com"
-									],
-									"path": [
-										"chats",
-										":telefone",
-										"read"
-									],
-									"variable": [
-										{
-											"key": "telefone",
-											"value": ""
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"id": "61a8dd9f-b963-463e-80aa-219f037b896a"
-				},
-				{
-					"name": "Contacts",
-					"item": [
-						{
-							"name": "List Contacts",
-							"id": "dff875d3-1295-4717-a7c1-8dba6f72ac34",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/contacts/:telefone/list",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"contacts",
-										":telefone",
-										"list"
-									],
-									"variable": [
-										{
-											"key": "telefone",
-											"value": "{{telefone}}"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Check Contact",
-							"id": "c5954581-481e-45cf-88ff-5b998368e457",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"number\": \"5565984487400\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/contacts/:telefone/check",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"contacts",
-										":telefone",
-										"check"
-									],
-									"variable": [
-										{
-											"key": "telefone",
-											"value": "{{telefone}}"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Profile Picture",
-							"id": "4e8f8eba-f620-42b3-9a53-340b6e3b5454",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"number\": \"5565984487400\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/contacts/:telefone/profile-picture",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"contacts",
-										":telefone",
-										"profile-picture"
-									],
-									"variable": [
-										{
-											"key": "telefone",
-											"value": "{{telefone}}"
-										}
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"id": "2ffc931e-fbb3-4fad-9e5f-6c11356b5bc3"
-				},
-				{
 					"name": "Messages",
 					"item": [
 						{
-							"name": "Send Text",
+							"name": "Send Message",
 							"id": "f827b6c5-cb92-4c93-ba10-378255c26cc8",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
 							"request": {
 								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "a933f94cd1589687ad38f67c8f864e45",
-											"type": "string"
-										}
-									]
+									"type": "noauth"
 								},
 								"method": "POST",
-								"header": [],
+								"header": [
+									{
+										"key": "app-domain",
+										"value": "{{app-domain}}",
+										"type": "text"
+									},
+									{
+										"key": "api-key",
+										"value": "{{api-token}}",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"number\": \"5511973764794\",\r\n    \"message\": \"Teste via api\"\r\n}",
+									"raw": "{\r\n    \"action\": \"sendMessage\",\r\n    \"origin\": \"551131360353\",\r\n    \"destination\": \"559981599924\",\r\n    \"message\": \"\\ud83d\\udce6 FECHAMENTO DE CAIXA\\n28\\/10\\/2025 16:53\\n\\n*Produtos vendidos:\\n- 1x Amendoin: R$ 3,50\\n\\n*Total em produtos: R$ 3,50\\n\\n*Pagamentos:\\nCAIXA:\\n- Dinheiro: R$ 54,00\\nSubtotal: R$ 54,00\\n\\n*Total recebido: R$ 54,00\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1392,121 +1198,13 @@
 									}
 								},
 								"url": {
-									"raw": "https://w.frethical.com/messages/5511978758119/text",
-									"protocol": "https",
+									"raw": "{{host}}/webhook/whatsapp",
 									"host": [
-										"w",
-										"frethical",
-										"com"
+										"{{host}}"
 									],
 									"path": [
-										"messages",
-										"5511978758119",
-										"text"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Send Media",
-							"id": "44839d18-24f4-4a27-8541-cf683ea50305",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "{{token}}",
-											"type": "string"
-										}
-									]
-								},
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "number",
-											"value": "5565984487400",
-											"description": "string - required",
-											"type": "text"
-										},
-										{
-											"key": "caption",
-											"value": "Teste Caption",
-											"description": "string - optional",
-											"type": "text"
-										},
-										{
-											"key": "file",
-											"description": "file - required",
-											"type": "file",
-											"src": "/home/robson/Imagens/Capturas de tela/Captura de tela de 2024-12-13 12-49-21.png"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{baseUrl}}/messages/:telefone/media",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"messages",
-										":telefone",
-										"media"
-									],
-									"variable": [
-										{
-											"key": "telefone",
-											"value": "{{telefone}}"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Messages Unread",
-							"id": "c6402848-a906-45db-9790-0359ac93f619",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"auth": {
-									"type": "bearer",
-									"bearer": [
-										{
-											"key": "token",
-											"value": "a933f94cd1589687ad38f67c8f864e44",
-											"type": "string"
-										}
-									]
-								},
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "https://w.controleonline.com/messages/:telefone/unread",
-									"protocol": "https",
-									"host": [
-										"w",
-										"controleonline",
-										"com"
-									],
-									"path": [
-										"messages",
-										":telefone",
-										"unread"
-									],
-									"variable": [
-										{
-											"key": "telefone",
-											"value": "551131360353"
-										}
+										"webhook",
+										"whatsapp"
 									]
 								}
 							},
@@ -1682,12 +1380,9 @@
 							}
 						},
 						"url": {
-							"raw": "https://api.controleonline.com/pix",
-							"protocol": "https",
+							"raw": "{{host}}/pix",
 							"host": [
-								"api",
-								"controleonline",
-								"com"
+								"{{host}}"
 							],
 							"path": [
 								"pix"
