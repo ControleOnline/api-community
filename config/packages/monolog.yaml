@@ -5,3 +5,7 @@ monolog:
             path: "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
             channels: ["!event"]
+
+        custom_email:
+            type: service
+            id: App\Monolog\Handler\ErrorEmailHandler
