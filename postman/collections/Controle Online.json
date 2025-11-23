@@ -1190,7 +1190,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"action\": \"sendMessage\",\r\n    \"origin\": \"551131360353\",\r\n    \"destination\": \"559981599924\",\r\n    \"message\": \"\\ud83d\\udce6 FECHAMENTO DE CAIXA\\n28\\/10\\/2025 16:53\\n\\n*Produtos vendidos:\\n- 1x Amendoin: R$ 3,50\\n\\n*Total em produtos: R$ 3,50\\n\\n*Pagamentos:\\nCAIXA:\\n- Dinheiro: R$ 54,00\\nSubtotal: R$ 54,00\\n\\n*Total recebido: R$ 54,00\"\r\n}",
+									"raw": "{\r\n    \"action\": \"sendMessage\",\r\n    \"origin\": \"551131360353\",\r\n    \"destination\": \"5511971140832\",\r\n    \"message\": \"\\ud83d\\udce6 FECHAMENTO DE CAIXA\\n28\\/10\\/2025 16:53\\n\\n*Produtos vendidos:\\n- 1x Amendoin: R$ 3,50\\n\\n*Total em produtos: R$ 3,50\\n\\n*Pagamentos:\\nCAIXA:\\n- Dinheiro: R$ 54,00\\nSubtotal: R$ 54,00\\n\\n*Total recebido: R$ 54,00\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
