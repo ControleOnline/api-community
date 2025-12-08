@@ -127,7 +127,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/product_group_products?productGroup=/product_groups/1&productType=component",
+							"raw": "{{host}}/product_group_products?productGroup=/product_groups/1&productType=component&company=/people/2",
 							"host": [
 								"{{host}}"
 							],
@@ -143,6 +143,51 @@
 									"key": "productType",
 									"value": "component"
 								},
+								{
+									"key": "parentProduct",
+									"value": "/products/1",
+									"disabled": true
+								},
+								{
+									"key": "company",
+									"value": "/people/2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/product_groups/1",
+					"id": "a8f795cb-6d1b-4e02-a387-d83b4901f3ba",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{host}}/product_groups/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"product_groups",
+								"1"
+							],
+							"query": [
 								{
 									"key": "parentProduct",
 									"value": "/products/1",
@@ -210,7 +255,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/products?productCategory.category=/categories/199&active=1&order[product]=ASC&order[description]=ASC&type[]=custom&type[]=product&type[]=manufactured",
+							"raw": "{{host}}/products?active=1&order[product]=ASC&order[description]=ASC&type[]=product",
 							"host": [
 								"{{host}}"
 							],
@@ -220,7 +265,8 @@
 							"query": [
 								{
 									"key": "productCategory.category",
-									"value": "/categories/199"
+									"value": "/categories/199",
+									"disabled": true
 								},
 								{
 									"key": "active",
@@ -236,7 +282,8 @@
 								},
 								{
 									"key": "type[]",
-									"value": "custom"
+									"value": "custom",
+									"disabled": true
 								},
 								{
 									"key": "type[]",
@@ -244,7 +291,52 @@
 								},
 								{
 									"key": "type[]",
-									"value": "manufactured"
+									"value": "manufactured",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "products_category",
+					"id": "c23e5bfe-2b26-4cf5-8646-37d1e19c00b3",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/product_categories",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"product_categories"
+							],
+							"query": [
+								{
+									"key": "productCategory.category",
+									"value": "/categories/199",
+									"disabled": true
+								},
+								{
+									"key": "type[]",
+									"value": "custom",
+									"disabled": true
+								},
+								{
+									"key": "type[]",
+									"value": "manufactured",
+									"disabled": true
 								}
 							]
 						}
@@ -1209,6 +1301,51 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "N8N",
+							"id": "d377c31f-5b1c-4513-95b4-91731adc78a9",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "app-domain",
+										"value": "{{app-domain}}",
+										"type": "text"
+									},
+									{
+										"key": "api-key",
+										"value": "{{api-token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"action\": \"sendMessage\",\r\n    \"origin\": \"551131360353\",\r\n    \"destination\": \"5511971140832\",\r\n    \"message\": \"\\ud83d\\udce6 FECHAMENTO DE CAIXA\\n28\\/10\\/2025 16:53\\n\\n*Produtos vendidos:\\n- 1x Amendoin: R$ 3,50\\n\\n*Total em produtos: R$ 3,50\\n\\n*Pagamentos:\\nCAIXA:\\n- Dinheiro: R$ 54,00\\nSubtotal: R$ 54,00\\n\\n*Total recebido: R$ 54,00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/webhook/N8N",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"webhook",
+										"N8N"
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"id": "dcc81ee1-a059-483d-ae67-42a4719c6ead",
@@ -2134,6 +2271,87 @@
 					"response": []
 				},
 				{
+					"name": "people_links",
+					"id": "b628e33f-376e-4e7e-831d-d60861edec36",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/people_links?link_type=franchisee&company=/people/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"people_links"
+							],
+							"query": [
+								{
+									"key": "link_type",
+									"value": "franchisee"
+								},
+								{
+									"key": "company",
+									"value": "/people/1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "people/{id}",
+					"id": "c748f912-af23-4011-a682-772bf85ef756",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"otherInformations\": {\r\n        \"cars_in_queue\": 10\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/people/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"people",
+								"1"
+							],
+							"query": [
+								{
+									"key": "itemsPerPage",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "phone",
 					"id": "8a06ae81-3ee8-417f-91d0-63cd77a11e4e",
 					"protocolProfileBehavior": {
@@ -2149,7 +2367,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/phones?itemsPerPage=1",
+							"raw": "{{host}}/phones?itemsPerPage=1&phone=971140832&ddd=11&ddi=55",
 							"host": [
 								"{{host}}"
 							],
@@ -2160,6 +2378,18 @@
 								{
 									"key": "itemsPerPage",
 									"value": "1"
+								},
+								{
+									"key": "phone",
+									"value": "971140832"
+								},
+								{
+									"key": "ddd",
+									"value": "11"
+								},
+								{
+									"key": "ddi",
+									"value": "55"
 								}
 							]
 						}
@@ -2255,6 +2485,55 @@
 				}
 			],
 			"id": "c72e6752-f673-46c5-85c1-5b3587a0afe5"
+		},
+		{
+			"name": "Document",
+			"item": [
+				{
+					"name": "Document Type",
+					"id": "56d76fcf-23aa-43a5-b668-628bb5cf4abd",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "app-domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/document_types?company_document.people=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"document_types"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "4",
+									"disabled": true
+								},
+								{
+									"key": "id[gt]",
+									"value": "60245",
+									"disabled": true
+								},
+								{
+									"key": "company_document.people",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "f249973c-ee56-4359-b7aa-6a53c3ec1376"
 		}
 	],
 	"auth": {
