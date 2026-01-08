@@ -46,5 +46,6 @@ security:
         - { path: ^/bitcoin$, roles: PUBLIC_ACCESS }
         - { path: ^/categories$, roles: PUBLIC_ACCESS }        
         - { path: ^/categories/.*$, roles: PUBLIC_ACCESS }
+        - { path: ^/debug$, roles: PUBLIC_ACCESS }
         - { path: ^/products$, roles: PUBLIC_ACCESS }        
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
