@@ -10,6 +10,11 @@
 			"name": "Products",
 			"item": [
 				{
+					"name": "New Folder",
+					"item": [],
+					"id": "3965dfb2-00eb-4636-9622-114bae44de3f"
+				},
+				{
 					"name": "order_products",
 					"id": "974b6e6f-753e-46e1-a52a-fc706de7e0ef",
 					"protocolProfileBehavior": {
@@ -695,6 +700,57 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "orders Copy",
+					"id": "64c5fb56-7caa-4795-831c-65d575d66cbe",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "app-domain",
+								"value": "{{app-domain}}",
+								"description": "app.lave-go.com",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"client\": null,\n    \"invoice\": [],\n    \"status\": \"/statuses/6\",\n    \"app\": \"Teste 02\",\n    \"otherInformations\": \"Online\",\n    \"provider\": \"/people/8\",\n    \"orderType\": \"sales\",\n    \"comments\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/order_product_queues?status=106&itemsPerPage=3&order_product.order.provider=31485",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"order_product_queues"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "106"
+								},
+								{
+									"key": "itemsPerPage",
+									"value": "3"
+								},
+								{
+									"key": "order_product.order.provider",
+									"value": "31485"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"id": "4e841307-74e2-4ef0-91b8-49c5a9b57038"
@@ -1258,6 +1314,51 @@
 					"name": "Messages",
 					"item": [
 						{
+							"name": "N8N",
+							"id": "d377c31f-5b1c-4513-95b4-91731adc78a9",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "app-domain",
+										"value": "{{app-domain}}",
+										"type": "text"
+									},
+									{
+										"key": "api-key",
+										"value": "{{api-token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"action\": \"sendMessage\",\r\n    \"origin\": \"551131360353\",\r\n    \"destination\": \"5511971140832\",\r\n    \"message\": \"\\ud83d\\udce6 FECHAMENTO DE CAIXA\\n28\\/10\\/2025 16:53\\n\\n*Produtos vendidos:\\n- 1x Amendoin: R$ 3,50\\n\\n*Total em produtos: R$ 3,50\\n\\n*Pagamentos:\\nCAIXA:\\n- Dinheiro: R$ 54,00\\nSubtotal: R$ 54,00\\n\\n*Total recebido: R$ 54,00\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/webhook/N8N",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"webhook",
+										"N8N"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Send Message",
 							"id": "f827b6c5-cb92-4c93-ba10-378255c26cc8",
 							"protocolProfileBehavior": {
@@ -1303,8 +1404,8 @@
 							"response": []
 						},
 						{
-							"name": "N8N",
-							"id": "d377c31f-5b1c-4513-95b4-91731adc78a9",
+							"name": "Receive Message",
+							"id": "cae97d8c-ed1a-40aa-b474-3b910909f3c4",
 							"protocolProfileBehavior": {
 								"disableBodyPruning": true
 							},
@@ -1335,13 +1436,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{host}}/webhook/N8N",
+									"raw": "{{host}}/webhook/whatsapp",
 									"host": [
 										"{{host}}"
 									],
 									"path": [
 										"webhook",
-										"N8N"
+										"whatsapp"
 									]
 								}
 							},
@@ -1638,7 +1739,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/invoice/inflow?receiver=31485&device.device=1769b92a72d56343",
+							"raw": "{{host}}/invoice/inflow?receiver=1",
 							"host": [
 								"{{host}}"
 							],
@@ -1649,11 +1750,44 @@
 							"query": [
 								{
 									"key": "receiver",
-									"value": "31485"
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "income_statements",
+					"id": "1fc749db-9b27-46b0-aae1-524ecc6071bb",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "App-Domain",
+								"value": "{{app-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/income_statements?year=2026&people=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"income_statements"
+							],
+							"query": [
+								{
+									"key": "year",
+									"value": "2026"
 								},
 								{
-									"key": "device.device",
-									"value": "1769b92a72d56343"
+									"key": "people",
+									"value": "1"
 								}
 							]
 						}
@@ -2250,6 +2384,12 @@
 								"key": "App-Domain",
 								"value": "{{app-domain}}",
 								"type": "text"
+							},
+							{
+								"key": "api-token",
+								"value": "020d94878cdc5b0140846b35fd48545e",
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"url": {
@@ -2367,7 +2507,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{host}}/phones?itemsPerPage=1&phone=971140832&ddd=11&ddi=55",
+							"raw": "{{host}}/phones?phone=971140832&ddd=11&ddi=55",
 							"host": [
 								"{{host}}"
 							],
@@ -2377,7 +2517,8 @@
 							"query": [
 								{
 									"key": "itemsPerPage",
-									"value": "1"
+									"value": "1",
+									"disabled": true
 								},
 								{
 									"key": "phone",
