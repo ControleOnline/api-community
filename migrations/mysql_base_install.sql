@@ -284,7 +284,8 @@ CREATE TABLE `connections` (
 CREATE TABLE `contract` (
   `id` int(11) NOT NULL,
   `contract_model_id` int(11) NOT NULL,
-  `beneficiary_id` int(11) NOT NULL,
+  `provider_id` int(11) NOT NULL,
+  `client_id` int(11) NOT NULL,
   `status_id` int(11) NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date DEFAULT NULL,
@@ -747,9 +748,8 @@ CREATE TABLE `hardware` (
 
 CREATE TABLE `imports` (
   `id` int(11) NOT NULL,
-  `import_type` enum('table','DACTE') NOT NULL DEFAULT 'table',
+  `import_type` enum('leads') NOT NULL DEFAULT 'leads',
   `status_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
   `file_id` int(11) NOT NULL,
   `people_id` int(11) NOT NULL,
   `file_format` enum('csv','xml') NOT NULL DEFAULT 'csv',
@@ -1827,7 +1827,7 @@ CREATE TABLE `tasks` (
   `registered_by_id` int(11) NOT NULL,
   `task_for_id` int(11) DEFAULT NULL,
   `provider_id` int(11) NOT NULL,
-  `client_id` int(11) DEFAULT NULL,
+  `client_id` int(11) NOT NULL,
   `task_status_id` int(11) NOT NULL,
   `category_id` int(11) DEFAULT NULL,
   `reason_id` int(11) DEFAULT NULL,
