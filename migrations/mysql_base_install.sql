@@ -61,7 +61,7 @@ CREATE TABLE `address` (
   `opening_time` time DEFAULT NULL,
   `closing_time` time DEFAULT NULL,
   `search_for` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -82,7 +82,7 @@ CREATE TABLE `card` (
   `ccv` blob NOT NULL COMMENT 'remover. proibido pelas normas internacionais de segurança (PCI-DSS)',
   `expiration_month` blob NOT NULL,
   `expiration_year` blob NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -97,7 +97,7 @@ CREATE TABLE `car_manufacturer` (
   `label` varchar(255) NOT NULL,
   `value` int(11) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -111,7 +111,7 @@ CREATE TABLE `car_model` (
   `label` varchar(255) NOT NULL,
   `value` int(11) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -130,7 +130,7 @@ CREATE TABLE `car_year_price` (
   `value` varchar(255) NOT NULL,
   `price` decimal(15,2) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -146,7 +146,7 @@ CREATE TABLE `category` (
   `context` varchar(100) NOT NULL,
   `parent_id` int(11) DEFAULT NULL,
   `company_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -158,7 +158,7 @@ CREATE TABLE `category_file` (
   `id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   `file_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -169,7 +169,7 @@ CREATE TABLE `category_file` (
 CREATE TABLE `cep` (
   `id` int(11) NOT NULL,
   `cep` int(8) UNSIGNED ZEROFILL NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -183,7 +183,7 @@ CREATE TABLE `city` (
   `city` varchar(80) NOT NULL,
   `state_id` int(11) NOT NULL,
   `seo` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -201,7 +201,7 @@ CREATE TABLE `cms` (
   `style` text DEFAULT NULL,
   `creation_date` datetime NOT NULL DEFAULT current_timestamp(),
   `alter_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -218,7 +218,7 @@ CREATE TABLE `cms_section` (
   `order` int(11) NOT NULL,
   `creation_date` datetime NOT NULL DEFAULT current_timestamp(),
   `alter_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -230,7 +230,7 @@ CREATE TABLE `cms_section_component` (
   `id` int(11) NOT NULL,
   `section_id` int(11) NOT NULL,
   `component_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -242,7 +242,7 @@ CREATE TABLE `company_document` (
   `id` int(11) NOT NULL,
   `people_id` int(11) NOT NULL,
   `document_type_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -257,7 +257,7 @@ CREATE TABLE `config` (
   `module_id` int(11) NOT NULL,
   `config_key` varchar(50) NOT NULL,
   `config_value` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -273,7 +273,7 @@ CREATE TABLE `connections` (
   `name` varchar(50) NOT NULL,
   `phone_id` int(11) DEFAULT NULL,
   `channel` enum('whatsapp') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -293,7 +293,7 @@ CREATE TABLE `contract` (
   `alter_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `contract_file_id` int(11) DEFAULT NULL,
   `doc_key` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -307,7 +307,7 @@ CREATE TABLE `contract_people` (
   `people_id` int(11) NOT NULL,
   `people_type` enum('Beneficiary','Witness','Contractor') NOT NULL,
   `contract_percentage` decimal(5,2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -333,7 +333,7 @@ CREATE TABLE `country` (
   `areaInSqKm` varchar(20) DEFAULT NULL,
   `isoAlpha3` char(3) DEFAULT NULL,
   `geonameId` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -347,7 +347,7 @@ CREATE TABLE `delivery_region` (
   `people_id` int(11) NOT NULL,
   `deadline` int(3) NOT NULL,
   `retrieve_tax` decimal(15,2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -359,7 +359,7 @@ CREATE TABLE `delivery_region_city` (
   `id` int(11) NOT NULL,
   `delivery_region_id` int(11) NOT NULL,
   `city_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -372,7 +372,7 @@ CREATE TABLE `delivery_restriction_material` (
   `people_id` int(11) NOT NULL,
   `product_material_id` int(11) NOT NULL,
   `restriction_type` enum('delivery_denied','delivery_restricted') NOT NULL DEFAULT 'delivery_denied'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -398,7 +398,7 @@ CREATE TABLE `delivery_tax` (
   `creation_date` datetime NOT NULL DEFAULT current_timestamp(),
   `alter_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `deadline` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -420,7 +420,7 @@ CREATE TABLE `delivery_tax_group` (
   `marketplace` tinyint(1) NOT NULL DEFAULT 1,
   `remote` tinyint(1) NOT NULL DEFAULT 0,
   `website` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -432,7 +432,7 @@ CREATE TABLE `device` (
   `id` int(11) NOT NULL,
   `alias` varchar(50) DEFAULT 'Caixa',
   `device` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -445,7 +445,7 @@ CREATE TABLE `device_configs` (
   `device_id` int(11) NOT NULL,
   `people_id` int(11) NOT NULL,
   `configs` longtext NOT NULL CHECK (json_valid(`configs`))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -465,7 +465,7 @@ CREATE TABLE `discount_coupon` (
   `discount_end_date` date NOT NULL,
   `config` longtext NOT NULL,
   `value` decimal(15,2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -478,7 +478,7 @@ CREATE TABLE `display` (
   `company_id` int(11) NOT NULL,
   `display` varchar(50) NOT NULL,
   `display_type` enum('products','orders') NOT NULL DEFAULT 'products'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -490,7 +490,7 @@ CREATE TABLE `display_queue` (
   `id` int(11) NOT NULL,
   `display_id` int(11) NOT NULL,
   `queue_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -502,7 +502,7 @@ CREATE TABLE `district` (
   `id` int(11) NOT NULL,
   `district` varchar(255) NOT NULL,
   `city_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -521,7 +521,7 @@ CREATE TABLE `docs` (
   `file_name_receipt` varchar(255) DEFAULT NULL,
   `people_id` int(11) NOT NULL,
   `company_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -535,7 +535,7 @@ CREATE TABLE `document` (
   `document_type_id` int(11) NOT NULL,
   `people_id` int(11) NOT NULL,
   `file_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -547,7 +547,7 @@ CREATE TABLE `document_type` (
   `id` int(11) NOT NULL,
   `document_type` varchar(50) NOT NULL,
   `people_type` enum('F','J') NOT NULL COMMENT ' Individual or juridical person'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -560,7 +560,7 @@ CREATE TABLE `ead_classes` (
   `classes` varchar(255) NOT NULL,
   `courses_id` int(11) NOT NULL,
   `subjects_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -573,7 +573,7 @@ CREATE TABLE `ead_content` (
   `content` varchar(255) NOT NULL,
   `subjects_id` int(11) NOT NULL,
   `file_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -586,7 +586,7 @@ CREATE TABLE `ead_exercises` (
   `exercise_type` enum('exercise','exam') NOT NULL,
   `content_id` int(11) NOT NULL,
   `file_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -599,7 +599,7 @@ CREATE TABLE `ead_exercises_options` (
   `exercise_id` int(11) NOT NULL,
   `option` varchar(255) NOT NULL,
   `correct` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -611,7 +611,7 @@ CREATE TABLE `ead_people_classes` (
   `id` int(11) NOT NULL,
   `people_id` int(11) NOT NULL,
   `people_type` enum('student','teacher') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -625,7 +625,7 @@ CREATE TABLE `ead_sessions` (
   `session` varchar(255) NOT NULL,
   `start_data` datetime DEFAULT NULL,
   `end_data` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -637,7 +637,7 @@ CREATE TABLE `ead_sessions_content` (
   `id` int(11) NOT NULL,
   `content_id` int(11) NOT NULL,
   `session_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -651,7 +651,7 @@ CREATE TABLE `ead_student_sessions` (
   `start_date` datetime DEFAULT NULL,
   `end_date` datetime DEFAULT NULL,
   `status_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -664,7 +664,7 @@ CREATE TABLE `ead_student_session_responses` (
   `student_session_id` int(11) NOT NULL,
   `exercise_id` int(11) NOT NULL,
   `response_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -678,7 +678,7 @@ CREATE TABLE `email` (
   `types` varchar(50) DEFAULT NULL,
   `confirmed` tinyint(1) NOT NULL DEFAULT 0,
   `people_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -694,7 +694,7 @@ CREATE TABLE `extra_data` (
   `data_value` varchar(255) NOT NULL,
   `source` varchar(64) DEFAULT NULL,
   `dateTime` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -709,7 +709,7 @@ CREATE TABLE `extra_fields` (
   `context` varchar(50) NOT NULL,
   `required` tinyint(1) NOT NULL,
   `field_configs` longtext DEFAULT NULL CHECK (json_valid(`field_configs`))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -725,7 +725,7 @@ CREATE TABLE `files` (
   `context` varchar(50) NOT NULL,
   `file_type` varchar(50) NOT NULL,
   `extension` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -738,7 +738,7 @@ CREATE TABLE `hardware` (
   `hardware` varchar(50) NOT NULL,
   `hardware_type` varchar(50) DEFAULT 'display',
   `company_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -755,7 +755,7 @@ CREATE TABLE `imports` (
   `file_format` enum('csv','xml') NOT NULL DEFAULT 'csv',
   `feedback` longtext DEFAULT NULL,
   `upload_date` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -773,7 +773,7 @@ CREATE TABLE `integration` (
   `device_id` int(11) DEFAULT NULL,
   `people_id` int(11) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -786,7 +786,7 @@ CREATE TABLE `inventory` (
   `inventory` varchar(50) NOT NULL,
   `type` enum('sales','internal','consignment','damaged') NOT NULL DEFAULT 'internal',
   `people_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -815,7 +815,7 @@ CREATE TABLE `invoice` (
   `payment_type_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `device_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -828,7 +828,7 @@ CREATE TABLE `invoice_tax` (
   `invoice_key` int(11) DEFAULT NULL,
   `invoice_number` int(11) DEFAULT NULL,
   `invoice` longtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -851,7 +851,7 @@ CREATE TABLE `labels` (
   `rota` varchar(255) NOT NULL,
   `rua` varchar(255) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -863,7 +863,7 @@ CREATE TABLE `language` (
   `id` int(11) NOT NULL,
   `language` varchar(10) NOT NULL,
   `locked` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -875,7 +875,7 @@ CREATE TABLE `language_country` (
   `id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `country_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -891,7 +891,7 @@ CREATE TABLE `log` (
   `action` varchar(255) NOT NULL,
   `class` varchar(255) NOT NULL,
   `object` longtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -903,7 +903,7 @@ CREATE TABLE `measure` (
   `id` int(11) NOT NULL,
   `measure` varchar(50) NOT NULL,
   `measure_type_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -914,7 +914,7 @@ CREATE TABLE `measure` (
 CREATE TABLE `measure_type` (
   `id` int(11) NOT NULL,
   `measure_type` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -927,7 +927,7 @@ CREATE TABLE `menu` (
   `category_id` int(11) NOT NULL,
   `menu` varchar(50) NOT NULL,
   `route_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -939,7 +939,7 @@ CREATE TABLE `menu_role` (
   `id` int(11) NOT NULL,
   `menu_id` int(11) NOT NULL,
   `role_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -954,7 +954,7 @@ CREATE TABLE `messengers` (
   `online` tinyint(1) NOT NULL,
   `people_id` int(11) NOT NULL,
   `other_informations` longtext DEFAULT NULL CHECK (json_valid(`other_informations`))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -970,7 +970,7 @@ CREATE TABLE `model` (
   `signer_id` int(11) NOT NULL,
   `file_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -984,7 +984,7 @@ CREATE TABLE `module` (
   `color` varchar(50) NOT NULL DEFAULT '$primary',
   `icon` varchar(50) NOT NULL,
   `description` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -997,7 +997,7 @@ CREATE TABLE `module_component` (
   `module_id` int(11) NOT NULL,
   `component` varchar(50) NOT NULL,
   `props` longtext NOT NULL CHECK (json_valid(`props`))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1009,7 +1009,7 @@ CREATE TABLE `module_product` (
   `id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `module_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1024,7 +1024,7 @@ CREATE TABLE `notification` (
   `route` varchar(50) NOT NULL,
   `route_id` int(11) NOT NULL,
   `notification_read` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1039,7 +1039,7 @@ CREATE TABLE `oauth` (
   `refresh_token` varchar(255) DEFAULT NULL,
   `access_token` varchar(255) NOT NULL,
   `company_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1077,7 +1077,7 @@ CREATE TABLE `orders` (
   `parking_date` datetime DEFAULT NULL,
   `user_id` int(11) NOT NULL,
   `device_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1090,7 +1090,7 @@ CREATE TABLE `order_invoice` (
   `order_id` int(11) NOT NULL,
   `invoice_id` int(11) NOT NULL,
   `real_price` decimal(15,2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1104,7 +1104,7 @@ CREATE TABLE `order_invoice_tax` (
   `invoice_tax_id` int(11) NOT NULL,
   `invoice_type` int(11) NOT NULL,
   `issuer_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1119,7 +1119,7 @@ CREATE TABLE `order_log` (
   `people_id` int(11) NOT NULL,
   `alter_date` datetime NOT NULL DEFAULT current_timestamp(),
   `note` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1149,7 +1149,7 @@ CREATE TABLE `order_logistic` (
   `created_by` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `last_modified` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1172,7 +1172,7 @@ CREATE TABLE `order_logistic_surveys` (
   `vehicle_km` int(11) DEFAULT NULL,
   `status` enum('pending','complete','canceled') NOT NULL DEFAULT 'pending',
   `comments` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1187,7 +1187,7 @@ CREATE TABLE `order_logistic_surveys_files` (
   `filename` varchar(255) DEFAULT NULL,
   `region` enum('front','left_side','right_side','rear','panel','motor','others') DEFAULT NULL,
   `breakdown` enum('none','kneaded','absence','chop','broke','scratched','cracked') DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1203,7 +1203,7 @@ CREATE TABLE `order_package` (
   `width` decimal(10,2) DEFAULT NULL,
   `depth` decimal(10,2) DEFAULT NULL,
   `weight` decimal(10,3) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1224,7 +1224,7 @@ CREATE TABLE `order_product` (
   `quantity` float NOT NULL,
   `price` float NOT NULL,
   `total` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1240,7 +1240,7 @@ CREATE TABLE `order_product_queue` (
   `status_id` int(11) NOT NULL,
   `register_time` datetime NOT NULL DEFAULT current_timestamp(),
   `update_time` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1264,7 +1264,7 @@ CREATE TABLE `order_tracking` (
   `data_hora_efetiva` varchar(50) DEFAULT NULL,
   `nome_recebedor` varchar(100) DEFAULT NULL,
   `nro_doc_recebedor` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1276,7 +1276,7 @@ CREATE TABLE `package` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1289,7 +1289,7 @@ CREATE TABLE `package_modules` (
   `package_id` int(11) NOT NULL,
   `module_id` int(11) NOT NULL,
   `users` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1302,7 +1302,7 @@ CREATE TABLE `particulars` (
   `particulars_type_id` int(11) NOT NULL,
   `people_id` int(11) NOT NULL,
   `particular_value` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1317,7 +1317,7 @@ CREATE TABLE `particulars_type` (
   `context` varchar(255) NOT NULL,
   `required` tinyint(1) NOT NULL,
   `field_configs` mediumtext DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1331,7 +1331,7 @@ CREATE TABLE `payment_type` (
   `payment_type` varchar(50) NOT NULL,
   `frequency` enum('monthly','daily','weekly','single') NOT NULL,
   `installments` enum('single','split') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1355,7 +1355,7 @@ CREATE TABLE `people` (
   `source` int(11) DEFAULT NULL,
   `sector_id` int(11) DEFAULT NULL,
   `subsector_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1369,7 +1369,7 @@ CREATE TABLE `people_domain` (
   `domain` varchar(255) NOT NULL,
   `theme_id` int(11) DEFAULT NULL,
   `domain_type` enum('API','APP','ERP','SHOP','WEBSITE') NOT NULL DEFAULT 'ERP'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1381,11 +1381,11 @@ CREATE TABLE `people_link` (
   `id` int(11) NOT NULL,
   `company_id` int(11) NOT NULL,
   `people_id` int(11) NOT NULL,
-  `link_type` varchar(50) NOT NULL,
+  `link_type` enum('employee','owner','director','manager','client','provider','franchisee') NOT NULL,
   `comission` decimal(15,2) DEFAULT NULL,
   `minimum_comission` int(11) NOT NULL DEFAULT 2000,
   `enable` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1397,7 +1397,7 @@ CREATE TABLE `people_order` (
   `id` int(11) NOT NULL,
   `people_client_id` int(11) NOT NULL,
   `order_value` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1410,7 +1410,7 @@ CREATE TABLE `people_package` (
   `people_id` int(11) NOT NULL,
   `package_id` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1424,7 +1424,7 @@ CREATE TABLE `people_procurator` (
   `grantor_id` int(11) NOT NULL,
   `muniment_signature_id` int(11) NOT NULL,
   `enable` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1437,7 +1437,7 @@ CREATE TABLE `people_role` (
   `company_id` int(11) NOT NULL,
   `people_id` int(11) NOT NULL,
   `role_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1451,7 +1451,7 @@ CREATE TABLE `people_support` (
   `company_id` int(11) NOT NULL,
   `commission` decimal(15,2) DEFAULT NULL,
   `enable` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1466,7 +1466,7 @@ CREATE TABLE `phone` (
   `phone` int(10) UNSIGNED NOT NULL,
   `confirmed` tinyint(1) NOT NULL DEFAULT 0,
   `people_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 -- --------------------------------------------------------
@@ -1490,7 +1490,7 @@ CREATE TABLE `product` (
   `active` tinyint(1) NOT NULL DEFAULT 1,
   `default_out_inventory_id` int(11) DEFAULT NULL,
   `default_in_inventory_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1502,7 +1502,7 @@ CREATE TABLE `product_category` (
   `id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1514,7 +1514,7 @@ CREATE TABLE `product_file` (
   `id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `file_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1532,7 +1532,7 @@ CREATE TABLE `product_group` (
   `maximum` float NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 1,
   `group_order` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1549,7 +1549,7 @@ CREATE TABLE `product_group_product` (
   `quantity` decimal(10,3) DEFAULT NULL,
   `price` float NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1567,7 +1567,7 @@ CREATE TABLE `product_inventory` (
   `transit` float NOT NULL,
   `minimum` float NOT NULL,
   `maximum` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1579,7 +1579,7 @@ CREATE TABLE `product_material` (
   `id` int(11) NOT NULL,
   `material` varchar(500) NOT NULL,
   `revised` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1591,7 +1591,7 @@ CREATE TABLE `product_unity` (
   `id` int(11) NOT NULL,
   `product_unit` varchar(3) NOT NULL,
   `unit_type` enum('I','F') NOT NULL DEFAULT 'I' COMMENT 'Integer, Fractioned'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1606,7 +1606,7 @@ CREATE TABLE `queue` (
   `status_working_id` int(11) NOT NULL,
   `status_out_id` int(11) NOT NULL,
   `company_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1628,7 +1628,7 @@ CREATE TABLE `quote` (
   `deadline` int(11) NOT NULL,
   `total` decimal(15,2) DEFAULT NULL,
   `denied` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1652,7 +1652,7 @@ CREATE TABLE `quote_detail` (
   `minimum_price` decimal(15,2) DEFAULT NULL,
   `optional` tinyint(1) NOT NULL,
   `price_calculated` double NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1669,7 +1669,7 @@ CREATE TABLE `rating` (
   `people_evaluator` int(11) NOT NULL,
   `rating_date` datetime NOT NULL DEFAULT current_timestamp(),
   `note` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1682,7 +1682,7 @@ CREATE TABLE `retrieve` (
   `order_id` int(11) NOT NULL,
   `retrieve_number` int(11) NOT NULL,
   `retrieve_date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1694,7 +1694,7 @@ CREATE TABLE `role` (
   `id` int(11) NOT NULL,
   `role` varchar(50) NOT NULL,
   `people_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1708,7 +1708,7 @@ CREATE TABLE `routes` (
   `route` varchar(50) NOT NULL,
   `color` varchar(50) NOT NULL,
   `icon` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1723,7 +1723,7 @@ CREATE TABLE `seo_url` (
   `city_destination` int(11) NOT NULL,
   `weight` float NOT NULL DEFAULT 1,
   `order_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1737,7 +1737,7 @@ CREATE TABLE `service_invoice_tax` (
   `invoice_tax_id` int(11) NOT NULL,
   `invoice_type` int(11) NOT NULL,
   `issuer_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1751,7 +1751,7 @@ CREATE TABLE `sessions` (
   `modified` int(11) DEFAULT NULL,
   `lifetime` int(11) DEFAULT NULL,
   `data` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1766,7 +1766,7 @@ CREATE TABLE `spool` (
   `register_date` datetime NOT NULL DEFAULT current_timestamp(),
   `status_id` int(11) NOT NULL,
   `file_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1780,7 +1780,7 @@ CREATE TABLE `state` (
   `state` varchar(50) NOT NULL,
   `country_id` int(11) NOT NULL,
   `UF` varchar(2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1797,7 +1797,7 @@ CREATE TABLE `status` (
   `notify` tinyint(1) NOT NULL,
   `system` tinyint(1) NOT NULL,
   `color` varchar(7) NOT NULL DEFAULT '#000000'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1811,7 +1811,7 @@ CREATE TABLE `street` (
   `cep_id` int(10) NOT NULL,
   `district_id` int(11) NOT NULL,
   `confirmed` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1836,7 +1836,7 @@ CREATE TABLE `tasks` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `alter_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `announce` longtext DEFAULT NULL CHECK (json_valid(`announce`))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1855,7 +1855,7 @@ CREATE TABLE `task_interations` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `is_read` tinyint(1) NOT NULL DEFAULT 0,
   `notified` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1875,7 +1875,7 @@ CREATE TABLE `tax` (
   `price` decimal(15,2) DEFAULT NULL,
   `minimum_price` decimal(15,2) DEFAULT NULL,
   `optional` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1888,7 +1888,7 @@ CREATE TABLE `theme` (
   `theme` varchar(50) NOT NULL DEFAULT 'Default',
   `background` int(11) NOT NULL,
   `colors` longtext NOT NULL CHECK (json_valid(`colors`))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1904,7 +1904,7 @@ CREATE TABLE `translate` (
   `lang_id` int(11) NOT NULL,
   `translate_key` varchar(64) NOT NULL,
   `translate` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1921,7 +1921,7 @@ CREATE TABLE `users` (
   `lost_password` varchar(60) DEFAULT NULL,
   `api_key` varchar(60) NOT NULL,
   `people_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1934,7 +1934,7 @@ CREATE TABLE `wallet` (
   `people_id` int(11) NOT NULL,
   `wallet` varchar(50) NOT NULL,
   `balance` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1947,7 +1947,7 @@ CREATE TABLE `wallet_payment_type` (
   `wallet_id` int(11) NOT NULL,
   `payment_type_id` int(11) NOT NULL,
   `payment_code` varchar(80) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Indexes for dumped tables
