@@ -4,4 +4,4 @@ framework:
             async: '%env(MESSENGER_TRANSPORT_DSN)%'
 
         routing:
-            ControleOnline\Message\SendAutomationMessage: async
+            'ControleOnline\Message\SendAutomationMessage': async
