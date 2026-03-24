@@ -1,0 +1,4 @@
+framework:
+    messenger:
+        routing:
+            'ControleOnline\Message\SendAutomationMessage': async
