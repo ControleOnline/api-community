@@ -2,7 +2,6 @@ name: Deploy Project Production
 on:
   push:
     branches: [production]
-  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -2,7 +2,6 @@ name: Deploy Project Develop
 on:
   push:
     branches: [develop,master]
-  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
