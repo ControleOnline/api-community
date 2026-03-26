@@ -13,7 +13,7 @@ jobs:
       - name: Update Controle Online      
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
+          host: ${{ secrets.API_HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.CONTROLEONLINE }}
           port: ${{ secrets.PORT }}        
