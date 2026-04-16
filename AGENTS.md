@@ -17,3 +17,5 @@
 - Evitar lógica em controllers.
 - Não adicinhar ou criar métodos para pesquisar várias opções.
 - Comente todo o código
+- Antes de começar qualquer análise, pense em eventos como o postPersist, existe vários deles implementados no sistema
+- Sempre verifique o securityFilter de todas as entidades, isso é um ponto de segurança muito importante.
