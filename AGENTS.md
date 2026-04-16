@@ -16,3 +16,4 @@
 - DTOs devem validar entrada.
 - Evitar lógica em controllers.
 - Não adicinhar ou criar métodos para pesquisar várias opções.
+- Comente todo o código
