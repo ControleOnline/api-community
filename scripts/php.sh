@@ -11,6 +11,12 @@ server {
 
     client_max_body_size 2G;
 
+    location ^~ /.well-known/acme-challenge/ {
+        auth_basic off;
+        allow all;
+        root /home/staging/frethical/public;
+    }
+
     location / {
         try_files $uri $uri/ /index.php?$query_string;
     }

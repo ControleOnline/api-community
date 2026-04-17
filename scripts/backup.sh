@@ -19,7 +19,8 @@ gunzip < $BACKUP_FILE | mysql -u root $TARGET_DB
 find $BACKUP_DIR -name "${SLAVE_DB}_*.sql.gz" -type f -mtime +3 -exec rm -f {} \;
 
 
-mysql -u root -D frethical_staging -e 'UPDATE `user` SET `password` = '\''$2y$13$5cJ18CCLpNRr6B9A6p2Ote5oc/F342BgXYUh.Fe8eqPKRVY1.IxCi'\'';
+MYSQL_PASSWORD_HASH='$2y$13$5cJ18CCLpNRr6B9A6p2Ote5oc/F342BgXYUh.Fe8eqPKRVY1.IxCi'
+mysql -u root -D $TARGET_DB -e "UPDATE \`user\` SET \`password\` = '${MYSQL_PASSWORD_HASH}';"
 
 cd /var/www/vhosts/staging.frethical.com/httpdocs
 /opt/plesk/php/8.2/bin/php bin/console doctrine:migrations:migrate --no-interaction
