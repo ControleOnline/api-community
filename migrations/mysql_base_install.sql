@@ -887,6 +887,7 @@ CREATE TABLE `log` (
   `id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `user_id` int(11) DEFAULT NULL,
+  `type` varchar(50) NOT NULL DEFAULT 'entity',
   `row` int(11) NOT NULL,
   `action` varchar(255) NOT NULL,
   `class` varchar(255) NOT NULL,
