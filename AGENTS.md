@@ -22,3 +22,5 @@
 - Sempre verifique o securityFilter de todas as entidades, isso é um ponto de segurança muito importante.
 - Funções devem ter responsabilidade única
 - Funções devem ser pequenas e caso necessário, separadas em mais de uma função para garantir que sejam legíveis
+- Não há diversos nomes ou diversos jeitos de fazer alguma coisa. Se houver dois arquivos diferentes tratando a mesma coisa, pergunte qual deve manter e ejuste para que apenas um componente tenha a responsabilidade por aquela função.
+- Se houver erros de grafia, ou diversos nomes para encontrar algo como um array de palavras por conta de dúvidas do que é o correto, simplesmente pergunte qual o correto. Exemplo: [order, orders] num campo de tipos provavelmente haverá uma grafia correta e outra que age como um fallback, porém isso não deve existir de forma alguma.
