@@ -11,6 +11,7 @@
 - Nomear arquivos e classes de forma consistente com os módulos atuais.
 
 ## Convenções
+- Preferir constantes em entidades em vez de serviços.
 - Não acessar banco direto fora de repository.
 - Toda regra de negócio deve ficar em service.
 - DTOs devem validar entrada.
