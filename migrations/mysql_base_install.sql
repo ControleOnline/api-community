@@ -888,9 +888,9 @@ CREATE TABLE `log` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `user_id` int(11) DEFAULT NULL,
   `type` varchar(50) NOT NULL DEFAULT 'entity',
-  `row` int(11) NOT NULL,
+  `row` int(11) DEFAULT NULL,
   `action` varchar(255) NOT NULL,
-  `class` varchar(255) NOT NULL,
+  `class` varchar(255) DEFAULT NULL,
   `object` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

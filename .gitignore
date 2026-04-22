@@ -22,7 +22,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 ios/.xcode.env.local
-
+.phpunit.cache
 
 /helm/api/charts
 *.lock
