@@ -3,7 +3,7 @@
 namespace App\Tests\Unit\Listener;
 
 use ControleOnline\Listener\LogListener;
-use Doctrine\DBAL\Connection;
+use ControleOnline\Service\SystemLogWriter;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
@@ -11,9 +11,6 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\Mapping\RuntimeReflectionService;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class LogListenerTest extends TestCase
 {
@@ -23,32 +20,31 @@ class LogListenerTest extends TestCase
         $entity = new LogListenerTestEntity(null, 'Pedido', new \DateTimeImmutable('2026-04-18 12:30:00'));
         $metadata = $this->createMetadata();
 
-        $connection = $this->createMock(Connection::class);
-        $connection
+        $writer = $this->createMock(SystemLogWriter::class);
+        $writer
             ->expects(self::once())
-            ->method('insert')
-            ->with('log', self::callback(function (array $data): bool {
-                self::assertSame('entity', $data['type']);
-                self::assertSame('insert', $data['action']);
-                self::assertSame(LogListenerTestEntity::class, $data['class']);
-                self::assertSame(15, $data['row']);
-                self::assertSame(7, $data['user_id']);
+            ->method('write')
+            ->with(
+                'entity',
+                'insert',
+                LogListenerTestEntity::class,
+                15,
+                self::callback(function (array $object): bool {
+                    self::assertSame(15, $object['id']);
+                    self::assertSame('Pedido', $object['name']);
+                    self::assertSame('2026-04-18 12:30:00', $object['createdAt']);
 
-                $object = json_decode($data['object'], true, 512, JSON_THROW_ON_ERROR);
-                self::assertSame(15, $object['id']);
-                self::assertSame('Pedido', $object['name']);
-                self::assertSame('2026-04-18 12:30:00', $object['createdAt']);
-
-                return true;
-            }))
-            ->willReturn(1);
+                    return true;
+                })
+            )
+            ->willReturn(true);
 
         $em = $this->createEntityManager(
             $metadata,
-            $connection,
             [$entity]
         );
 
+        $listener = new LogListener($writer);
         $listener->onFlush(new OnFlushEventArgs($em));
 
         $entity->id = 15;
@@ -72,55 +68,49 @@ class LogListenerTest extends TestCase
             ],
         ];
 
-        $connection = $this->createMock(Connection::class);
-        $connection
+        $writer = $this->createMock(SystemLogWriter::class);
+        $writer
             ->expects(self::once())
-            ->method('insert')
-            ->with('log', self::callback(function (array $data): bool {
-                self::assertSame('entity', $data['type']);
-                self::assertSame('update', $data['action']);
-                self::assertSame(LogListenerTestEntity::class, $data['class']);
-                self::assertSame(25, $data['row']);
-                self::assertSame(12, $data['user_id']);
+            ->method('write')
+            ->with(
+                'entity',
+                'update',
+                LogListenerTestEntity::class,
+                25,
+                self::callback(function (array $object): bool {
+                    self::assertSame(['Pedido antigo', 'Pedido atualizado'], $object['name']);
+                    self::assertSame(
+                        ['2026-04-18 13:00:00', '2026-04-18 13:15:00'],
+                        $object['createdAt']
+                    );
 
-                $object = json_decode($data['object'], true, 512, JSON_THROW_ON_ERROR);
-                self::assertSame(['Pedido antigo', 'Pedido atualizado'], $object['name']);
-                self::assertSame(
-                    ['2026-04-18 13:00:00', '2026-04-18 13:15:00'],
-                    $object['createdAt']
-                );
-
-                return true;
-            }))
-            ->willReturn(1);
+                    return true;
+                })
+            )
+            ->willReturn(true);
 
         $em = $this->createEntityManager(
             $metadata,
-            $connection,
             [],
             [$entity],
             [],
             $changeSets
         );
 
+        $listener = new LogListener($writer);
         $listener->onFlush(new OnFlushEventArgs($em));
         $listener->postFlush(new PostFlushEventArgs($em));
     }
 
     private function createListener(int $userId): LogListener
     {
-        $token = $this->createMock(TokenInterface::class);
-        $token->method('getUser')->willReturn(new LogListenerTestUser($userId));
+        $writer = $this->createMock(SystemLogWriter::class);
 
-        $tokenStorage = $this->createMock(TokenStorageInterface::class);
-        $tokenStorage->method('getToken')->willReturn($token);
-
-        return new LogListener($tokenStorage);
+        return new LogListener($writer);
     }
 
     private function createEntityManager(
         ClassMetadata $metadata,
-        Connection $connection,
         array $insertions = [],
         array $updates = [],
         array $deletions = [],
@@ -140,7 +130,6 @@ class LogListenerTest extends TestCase
 
         $em = $this->createMock(EntityManagerInterface::class);
         $em->method('getUnitOfWork')->willReturn($unitOfWork);
-        $em->method('getConnection')->willReturn($connection);
         $em->method('getClassMetadata')->willReturnCallback(
             fn(string $className): ClassMetadata => $this->assertMetadataClass($metadata, $className)
         );
@@ -185,26 +174,4 @@ class LogListenerTestEntity
         public string $name,
         public ?\DateTimeImmutable $createdAt = null
     ) {}
-}
-
-class LogListenerTestUser implements UserInterface
-{
-    public function __construct(private int $id) {}
-
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function getRoles(): array
-    {
-        return [];
-    }
-
-    public function eraseCredentials(): void {}
-
-    public function getUserIdentifier(): string
-    {
-        return 'listener-test-user';
-    }
 }
