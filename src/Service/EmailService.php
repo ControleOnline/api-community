@@ -2,10 +2,9 @@
 
 namespace App\Service;
 
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\Transport;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Email;
-use RuntimeException;
 
 class EmailService
 {
@@ -51,38 +50,6 @@ class EmailService
 			} catch (\Throwable $inner) {
 				// Fallback absoluto: não fazer nada
 			}
-		}
-	}
-
-	public function sendMessage(
-		string $recipient,
-		string $subject,
-		string $bodyHtml,
-		?string $from = null
-	): void {
-		$normalizedRecipient = strtolower(trim($recipient));
-
-		if (
-			$normalizedRecipient === '' ||
-			!filter_var($normalizedRecipient, FILTER_VALIDATE_EMAIL)
-		) {
-			throw new RuntimeException('E-mail de destino invalido para recuperacao de senha.');
-		}
-
-		$email = (new Email())
-			->from($from ?: $_ENV['REPORT_MAIL'])
-			->to($normalizedRecipient)
-			->subject($subject)
-			->html($bodyHtml);
-
-		try {
-			$this->mailer->send($email);
-		} catch (TransportExceptionInterface $e) {
-			throw new RuntimeException(
-				'Nao foi possivel enviar o e-mail de recuperacao.',
-				0,
-				$e
-			);
 		}
 	}
 }
