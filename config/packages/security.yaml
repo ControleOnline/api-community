@@ -34,8 +34,6 @@ security:
         - { path: ^/docs$, roles: PUBLIC_ACCESS }
         - { path: ^/token$, roles: PUBLIC_ACCESS }
         - { path: ^/create-account, roles: PUBLIC_ACCESS }
-        - { path: ^/password_recoveries$, roles: PUBLIC_ACCESS }
-        - { path: ^/recovery_accesses$, roles: PUBLIC_ACCESS }
         - { path: ^/themes-colors.css$, roles: PUBLIC_ACCESS }
         - { path: ^/languages$, roles: PUBLIC_ACCESS }
         - { path: ^/people/company/default$, roles: PUBLIC_ACCESS }
