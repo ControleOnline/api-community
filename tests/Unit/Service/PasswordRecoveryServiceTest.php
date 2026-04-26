@@ -13,6 +13,8 @@ use ControleOnline\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PasswordRecoveryServiceTest extends TestCase
 {
@@ -23,25 +25,22 @@ class PasswordRecoveryServiceTest extends TestCase
             ['primary@example.com', 'contact@example.com']
         );
 
-        $payload = new PasswordRecovery();
-        $payload->username = 'contact@example.com';
-        $payload->email = 'contact@example.com';
-
         $userRepository = $this->createMock(ObjectRepository::class);
         $userRepository
             ->expects(self::exactly(2))
             ->method('findOneBy')
-            ->willReturnCallback(function (array $criteria) use ($user): ?User {
+            ->willReturnCallback(function (array $criteria): ?User {
                 if ($criteria === ['username' => 'contact@example.com']) {
                     return null;
                 }
 
-                if ($criteria === ['people' => $user->getPeople()]) {
-                    return $user;
-                }
-
                 self::fail('Unexpected user lookup: ' . json_encode($criteria));
             });
+        $userRepository
+            ->expects(self::once())
+            ->method('findBy')
+            ->with(['people' => $user->getPeople()])
+            ->willReturn([$user]);
 
         $emailRepository = $this->createMock(ObjectRepository::class);
         $emailRepository
@@ -68,10 +67,13 @@ class PasswordRecoveryServiceTest extends TestCase
             $manager,
             $emailService,
             $this->createMock(UserService::class),
-            $this->createDomainService()
+            $this->createDomainService(),
+            $this->createValidator()
         );
 
-        $service->requestRecovery($payload);
+        $service->requestRecoveryFromContent(json_encode([
+            'username' => 'contact@example.com',
+        ]));
 
         self::assertNotNull($user->getOauthHash());
         self::assertNotNull($user->getLostPassword());
@@ -116,7 +118,8 @@ class PasswordRecoveryServiceTest extends TestCase
             $manager,
             $emailService,
             $this->createMock(UserService::class),
-            $this->createDomainService()
+            $this->createDomainService(),
+            $this->createValidator()
         );
 
         $service->requestRecovery($payload);
@@ -153,6 +156,16 @@ class PasswordRecoveryServiceTest extends TestCase
             ->willReturn('https://app.example.com');
 
         return $domainService;
+    }
+
+    private function createValidator(): ValidatorInterface
+    {
+        $validator = $this->createMock(ValidatorInterface::class);
+        $validator
+            ->method('validate')
+            ->willReturn(new ConstraintViolationList());
+
+        return $validator;
     }
 
     private function createUserWithEmails(string $username, array $emails): array
