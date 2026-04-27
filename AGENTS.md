@@ -5,7 +5,7 @@
 - Rodar lint e testes antes de concluir.
 - Não introduzir breaking changes sem destacar.
 - Preferir mudanças pequenas e isoladas.
-
+- Arrume tudo o que for deprecated.
 
 ## Estilo de implementação
 - Seguir padrão dos módulos existentes.
