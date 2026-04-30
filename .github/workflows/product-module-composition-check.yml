@@ -1,0 +1,18 @@
+name: Product Module Composition Check
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - task-76
+
+jobs:
+  verify-products-module-pointer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify products module pointer
+        run: node tools/verify-products-module-pointer.cjs
