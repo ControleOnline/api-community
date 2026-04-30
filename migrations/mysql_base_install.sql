@@ -1382,7 +1382,7 @@ CREATE TABLE `people_link` (
   `id` int(11) NOT NULL,
   `company_id` int(11) NOT NULL,
   `people_id` int(11) NOT NULL,
-  `link_type` enum('employee','owner','director','manager','client','provider','franchisee') NOT NULL,
+  `link_type` enum('employee','owner','director','manager','client','provider','franchisee','salesman','after-sales') NOT NULL,
   `comission` decimal(15,2) DEFAULT NULL,
   `minimum_comission` int(11) NOT NULL DEFAULT 2000,
   `enable` tinyint(1) NOT NULL DEFAULT 1
