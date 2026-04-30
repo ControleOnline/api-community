@@ -31,6 +31,16 @@
 - `client` não concede papel humano operacional; ele apenas habilita o contexto comercial da empresa.
 - `family` e `sellers-client` não são roles humanas oficiais da API.
 
+## Regra transversal de seletor de empresa
+- `/people/companies/my` deve listar todos os vínculos humanos diretos ativos da pessoa com empresas ativas.
+- O seletor de empresa não deve esconder empresas só porque a cadeia comercial do `app-domain` atual não permite entrar nelas.
+- A empresa principal deve aparecer no seletor quando houver vínculo humano direto, inclusive `owner`.
+- A resposta de `/people/companies/my` deve separar os estados:
+- `enabled`: empresa ativa no cadastro.
+- `commercial_enabled`: empresa tem cadeia comercial válida até a principal no domínio atual.
+- `panel_enabled`: empresa pode ser selecionada e usada no painel do domínio atual.
+- `permission` em `/people/companies/my` deve refletir a permissão efetiva no domínio atual. Quando a cadeia comercial do domínio atual não for válida, a empresa continua visível no seletor, mas pode retornar `guest`.
+
 ## Retorno de API
 - Toda resposta customizada interna deve seguir o padrão do `HydratorService`.
 - Exceções só são aceitáveis quando houver integração externa que imponha outro contrato.
