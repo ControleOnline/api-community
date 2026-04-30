@@ -1,0 +1,23 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - task-5
+      - task-65
+
+jobs:
+  public-signup-route:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate public signup routes
+        run: |
+          grep -q "path: \\^/users/create-account\\$, roles: PUBLIC_ACCESS" config/packages/security.yaml
+          grep -q "path: \\^/create-account, roles: PUBLIC_ACCESS" config/packages/security.yaml
+
+      - name: Check diff formatting
+        run: git diff --check
