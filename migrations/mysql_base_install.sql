@@ -887,9 +887,10 @@ CREATE TABLE `log` (
   `id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `user_id` int(11) DEFAULT NULL,
-  `row` int(11) NOT NULL,
+  `type` varchar(50) NOT NULL DEFAULT 'entity',
+  `row` int(11) DEFAULT NULL,
   `action` varchar(255) NOT NULL,
-  `class` varchar(255) NOT NULL,
+  `class` varchar(255) DEFAULT NULL,
   `object` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1381,7 +1382,7 @@ CREATE TABLE `people_link` (
   `id` int(11) NOT NULL,
   `company_id` int(11) NOT NULL,
   `people_id` int(11) NOT NULL,
-  `link_type` enum('employee','owner','director','manager','client','provider','franchisee') NOT NULL,
+  `link_type` enum('employee','owner','director','manager','client','provider','franchisee','salesman','after-sales') NOT NULL,
   `comission` decimal(15,2) DEFAULT NULL,
   `minimum_comission` int(11) NOT NULL DEFAULT 2000,
   `enable` tinyint(1) NOT NULL DEFAULT 1
@@ -1903,7 +1904,8 @@ CREATE TABLE `translate` (
   `type` varchar(64) NOT NULL,
   `lang_id` int(11) NOT NULL,
   `translate_key` varchar(64) NOT NULL,
-  `translate` varchar(255) NOT NULL
+  `translate` varchar(255) NOT NULL,
+  `revised` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

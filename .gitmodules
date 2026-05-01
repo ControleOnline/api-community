@@ -4,57 +4,76 @@
 [submodule "modules/controleonline/users"]
 	path = modules/controleonline/users
 	url = https://github.com/ControleOnline/api-platform-users.git
+	branch = staging
 [submodule "modules/controleonline/tasks"]
 	path = modules/controleonline/tasks
 	url = https://github.com/ControleOnline/api-platform-tasks.git
+	branch = staging
 [submodule "modules/controleonline/queue"]
 	path = modules/controleonline/queue
 	url = https://github.com/ControleOnline/api-platform-queue.git
+	branch = staging
 [submodule "modules/controleonline/products"]
 	path = modules/controleonline/products
 	url = https://github.com/ControleOnline/api-platform-products.git
+	branch = staging
 [submodule "modules/controleonline/people"]
 	path = modules/controleonline/people
 	url = https://github.com/ControleOnline/api-platform-people.git
+	branch = staging
 [submodule "modules/controleonline/orders"]
 	path = modules/controleonline/orders
 	url = https://github.com/ControleOnline/api-platform-orders.git
+	branch = staging
 [submodule "modules/controleonline/logistic"]
 	path = modules/controleonline/logistic
 	url = https://github.com/ControleOnline/api-platform-logistic.git
+	branch = staging
 [submodule "modules/controleonline/financial"]
 	path = modules/controleonline/financial
 	url = https://github.com/ControleOnline/api-platform-financial.git
+	branch = staging
 [submodule "modules/controleonline/ead"]
 	path = modules/controleonline/ead
 	url = https://github.com/ControleOnline/api-platform-ead.git
+	branch = staging
 [submodule "modules/controleonline/dashboard"]
 	path = modules/controleonline/dashboard
 	url = https://github.com/ControleOnline/api-platform-dashboard.git
+	branch = staging
 [submodule "modules/controleonline/common"]
 	path = modules/controleonline/common
 	url = https://github.com/ControleOnline/api-platform-common.git
+	branch = staging
 [submodule "modules/controleonline/contract"]
 	path = modules/controleonline/contract
 	url = https://github.com/ControleOnline/api-platform-contract.git
+	branch = staging
 [submodule "modules/controleonline/multi-tenancy"]
 	path = modules/controleonline/multi-tenancy
 	url = https://github.com/ControleOnline/api-platform-multi-tenancy.git
+	branch = staging
 [submodule "modules/controleonline/accounting"]
 	path = modules/controleonline/accounting
 	url = https://github.com/ControleOnline/api-platform-accounting.git
+	branch = staging
 [submodule "modules/controleonline/websocket-server"]
 	path = modules/controleonline/websocket-server
 	url = https://github.com/ControleOnline/api-platform-websocket-server.git
+	branch = staging
 [submodule "modules/controleonline/integration"]
 	path = modules/controleonline/integration
 	url = https://github.com/ControleOnline/api-platform-integration.git
+	branch = staging
 [submodule "modules/controleonline/whatsapp-sdk"]
 	path = modules/controleonline/whatsapp-sdk
 	url = https://github.com/ControleOnline/whatsapp-sdk-php.git
+	branch = staging
 [submodule "modules/controleonline/messages-sdk"]
 	path = modules/controleonline/messages-sdk
 	url = https://github.com/ControleOnline/messages-sdk-php.git
+	branch = staging
 [submodule "modules/controleonline/spc-sdk"]
 	path = modules/controleonline/spc-sdk
 	url = https://github.com/ControleOnline/spc-sdk-php.git
+	branch = staging

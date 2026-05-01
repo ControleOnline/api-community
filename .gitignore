@@ -22,7 +22,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 ios/.xcode.env.local
-
+.phpunit.cache
 
 /helm/api/charts
 *.lock
@@ -32,6 +32,8 @@ error_log
 composer.lock
 symfony.lock
 yarn.lock
+/.key.local
+
 
 ###> symfony/framework-bundle ###
 /.env.local
