@@ -9,19 +9,33 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "18.17.1"                          
-      - name: Update Controle Online      
+          node-version: "18.17.1"
+      - name: Update Controle Online
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.API_HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.CONTROLEONLINE }}
-          port: ${{ secrets.PORT }}        
+          port: ${{ secrets.PORT }}
           script: |
+                  export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
                   cd ~/sistemas/controleonline/api
                   git checkout production
-                  git pull origin production    
+                  git pull origin production
                   git submodule update --recursive --init
-                  git submodule update --recursive --remote        
-                  composer install --no-suggest
-                  php bin/console tenant:migrations:migrate --no-interaction                                   
+                  git submodule update --recursive --remote
+                  COMPOSER_BIN="$(command -v composer || true)"
+                  if [ -z "$COMPOSER_BIN" ]; then
+                    for candidate in /usr/local/bin/composer /usr/bin/composer "$HOME/bin/composer"; do
+                      if [ -x "$candidate" ]; then
+                        COMPOSER_BIN="$candidate"
+                        break
+                      fi
+                    done
+                  fi
+                  if [ -z "$COMPOSER_BIN" ]; then
+                    echo "Composer not found on remote server"
+                    exit 1
+                  fi
+                  "$COMPOSER_BIN" install --no-interaction --no-suggest
+                  php bin/console tenant:migrations:migrate --no-interaction
