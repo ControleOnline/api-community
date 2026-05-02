@@ -20,10 +20,22 @@ jobs:
           script: |
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
                   cd ~/sistemas/controleonline/api
-                  git checkout production
-                  git pull origin production
+                  git fetch origin
+                  git checkout master
+                  git reset --hard origin/master
+                  git clean -fd
+                  git submodule sync --recursive
                   git submodule update --recursive --init
-                  git submodule update --recursive --remote
+                  git submodule foreach --recursive '
+                    git fetch origin
+                    if git show-ref --verify --quiet refs/heads/master; then
+                      git checkout master
+                    else
+                      git checkout -B master origin/master
+                    fi
+                    git reset --hard origin/master
+                    git clean -fd
+                  '
                   COMPOSER_BIN="$(command -v composer || true)"
                   if [ -z "$COMPOSER_BIN" ]; then
                     for candidate in /usr/local/bin/composer /usr/bin/composer "$HOME/bin/composer"; do
