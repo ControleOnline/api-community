@@ -806,6 +806,8 @@ CREATE TABLE `invoice` (
   `alter_date` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `due_date` date NOT NULL,
   `price` decimal(15,2) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `invoice_type` varchar(32) NOT NULL DEFAULT 'invoice',
   `notified` tinyint(1) NOT NULL DEFAULT 0,
   `category_id` int(11) DEFAULT NULL,
   `invoice_bank_id` varchar(30) DEFAULT NULL,
