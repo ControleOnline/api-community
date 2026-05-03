@@ -50,4 +50,8 @@ jobs:
                     exit 1
                   fi
                   "$COMPOSER_BIN" install --no-interaction --no-suggest
+                  rm -rf var/cache/prod/pools/system
+                  rm -rf var/cache/prod/doctrine/orm
+                  rm -f var/cache/prod/serialization.php
+                  php -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null
                   php bin/console tenant:migrations:migrate --no-interaction
