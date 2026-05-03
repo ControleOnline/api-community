@@ -1919,6 +1919,7 @@ CREATE TABLE `translate` (
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
+  `timezone_id` smallint(5) unsigned DEFAULT NULL,
   `hash` varchar(255) NOT NULL,
   `oauth_user` varchar(20) DEFAULT NULL,
   `oauth_hash` varchar(40) DEFAULT NULL,
