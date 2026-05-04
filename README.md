@@ -10,6 +10,12 @@ git submodule update --init --recursive
 git submodule update --recursive
 ```
 
+## Public signup compatibility
+
+The main API keeps the legacy public signup route `^/users/create-account$` exposed in `config/packages/security.yaml` so the web client can finish the initial registration flow without authentication.
+
+This route complements the users module compatibility layer and should stay aligned with the current public signup endpoint `POST /create-account`.
+
 
 ### Front Ends
 
