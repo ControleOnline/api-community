@@ -1540,6 +1540,19 @@ CREATE TABLE `product_group` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `product_group_parent`
+--
+
+CREATE TABLE `product_group_parent` (
+  `id` int(11) NOT NULL,
+  `product_group_id` int(11) NOT NULL,
+  `parent_product_id` int(11) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `product_group_product`
 --
 
@@ -2760,6 +2773,14 @@ ALTER TABLE `product_group`
   ADD KEY `product_parent_id` (`parent_product_id`);
 
 --
+-- Indexes for table `product_group_parent`
+--
+ALTER TABLE `product_group_parent`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `product_group_parent_unique` (`product_group_id`,`parent_product_id`),
+  ADD KEY `product_group_parent_product_id` (`parent_product_id`);
+
+--
 -- Indexes for table `product_group_product`
 --
 ALTER TABLE `product_group_product`
@@ -3568,6 +3589,12 @@ ALTER TABLE `product_group`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `product_group_parent`
+--
+ALTER TABLE `product_group_parent`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `product_group_product`
 --
 ALTER TABLE `product_group_product`
@@ -4310,6 +4337,13 @@ ALTER TABLE `product_file`
 --
 ALTER TABLE `product_group`
   ADD CONSTRAINT `product_group_ibfk_1` FOREIGN KEY (`parent_product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `product_group_parent`
+--
+ALTER TABLE `product_group_parent`
+  ADD CONSTRAINT `product_group_parent_ibfk_1` FOREIGN KEY (`product_group_id`) REFERENCES `product_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `product_group_parent_ibfk_2` FOREIGN KEY (`parent_product_id`) REFERENCES `product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `product_group_product`
