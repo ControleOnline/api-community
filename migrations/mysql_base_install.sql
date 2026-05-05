@@ -1559,7 +1559,7 @@ CREATE TABLE `product_group_parent` (
 CREATE TABLE `product_group_product` (
   `id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
-  `product_group_id` int(11) NOT NULL,
+  `product_group_id` int(11) DEFAULT NULL,
   `product_type` enum('feedstock','component','package') NOT NULL,
   `product_child_id` int(11) NOT NULL,
   `quantity` decimal(10,3) DEFAULT NULL,
