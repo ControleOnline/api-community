@@ -17,6 +17,9 @@
 - Criar e manter `AGENTS.md` conciso em cada módulo afetado.
 - Quando a regra for transversal entre módulos, o `AGENTS.md` da raiz também deve ser atualizado.
 - Testes automatizados devem ficar dentro dos módulos correspondentes.
+- Você deve manter o redme.md do projeto e dos submódulos sempre atualizados e se não existir, deve criar.
+- Você deve manter o funding.yml do projeto e dos submódulos sempre atualizados e se não existir, deve criar.
+- Você deve manter o .scrutinizer.yml do projeto e dos submódulos sempre atualizados e se não existir, deve criar.
 
 ## Regra transversal de acesso
 - `people_link` é a fonte única de verdade dos papéis backend.
