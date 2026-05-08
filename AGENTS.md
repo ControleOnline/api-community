@@ -47,3 +47,4 @@
 ## Retorno de API
 - Toda resposta customizada interna deve seguir o padrão do `HydratorService`.
 - Exceções só são aceitáveis quando houver integração externa que imponha outro contrato.
+- Totais de listagens devem ser expostos pelo mecanismo de `summary` do backend, usando `CollectionSummary` ou resolver especifico. O frontend nao deve precisar somar a pagina carregada para exibir totais filtrados.
