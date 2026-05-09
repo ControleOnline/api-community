@@ -193,14 +193,14 @@ final class Version20260509120000 extends AbstractMigration
 
             $this->menu('PPC', 'displays', 'Displays', 'Producao', 'DisplayList', 'monitor', '#7C3AED', 'ui-ppc', $human, 10),
 
-            $this->menu('SHOP', 'shop_home', 'Loja', 'Loja', 'ShopIndex', 'shopping-bag', '#0EA5E9', 'ui-shop', ['client'], 10),
-            $this->menu('SHOP', 'franchises', 'Franquias', 'Loja', 'ShopFranchiseLocatorPage', 'map-pin', '#16A34A', 'ui-shop', ['client'], 20),
-            $this->menu('SHOP', 'loyalty', 'Fidelidade', 'Loja', 'ShopLoyaltyPage', 'gift', '#F59E0B', 'ui-shop', ['client'], 30),
-            $this->menu('SHOP', 'cart', 'Carrinho', 'Loja', 'ShopCartPage', 'shopping-cart', '#0EA5E9', 'ui-shop', ['client'], 40),
-            $this->menu('SHOP', 'orders', 'Meus pedidos', 'Loja', 'ShopOrdersPage', 'package', '#7C3AED', 'ui-shop', ['client'], 50),
-            $this->menu('SHOP', 'profile', 'Perfil', 'Loja', 'ShopProfilePage', 'user', '#64748B', 'ui-shop', ['client'], 60),
-            $this->menu('SHOP', 'cards', 'Cartoes', 'Loja', 'ShopCardsPage', 'credit-card', '#0F766E', 'ui-shop', ['client'], 70),
-            $this->menu('SHOP', 'download', 'Baixar cardapio', 'Loja', 'ShopDownloadPage', 'download', '#475569', 'ui-shop', ['client'], 80),
+            $this->menu('SHOP', 'shop_home', 'Loja', 'Loja', 'ShopIndex', 'shopping-bag', '#0EA5E9', 'ui-shop', $human, 10),
+            $this->menu('SHOP', 'franchises', 'Franquias', 'Loja', 'ShopFranchiseLocatorPage', 'map-pin', '#16A34A', 'ui-shop', $human, 20),
+            $this->menu('SHOP', 'loyalty', 'Fidelidade', 'Loja', 'ShopLoyaltyPage', 'gift', '#F59E0B', 'ui-shop', $human, 30),
+            $this->menu('SHOP', 'cart', 'Carrinho', 'Loja', 'ShopCartPage', 'shopping-cart', '#0EA5E9', 'ui-shop', $human, 40),
+            $this->menu('SHOP', 'orders', 'Meus pedidos', 'Loja', 'ShopOrdersPage', 'package', '#7C3AED', 'ui-shop', $human, 50),
+            $this->menu('SHOP', 'profile', 'Perfil', 'Loja', 'ShopProfilePage', 'user', '#64748B', 'ui-shop', $human, 60),
+            $this->menu('SHOP', 'cards', 'Cartoes', 'Loja', 'ShopCardsPage', 'credit-card', '#0F766E', 'ui-shop', $human, 70),
+            $this->menu('SHOP', 'download', 'Baixar cardapio', 'Loja', 'ShopDownloadPage', 'download', '#475569', 'ui-shop', $human, 80),
         ];
     }
 

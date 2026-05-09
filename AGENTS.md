@@ -25,6 +25,7 @@
 - `people_link` é a fonte única de verdade dos papéis backend.
 - O menu da home deve ser filtrado por `menu.app_type` e por `people_link.link_type`; `people_role`/`menu_role` nao devem ser usados para permissao de menu novo.
 - `ROLE_SUPER` nao e gravado como vinculo de menu: ele apenas ignora o filtro de `link_type` dentro do `APP_TYPE` atual.
+- Menus configuraveis usam apenas vinculos humanos (`employee`, `owner`, `director`, `manager`, `salesman`, `after-sales`). `client`, `provider` e `franchisee` sao vinculos comerciais e nao devem aparecer como perfis de menu.
 - `User` não pode devolver roles estáticos; token e sessão devem refletir os vínculos resolvidos.
 - Roles humanas explícitas: `employee`, `owner`, `director`, `manager`, `salesman`, `after-sales`.
 - Roles comerciais explícitas: `client`, `provider`, `franchisee`.
