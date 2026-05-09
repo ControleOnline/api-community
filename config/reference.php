@@ -1806,6 +1806,30 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         },
  *     }>,
  * }
+ * @psalm-type DoctrineMigrationsConfig = array{
+ *     enable_service_migrations?: bool|Param, // Whether to enable fetching migrations from the service container. // Default: false
+ *     migrations_paths?: array<string, scalar|Param|null>,
+ *     services?: array<string, scalar|Param|null>,
+ *     factories?: array<string, scalar|Param|null>,
+ *     storage?: array{ // Storage to use for migration status metadata.
+ *         table_storage?: array{ // The default metadata storage, implemented as a table in the database.
+ *             table_name?: scalar|Param|null, // Default: null
+ *             version_column_name?: scalar|Param|null, // Default: null
+ *             version_column_length?: scalar|Param|null, // Default: null
+ *             executed_at_column_name?: scalar|Param|null, // Default: null
+ *             execution_time_column_name?: scalar|Param|null, // Default: null
+ *         },
+ *     },
+ *     migrations?: list<scalar|Param|null>,
+ *     connection?: scalar|Param|null, // Connection name to use for the migrations database. // Default: null
+ *     em?: scalar|Param|null, // Entity manager name to use for the migrations database (available when doctrine/orm is installed). // Default: null
+ *     all_or_nothing?: scalar|Param|null, // Run all migrations in a transaction. // Default: false
+ *     check_database_platform?: scalar|Param|null, // Adds an extra check in the generated migrations to allow execution only on the same platform as they were initially generated on. // Default: true
+ *     custom_template?: scalar|Param|null, // Custom template path for generated migration classes. // Default: null
+ *     organize_migrations?: scalar|Param|null, // Organize migrations mode. Possible values are: "BY_YEAR", "BY_YEAR_AND_MONTH", false // Default: false
+ *     enable_profiler?: bool|Param, // Whether or not to enable the profiler collector to calculate and visualize migration status. This adds some queries overhead. // Default: false
+ *     transactional?: bool|Param, // Whether or not to wrap migrations in a single transaction. // Default: true
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1819,6 +1843,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     vich_uploader?: VichUploaderConfig,
  *     nelmio_cors?: NelmioCorsConfig,
  *     monolog?: MonologConfig,
+ *     doctrine_migrations?: DoctrineMigrationsConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1833,6 +1858,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         vich_uploader?: VichUploaderConfig,
  *         nelmio_cors?: NelmioCorsConfig,
  *         monolog?: MonologConfig,
+ *         doctrine_migrations?: DoctrineMigrationsConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1847,6 +1873,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         vich_uploader?: VichUploaderConfig,
  *         nelmio_cors?: NelmioCorsConfig,
  *         monolog?: MonologConfig,
+ *         doctrine_migrations?: DoctrineMigrationsConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,

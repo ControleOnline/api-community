@@ -28,26 +28,24 @@ final class Version20260509120000 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        if ($schema->hasTable('menu_link_type')) {
+        if ($this->tableExists('menu_link_type')) {
             $this->addSql('DROP TABLE menu_link_type');
         }
 
-        if (!$schema->hasTable('menu')) {
+        if (!$this->tableExists('menu')) {
             return;
         }
 
-        $menu = $schema->getTable('menu');
-
-        if ($menu->hasIndex('menu_app_key_unique')) {
+        if ($this->indexExists('menu', 'menu_app_key_unique')) {
             $this->addSql('DROP INDEX menu_app_key_unique ON menu');
         }
 
-        if ($menu->hasIndex('menu_app_type_idx')) {
+        if ($this->indexExists('menu', 'menu_app_type_idx')) {
             $this->addSql('DROP INDEX menu_app_type_idx ON menu');
         }
 
         foreach (['enabled', 'sort_order', 'route_params', 'app_type', 'menu_key'] as $column) {
-            if ($menu->hasColumn($column)) {
+            if ($this->columnExists('menu', $column)) {
                 $this->addSql(sprintf('ALTER TABLE menu DROP COLUMN %s', $column));
             }
         }
@@ -55,51 +53,73 @@ final class Version20260509120000 extends AbstractMigration
 
     private function extendMenuTable(Schema $schema): void
     {
-        if (!$schema->hasTable('menu')) {
+        if (!$this->tableExists('menu')) {
             return;
         }
 
-        $menu = $schema->getTable('menu');
-
-        if (!$menu->hasColumn('menu_key')) {
+        if (!$this->columnExists('menu', 'menu_key')) {
             $this->addSql('ALTER TABLE menu ADD menu_key VARCHAR(100) DEFAULT NULL');
             $this->addSql("UPDATE menu INNER JOIN routes ON routes.id = menu.route_id SET menu.menu_key = CONCAT('legacy_', routes.route, '_', menu.id) WHERE menu.menu_key IS NULL OR menu.menu_key = ''");
             $this->addSql('ALTER TABLE menu MODIFY menu_key VARCHAR(100) NOT NULL');
         }
 
-        if (!$menu->hasColumn('app_type')) {
+        if (!$this->columnExists('menu', 'app_type')) {
             $this->addSql("ALTER TABLE menu ADD app_type VARCHAR(30) DEFAULT 'MANAGER' NOT NULL");
         }
 
-        if (!$menu->hasColumn('route_params')) {
+        if (!$this->columnExists('menu', 'route_params')) {
             $this->addSql('ALTER TABLE menu ADD route_params LONGTEXT DEFAULT NULL CHECK (json_valid(route_params))');
         }
 
-        if (!$menu->hasColumn('sort_order')) {
+        if (!$this->columnExists('menu', 'sort_order')) {
             $this->addSql('ALTER TABLE menu ADD sort_order INT DEFAULT 0 NOT NULL');
         }
 
-        if (!$menu->hasColumn('enabled')) {
+        if (!$this->columnExists('menu', 'enabled')) {
             $this->addSql('ALTER TABLE menu ADD enabled TINYINT(1) DEFAULT 1 NOT NULL');
         }
 
-        if (!$menu->hasIndex('menu_app_type_idx')) {
+        if (!$this->indexExists('menu', 'menu_app_type_idx')) {
             $this->addSql('CREATE INDEX menu_app_type_idx ON menu (app_type)');
         }
 
-        if (!$menu->hasIndex('menu_app_key_unique')) {
+        if (!$this->indexExists('menu', 'menu_app_key_unique')) {
             $this->addSql('CREATE UNIQUE INDEX menu_app_key_unique ON menu (app_type, menu_key)');
         }
     }
 
     private function createMenuLinkTypeTable(Schema $schema): void
     {
-        if ($schema->hasTable('menu_link_type')) {
+        if ($this->tableExists('menu_link_type')) {
             return;
         }
 
         $this->addSql('CREATE TABLE menu_link_type (id INT AUTO_INCREMENT NOT NULL, menu_id INT NOT NULL, link_type VARCHAR(30) NOT NULL, INDEX menu_link_type_link_type_idx (link_type), INDEX IDX_486AA71ACCD7E912 (menu_id), UNIQUE INDEX menu_link_type_unique (menu_id, link_type), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE menu_link_type ADD CONSTRAINT FK_486AA71ACCD7E912 FOREIGN KEY (menu_id) REFERENCES menu (id) ON DELETE CASCADE');
+    }
+
+    private function tableExists(string $tableName): bool
+    {
+        return (int) $this->connection->fetchOne(
+            'SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ?',
+            [$tableName]
+        ) > 0;
+    }
+
+    private function columnExists(string $tableName, string $columnName): bool
+    {
+        return (int) $this->connection->fetchOne(
+            'SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?',
+            [$tableName, $columnName]
+        ) > 0;
+    }
+
+    private function indexExists(string $tableName, string $indexName): bool
+    {
+        return (int) $this->connection->fetchOne(
+            'SELECT COUNT(*) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND INDEX_NAME = ?',
+            [$tableName, $indexName]
+        ) > 0;
     }
 
     private function seedMenus(): void
