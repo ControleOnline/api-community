@@ -10,7 +10,7 @@ build:
       dependencies:
         override:
           - composer self-update --2
-          - composer install --no-interaction --no-progress --prefer-dist --no-scripts --no-blocking
+          - composer install --no-interaction --no-progress --prefer-dist --no-scripts --no-security-blocking
           - composer require --dev --no-interaction --no-progress --no-scripts squizlabs/php_codesniffer:^3.11
       tests:
         override:
