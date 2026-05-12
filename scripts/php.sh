@@ -1,12 +1,12 @@
 sudo apt install composer -y
 
-sudo chmod o+x /home/MYDOMAIN
-sudo tee /etc/nginx/sites-available/MYDOMAIN.com.conf > /dev/null <<'EOF'
+sudo chmod o+x /var/www/api-community
+sudo tee /etc/nginx/sites-available/staging.controleonline.com.conf > /dev/null <<'EOF'
 server {
     listen 80;
-    server_name MYDOMAIN.com;
+    server_name s.controleonline.com staging.controleonline.com dev.controleonline.com;
 
-    root /home/MYDOMAIN/public;
+    root /var/www/api-community/public;
     index index.php;
 
     client_max_body_size 2G;
@@ -14,7 +14,7 @@ server {
     location ^~ /.well-known/acme-challenge/ {
         auth_basic off;
         allow all;
-        root /home/staging/frethical/public;
+        root /var/www/api-community/public;
     }
 
     location / {
@@ -37,11 +37,11 @@ server {
         return 404;
     }
 
-    error_log /var/log/nginx/MYDOMAIN_error.log;
-    access_log /var/log/nginx/MYDOMAIN_access.log;
+    error_log /var/log/nginx/staging.controleonline.com_error.log;
+    access_log /var/log/nginx/staging.controleonline.com_access.log;
 }
 EOF
 
-sudo ln -s /etc/nginx/sites-available/MYDOMAIN.com.conf /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/staging.controleonline.com.conf /etc/nginx/sites-enabled/
 
 sudo systemctl reload nginx
