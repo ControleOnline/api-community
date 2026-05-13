@@ -47,6 +47,14 @@
 - `panel_enabled`: empresa pode ser selecionada e usada no painel do domínio atual.
 - `permission` em `/people/companies/my` deve refletir a permissão efetiva no domínio atual. Quando a cadeia comercial do domínio atual não for válida, a empresa continua visível no seletor, mas pode retornar `guest`.
 
+## Regra Food99
+- Em `Food99`, apenas um código remoto pode ser considerado para vincular cliente: `receive_address.uid` do payload.
+- Não inferir nem “adivinhar” `Food99.code` por telefone, e-mail ou combinações parciais de payload.
+- Registros legados sem `uid` podem ser reconciliados por `nome + endereço completo` quando houver correspondência exata no banco.
+- Quando existir mais de um candidato ou o payload não trouxer `uid`, o fluxo deve tratar o caso como legado e exigir validação explícita, nunca fallback heurístico.
+- Invoices de repasse e cobrança da `Food99` devem sempre usar `receiver = 99 Food`, nunca `iFood` nem contexto legado reutilizado.
+- Pedidos de segunda a domingo entram na mesma invoice semanal da `Food99`, com vencimento na quarta-feira seguinte.
+
 ## Retorno de API
 - Toda resposta customizada interna deve seguir o padrão do `HydratorService`.
 - Exceções só são aceitáveis quando houver integração externa que imponha outro contrato.
