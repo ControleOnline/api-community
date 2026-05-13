@@ -52,6 +52,8 @@
 - Não inferir nem “adivinhar” `Food99.code` por telefone, e-mail ou combinações parciais de payload.
 - Registros legados sem `uid` podem ser reconciliados por `nome + endereço completo` quando houver correspondência exata no banco.
 - Quando existir mais de um candidato ou o payload não trouxer `uid`, o fluxo deve tratar o caso como legado e exigir validação explícita, nunca fallback heurístico.
+- Invoices de repasse e cobrança da `Food99` devem sempre usar `receiver = 99 Food`, nunca `iFood` nem contexto legado reutilizado.
+- Pedidos de segunda a domingo entram na mesma invoice semanal da `Food99`, com vencimento na quarta-feira seguinte.
 
 ## Retorno de API
 - Toda resposta customizada interna deve seguir o padrão do `HydratorService`.
