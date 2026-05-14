@@ -23,6 +23,9 @@
 
 ## Regra transversal de acesso
 - `people_link` é a fonte única de verdade dos papéis backend.
+- O menu da home deve ser filtrado por `menu.app_type` e por `people_link.link_type`; `people_role`/`menu_role` nao devem ser usados para permissao de menu novo.
+- `ROLE_SUPER` nao e gravado como vinculo de menu: ele apenas ignora o filtro de `link_type` dentro do `APP_TYPE` atual.
+- Menus configuraveis usam apenas vinculos humanos (`employee`, `owner`, `director`, `manager`, `salesman`, `after-sales`). `client`, `provider` e `franchisee` sao vinculos comerciais e nao devem aparecer como perfis de menu.
 - `User` não pode devolver roles estáticos; token e sessão devem refletir os vínculos resolvidos.
 - Roles humanas explícitas: `employee`, `owner`, `director`, `manager`, `salesman`, `after-sales`.
 - Roles comerciais explícitas: `client`, `provider`, `franchisee`.
@@ -44,7 +47,16 @@
 - `panel_enabled`: empresa pode ser selecionada e usada no painel do domínio atual.
 - `permission` em `/people/companies/my` deve refletir a permissão efetiva no domínio atual. Quando a cadeia comercial do domínio atual não for válida, a empresa continua visível no seletor, mas pode retornar `guest`.
 
+## Regra Food99
+- Em `Food99`, apenas um código remoto pode ser considerado para vincular cliente: `receive_address.uid` do payload.
+- Não inferir nem “adivinhar” `Food99.code` por telefone, e-mail ou combinações parciais de payload.
+- Registros legados sem `uid` podem ser reconciliados por `nome + endereço completo` quando houver correspondência exata no banco.
+- Quando existir mais de um candidato ou o payload não trouxer `uid`, o fluxo deve tratar o caso como legado e exigir validação explícita, nunca fallback heurístico.
+- Invoices de repasse e cobrança da `Food99` devem sempre usar `receiver = 99 Food`, nunca `iFood` nem contexto legado reutilizado.
+- Pedidos de segunda a domingo entram na mesma invoice semanal da `Food99`, com vencimento na quarta-feira seguinte.
+
 ## Retorno de API
 - Toda resposta customizada interna deve seguir o padrão do `HydratorService`.
 - Exceções só são aceitáveis quando houver integração externa que imponha outro contrato.
 - Totais de listagens devem ser expostos pelo mecanismo de `summary` do backend, usando `CollectionSummary` ou resolver especifico. O frontend nao deve precisar somar a pagina carregada para exibir totais filtrados.
+- Quando uma listagem for consumida por `DefaultTable` React, o contrato de busca e ordenacao precisa existir no backend: `CustomOrFilter` ou equivalente para `search`, `OrderFilter` para os campos usados pelo store e `DateFilter` para periodos. Datas ordenam pelo valor persistido, nao por string formatada.

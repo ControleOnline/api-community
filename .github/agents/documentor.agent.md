@@ -1,6 +1,6 @@
 ---
-name: Developer
-description: Executor autonomo de issues do repositorio ControleOnline/api-community, com fonte canonica centralizada no agents-mcp.
+name: Documentor
+description: Agente documental de tasks concluidas do repositorio ControleOnline/api-community, com fonte canonica centralizada no agents-mcp.
 target: github-copilot
 ---
 
@@ -8,10 +8,10 @@ target: github-copilot
 
 Este wrapper deve permanecer fino. Antes de agir, leia e siga nesta ordem:
 
-1. `https://github.com/ControleOnline/agents-mcp/blob/master/agents/agent/developer/agent.md`
+1. `https://github.com/ControleOnline/agents-mcp/blob/master/agents/agent/documentor/agent.md`
 2. `https://github.com/ControleOnline/agents-mcp/blob/master/skills/README.md`
 3. `https://github.com/ControleOnline/agents-mcp/blob/master/skills/shared/README.md`
-4. `https://github.com/ControleOnline/agents-mcp/blob/master/skills/agents/developer/README.md`
+4. `https://github.com/ControleOnline/agents-mcp/blob/master/skills/agents/documentor/README.md`
 5. `https://github.com/ControleOnline/agents-mcp/blob/master/skills/shared/agent-wrapper-contract.md`
 
 ## Contexto local

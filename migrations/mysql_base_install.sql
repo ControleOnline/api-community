@@ -929,7 +929,12 @@ CREATE TABLE `menu` (
   `id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   `menu` varchar(50) NOT NULL,
-  `route_id` int(11) NOT NULL
+  `route_id` int(11) NOT NULL,
+  `menu_key` varchar(100) NOT NULL,
+  `app_type` varchar(30) NOT NULL DEFAULT 'MANAGER',
+  `route_params` longtext DEFAULT NULL CHECK (json_valid(`route_params`)),
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `enabled` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -942,6 +947,18 @@ CREATE TABLE `menu_role` (
   `id` int(11) NOT NULL,
   `menu_id` int(11) NOT NULL,
   `role_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `menu_link_type`
+--
+
+CREATE TABLE `menu_link_type` (
+  `id` int(11) NOT NULL,
+  `menu_id` int(11) NOT NULL,
+  `link_type` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -2438,7 +2455,9 @@ ALTER TABLE `measure_type`
 --
 ALTER TABLE `menu`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `menu_app_key_unique` (`app_type`,`menu_key`),
   ADD KEY `category_id` (`category_id`),
+  ADD KEY `menu_app_type_idx` (`app_type`),
   ADD KEY `menu_ibfk_3` (`route_id`);
 
 --
@@ -2448,6 +2467,15 @@ ALTER TABLE `menu_role`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `menu_id` (`menu_id`,`role_id`),
   ADD KEY `role_id` (`role_id`);
+
+--
+-- Indexes for table `menu_link_type`
+--
+ALTER TABLE `menu_link_type`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `menu_link_type_unique` (`menu_id`,`link_type`),
+  ADD KEY `menu_link_type_link_type_idx` (`link_type`),
+  ADD KEY `IDX_486AA71ACCD7E912` (`menu_id`);
 
 --
 -- Indexes for table `messengers`
@@ -3373,6 +3401,12 @@ ALTER TABLE `menu_role`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `menu_link_type`
+--
+ALTER TABLE `menu_link_type`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `messengers`
 --
 ALTER TABLE `messengers`
@@ -4084,6 +4118,12 @@ ALTER TABLE `menu`
 ALTER TABLE `menu_role`
   ADD CONSTRAINT `menu_role_ibfk_1` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `menu_role_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `menu_link_type`
+--
+ALTER TABLE `menu_link_type`
+  ADD CONSTRAINT `FK_486AA71ACCD7E912` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `messengers`

@@ -8,6 +8,8 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
+require_once __DIR__ . '/dumpCleanUp.php';
+
 final class Version20260228180000 extends AbstractMigration
 {
     public function getDescription(): string
