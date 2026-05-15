@@ -1,7 +1,7 @@
 <?php
 namespace App\Tests\Functional;
 
-use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
+use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use App\Entity\User;
 
 class LessonResourceTest extends ApiTestCase
