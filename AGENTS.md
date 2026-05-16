@@ -47,6 +47,13 @@
 - `panel_enabled`: empresa pode ser selecionada e usada no painel do domínio atual.
 - `permission` em `/people/companies/my` deve refletir a permissão efetiva no domínio atual. Quando a cadeia comercial do domínio atual não for válida, a empresa continua visível no seletor, mas pode retornar `guest`.
 
+## Regra transversal de Food99
+- O financeiro de `Food99` deve ler somente o snapshot persistido em `order.otherInformations.Food99`.
+- `Food99Service` nao deve criar invoices inline quando o pedido nasce; a geracao e o backfill ficam centralizados em `MarketplaceOrderFinancialGenerationService`.
+- Em invoices de `Food99`, `iFood` so pode existir como contexto legado de estado do pedido, nunca como nome de conta, pagamento ou receptor.
+- Na `Food99`, a carteira de repasse da loja vem apenas da configuracao da tela de integracao e e a unica fonte valida para `provider_wallet`; nao inferir nem reaproveitar `99 Food` ou `iFood` como carteira da loja.
+- Backfill de `Food99` deve ser idempotente e sempre reconstruir as invoices a partir do snapshot do pedido, sem consultar fontes externas adicionais.
+
 ## Regra Food99
 - Em `Food99`, apenas um código remoto pode ser considerado para vincular cliente: `receive_address.uid` do payload.
 - Não inferir nem “adivinhar” `Food99.code` por telefone, e-mail ou combinações parciais de payload.
