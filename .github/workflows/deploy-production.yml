@@ -55,3 +55,5 @@ jobs:
                   rm -f var/cache/prod/serialization.php
                   php -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null
                   php bin/console tenant:migrations:migrate --no-interaction
+                  mkdir -p var/log
+                  nohup php bin/console tenant:messenger:consume async --domain=api.controleonline.com >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
