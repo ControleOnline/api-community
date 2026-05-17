@@ -1,5 +1,6 @@
 ## Configuração local para testes
 - `api-community/key.local` guarda a chave de API de um usuário de teste. Use quando precisar validar autenticação real.
+- Quando precisar acessar um ambiente por SSH para depurar ou publicar, consulte a tabela `servers` do banco do ambiente. Ela concentra os dados operacionais do acesso (`app_host`, `host`, `user`, `port` e `password`) e é a fonte de verdade para esse tipo de conexão.
 
 ## Qualidade
 - Rodar lint e testes antes de concluir.
