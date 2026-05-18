@@ -1,5 +1,6 @@
 ## Configuração local para testes
 - `api-community/key.local` guarda a chave de API de um usuário de teste. Use quando precisar validar autenticação real.
+- Quando precisar acessar um ambiente por SSH para depurar ou publicar, consulte a tabela `servers` do banco do ambiente. Ela concentra os dados operacionais do acesso (`app_host`, `host`, `user`, `port` e `password`) e é a fonte de verdade para esse tipo de conexão.
 
 ## Qualidade
 - Rodar lint e testes antes de concluir.
@@ -25,9 +26,9 @@
 - `people_link` é a fonte única de verdade dos papéis backend.
 - O menu da home deve ser filtrado por `menu.app_type` e por `people_link.link_type`; `people_role`/`menu_role` nao devem ser usados para permissao de menu novo.
 - `ROLE_SUPER` nao e gravado como vinculo de menu: ele apenas ignora o filtro de `link_type` dentro do `APP_TYPE` atual.
-- Menus configuraveis usam apenas vinculos humanos (`employee`, `owner`, `director`, `manager`, `salesman`, `after-sales`). `client`, `provider` e `franchisee` sao vinculos comerciais e nao devem aparecer como perfis de menu.
+- Menus configuraveis usam apenas vinculos humanos (`employee`, `owner`, `director`, `manager`, `salesman`, `after-sales`, `courier`). `client`, `provider` e `franchisee` sao vinculos comerciais e nao devem aparecer como perfis de menu.
 - `User` não pode devolver roles estáticos; token e sessão devem refletir os vínculos resolvidos.
-- Roles humanas explícitas: `employee`, `owner`, `director`, `manager`, `salesman`, `after-sales`.
+- Roles humanas explícitas: `employee`, `owner`, `director`, `manager`, `salesman`, `after-sales`, `courier`.
 - Roles comerciais explícitas: `client`, `provider`, `franchisee`.
 - `ROLE_SUPER` existe apenas para `owner` da empresa principal.
 - `ROLE_HUMAN` é apenas um agregador de entrada da API; ele não deve ser persistido nem salvo no token.
@@ -46,6 +47,13 @@
 - `commercial_enabled`: empresa tem cadeia comercial válida até a principal no domínio atual.
 - `panel_enabled`: empresa pode ser selecionada e usada no painel do domínio atual.
 - `permission` em `/people/companies/my` deve refletir a permissão efetiva no domínio atual. Quando a cadeia comercial do domínio atual não for válida, a empresa continua visível no seletor, mas pode retornar `guest`.
+
+## Regra transversal de Food99
+- O financeiro de `Food99` deve ler somente o snapshot persistido em `order.otherInformations.Food99`.
+- `Food99Service` nao deve criar invoices inline quando o pedido nasce; a geracao e o backfill ficam centralizados em `MarketplaceOrderFinancialGenerationService`.
+- Em invoices de `Food99`, `iFood` so pode existir como contexto legado de estado do pedido, nunca como nome de conta, pagamento ou receptor.
+- Na `Food99`, a carteira de repasse da loja vem apenas da configuracao da tela de integracao e e a unica fonte valida para `provider_wallet`; nao inferir nem reaproveitar `99 Food` ou `iFood` como carteira da loja.
+- Backfill de `Food99` deve ser idempotente e sempre reconstruir as invoices a partir do snapshot do pedido, sem consultar fontes externas adicionais.
 
 ## Regra Food99
 - Em `Food99`, apenas um código remoto pode ser considerado para vincular cliente: `receive_address.uid` do payload.
