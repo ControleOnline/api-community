@@ -65,7 +65,8 @@
 - Pedidos de segunda a domingo entram na mesma invoice semanal da `Food99`, com vencimento na quarta-feira seguinte.
 
 ## Retorno de API
-- Toda resposta customizada interna deve seguir o padrão do `HydratorService`.
+- Toda resposta customizada interna deve seguir o padrão do `HydratorService`, com `@type: Error`, `hydra:title` e `hydra:description`.
+- Controllers nao devem devolver `{"error": ...}` em paralelo quando a resposta interna puder usar o envelope do `HydratorService`.
 - Exceções só são aceitáveis quando houver integração externa que imponha outro contrato.
 - Totais de listagens devem ser expostos pelo mecanismo de `summary` do backend, usando `CollectionSummary` ou resolver especifico. O frontend nao deve precisar somar a pagina carregada para exibir totais filtrados.
 - Quando uma listagem for consumida por `DefaultTable` React, o contrato de busca e ordenacao precisa existir no backend: `CustomOrFilter` ou equivalente para `search`, `OrderFilter` para os campos usados pelo store e `DateFilter` para periodos. Datas ordenam pelo valor persistido, nao por string formatada.
