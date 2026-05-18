@@ -22,3 +22,6 @@ controleonline_common:
 controleonline_food:
     resource: ../../modules/controleonline/integration/src/Controller/
     type: attribute    
+controleonline_logistic:
+    resource: ../../modules/controleonline/logistic/src/Controller/
+    type: attribute
