@@ -10,16 +10,16 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: "18.17.1"
-      - name: Update Controle Online
+      - name: Update API NEW LaveGo
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.API_HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.CONTROLEONLINE }}
-          port: ${{ secrets.PORT }}
+          host: ${{ secrets.HOST_APINEW_LAVEGO }}
+          username: ${{ secrets.USER_APINEW_LAVEGO }}
+          key: ${{ secrets.PASS_APINEW_LAVEGO }}
+          port: ${{ secrets.PORT_APINEW_LAVEGO }}
           script: |
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
-                  cd ~/sistemas/controleonline/api
+                  cd ~/api
                   git fetch origin
                   git checkout master
                   git reset --hard origin/master
@@ -56,4 +56,4 @@ jobs:
                   php -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null
                   php bin/console tenant:migrations:migrate --no-interaction
                   mkdir -p var/log
-                  nohup php bin/console tenant:messenger:consume async --domain=api.controleonline.com >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
+                  nohup php bin/console tenant:messenger:consume async --domain=apinew.lave-go.com >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &

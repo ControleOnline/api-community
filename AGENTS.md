@@ -53,6 +53,7 @@
 - `Food99Service` nao deve criar invoices inline quando o pedido nasce; a geracao e o backfill ficam centralizados em `MarketplaceOrderFinancialGenerationService`.
 - Em invoices de `Food99`, `iFood` so pode existir como contexto legado de estado do pedido, nunca como nome de conta, pagamento ou receptor.
 - Na `Food99`, a carteira de repasse da loja vem apenas da configuracao da tela de integracao e e a unica fonte valida para `provider_wallet`; nao inferir nem reaproveitar `99 Food` ou `iFood` como carteira da loja.
+- Nos pedidos filhos de logistica da `Food99`, `provider` e sempre o motoboy, `payer` e `99 Food`, `client` e a empresa do pedido pai, `deliveryContact` e o cliente do pedido pai, `addressOrigin` precisa estar sempre preenchido e o filho nao deve duplicar `otherInformations`.
 - Backfill de `Food99` deve ser idempotente e sempre reconstruir as invoices a partir do snapshot do pedido, sem consultar fontes externas adicionais.
 
 ## Regra Food99
@@ -64,7 +65,8 @@
 - Pedidos de segunda a domingo entram na mesma invoice semanal da `Food99`, com vencimento na quarta-feira seguinte.
 
 ## Retorno de API
-- Toda resposta customizada interna deve seguir o padrão do `HydratorService`.
+- Toda resposta customizada interna deve seguir o padrão do `HydratorService`, com `@type: Error`, `hydra:title` e `hydra:description`.
+- Controllers nao devem devolver `{"error": ...}` em paralelo quando a resposta interna puder usar o envelope do `HydratorService`.
 - Exceções só são aceitáveis quando houver integração externa que imponha outro contrato.
 - Totais de listagens devem ser expostos pelo mecanismo de `summary` do backend, usando `CollectionSummary` ou resolver especifico. O frontend nao deve precisar somar a pagina carregada para exibir totais filtrados.
 - Quando uma listagem for consumida por `DefaultTable` React, o contrato de busca e ordenacao precisa existir no backend: `CustomOrFilter` ou equivalente para `search`, `OrderFilter` para os campos usados pelo store e `DateFilter` para periodos. Datas ordenam pelo valor persistido, nao por string formatada.
