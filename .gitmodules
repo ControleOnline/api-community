@@ -37,9 +37,9 @@
 	path = modules/controleonline/ead
 	url = https://github.com/ControleOnline/api-platform-ead.git
 	branch = master
-[submodule "modules/controleonline/dashboard"]
-	path = modules/controleonline/dashboard
-	url = https://github.com/ControleOnline/api-platform-dashboard.git
+[submodule "modules/controleonline/report"]
+	path = modules/controleonline/report
+	url = https://github.com/ControleOnline/api-platform-report.git
 	branch = master
 [submodule "modules/controleonline/common"]
 	path = modules/controleonline/common

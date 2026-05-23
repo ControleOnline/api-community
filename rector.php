@@ -12,7 +12,7 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . '/modules/controleonline/common/src/Entity',
         __DIR__ . '/modules/controleonline/financial/src/Entity',
         __DIR__ . '/modules/controleonline/contract/src/Entity',
-        __DIR__ . '/modules/controleonline/dashboard/src/Entity',
+        __DIR__ . '/modules/controleonline/report/src/Entity',
         __DIR__ . '/modules/controleonline/ead/src/Entity',
         __DIR__ . '/modules/controleonline/orders/src/Entity',
         __DIR__ . '/modules/controleonline/people/src/Entity',

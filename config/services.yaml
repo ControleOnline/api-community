@@ -36,7 +36,7 @@ imports:
     - { resource: "../modules/controleonline/common/config/config.yaml" }
     - { resource: "../modules/controleonline/financial/config/config.yaml" }
     - { resource: "../modules/controleonline/contract/config/config.yaml" }
-    - { resource: "../modules/controleonline/dashboard/config/config.yaml" }
+    - { resource: "../modules/controleonline/report/config/config.yaml" }
     - { resource: "../modules/controleonline/ead/config/config.yaml" }
     - { resource: "../modules/controleonline/orders/config/config.yaml" }
     - { resource: "../modules/controleonline/people/config/config.yaml" }

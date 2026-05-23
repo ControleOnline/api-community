@@ -11,7 +11,7 @@
         "controleonline/accounting": "dev-master",
         "controleonline/common": "dev-master",
         "controleonline/contract": "dev-master",
-        "controleonline/dashboard": "dev-master",
+        "controleonline/report": "dev-master",
         "controleonline/ead": "dev-master",
         "controleonline/financial": "dev-master",
         "controleonline/integration": "dev-master",
@@ -137,7 +137,7 @@
             "modules/controleonline/{$name}/": [
                 "controleonline/common",
                 "controleonline/contract",
-                "controleonline/dashboard",
+                "controleonline/report",
                 "controleonline/ead",
                 "controleonline/financial",
                 "controleonline/multi-tenancy",
