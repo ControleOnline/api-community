@@ -1551,6 +1551,7 @@ CREATE TABLE `product_group` (
   `minimum` float NOT NULL,
   `maximum` float NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 1,
+  `show_in_display` tinyint(1) NOT NULL DEFAULT 0,
   `group_order` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

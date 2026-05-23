@@ -26,6 +26,7 @@
 - `order_product_queues` e a árvore de `orderProducts` sao contratos diferentes.
 - A fila de producao persiste apenas o que entrou na producao; a visibilidade de filho no pai e regra visual do consumidor.
 - `showInParentQueue` nao pode criar registros sintéticos nem alterar a persistencia da fila real.
+- `ProductGroup.showInDisplay` e a flag de visibilidade operacional do grupo. Quando falsa, o grupo continua agrupando itens, mas o titulo nao deve aparecer em displays nem na impressao. O default de novos grupos e oculto (`false`).
 - A impressao em papel da fila deve seguir a mesma regra visual do display correspondente: item materializado nao mostra `2x`, e prefixo de quantidade so aparece acima de 1 em itens internos nao materializados.
 
 ## Regra transversal de acesso
