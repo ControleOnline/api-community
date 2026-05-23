@@ -22,6 +22,12 @@
 - Você deve manter o funding.yml do projeto e dos submódulos sempre atualizados e se não existir, deve criar.
 - Você deve manter o .scrutinizer.yml do projeto e dos submódulos sempre atualizados e se não existir, deve criar.
 
+## Regra transversal de filas e hierarquia
+- `order_product_queues` e a árvore de `orderProducts` sao contratos diferentes.
+- A fila de producao persiste apenas o que entrou na producao; a visibilidade de filho no pai e regra visual do consumidor.
+- `showInParentQueue` nao pode criar registros sintéticos nem alterar a persistencia da fila real.
+- A impressao em papel da fila deve seguir a mesma regra visual do display correspondente: item materializado nao mostra `2x`, e prefixo de quantidade so aparece acima de 1 em itens internos nao materializados.
+
 ## Regra transversal de acesso
 - `people_link` é a fonte única de verdade dos papéis backend.
 - O menu da home deve ser filtrado por `menu.app_type` e por `people_link.link_type`; `people_role`/`menu_role` nao devem ser usados para permissao de menu novo.
