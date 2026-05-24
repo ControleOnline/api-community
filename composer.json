@@ -36,6 +36,7 @@
         "dragonmantank/cron-expression": "^3.4",
         "endroid/qr-code": "^6.0",
         "fpdf/fpdf": "^1.86",
+        "google/auth": "^1.45",
         "guzzlehttp/guzzle": "^7.9",
         "league/html-to-markdown": "^5.1",
         "league/oauth2-facebook": "^2.2",
