@@ -64,9 +64,10 @@
 - Backfill de `Food99` deve ser idempotente e sempre reconstruir as invoices a partir do snapshot do pedido, sem consultar fontes externas adicionais.
 
 ## Regra transversal de push do Manager
-- Novo pedido aberto deve disparar mensagem interna assíncrona para push humano do `MANAGER` via Firebase Cloud Messaging HTTP v1.
+- Novo pedido aberto e eventos financeiros humanos (`store.opened`, `store.closed`, `cash.closed`) devem disparar mensagem interna assíncrona para push do `MANAGER` via Firebase Cloud Messaging HTTP v1.
 - O envio FCM deve resolver destinatarios por `device_config.type = MANAGER` da empresa do pedido e token em `device.metadata.pushTokens.manager.android.deviceToken`, deduplicando tokens.
 - O payload do push humano deve apontar para `OrderDetails`, com `orderId` e `companyId`; nao usar rota de KDS/LDS nesse fluxo.
+- Eventos financeiros do `MANAGER` devem ir pelo mesmo canal FCM, mas sem rota de KDS/LDS e sem depender do app aberto.
 - O canal do push humano do `MANAGER` usa som padrao do sistema. Audio customizado e `caixa.m4a` pertencem aos fluxos locais de KDS/runtime, nao ao FCM humano.
 - Falha em token individual deve ser logada e nunca bloquear o `postPersist` do pedido.
 
