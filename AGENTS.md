@@ -70,7 +70,7 @@
 - O payload do push humano deve apontar para `OrderDetails`, com `orderId` e `companyId`; nao usar rota de KDS/LDS nesse fluxo.
 - Eventos financeiros do `MANAGER` devem ir pelo mesmo canal FCM, mas sem rota de KDS/LDS e sem depender do app aberto.
 - O canal do push humano do `MANAGER` usa o som nativo `caixa.m4a` empacotado no app; URL de audio configurada vale apenas para fluxos locais com app aberto.
-- `Websocket` e `PushNotification` sao filas efemeras: entregue deve ser apagado da `integration`; aberto nao entregue deve ser removido pela manutencao apos 24 horas.
+- `Websocket` e `PushNotification` sao filas efemeras: entregue deve ser apagado da `integration`; qualquer registro remanescente com mais de 24 horas deve ser removido pela manutencao.
 - Falha em token individual deve ser logada e nunca bloquear o `postPersist` do pedido.
 
 ## Regra Food99
