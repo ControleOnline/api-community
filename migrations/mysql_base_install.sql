@@ -1069,6 +1069,7 @@ CREATE TABLE `oauth` (
 
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL,
+  `external_code` varchar(255) DEFAULT NULL,
   `order_type` varchar(50) DEFAULT 'sale',
   `app` text DEFAULT NULL,
   `discount_coupon_id` int(11) DEFAULT NULL,
