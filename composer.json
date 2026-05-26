@@ -49,7 +49,7 @@
         "nfephp-org/sped-nfe": "dev-master",
         "nfephp-org/sped-pos": "dev-master",
         "phpdocumentor/reflection-docblock": "^5.4",
-        "phpoffice/phpspreadsheet": "^4.1",
+        "phpoffice/phpspreadsheet": "^5.7",
         "symfony/asset": "^7.0",
         "symfony/console": "^7.0",
         "symfony/doctrine-messenger": "^7.0",
