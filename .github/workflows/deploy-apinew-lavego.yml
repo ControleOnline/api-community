@@ -9,6 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "18.17.1"
+
       - name: Check secrets
         run: |
           echo "HOST is empty: ${{ secrets.HOST_APINEW_LAVEGO == '' }}"
@@ -16,10 +21,6 @@ jobs:
           echo "PASS is empty: ${{ secrets.PASS_APINEW_LAVEGO == '' }}"
           echo "PORT is empty: ${{ secrets.PORT_APINEW_LAVEGO == '' }}"
 
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
-        with:
-          node-version: "18.17.1"
       - name: Update API NEW LaveGo
         uses: appleboy/ssh-action@master
         with:
