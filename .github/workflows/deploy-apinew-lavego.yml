@@ -1,23 +1,32 @@
 name: Deploy API NEW LaveGo
 on:
   push:
-    branches: [master]
+    branches: [staging]
   workflow_dispatch:
   
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
           node-version: "18.17.1"
+
+      - name: Check secrets
+        run: |
+          echo "HOST is empty: ${{ secrets.HOST_APINEW_LAVEGO == '' }}"
+          echo "USER is empty: ${{ secrets.USER_APINEW_LAVEGO == '' }}"
+          echo "PASS is empty: ${{ secrets.PASS_APINEW_LAVEGO == '' }}"
+          echo "PORT is empty: ${{ secrets.PORT_APINEW_LAVEGO == '' }}"
+
       - name: Update API NEW LaveGo
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_APINEW_LAVEGO }}
           username: ${{ secrets.USER_APINEW_LAVEGO }}
-          key: ${{ secrets.PASS_APINEW_LAVEGO }}
+          password: ${{ secrets.PASS_APINEW_LAVEGO }}
           port: ${{ secrets.PORT_APINEW_LAVEGO }}
           script: |
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"

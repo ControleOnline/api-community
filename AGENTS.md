@@ -87,6 +87,11 @@
 - Invoices de repasse e cobrança da `Food99` devem sempre usar `receiver = 99 Food`, nunca `iFood` nem contexto legado reutilizado.
 - Pedidos de segunda a domingo entram na mesma invoice semanal da `Food99`, com vencimento na quarta-feira seguinte.
 
+## Regra transversal de marketplace
+- `IntegrationService`, `LogisticsQuoteService` e `OrderLogisticsService` devem resolver providers por registry/contrato, nunca por concatenação de nome de classe.
+- `iFood`, `Food99` e futuros providers como `Keeta` devem expor contratos de capability; a classe concreta fica como fachada e os detalhes de domínio ficam em serviços internos.
+- Novas consultas de integração devem ficar em repositórios ou resolvers dedicados; services só orquestram e persistem.
+
 ## Retorno de API
 - Toda resposta customizada interna deve seguir o padrão do `HydratorService`, com `@type: Error`, `hydra:title` e `hydra:description`.
 - Controllers nao devem devolver `{"error": ...}` em paralelo quando a resposta interna puder usar o envelope do `HydratorService`.
