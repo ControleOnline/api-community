@@ -1,5 +1,5 @@
 <?php
-// ALEMAC // 2026/05/23 12:00:00
+// ALEMAC // 2026/05/26 12:00:00
 
 declare(strict_types=1);
 
@@ -8,29 +8,29 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-final class Version20260523120000 extends AbstractMigration
+final class Version20260526120000 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Add show_in_display flag to product_group';
+        return 'Add externalCode to orders';
     }
 
     public function up(Schema $schema): void
     {
-        if ($this->columnExists('product_group', 'show_in_display')) {
+        if ($this->columnExists('orders', 'external_code')) {
             return;
         }
 
-        $this->addSql('ALTER TABLE `product_group` ADD `show_in_display` TINYINT(1) DEFAULT 0 NOT NULL AFTER `active`');
+        $this->addSql('ALTER TABLE `orders` ADD `external_code` VARCHAR(255) DEFAULT NULL AFTER `id`');
     }
 
     public function down(Schema $schema): void
     {
-        if (!$this->columnExists('product_group', 'show_in_display')) {
+        if (!$this->columnExists('orders', 'external_code')) {
             return;
         }
 
-        $this->addSql('ALTER TABLE `product_group` DROP `show_in_display`');
+        $this->addSql('ALTER TABLE `orders` DROP COLUMN `external_code`');
     }
 
     private function columnExists(string $tableName, string $columnName): bool
