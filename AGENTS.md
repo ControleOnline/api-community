@@ -29,6 +29,12 @@
 - `ProductGroup.showInDisplay` e a flag de visibilidade operacional do grupo. Quando falsa, o grupo continua agrupando itens, mas o titulo nao deve aparecer em displays nem na impressao. O default de novos grupos e oculto (`false`).
 - A impressao em papel da fila deve seguir a mesma regra visual do display correspondente: item materializado nao mostra `2x`, e prefixo de quantidade so aparece acima de 1 em itens internos nao materializados.
 
+## Regra transversal de grupos compartilhados
+- `product_group.company_id` e a fonte de escopo da empresa para o grupo.
+- `product_group_parent` e a unica fonte de verdade do vinculo `pai -> grupo`.
+- O runtime nao deve ler nem gravar `product_group.parent_product_id`; esse campo fica restrito a migration/backfill legado.
+- Em `product_group_product`, `component` e `package` compartilham identidade por `product_group_id + product_child_id + product_type + quantity`; `feedstock` continua ancorado por `product_id`.
+
 ## Regra transversal de acesso
 - `people_link` é a fonte única de verdade dos papéis backend.
 - O menu da home deve ser filtrado por `menu.app_type` e por `people_link.link_type`; `people_role`/`menu_role` nao devem ser usados para permissao de menu novo.
