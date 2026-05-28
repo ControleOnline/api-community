@@ -71,6 +71,8 @@ jobs:
                 
                   if ! grep -qF "$BLOCK_START" "$HTACCESS" 2>/dev/null; then
                     cat <<'EOF' >> "$HTACCESS"
+
+
                 
                   # php -- BEGIN cPanel-generated handler, do not edit
                   # Set the “ea-php84” package as the default “PHP” programming language.
