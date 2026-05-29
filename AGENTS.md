@@ -92,6 +92,12 @@
 - `iFood`, `Food99` e futuros providers como `Keeta` devem expor contratos de capability; a classe concreta fica como fachada e os detalhes de domínio ficam em serviços internos.
 - Novas consultas de integração devem ficar em repositórios ou resolvers dedicados; services só orquestram e persistem.
 
+## Regra transversal de extra_data
+- `extra_data` e `extra_fields` nao sao destino de snapshot rico nem de estado de dominio.
+- O uso permitido em `extra_data` fica restrito a IDs, chaves remotas e codigos de integracao que nao tenham tabela/coluna materializada equivalente.
+- Se a informacao ja tiver destino canonico em `people`, `orders`, `invoices`, `configs`, `addresses` ou outra entidade do dominio, ela deve ser materializada ali e removida de `extra_data`/`extra_fields` depois do backfill.
+- Pessoas, pedidos, financeiro e logistica nao devem continuar gravando estado rico em `extra_data`; o backend deve preferir a tabela dona ou `otherInformations` do proprio agregado quando o contrato ja existir.
+
 ## Retorno de API
 - Toda resposta customizada interna deve seguir o padrão do `HydratorService`, com `@type: Error`, `hydra:title` e `hydra:description`.
 - Controllers nao devem devolver `{"error": ...}` em paralelo quando a resposta interna puder usar o envelope do `HydratorService`.
