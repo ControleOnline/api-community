@@ -40,6 +40,40 @@ jobs:
                     git reset --hard origin/master
                     git clean -fd
                   '
+
+                  ### OBRIGATÓRIO PARA FUNCIONAR COM O PHP 8.4 - NÃO REMOVER ###
+                  HTACCESS="$HOME/public_html/.htaccess"
+                  BLOCK_START="cPanel-generated handler"
+
+                  if ! grep -qF "$BLOCK_START" "$HTACCESS" 2>/dev/null; then
+                    {
+                      echo ''
+                      echo '# php -- BEGIN cPanel-generated handler, do not edit'
+                      echo '# Set the "ea-php84" package as the default "PHP" programming language.'
+                      echo '<IfModule mime_module>'
+                      echo '  AddHandler application/x-httpd-ea-php84 .php .php8 .phtml'
+                      echo '</IfModule>'
+                      echo '# php -- END cPanel-generated handler, do not edit'
+                      echo ''
+                    } >> "$HTACCESS"
+                  fi
+                  ### ### ### ### ### ### FIM ### ### ### ### ### ###
+
+
+                  PHP_BIN="$(command -v ea-php84 || true)"
+                  if [ -z "$PHP_BIN" ]; then
+                    for candidate in /usr/local/bin/ea-php84 /opt/cpanel/ea-php84/root/usr/bin/php; do
+                      if [ -x "$candidate" ]; then
+                        PHP_BIN="$candidate"
+                        break
+                      fi
+                    done
+                  fi
+                  if [ -z "$PHP_BIN" ]; then
+                    echo "PHP 8.4 not found on remote server"
+                    exit 1
+                  fi
+
                   COMPOSER_BIN="$(command -v composer || true)"
                   if [ -z "$COMPOSER_BIN" ]; then
                     for candidate in /usr/local/bin/composer /usr/bin/composer "$HOME/bin/composer"; do
@@ -53,33 +87,12 @@ jobs:
                     echo "Composer not found on remote server"
                     exit 1
                   fi
-                  "$COMPOSER_BIN" install --no-interaction --no-suggest
+
+                  "$PHP_BIN" "$COMPOSER_BIN" install --no-interaction
                   rm -rf var/cache/prod/pools/system
                   rm -rf var/cache/prod/doctrine/orm
                   rm -f var/cache/prod/serialization.php
-                  php -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null
-                  php bin/console tenant:migrations:migrate --no-interaction
+                  "$PHP_BIN" -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null
+                  "$PHP_BIN" bin/console tenant:migrations:migrate --no-interaction
                   mkdir -p var/log
-                  nohup php bin/console tenant:messenger:consume async --domain=apinew.lave-go.com >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
-
-
-                  ### OBRIGATÓRIO PARA FUNCIONAR COM O PHP 8.4 - NÃO REMOVER ###
-                  
-                  HTACCESS="$HOME/public_html/.htaccess"
-                
-                  BLOCK_START="cPanel-generated handler"
-                
-                  if ! grep -qF "$BLOCK_START" "$HTACCESS" 2>/dev/null; then
-                    cat <<'EOF' >> "$HTACCESS"
-
-
-                
-                  # php -- BEGIN cPanel-generated handler, do not edit
-                  # Set the “ea-php84” package as the default “PHP” programming language.
-                  <IfModule mime_module>
-                    AddHandler application/x-httpd-ea-php84 .php .php8 .phtml
-                  </IfModule>
-                  # php -- END cPanel-generated handler, do not edit
-                
-                  EOF
-                  fi
+                  nohup "$PHP_BIN" bin/console tenant:messenger:consume async --domain=apinew.lave-go.com >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
