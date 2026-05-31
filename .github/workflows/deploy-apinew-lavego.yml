@@ -22,6 +22,10 @@ jobs:
           password: ${{ secrets.PASS_APINEW_LAVEGO }}
           port: ${{ secrets.PORT_APINEW_LAVEGO }}
           script: |
+                  ### VARIÁVEIS GLOBAIS ###
+                  DOMAIN="apinew.lave-go.com"
+                  ### ### ### ### ### ### ###
+
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
                   cd ~/api
                   git fetch origin
@@ -95,4 +99,32 @@ jobs:
                   "$PHP_BIN" -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null
                   "$PHP_BIN" bin/console tenant:migrations:migrate --no-interaction
                   mkdir -p var/log
-                  nohup "$PHP_BIN" bin/console tenant:messenger:consume async --domain=apinew.lave-go.com >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
+                  nohup "$PHP_BIN" bin/console tenant:messenger:consume async --domain="$DOMAIN" >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
+
+
+                  ### CONFIGURAÇÃO DE CRON JOBS - NÃO REMOVER ###
+                  ### Garante que os processos essenciais da aplicação ###
+                  ### estejam sempre registrados no crontab do servidor ###
+
+                  CRON_LINES=(
+                    "* * * * * cd ~/api && $PHP_BIN bin/console websocket:start --domain=$DOMAIN -p 8080 -b 0.0.0.0"
+                    "* * * * * cd ~/api && $PHP_BIN bin/console tenant:messenger:consume async --domain=$DOMAIN"
+                    "* * * * * cd ~/api && $PHP_BIN bin/console tenant:integration:start --domain=$DOMAIN"
+                    "* * * * * cd ~/api && $PHP_BIN bin/console import:start --domain=$DOMAIN"
+                    "* * * * * cd ~/api && $PHP_BIN bin/console app:maintenance:run --domain=$DOMAIN"
+                  )
+
+                  CURRENT_CRON=$(crontab -l 2>/dev/null)
+
+                  for LINE in "${CRON_LINES[@]}"; do
+                    if echo "$CURRENT_CRON" | grep -qF "$LINE"; then
+                      echo "Cron já existe: $LINE"
+                    else
+                      CURRENT_CRON="${CURRENT_CRON}"$'\n'"${LINE}"
+                      echo "Cron adicionado: $LINE"
+                    fi
+                  done
+
+                  echo "$CURRENT_CRON" | crontab -
+
+                  ### ### ### ### ### ### FIM CRON JOBS ### ### ### ### ### ###
