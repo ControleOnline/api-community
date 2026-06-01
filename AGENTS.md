@@ -97,6 +97,7 @@
 - O uso permitido em `extra_data` fica restrito a IDs, chaves remotas e codigos de integracao que nao tenham tabela/coluna materializada equivalente.
 - Se a informacao ja tiver destino canonico em `people`, `orders`, `invoices`, `configs`, `addresses` ou outra entidade do dominio, ela deve ser materializada ali e removida de `extra_data`/`extra_fields` depois do backfill.
 - Pessoas, pedidos, financeiro e logistica nao devem continuar gravando estado rico em `extra_data`; o backend deve preferir a tabela dona ou `otherInformations` do proprio agregado quando o contrato ja existir.
+- Em pedidos `iFood`, os identificadores canonicos `id` e `code` devem ser materializados em `extra_data` a partir de `otherInformations.iFood` e nunca a partir de fallback ou alias alternativo; `merchant_id` fica na relacao `order.provider`.
 
 ## Retorno de API
 - Toda resposta customizada interna deve seguir o padrão do `HydratorService`, com `@type: Error`, `hydra:title` e `hydra:description`.
