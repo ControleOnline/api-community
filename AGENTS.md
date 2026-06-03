@@ -13,7 +13,7 @@
 - Toda regra de negócio deve ficar em service.
 - Sempre revisar `securityFilter` das entidades afetadas.
 - Evitar lógica em controllers; controller só orquestra entrada e saída.
-- No fluxo de traducoes, `PersistTranslateController` deve validar a intencao da operacao e impedir overwrite involuntario; apenas a tela de traducoes e os saves intencionais podem sobrescrever o texto existente.
+- No fluxo de traducoes, `PersistTranslateController` deve validar `revised: true` como sinal de operacao intencional e impedir overwrite involuntario; apenas a tela de traducoes e os saves revisados podem sobrescrever o texto existente.
 - Funções devem ter responsabilidade única e tamanho pequeno.
 - Antes de alterar fluxo persistente, revisar eventos como `postPersist` e `onEntityChanged`.
 - Criar e manter `AGENTS.md` conciso em cada módulo afetado.
