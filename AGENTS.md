@@ -36,6 +36,11 @@
 - O runtime nao deve ler nem gravar `product_group.parent_product_id`; esse campo fica restrito a migration/backfill legado.
 - Em `product_group_product`, `component` e `package` compartilham identidade por `product_group_id + product_child_id + product_type + quantity`; `feedstock` continua ancorado por `product_id`.
 
+## Regra transversal de anexos de pedidos
+- Anexos de pedido devem passar pela relacao `order_file`; nao escrever anexos diretamente em `products`, `components` ou em qualquer tabela de catalogo.
+- O upload continua entrando por `files/upload`; o contexto de biblioteca para pedido e `order-attachments`.
+- O contrato de leitura de arquivo para pedidos precisa incluir `order_file:read` em `File` para a biblioteca do front conseguir exibir nome, tipo e contexto.
+
 ## Regra transversal de acesso
 - `people_link` é a fonte única de verdade dos papéis backend.
 - O menu da home deve ser filtrado por `menu.app_type` e por `people_link.link_type`; `people_role`/`menu_role` nao devem ser usados para permissao de menu novo.
