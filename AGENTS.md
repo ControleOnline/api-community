@@ -25,6 +25,7 @@
 
 ## Regra transversal de filas e hierarquia
 - `order_product_queues` e a árvore de `orderProducts` sao contratos diferentes.
+- Em contratos de leitura de pedidos operacionais, como `/orders-queue` e detalhe do pedido, `orderProducts` deve conter apenas itens raiz; filhos, modificadores e complementos devem vir somente em `orderProductComponents`.
 - A fila de producao persiste apenas o que entrou na producao; a visibilidade de filho no pai e regra visual do consumidor.
 - `showInParentQueue` nao pode criar registros sintéticos nem alterar a persistencia da fila real.
 - `ProductGroup.showInDisplay` e a flag de visibilidade operacional do grupo. Quando falsa, o grupo continua agrupando itens, mas o titulo nao deve aparecer em displays nem na impressao. O default de novos grupos e oculto (`false`).
