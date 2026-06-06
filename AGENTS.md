@@ -111,3 +111,8 @@
 - Exceções só são aceitáveis quando houver integração externa que imponha outro contrato.
 - Totais de listagens devem ser expostos pelo mecanismo de `summary` do backend, usando `CollectionSummary` ou resolver especifico. O frontend nao deve precisar somar a pagina carregada para exibir totais filtrados.
 - Quando uma listagem for consumida por `DefaultTable` React, o contrato de busca e ordenacao precisa existir no backend: `CustomOrFilter` ou equivalente para `search`, `OrderFilter` para os campos usados pelo store e `DateFilter` para periodos. Datas ordenam pelo valor persistido, nao por string formatada.
+
+## Regra transversal de pedidos operacionais
+- `/orders` e as telas `orders` e `tv` devem serializar a arvore completa de `orderProducts` no contexto `order:read`, incluindo `productGroup`, `orderProductComponents` e `orderProductQueues`.
+- Os tickets de fila devem usar `order_product_queue.id` como codigo de barras para conferência, mas o backend de conferencia continua gravando apenas o status do `order_product`.
+- Produtos sem fila continuam valendo por `SKU`; quando houver fila, a conferencia precisa enxergar os `orderProductQueues` dentro do `orderProduct` para nao perder itens sem fila.
