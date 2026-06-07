@@ -33,6 +33,7 @@ final class Version20260606170000 extends AbstractMigration
             return;
         }
 
+        $this->relaxStatusEnumColumns();
         $this->seedOrderProductStatuses();
 
         if (!$this->columnExists('order_product', 'status_id')) {
@@ -95,6 +96,12 @@ final class Version20260606170000 extends AbstractMigration
                 ]
             );
         }
+    }
+
+    private function relaxStatusEnumColumns(): void
+    {
+        $this->addSql("ALTER TABLE status MODIFY context VARCHAR(64) NOT NULL DEFAULT 'order'");
+        $this->addSql("ALTER TABLE status MODIFY real_status VARCHAR(50) NOT NULL DEFAULT 'open'");
     }
 
     private function backfillOpenStatus(): void
