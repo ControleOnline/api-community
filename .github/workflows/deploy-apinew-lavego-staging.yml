@@ -15,7 +15,7 @@ jobs:
           node-version: "18.17.1"
 
       - name: Update API NEW LaveGo
-        uses: appleboy/ssh-action@staging
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_APINEW_LAVEGO }}
           username: ${{ secrets.USER_APINEW_LAVEGO }}
