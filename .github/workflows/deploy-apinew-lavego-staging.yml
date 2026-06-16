@@ -1,0 +1,123 @@
+name: Deploy API NEW LaveGo
+on:
+  push:
+    branches: [staging]
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "18.17.1"
+
+      - name: Update API NEW LaveGo
+        uses: appleboy/ssh-action@staging
+        with:
+          host: ${{ secrets.HOST_APINEW_LAVEGO }}
+          username: ${{ secrets.USER_APINEW_LAVEGO }}
+          password: ${{ secrets.PASS_APINEW_LAVEGO }}
+          port: ${{ secrets.PORT_APINEW_LAVEGO }}
+          script: |
+                  ### VARIÁVEIS GLOBAIS ###
+                  DOMAIN="apinew.lave-go.com"
+                  ### ### ### ### ### ### ###
+
+                  export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+                  cd ~/api
+                  git checkout staging
+                  git pull
+                
+                  git submodule sync --recursive
+                  git submodule update --init --recursive
+                
+                  git submodule foreach --recursive "git fetch origin"
+                  git submodule foreach --recursive "git checkout staging || git checkout -b staging --track origin/staging"
+                  git submodule foreach --recursive "git pull origin staging"
+
+                  ### OBRIGATÓRIO PARA FUNCIONAR COM O PHP 8.4 - NÃO REMOVER ###
+                  HTACCESS="$HOME/public_html/.htaccess"
+                  BLOCK_START="cPanel-generated handler"
+
+                  if ! grep -qF "$BLOCK_START" "$HTACCESS" 2>/dev/null; then
+                    {
+                      echo ''
+                      echo '# php -- BEGIN cPanel-generated handler, do not edit'
+                      echo '# Set the "ea-php84" package as the default "PHP" programming language.'
+                      echo '<IfModule mime_module>'
+                      echo '  AddHandler application/x-httpd-ea-php84 .php .php8 .phtml'
+                      echo '</IfModule>'
+                      echo '# php -- END cPanel-generated handler, do not edit'
+                      echo ''
+                    } >> "$HTACCESS"
+                  fi
+                  ### ### ### ### ### ### FIM ### ### ### ### ### ###
+
+
+                  PHP_BIN="$(command -v ea-php84 || true)"
+                  if [ -z "$PHP_BIN" ]; then
+                    for candidate in /usr/local/bin/ea-php84 /opt/cpanel/ea-php84/root/usr/bin/php; do
+                      if [ -x "$candidate" ]; then
+                        PHP_BIN="$candidate"
+                        break
+                      fi
+                    done
+                  fi
+                  if [ -z "$PHP_BIN" ]; then
+                    echo "PHP 8.4 not found on remote server"
+                    exit 1
+                  fi
+
+                  COMPOSER_BIN="$(command -v composer || true)"
+                  if [ -z "$COMPOSER_BIN" ]; then
+                    for candidate in /usr/local/bin/composer /usr/bin/composer "$HOME/bin/composer"; do
+                      if [ -x "$candidate" ]; then
+                        COMPOSER_BIN="$candidate"
+                        break
+                      fi
+                    done
+                  fi
+                  if [ -z "$COMPOSER_BIN" ]; then
+                    echo "Composer not found on remote server"
+                    exit 1
+                  fi
+
+                  "$PHP_BIN" "$COMPOSER_BIN" install --no-interaction
+                  rm -rf var/cache/prod/pools/system
+                  rm -rf var/cache/prod/doctrine/orm
+                  rm -f var/cache/prod/serialization.php
+                  "$PHP_BIN" -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null
+                  "$PHP_BIN" bin/console tenant:migrations:migrate --no-interaction
+                  mkdir -p var/log
+                  nohup "$PHP_BIN" bin/console tenant:messenger:consume async --domain="$DOMAIN" >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
+
+
+                  ### CONFIGURAÇÃO DE CRON JOBS - NÃO REMOVER ###
+                  ### Garante que os processos essenciais da aplicação ###
+                  ### estejam sempre registrados no crontab do servidor ###
+
+                  CRON_LINES=(
+                    "* * * * * cd ~/api && $PHP_BIN bin/console websocket:start --domain=$DOMAIN -p 8080 -b 0.0.0.0"
+                    "* * * * * cd ~/api && $PHP_BIN bin/console tenant:messenger:consume async --domain=$DOMAIN"
+                    "* * * * * cd ~/api && $PHP_BIN bin/console tenant:integration:start --domain=$DOMAIN"
+                    "* * * * * cd ~/api && $PHP_BIN bin/console import:start --domain=$DOMAIN"
+                    "* * * * * cd ~/api && $PHP_BIN bin/console app:maintenance:run --domain=$DOMAIN"
+                  )
+
+                  CURRENT_CRON=$(crontab -l 2>/dev/null)
+
+                  for LINE in "${CRON_LINES[@]}"; do
+                    if echo "$CURRENT_CRON" | grep -qF "$LINE"; then
+                      echo "Cron já existe: $LINE"
+                    else
+                      CURRENT_CRON="${CURRENT_CRON}"$'\n'"${LINE}"
+                      echo "Cron adicionado: $LINE"
+                    fi
+                  done
+
+                  echo "$CURRENT_CRON" | crontab -
+
+                  ### ### ### ### ### ### FIM CRON JOBS ### ### ### ### ### ###
