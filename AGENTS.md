@@ -13,6 +13,7 @@
 - Toda regra de negócio deve ficar em service.
 - Sempre revisar `securityFilter` das entidades afetadas.
 - Evitar lógica em controllers; controller só orquestra entrada e saída.
+- No fluxo de traducoes, `PersistTranslateController` deve validar `revised: true` como sinal de operacao intencional e impedir overwrite involuntario; apenas a tela de traducoes e os saves revisados podem sobrescrever o texto existente.
 - Funções devem ter responsabilidade única e tamanho pequeno.
 - Antes de alterar fluxo persistente, revisar eventos como `postPersist` e `onEntityChanged`.
 - Criar e manter `AGENTS.md` conciso em cada módulo afetado.
@@ -34,6 +35,11 @@
 - `product_group_parent` e a unica fonte de verdade do vinculo `pai -> grupo`.
 - O runtime nao deve ler nem gravar `product_group.parent_product_id`; esse campo fica restrito a migration/backfill legado.
 - Em `product_group_product`, `component` e `package` compartilham identidade por `product_group_id + product_child_id + product_type + quantity`; `feedstock` continua ancorado por `product_id`.
+
+## Regra transversal de anexos de pedidos
+- Anexos de pedido devem passar pela relacao `order_file`; nao escrever anexos diretamente em `products`, `components` ou em qualquer tabela de catalogo.
+- O upload continua entrando por `files/upload`; o contexto de biblioteca para pedido e `order-attachments`.
+- O contrato de leitura de arquivo para pedidos precisa incluir `order_file:read` em `File` para a biblioteca do front conseguir exibir nome, tipo e contexto.
 
 ## Regra transversal de acesso
 - `people_link` é a fonte única de verdade dos papéis backend.
@@ -97,6 +103,7 @@
 - O uso permitido em `extra_data` fica restrito a IDs, chaves remotas e codigos de integracao que nao tenham tabela/coluna materializada equivalente.
 - Se a informacao ja tiver destino canonico em `people`, `orders`, `invoices`, `configs`, `addresses` ou outra entidade do dominio, ela deve ser materializada ali e removida de `extra_data`/`extra_fields` depois do backfill.
 - Pessoas, pedidos, financeiro e logistica nao devem continuar gravando estado rico em `extra_data`; o backend deve preferir a tabela dona ou `otherInformations` do proprio agregado quando o contrato ja existir.
+- Em pedidos `iFood`, os identificadores canonicos `id` e `code` devem ser materializados em `extra_data` a partir de `otherInformations.iFood` e nunca a partir de fallback ou alias alternativo; `merchant_id` fica na relacao `order.provider`.
 
 ## Retorno de API
 - Toda resposta customizada interna deve seguir o padrão do `HydratorService`, com `@type: Error`, `hydra:title` e `hydra:description`.
@@ -104,3 +111,8 @@
 - Exceções só são aceitáveis quando houver integração externa que imponha outro contrato.
 - Totais de listagens devem ser expostos pelo mecanismo de `summary` do backend, usando `CollectionSummary` ou resolver especifico. O frontend nao deve precisar somar a pagina carregada para exibir totais filtrados.
 - Quando uma listagem for consumida por `DefaultTable` React, o contrato de busca e ordenacao precisa existir no backend: `CustomOrFilter` ou equivalente para `search`, `OrderFilter` para os campos usados pelo store e `DateFilter` para periodos. Datas ordenam pelo valor persistido, nao por string formatada.
+
+## Regra transversal de pedidos operacionais
+- `/orders` e as telas `orders` e `tv` devem serializar a arvore completa de `orderProducts` no contexto `order:read`, incluindo `productGroup`, `orderProductComponents` e `orderProductQueues`.
+- Os tickets de fila devem usar `order_product_queue.id` como codigo de barras para conferência, mas o backend de conferencia continua gravando apenas o status do `order_product`.
+- Produtos sem fila continuam valendo por `SKU`; quando houver fila, a conferencia precisa enxergar os `orderProductQueues` dentro do `orderProduct` para nao perder itens sem fila.

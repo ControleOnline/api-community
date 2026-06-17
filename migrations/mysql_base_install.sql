@@ -1826,8 +1826,8 @@ CREATE TABLE `state` (
 CREATE TABLE `status` (
   `id` int(11) NOT NULL,
   `status` varchar(50) NOT NULL,
-  `context` enum('print','connections','integration','order','support','relationship','invoice','docs','logistic','display','contract','proposal') NOT NULL DEFAULT 'order',
-  `real_status` enum('open','pending','canceled','closed') NOT NULL DEFAULT 'open',
+  `context` varchar(64) NOT NULL DEFAULT 'order',
+  `real_status` varchar(50) NOT NULL DEFAULT 'open',
   `visibility` enum('public','private') NOT NULL DEFAULT 'public',
   `notify` tinyint(1) NOT NULL,
   `system` tinyint(1) NOT NULL,

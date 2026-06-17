@@ -28,22 +28,15 @@ jobs:
 
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
                   cd ~/api
-                  git fetch origin
-                  git checkout master
-                  git reset --hard origin/master
-                  git clean -fd
+                  git checkout staging
+                  git pull
+                
                   git submodule sync --recursive
-                  git submodule update --recursive --init
-                  git submodule foreach --recursive '
-                    git fetch origin
-                    if git show-ref --verify --quiet refs/heads/master; then
-                      git checkout master
-                    else
-                      git checkout -B master origin/master
-                    fi
-                    git reset --hard origin/master
-                    git clean -fd
-                  '
+                  git submodule update --init --recursive
+                
+                  git submodule foreach --recursive "git fetch origin"
+                  git submodule foreach --recursive "git checkout staging || git checkout -b staging --track origin/staging"
+                  git submodule foreach --recursive "git pull origin staging"
 
                   ### OBRIGATÓRIO PARA FUNCIONAR COM O PHP 8.4 - NÃO REMOVER ###
                   HTACCESS="$HOME/public_html/.htaccess"
