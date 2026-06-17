@@ -111,6 +111,8 @@
 - Exceções só são aceitáveis quando houver integração externa que imponha outro contrato.
 - Totais de listagens devem ser expostos pelo mecanismo de `summary` do backend, usando `CollectionSummary` ou resolver especifico. O frontend nao deve precisar somar a pagina carregada para exibir totais filtrados.
 - Quando uma listagem for consumida por `DefaultTable` React, o contrato de busca e ordenacao precisa existir no backend: `CustomOrFilter` ou equivalente para `search`, `OrderFilter` para os campos usados pelo store e `DateFilter` para periodos. Datas ordenam pelo valor persistido, nao por string formatada.
+- Listagens do backend devem manter paginação como comportamento padrao; nao criar endpoints que dependam de carregar colecoes inteiras de uma vez quando o front pode consumir por pagina.
+- Chamadas HTTP novas ou alteradas expostas ao front devem ser espelhadas na colecao Postman correspondente para documentacao e reproducao.
 
 ## Regra transversal de pedidos operacionais
 - `/orders` e as telas `orders` e `tv` devem serializar a arvore completa de `orderProducts` no contexto `order:read`, incluindo `productGroup`, `orderProductComponents` e `orderProductQueues`.
