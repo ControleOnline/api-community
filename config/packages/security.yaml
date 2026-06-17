@@ -57,7 +57,6 @@ security:
         - { path: ^/debug$, roles: PUBLIC_ACCESS }
         - { path: ^/products$, roles: PUBLIC_ACCESS }
         - { path: ^/products/.*$, roles: PUBLIC_ACCESS }
-        - { path: ^/products/shop-catalog$, roles: PUBLIC_ACCESS }
         - { path: ^/product_groups$, roles: PUBLIC_ACCESS }
         - { path: ^/product_groups/.*$, roles: PUBLIC_ACCESS }
         - { path: ^/product_group_products$, roles: PUBLIC_ACCESS }
