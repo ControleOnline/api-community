@@ -77,6 +77,7 @@
 
 ## Regra transversal de push do Manager
 - Novo pedido `sale` e eventos financeiros humanos (`store.opened`, `store.closed`, `cash.open`, `cash.closed`) devem disparar push do `MANAGER` via Firebase Cloud Messaging HTTP v1; `cart` nao dispara `order.created`.
+- Quando `cart` vira `sale`, as filas de producao ignoradas durante o rascunho precisam ser materializadas imediatamente para o KDS; `cart` continua fora da fila ate a promocao.
 - Eventos financeiros humanos devem entrar na tabela `integration` com `queue_name = PushNotification`; nao usar `Websocket` para o alerta humano do manager.
 - O envio FCM deve resolver destinatarios por `device_config.type = MANAGER` da empresa do pedido e token em `device.metadata.pushTokens.manager.android.deviceToken`, deduplicando tokens.
 - O payload do push humano deve apontar para `OrderDetails`, com `orderId` e `companyId`; nao usar rota de KDS/LDS nesse fluxo.
