@@ -119,3 +119,5 @@
 - `/orders` e as telas `orders` e `tv` devem serializar a arvore completa de `orderProducts` no contexto `order:read`, incluindo `productGroup`, `orderProductComponents` e `orderProductQueues`.
 - Os tickets de fila devem usar `order_product_queue.id` como codigo de barras para conferência, mas o backend de conferencia continua gravando apenas o status do `order_product`.
 - Produtos sem fila continuam valendo por `SKU`; quando houver fila, a conferencia precisa enxergar os `orderProductQueues` dentro do `orderProduct` para nao perder itens sem fila.
+- Itens de pedido so podem ser adicionados, ter quantidade alterada, ser substituidos ou removidos enquanto o pedido ainda estiver em `cart` e nao for terminal; `sale` e estados finais ficam read-only para `order_products`.
+- `PUT /orders/{id}` nao pode ser um update arbitrario de status. Esse endpoint so aceita edicao de dados de negocio e normalizacao controlada de `cart`/`sale`; transicoes de `status` seguem os fluxos de acao e financeiro.
