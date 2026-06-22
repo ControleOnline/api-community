@@ -31,12 +31,15 @@ jobs:
                   git checkout staging
                   git pull
                 
+                  git clean -fd
                   git submodule sync --recursive
                   git submodule update --init --recursive
                 
                   git submodule foreach --recursive "git fetch origin"
                   git submodule foreach --recursive "git checkout staging || git checkout -b staging --track origin/staging"
                   git submodule foreach --recursive "git pull origin staging"
+
+
 
                   ### OBRIGATÓRIO PARA FUNCIONAR COM O PHP 8.4 - NÃO REMOVER ###
                   HTACCESS="$HOME/public_html/.htaccess"
@@ -55,6 +58,7 @@ jobs:
                     } >> "$HTACCESS"
                   fi
                   ### ### ### ### ### ### FIM ### ### ### ### ### ###
+
 
 
                   PHP_BIN="$(command -v ea-php84 || true)"
@@ -93,6 +97,7 @@ jobs:
                   "$PHP_BIN" bin/console tenant:migrations:migrate --no-interaction
                   mkdir -p var/log
                   nohup "$PHP_BIN" bin/console tenant:messenger:consume async --domain="$DOMAIN" >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
+
 
 
                   ### CONFIGURAÇÃO DE CRON JOBS - NÃO REMOVER ###

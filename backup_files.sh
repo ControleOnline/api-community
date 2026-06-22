@@ -26,7 +26,7 @@ LOG_DIR="${BASE_DIR}/logs"
 LOG_FILE="${LOG_DIR}/backups.log"
 
 # Retenção dos backups
-RETENTION_DAYS=30
+RETENTION_DAYS=7
 
 # Caminho do comando zip
 ZIP_BIN="/usr/bin/zip"

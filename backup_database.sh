@@ -6,31 +6,23 @@ set -euo pipefail
 # CONFIGURAÇÕES
 # ==========================================================
 
-# Diretório onde está este script e também o arquivo .env.local
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Diretório base: um nível acima do diretório onde está este script
-# Exemplo:
-# SCRIPT_DIR=/home/apilavego/sistemas
-# BASE_DIR=/home/apilavego
 BASE_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-# Arquivo de ambiente Symfony
 ENV_FILE="${SCRIPT_DIR}/.env.local"
 
-# Diretório onde os backups serão salvos
 BACKUP_DIR="${BASE_DIR}/backups"
-
-# Diretório e arquivo de log
 LOG_DIR="${BASE_DIR}/logs"
 LOG_FILE="${LOG_DIR}/backups.log"
 
-# Retenção dos backups
-RETENTION_DAYS=30
+RETENTION_DAYS=7
 
-# Caminho dos comandos
+MYSQL_BIN="/usr/bin/mysql"
 MYSQLDUMP_BIN="/usr/bin/mysqldump"
 GZIP_BIN="/usr/bin/gzip"
+
+# Banco auxiliar para teste de restore
+BACKUP_DB_NAME="apilavego_bkp"
 
 # ==========================================================
 # FUNÇÕES
@@ -42,18 +34,15 @@ log() {
 
 clean_env_value() {
     local value="$1"
-
     value="${value%\"}"
     value="${value#\"}"
     value="${value%\'}"
     value="${value#\'}"
-
     echo "${value}"
 }
 
 get_env_value() {
     local key="$1"
-
     grep -E "^${key}=" "${ENV_FILE}" | tail -n 1 | cut -d '=' -f 2-
 }
 
@@ -82,35 +71,12 @@ DATABASE_NAME="$(clean_env_value "$(get_env_value DATABASE_NAME)")"
 DATABASE_USER="$(clean_env_value "$(get_env_value DATABASE_USER)")"
 DATABASE_PASSWORD="$(clean_env_value "$(get_env_value DATABASE_PASSWORD)")"
 
-if [[ -z "${DATABASE_HOST}" ]]; then
-    log "Erro: DATABASE_HOST não definido no .env.local"
-    exit 1
-fi
-
-if [[ -z "${DATABASE_PORT}" ]]; then
-    log "Erro: DATABASE_PORT não definido no .env.local"
-    exit 1
-fi
-
-if [[ -z "${DATABASE_DRIVER}" ]]; then
-    log "Erro: DATABASE_DRIVER não definido no .env.local"
-    exit 1
-fi
-
-if [[ -z "${DATABASE_NAME}" ]]; then
-    log "Erro: DATABASE_NAME não definido no .env.local"
-    exit 1
-fi
-
-if [[ -z "${DATABASE_USER}" ]]; then
-    log "Erro: DATABASE_USER não definido no .env.local"
-    exit 1
-fi
-
-if [[ -z "${DATABASE_PASSWORD}" ]]; then
-    log "Erro: DATABASE_PASSWORD não definido no .env.local"
-    exit 1
-fi
+for var in DATABASE_HOST DATABASE_PORT DATABASE_DRIVER DATABASE_NAME DATABASE_USER DATABASE_PASSWORD; do
+    if [[ -z "${!var}" ]]; then
+        log "Erro: ${var} não definido no .env.local"
+        exit 1
+    fi
+done
 
 if [[ "${DATABASE_DRIVER}" != "pdo_mysql" ]]; then
     log "Erro: este script suporta apenas DATABASE_DRIVER=pdo_mysql"
@@ -120,11 +86,34 @@ fi
 
 DATE_BACKUP="$(date '+%Y-%m-%d_%H-%M-%S')"
 BACKUP_PREFIX="${DATABASE_NAME}"
-BACKUP_FILE="${BACKUP_DIR}/${BACKUP_PREFIX}_${DATE_BACKUP}.sql.gz"
 
-log "Banco: ${DATABASE_NAME}"
+DUMP_FILE="${BACKUP_DIR}/${BACKUP_PREFIX}_${DATE_BACKUP}.sql"
+BACKUP_FILE="${DUMP_FILE}.gz"
+
+log "Banco origem: ${DATABASE_NAME}"
+log "Banco destino (teste restore): ${BACKUP_DB_NAME}"
 log "Host: ${DATABASE_HOST}:${DATABASE_PORT}"
-log "Gerando backup..."
+
+# ==========================================================
+# 1 - DROP E CREATE DO BANCO DE BACKUP
+# ==========================================================
+
+log "Recriando banco ${BACKUP_DB_NAME}..."
+
+MYSQL_PWD="${DATABASE_PASSWORD}" \
+"${MYSQL_BIN}" \
+    --host="${DATABASE_HOST}" \
+    --port="${DATABASE_PORT}" \
+    --user="${DATABASE_USER}" \
+    -e "DROP DATABASE IF EXISTS \`${BACKUP_DB_NAME}\`; CREATE DATABASE \`${BACKUP_DB_NAME}\`;"
+
+log "Banco ${BACKUP_DB_NAME} recriado com sucesso."
+
+# ==========================================================
+# 2 - GERANDO DUMP (SEM COMPRESSÃO)
+# ==========================================================
+
+log "Gerando dump do banco ${DATABASE_NAME}..."
 
 MYSQL_PWD="${DATABASE_PASSWORD}" \
 "${MYSQLDUMP_BIN}" \
@@ -136,12 +125,42 @@ MYSQL_PWD="${DATABASE_PASSWORD}" \
     --routines \
     --triggers \
     --events \
-    --databases "${DATABASE_NAME}" \
-| "${GZIP_BIN}" > "${BACKUP_FILE}"
+    "${DATABASE_NAME}" \
+> "${DUMP_FILE}"
+
+log "Dump criado em: ${DUMP_FILE}"
+
+# ==========================================================
+# 3 - RESTAURANDO NO BANCO DE BACKUP
+# ==========================================================
+
+log "Restaurando dump no banco ${BACKUP_DB_NAME}..."
+
+MYSQL_PWD="${DATABASE_PASSWORD}" \
+"${MYSQL_BIN}" \
+    --host="${DATABASE_HOST}" \
+    --port="${DATABASE_PORT}" \
+    --user="${DATABASE_USER}" \
+    "${BACKUP_DB_NAME}" \
+< "${DUMP_FILE}"
+
+log "Restauração concluída com sucesso."
+
+# ==========================================================
+# 4 - COMPRESSÃO
+# ==========================================================
+
+log "Compactando dump..."
+
+"${GZIP_BIN}" "${DUMP_FILE}"
 
 chmod 600 "${BACKUP_FILE}"
 
-log "Backup criado em: ${BACKUP_FILE}"
+log "Backup compactado em: ${BACKUP_FILE}"
+
+# ==========================================================
+# 5 - RETENÇÃO
+# ==========================================================
 
 find "${BACKUP_DIR}" \
     -type f \
@@ -149,5 +168,5 @@ find "${BACKUP_DIR}" \
     -mtime +"${RETENTION_DAYS}" \
     -delete
 
-log "Backups do banco com mais de ${RETENTION_DAYS} dias removidos."
+log "Backups com mais de ${RETENTION_DAYS} dias removidos."
 log "Backup do banco de dados finalizado com sucesso."
