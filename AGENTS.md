@@ -76,7 +76,8 @@
 - Backfill de `Food99` deve ser idempotente e sempre reconstruir as invoices a partir do snapshot do pedido, sem consultar fontes externas adicionais.
 
 ## Regra transversal de push do Manager
-- Novo pedido aberto e eventos financeiros humanos (`store.opened`, `store.closed`, `cash.open`, `cash.closed`) devem disparar push do `MANAGER` via Firebase Cloud Messaging HTTP v1.
+- Novo pedido `sale` e eventos financeiros humanos (`store.opened`, `store.closed`, `cash.open`, `cash.closed`) devem disparar push do `MANAGER` via Firebase Cloud Messaging HTTP v1; `cart` nao dispara `order.created`.
+- Quando `cart` vira `sale`, as filas de producao ignoradas durante o rascunho precisam ser materializadas imediatamente para o KDS; `cart` continua fora da fila ate a promocao.
 - Eventos financeiros humanos devem entrar na tabela `integration` com `queue_name = PushNotification`; nao usar `Websocket` para o alerta humano do manager.
 - O envio FCM deve resolver destinatarios por `device_config.type = MANAGER` da empresa do pedido e token em `device.metadata.pushTokens.manager.android.deviceToken`, deduplicando tokens.
 - O payload do push humano deve apontar para `OrderDetails`, com `orderId` e `companyId`; nao usar rota de KDS/LDS nesse fluxo.
@@ -111,8 +112,12 @@
 - Exceções só são aceitáveis quando houver integração externa que imponha outro contrato.
 - Totais de listagens devem ser expostos pelo mecanismo de `summary` do backend, usando `CollectionSummary` ou resolver especifico. O frontend nao deve precisar somar a pagina carregada para exibir totais filtrados.
 - Quando uma listagem for consumida por `DefaultTable` React, o contrato de busca e ordenacao precisa existir no backend: `CustomOrFilter` ou equivalente para `search`, `OrderFilter` para os campos usados pelo store e `DateFilter` para periodos. Datas ordenam pelo valor persistido, nao por string formatada.
+- Listagens do backend devem manter paginação como comportamento padrao; nao criar endpoints que dependam de carregar colecoes inteiras de uma vez quando o front pode consumir por pagina.
+- Chamadas HTTP novas ou alteradas expostas ao front devem ser espelhadas na colecao Postman correspondente para documentacao e reproducao.
 
 ## Regra transversal de pedidos operacionais
 - `/orders` e as telas `orders` e `tv` devem serializar a arvore completa de `orderProducts` no contexto `order:read`, incluindo `productGroup`, `orderProductComponents` e `orderProductQueues`.
 - Os tickets de fila devem usar `order_product_queue.id` como codigo de barras para conferência, mas o backend de conferencia continua gravando apenas o status do `order_product`.
 - Produtos sem fila continuam valendo por `SKU`; quando houver fila, a conferencia precisa enxergar os `orderProductQueues` dentro do `orderProduct` para nao perder itens sem fila.
+- Itens de pedido so podem ser adicionados, ter quantidade alterada, ser substituidos ou removidos enquanto o pedido ainda estiver em `cart` e nao for terminal; `sale` e estados finais ficam read-only para `order_products`.
+- `PUT /orders/{id}` nao pode ser um update arbitrario de status. Esse endpoint so aceita edicao de dados de negocio e normalizacao controlada de `cart`/`sale`; transicoes de `status` seguem os fluxos de acao e financeiro.
