@@ -45,6 +45,7 @@ security:
         - { path: ^/themes-colors.css$, roles: PUBLIC_ACCESS }
         - { path: ^/languages$, roles: PUBLIC_ACCESS }
         - { path: ^/people/company/default$, roles: PUBLIC_ACCESS }
+        - { path: ^/shop/franchises$, roles: PUBLIC_ACCESS }
         - { path: ^/translates$, roles: PUBLIC_ACCESS }
         - { path: ^/cart$, roles: PUBLIC_ACCESS }
         - { path: ^/files/.*$, roles: PUBLIC_ACCESS }
