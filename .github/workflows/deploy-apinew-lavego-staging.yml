@@ -28,16 +28,24 @@ jobs:
 
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
                   cd ~/api
+                  git fetch origin
                   git checkout staging
-                  git pull
-                
+                  git reset --hard origin/staging
+
                   git clean -fd
                   git submodule sync --recursive
-                  git submodule update --init --recursive
-                
-                  git submodule foreach --recursive "git fetch origin"
-                  git submodule foreach --recursive "git checkout staging || git checkout -b staging --track origin/staging"
-                  git submodule foreach --recursive "git pull origin staging"
+                  git submodule update --recursive --init
+                  
+                  git submodule foreach --recursive '
+                    git fetch origin
+                    if git show-ref --verify --quiet refs/heads/staging; then
+                      git checkout staging
+                    else
+                      git checkout -B staging origin/staging
+                    fi
+                    git reset --hard origin/staging
+                    git clean -fd
+                  '
 
 
 
