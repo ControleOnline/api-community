@@ -83,6 +83,7 @@
 - O payload do push humano deve apontar para `OrderDetails`, com `orderId` e `companyId`; nao usar rota de KDS/LDS nesse fluxo.
 - Eventos financeiros do `MANAGER` devem ir pelo mesmo canal FCM, mas sem rota de KDS/LDS e sem depender do app aberto.
 - O canal do push humano do `MANAGER` usa o som nativo `caixa.m4a` empacotado no app; URL de audio configurada vale apenas para fluxos locais com app aberto.
+- Entregas `delivery` em `aguardando aceite` devem disparar push separado para o motoboy vinculado ao pedido, com `device_config` resolvido por `people` e nao por empresa; o `order.created` continua sendo o evento do owner/manager e nao deve ser reaproveitado para esse fluxo.
 - `Websocket` e `PushNotification` sao filas efemeras: entregue deve ser apagado da `integration`; qualquer registro remanescente com mais de 24 horas deve ser removido pela manutencao.
 - Falha em token individual deve ser logada e nunca bloquear o `postPersist` do pedido.
 
