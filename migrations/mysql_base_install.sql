@@ -932,6 +932,7 @@ CREATE TABLE `menu` (
   `route_id` int(11) NOT NULL,
   `menu_key` varchar(100) NOT NULL,
   `app_type` varchar(30) NOT NULL DEFAULT 'MANAGER',
+  `menu_type` varchar(30) NOT NULL DEFAULT 'home',
   `route_params` longtext DEFAULT NULL CHECK (json_valid(`route_params`)),
   `sort_order` int(11) NOT NULL DEFAULT 0,
   `enabled` tinyint(1) NOT NULL DEFAULT 1
@@ -2457,7 +2458,7 @@ ALTER TABLE `measure_type`
 --
 ALTER TABLE `menu`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `menu_app_key_unique` (`app_type`,`menu_key`),
+  ADD UNIQUE KEY `menu_app_key_unique` (`app_type`,`menu_type`,`menu_key`),
   ADD KEY `category_id` (`category_id`),
   ADD KEY `menu_app_type_idx` (`app_type`),
   ADD KEY `menu_ibfk_3` (`route_id`);
