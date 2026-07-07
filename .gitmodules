@@ -77,3 +77,7 @@
 	path = modules/controleonline/spc-sdk
 	url = https://github.com/ControleOnline/spc-sdk-php.git
 	branch = master
+[submodule "modules/controleonline/smoke-tests-playground"]
+	path = modules/controleonline/smoke-tests-playground
+	url = https://github.com/ControleOnline/smoke-tests-playground.git
+	branch = master
