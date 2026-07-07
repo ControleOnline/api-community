@@ -3,6 +3,13 @@
 # API - Controle Online
 API - Controle Online
 
+### Cadastro inicial (auto-cadastro)
+
+Os endpoints públicos de cadastro inicial aceitos pelo backend são:
+
+- `POST /create-account`
+- `POST /users/create-account` (compatibilidade com front-end legado)
+
 
 ### Submodules
 ```bash
@@ -39,5 +46,4 @@ git submodule update --recursive
 <a href="https://github.com/ControleOnline/api-community/graphs/contributors" target="_blank">
   <img src="https://contrib.rocks/image?repo=ControleOnline/api-community" />
 </a>
-
 
