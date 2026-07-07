@@ -25,3 +25,6 @@ controleonline_food:
 controleonline_logistic:
     resource: ../../modules/controleonline/logistic/src/Controller/
     type: attribute
+controleonline_smoke_tests_playground:
+    resource: ../../modules/controleonline/smoke-tests-playground/src/Controller/
+    type: attribute
