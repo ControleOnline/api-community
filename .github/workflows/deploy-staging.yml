@@ -1,0 +1,74 @@
+name: Deploy Project Staging
+on:
+  push:
+    branches: [staging]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "18.17.1"
+      - name: Update Controle Online
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.API_HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.CONTROLEONLINE }}
+          port: ${{ secrets.PORT }}
+          script: |
+                  export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+                  cd /var/www/api-community
+                  git fetch origin
+                  git checkout staging
+                  git reset --hard origin/staging
+                  git clean -fd
+                  git submodule sync --recursive
+                  git submodule update --recursive --init
+                  git submodule foreach --recursive '
+                    git fetch origin
+                    if git show-ref --verify --quiet refs/heads/staging; then
+                      git checkout staging
+                    else
+                      git checkout -B staging origin/staging
+                    fi
+                    git reset --hard origin/staging
+                    git clean -fd
+                  '
+                  COMPOSER_BIN="$(command -v composer || true)"
+                  if [ -z "$COMPOSER_BIN" ]; then
+                    for candidate in /usr/local/bin/composer /usr/bin/composer "$HOME/bin/composer"; do
+                      if [ -x "$candidate" ]; then
+                        COMPOSER_BIN="$candidate"
+                        break
+                      fi
+                    done
+                  fi
+                  if [ -z "$COMPOSER_BIN" ]; then
+                    echo "Composer not found on remote server"
+                    exit 1
+                  fi
+                  "$COMPOSER_BIN" install --no-interaction --no-suggest
+                  rm -rf var/cache/prod/pools/system
+                  rm -rf var/cache/prod/doctrine/orm
+                  rm -f var/cache/prod/serialization.php
+                  php -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null
+                  php bin/console tenant:migrations:migrate --no-interaction
+                  mkdir -p var/log
+                  nohup php bin/console tenant:messenger:consume async --domain=s.controleonline.com >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
+  tests:
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          coverage: none
+          tools: composer:v2
+      - name: Install Dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+      - name: Run PHPUnit
+        run: php bin/phpunit
