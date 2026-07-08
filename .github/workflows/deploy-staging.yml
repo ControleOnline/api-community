@@ -13,10 +13,9 @@ jobs:
       - name: Update Controle Online
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.API_HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.CONTROLEONLINE }}
-          port: ${{ secrets.PORT }}
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USER }}
+          password: ${{ secrets.DEV_PASS }}
           script: |
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
                   cd /var/www/api-community
