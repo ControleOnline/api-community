@@ -24,16 +24,13 @@ final class Version20260709120000 extends AbstractMigration
         $this->addSql(
             "DELETE admin_menu
              FROM menu admin_menu
+             INNER JOIN menu manager_menu
+                ON manager_menu.app_type = 'MANAGER'
+               AND manager_menu.menu_key = 'menu_access'
+               AND manager_menu.menu_type = 'home'
              WHERE admin_menu.app_type = 'ADMIN'
-             AND admin_menu.menu_key = 'menu_access'
-             AND admin_menu.menu_type = 'home'
-             AND EXISTS (
-                SELECT 1
-                FROM menu manager_menu
-                WHERE manager_menu.app_type = 'MANAGER'
-                AND manager_menu.menu_key = 'menu_access'
-                AND manager_menu.menu_type = 'home'
-             )"
+               AND admin_menu.menu_key = 'menu_access'
+               AND admin_menu.menu_type = 'home'"
         );
 
         $this->addSql(
@@ -54,16 +51,13 @@ final class Version20260709120000 extends AbstractMigration
         $this->addSql(
             "DELETE manager_menu
              FROM menu manager_menu
+             INNER JOIN menu admin_menu
+                ON admin_menu.app_type = 'ADMIN'
+               AND admin_menu.menu_key = 'menu_access'
+               AND admin_menu.menu_type = 'home'
              WHERE manager_menu.app_type = 'MANAGER'
-             AND manager_menu.menu_key = 'menu_access'
-             AND manager_menu.menu_type = 'home'
-             AND EXISTS (
-                SELECT 1
-                FROM menu admin_menu
-                WHERE admin_menu.app_type = 'ADMIN'
-                AND admin_menu.menu_key = 'menu_access'
-                AND admin_menu.menu_type = 'home'
-             )"
+               AND manager_menu.menu_key = 'menu_access'
+               AND manager_menu.menu_type = 'home'"
         );
 
         $this->addSql(
