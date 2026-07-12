@@ -49,6 +49,8 @@ security:
         - { path: ^/languages$, roles: PUBLIC_ACCESS }
         - { path: ^/people/company/default$, roles: PUBLIC_ACCESS }
         - { path: ^/shop/franchises$, roles: PUBLIC_ACCESS }
+        - { path: ^/shop/categories$, roles: PUBLIC_ACCESS }
+        - { path: ^/shop/categories/.*$, roles: PUBLIC_ACCESS }
         - { path: ^/translates$, roles: PUBLIC_ACCESS }
         - { path: ^/cart$, roles: PUBLIC_ACCESS }
         - { path: ^/files/.*$, roles: PUBLIC_ACCESS }
@@ -56,8 +58,6 @@ security:
         - { path: ^/oauth/, roles: PUBLIC_ACCESS }
         - { path: ^/pix$, roles: PUBLIC_ACCESS }
         - { path: ^/bitcoin$, roles: PUBLIC_ACCESS }
-        - { path: ^/categories$, roles: PUBLIC_ACCESS }        
-        - { path: ^/categories/.*$, roles: PUBLIC_ACCESS }
         - { path: ^/debug$, roles: PUBLIC_ACCESS }
         - { path: ^/products$, roles: PUBLIC_ACCESS }
         - { path: ^/products/.*$, roles: PUBLIC_ACCESS }

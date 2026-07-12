@@ -117,6 +117,11 @@
 - Listagens do backend devem manter paginação como comportamento padrao; nao criar endpoints que dependam de carregar colecoes inteiras de uma vez quando o front pode consumir por pagina.
 - Chamadas HTTP novas ou alteradas expostas ao front devem ser espelhadas na colecao Postman correspondente para documentacao e reproducao.
 
+## Regra transversal de categorias
+- A colecao interna `/categories` e seus itens exigem usuario humano e devem ser limitados por `Category.company` as empresas acessiveis ao usuario.
+- O Shop anonimo usa exclusivamente `/shop/categories` e `/shop/categories/{id}`; essas rotas exigem dominio do tipo `SHOP`, forcam `context=products` e aceitam apenas a empresa do dominio ou franquias explicitamente publicadas por ela.
+- Parametros de request refinam o recorte, mas nunca podem ampliar o universo autorizado pelo `securityFilter`.
+
 ## Regra transversal de pedidos operacionais
 - `/orders` e as telas `orders` e `tv` devem serializar a arvore completa de `orderProducts` no contexto `order:read`, incluindo `productGroup`, `orderProductComponents` e `orderProductQueues`.
 - Os tickets de fila devem usar `order_product_queue.id` como codigo de barras para conferência, mas o backend de conferencia continua gravando apenas o status do `order_product`.

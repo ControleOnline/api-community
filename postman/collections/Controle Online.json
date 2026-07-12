@@ -7,6 +7,56 @@
   },
   "item": [
     {
+      "name": "Shop Categories",
+      "item": [
+        {
+          "name": "GET /shop/categories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "App-Domain",
+                "value": "{{shop-domain}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/shop/categories?company={{company-id}}&itemsPerPage=30",
+              "host": ["{{host}}"],
+              "path": ["shop", "categories"],
+              "query": [
+                {"key": "company", "value": "{{company-id}}"},
+                {"key": "itemsPerPage", "value": "30"}
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /shop/categories/{id}",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "App-Domain",
+                "value": "{{shop-domain}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/shop/categories/{{category-id}}?company={{company-id}}",
+              "host": ["{{host}}"],
+              "path": ["shop", "categories", "{{category-id}}"],
+              "query": [
+                {"key": "company", "value": "{{company-id}}"}
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "Products",
       "item": [
         {
