@@ -19,10 +19,11 @@ jobs:
           script: |
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
                   cd /var/www/api-community
+                  RESTART_FILE="$PWD/public/.lsphp_restart.txt"
                   git fetch origin
                   git checkout staging
                   git reset --hard origin/staging
-                  git clean -fd
+                  git clean -ffd
                   git submodule sync --recursive
                   git submodule update --recursive --init
                   git submodule foreach --recursive '
@@ -33,7 +34,7 @@ jobs:
                       git checkout -B staging origin/staging
                     fi
                     git reset --hard origin/staging
-                    git clean -fd
+                    git clean -ffd
                   '
                   COMPOSER_BIN="$(command -v composer || true)"
                   if [ -z "$COMPOSER_BIN" ]; then
@@ -56,11 +57,12 @@ jobs:
                   php bin/console tenant:migrations:migrate --no-interaction
                   mkdir -p var/log
                   nohup php bin/console tenant:messenger:consume async --domain=s.controleonline.com >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
-                  touch ~/.lsphp_restart.txt 2>/dev/null || true
-                  touch /var/www/api-community/public/.lsphp_restart.txt 2>/dev/null || true
+                  touch "$HOME/.lsphp_restart.txt" 2>/dev/null || true
+                  touch "$RESTART_FILE" 2>/dev/null || true
                   if command -v systemctl >/dev/null 2>&1; then
                     sudo -n systemctl reload php8.3-fpm 2>/dev/null || sudo -n service php8.3-fpm reload 2>/dev/null || true
                   fi
+                  rm -f "$HOME/.lsphp_restart.txt" "$RESTART_FILE" 2>/dev/null || true
   tests:
     runs-on: ubuntu-latest
     needs: build

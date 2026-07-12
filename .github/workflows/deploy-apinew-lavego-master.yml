@@ -32,7 +32,7 @@ jobs:
                   git checkout master
                   git reset --hard origin/master
 
-                  git clean -fd
+                  git clean -ffd
                   git submodule sync --recursive
                   git submodule update --recursive --init
                   
@@ -44,7 +44,7 @@ jobs:
                       git checkout -B master origin/master
                     fi
                     git reset --hard origin/master
-                    git clean -fd
+                    git clean -ffd
                   '
 
 

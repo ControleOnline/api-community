@@ -32,7 +32,7 @@ jobs:
                   git checkout staging
                   git reset --hard origin/staging
 
-                  git clean -fd
+                  git clean -ffd
                   git submodule sync --recursive
                   git submodule update --recursive --init
                   
@@ -44,7 +44,7 @@ jobs:
                       git checkout -B staging origin/staging
                     fi
                     git reset --hard origin/staging
-                    git clean -fd
+                    git clean -ffd
                   '
 
 
