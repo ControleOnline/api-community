@@ -13,7 +13,7 @@
 - Toda regra de negócio deve ficar em service.
 - Sempre revisar `securityFilter` das entidades afetadas.
 - Evitar lógica em controllers; controller só orquestra entrada e saída.
-- AGENTS.md deve registrar apenas ownership, contratos e padrões reutilizaveis. Regras de negocio especificas devem ficar em comentarios de codigo em ingles, proximos da implementacao.
+- AGENTS.md deve registrar apenas ownership, contratos e padrões reutilizaveis. Regras de negocio especificas devem ficar em comentarios de codigo em ingles, proximos da implementacao. Em blocos multi-linha, use `@agents` apenas na primeira linha do comentario.
 - No fluxo de traducoes, `PersistTranslateController` deve validar `revised: true` como sinal de operacao intencional e impedir overwrite involuntario; apenas a tela de traducoes e os saves revisados podem sobrescrever o texto existente.
 - Funções devem ter responsabilidade única e tamanho pequeno.
 - Antes de alterar fluxo persistente, revisar eventos como `postPersist` e `onEntityChanged`.
