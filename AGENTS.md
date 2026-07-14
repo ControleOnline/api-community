@@ -59,6 +59,11 @@
 - `client` não concede papel humano operacional; ele apenas habilita o contexto comercial da empresa.
 - `family` e `sellers-client` não são roles humanas oficiais da API.
 
+## Regra transversal de RH
+- `employee_profile` é a camada específica de RH e deve permanecer ligada ao `people_link` do tipo `employee`.
+- `people_access_event`, `people_schedule` e `people_export_job` sao tabelas genéricas por `context`; o primeiro uso e `employment`, mas o schema e os services precisam aceitar novos contextos sem criar outra tabela.
+- `contract` continua sendo o contrato de trabalho; o contexto de RH usa `context=employment` e `client=employee`, sem duplicar modelagem.
+
 ## Regra transversal de seletor de empresa
 - `/people/companies/my` deve listar todos os vínculos humanos diretos ativos da pessoa com empresas ativas.
 - O seletor de empresa não deve esconder empresas só porque a cadeia comercial do `app-domain` atual não permite entrar nelas.
