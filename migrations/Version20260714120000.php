@@ -52,6 +52,9 @@ final class Version20260714120000 extends AbstractMigration
 CREATE TABLE employee_profile (
   id INT AUTO_INCREMENT NOT NULL,
   people_link_id INT NOT NULL,
+  job_title_id INT DEFAULT NULL,
+  job_function_id INT DEFAULT NULL,
+  department_id INT DEFAULT NULL,
   job_title VARCHAR(255) DEFAULT NULL,
   job_function VARCHAR(255) DEFAULT NULL,
   department VARCHAR(255) DEFAULT NULL,
@@ -69,12 +72,18 @@ CREATE TABLE employee_profile (
   alter_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   UNIQUE INDEX employee_profile_people_link_unique (people_link_id),
   INDEX employee_profile_people_link_idx (people_link_id),
+  INDEX employee_profile_job_title_idx (job_title_id),
+  INDEX employee_profile_job_function_idx (job_function_id),
+  INDEX employee_profile_department_idx (department_id),
   PRIMARY KEY(id)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB
 SQL
         );
 
         $this->addSql('ALTER TABLE employee_profile ADD CONSTRAINT FK_EMPLOYEE_PROFILE_PEOPLE_LINK FOREIGN KEY (people_link_id) REFERENCES people_link (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE employee_profile ADD CONSTRAINT FK_EMPLOYEE_PROFILE_JOB_TITLE FOREIGN KEY (job_title_id) REFERENCES category (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE employee_profile ADD CONSTRAINT FK_EMPLOYEE_PROFILE_JOB_FUNCTION FOREIGN KEY (job_function_id) REFERENCES category (id) ON DELETE SET NULL');
+        $this->addSql('ALTER TABLE employee_profile ADD CONSTRAINT FK_EMPLOYEE_PROFILE_DEPARTMENT FOREIGN KEY (department_id) REFERENCES category (id) ON DELETE SET NULL');
     }
 
     private function createPeopleAccessEventTable(): void
