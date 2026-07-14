@@ -2430,6 +2430,53 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "People Attendance",
+          "id": "12ea6d05-b1c5-4edb-b8b3-4fb024d624bc",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "App-Domain",
+                "value": "{{app-domain}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/report/people/attendance?context=employment&company=/people/1&periodStart=2026-07-01&periodEnd=2026-07-14",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "report",
+                "people",
+                "attendance"
+              ],
+              "query": [
+                {
+                  "key": "context",
+                  "value": "employment"
+                },
+                {
+                  "key": "company",
+                  "value": "/people/1"
+                },
+                {
+                  "key": "periodStart",
+                  "value": "2026-07-01"
+                },
+                {
+                  "key": "periodEnd",
+                  "value": "2026-07-14"
+                }
+              ]
+            }
+          },
+          "response": []
         }
       ],
       "id": "4001cea3-4bea-4ac1-9066-51d109f87989"
@@ -4356,6 +4403,43 @@
                 {
                   "key": "kind",
                   "value": "timesheet"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "people_absences",
+          "id": "963ac474-67f6-4412-a170-b0531b1ec94f",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "App-Domain",
+                "value": "{{app-domain}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/people_absences?context=employment&company=/people/1",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "people_absences"
+              ],
+              "query": [
+                {
+                  "key": "context",
+                  "value": "employment"
+                },
+                {
+                  "key": "company",
+                  "value": "/people/1"
                 }
               ]
             }
