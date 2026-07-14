@@ -2,7 +2,9 @@
 
 namespace App;
 
+use App\DependencyInjection\Compiler\DoctrineMigrationsComparatorPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -30,6 +32,12 @@ class Kernel extends BaseKernel
                 yield new $class();
             }
         }
+    }
+
+    public function build(ContainerBuilder $container): void
+    {
+        parent::build($container);
+        $container->addCompilerPass(new DoctrineMigrationsComparatorPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION);
     }
 
     public function getProjectDir(): string

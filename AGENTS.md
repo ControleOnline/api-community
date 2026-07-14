@@ -19,6 +19,7 @@
 - Antes de alterar fluxo persistente, revisar eventos como `postPersist` e `onEntityChanged`.
 - Criar e manter `AGENTS.md` conciso em cada módulo afetado.
 - Quando a regra for transversal entre módulos, o `AGENTS.md` da raiz também deve ser atualizado.
+- Migrations de estrutura devem ficar em `modules/controleonline/<modulo>/migrations`; o app raiz deve descobrir e executar esses caminhos via `doctrine_migrations` e o proxy `tenant:migrations:migrate`.
 - Testes automatizados devem ficar dentro dos módulos correspondentes.
 - Você deve manter o redme.md do projeto e dos submódulos sempre atualizados e se não existir, deve criar.
 - Você deve manter o funding.yml do projeto e dos submódulos sempre atualizados e se não existir, deve criar.
