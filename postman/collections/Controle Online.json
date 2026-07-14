@@ -4215,6 +4215,196 @@
           "response": []
         },
         {
+          "name": "employee_profiles",
+          "id": "d9f3c0ef-1f2b-4e8a-9f3d-1a2f39b0cb01",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "App-Domain",
+                "value": "{{app-domain}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/employee_profiles?peopleLink.linkType=employee&peopleLink.company=/people/1",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "employee_profiles"
+              ],
+              "query": [
+                {
+                  "key": "peopleLink.linkType",
+                  "value": "employee"
+                },
+                {
+                  "key": "peopleLink.company",
+                  "value": "/people/1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "people_access_events",
+          "id": "8aa40c3f-7b19-4f10-a7f5-6e6fa0e0e5fb",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "App-Domain",
+                "value": "{{app-domain}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/people_access_events?context=employment&company=/people/1",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "people_access_events"
+              ],
+              "query": [
+                {
+                  "key": "context",
+                  "value": "employment"
+                },
+                {
+                  "key": "company",
+                  "value": "/people/1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "people_schedules",
+          "id": "4b8dd0c3-1c04-4c52-a876-80b6b5d4c1d0",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "App-Domain",
+                "value": "{{app-domain}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/people_schedules?context=employment&company=/people/1",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "people_schedules"
+              ],
+              "query": [
+                {
+                  "key": "context",
+                  "value": "employment"
+                },
+                {
+                  "key": "company",
+                  "value": "/people/1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "people_export_jobs",
+          "id": "f0a7b7ee-2ed0-4d7f-b89d-82e79f0e7f95",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "App-Domain",
+                "value": "{{app-domain}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{host}}/people_export_jobs?context=employment&kind=timesheet",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "people_export_jobs"
+              ],
+              "query": [
+                {
+                  "key": "context",
+                  "value": "employment"
+                },
+                {
+                  "key": "kind",
+                  "value": "timesheet"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /people_export_jobs/generate",
+          "id": "7b2d2f0a-2e87-4f15-8be4-9a9d7d49cb2b",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "App-Domain",
+                "value": "{{app-domain}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/ld+json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"context\": \"employment\",\n  \"kind\": \"timesheet\",\n  \"company\": \"/people/1\",\n  \"people\": \"/people/2\",\n  \"periodStart\": \"2026-07-01\",\n  \"periodEnd\": \"2026-07-14\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{host}}/people_export_jobs/generate",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "people_export_jobs",
+                "generate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "phone",
           "id": "8a06ae81-3ee8-417f-91d0-63cd77a11e4e",
           "protocolProfileBehavior": {
