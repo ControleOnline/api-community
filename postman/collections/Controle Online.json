@@ -3570,6 +3570,48 @@
           "response": []
         },
         {
+          "name": "POST /translates/resolve",
+          "id": "4ed6c6f2-cb4e-45a7-8210-71c1e576e62d",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "App-Domain",
+                "value": "{{app-domain}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/ld+json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"people\": \"/people/1\",\n  \"language\": \"pt-br\",\n  \"requests\": [\n    {\n      \"store\": \"menu\",\n      \"type\": \"label\",\n      \"keys\": [\"save\", \"cancel\", \"delete\"]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{host}}/translates/resolve",
+              "host": [
+                "{{host}}"
+              ],
+              "path": [
+                "translates",
+                "resolve"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "GET /translates/1",
           "id": "f3c7fd81-f2c1-4215-a2d7-b5103e29ddac",
           "request": {
