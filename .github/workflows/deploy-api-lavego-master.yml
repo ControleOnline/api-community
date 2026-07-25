@@ -1,7 +1,16 @@
+#
+# este script só é executado manualmente
+# ele envia para o domínio *API* o que está em *STAGING*
+#
+# este script está sendo editado para 
+# fazer a migração corretamente para *API*, 
+# enviando o que está em *MASTER*
+#
+
 name: Deploy API NEW LaveGo
 on:
   push:
-    branches: [staging]
+    branches: [xxx]
   workflow_dispatch:
   
 jobs:
@@ -17,20 +26,20 @@ jobs:
       - name: Update API NEW LaveGo
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_APINEW_LAVEGO }}
-          username: ${{ secrets.USER_APINEW_LAVEGO }}
-          password: ${{ secrets.PASS_APINEW_LAVEGO }}
-          port: ${{ secrets.PORT_APINEW_LAVEGO }}
+          host: ${{ secrets.HOST_API_LAVEGO }}
+          username: ${{ secrets.USER_API_LAVEGO }}
+          password: ${{ secrets.PASS_API_LAVEGO }}
+          port: ${{ secrets.PORT_API_LAVEGO }}
           script: |
                   ##### ATENÇÃO!!! #####
-                  DOMAIN="apinew.lave-go.com"
+                  DOMAIN="api.lave-go.com"
                   ### ### ### ### ### ### ###
 
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
-                  cd ~/api
+                  cd ~/api # <<< ---------------------------------------------------------local correto, mesmo para a api definitiva. não trocar!
                   git fetch origin
-                  git checkout staging
-                  git reset --hard origin/staging
+                  git checkout master
+                  git reset --hard origin/master
 
                   git clean -ffd
                   git submodule sync --recursive
@@ -38,12 +47,12 @@ jobs:
                   
                   git submodule foreach --recursive '
                     git fetch origin
-                    if git show-ref --verify --quiet refs/heads/staging; then
-                      git checkout staging
+                    if git show-ref --verify --quiet refs/heads/master; then
+                      git checkout master
                     else
-                      git checkout -B staging origin/staging
+                      git checkout -B master origin/master
                     fi
-                    git reset --hard origin/staging
+                    git reset --hard origin/master
                     git clean -ffd
                   '
 
@@ -51,9 +60,15 @@ jobs:
 
                   ### OBRIGATÓRIO PARA FUNCIONAR COM O PHP 8.4 - NÃO REMOVER ###
 
-                  ### ATENÇÃO!!! >>> public_html -> ~/api/public/
-                  ### public_html é um alias apontado para ~/api/public/
-                  HTACCESS="$HOME/public_html/.htaccess"
+                  
+                  ### public_html é onde a api LEGADA chama a pasta SISTEMA # <<< --------mudar o nome para legado e criar um alias (de sábado para domingo
+                  ### public_html alias apontado para ~/legado/ # <<< --------------------CRIAR ESSE ALIAS AGORA (de sábado para domingo)                 
+                  
+
+
+                  ### public_html é um alias apontado para ~/api/public/ # <<< -----------CRIAR ESSE ALIAS SOMENTE DEPOIS DA VIRADA                 
+                  # HTACCESS="$HOME/public_html/.htaccess" # <<< -------------------------deixar DESLIGADO até a virada!!!
+                  HTACCESS="$HOME/api/public/.htaccess" # <<< ----------------------------deixar ASSIM até a virada!!!
 
                   BLOCK_START="cPanel-generated handler"
 

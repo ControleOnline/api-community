@@ -1,3 +1,10 @@
+#
+# este script só é executado manualmente
+# ele envia para o domínio *APINEW* o que está em *STANGING*
+#
+# NÃO ALTERAR !!!
+#
+
 name: Deploy API NEW LaveGo
 on:
   push:
@@ -17,20 +24,20 @@ jobs:
       - name: Update API NEW LaveGo
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST_API_LAVEGO }}
-          username: ${{ secrets.USER_API_LAVEGO }}
-          password: ${{ secrets.PASS_API_LAVEGO }}
-          port: ${{ secrets.PORT_API_LAVEGO }}
+          host: ${{ secrets.HOST_APINEW_LAVEGO }}
+          username: ${{ secrets.USER_APINEW_LAVEGO }}
+          password: ${{ secrets.PASS_APINEW_LAVEGO }}
+          port: ${{ secrets.PORT_APINEW_LAVEGO }}
           script: |
                   ##### ATENÇÃO!!! #####
-                  DOMAIN="api.lave-go.com"
+                  DOMAIN="apinew.lave-go.com"
                   ### ### ### ### ### ### ###
 
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
-                  cd ~/api # <<< ---------------------------------------------------------local correto, mesmo para a api definitiva. não trocar!
+                  cd ~/api
                   git fetch origin
-                  git checkout staging # <<< ---------------------------------------------trocar para master
-                  git reset --hard origin/staging # <<< ----------------------------------trocar para master
+                  git checkout staging
+                  git reset --hard origin/staging
 
                   git clean -ffd
                   git submodule sync --recursive
@@ -38,23 +45,22 @@ jobs:
                   
                   git submodule foreach --recursive '
                     git fetch origin
-                    if git show-ref --verify --quiet refs/heads/staging; then # <<< ------trocar para master
-                      git checkout staging # <<< -----------------------------------------trocar para master
+                    if git show-ref --verify --quiet refs/heads/staging; then
+                      git checkout staging
                     else
-                      git checkout -B staging origin/staging # <<< -----------------------trocar para master
+                      git checkout -B staging origin/staging
                     fi
-                    git reset --hard origin/staging # <<< --------------------------------trocar para master
+                    git reset --hard origin/staging
                     git clean -ffd
                   '
 
 
 
                   ### OBRIGATÓRIO PARA FUNCIONAR COM O PHP 8.4 - NÃO REMOVER ###
-                  
-                  ### ATENÇÃO!!! >>> public_html -> ~/api/public/ # <<< ------------------deixar sem este alias até a virada??
-                  ### public_html é um alias apontado para ~/api/public/                  
-                  HTACCESS="$HOME/public_html/.htaccess" # <<< ---------------------------não sei se posso fazer isso no legado… deixar o alias desligado?
-                  HTACCESS="$HOME/api/public/.htaccess" # <<< ----------------------------fazer aqui e depois na virada criar o alias >>> public_html -> ~/api/public/ ???
+
+                  ### ATENÇÃO!!! >>> public_html -> ~/api/public/
+                  ### public_html é um alias apontado para ~/api/public/
+                  HTACCESS="$HOME/public_html/.htaccess"
 
                   BLOCK_START="cPanel-generated handler"
 
