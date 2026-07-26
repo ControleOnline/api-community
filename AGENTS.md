@@ -37,6 +37,7 @@
 - Pagamento antes da producao so e obrigatorio quando a politica do modo/canal deixar isso explicito, como no balcao/prepaid checkout. Nos demais fluxos, pagamento pode acontecer antes, depois ou na entrega conforme a configuracao operacional.
 - Cobranca pendente nao pertence apenas ao delivery: em mesa/garcom, a configuracao deve indicar se o garcom cobra pelo POS ou se o cliente paga na saida do estabelecimento via `APP_TYPE=CHECKOUT`/`APP_TYPE=MANAGER`.
 - O PCP operacional segue a sequencia `production` -> impressao de barcode -> picking/separation com bipagem -> `conference` -> ready/tracking; nao modelar `conference` ou `tracking` como atalhos paralelos diretos da entrada da fila.
+- Produto sem queue de producao ainda precisa passar pelo display `conference`; nao enviar esse caso direto para entrega/pronto.
 - Pedido delivery sai para entrega somente depois da producao. Cobranca na entrega e responsabilidade do nosso entregador apenas quando a entrega tambem for nossa; em marketplaces como iFood/99 com entregador proprio da plataforma, a cobranca e responsabilidade deles.
 - Antes de abrir fluxo `APP_TYPE=DELIVERY`, resolver se a entrega e nossa. Pedidos iFood/99 com entregador da plataforma nao devem entrar na fila/tela do nosso DELIVERY; ficam aguardando confirmacao/ciclo externo do marketplace.
 
