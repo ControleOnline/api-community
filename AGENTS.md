@@ -32,6 +32,10 @@
 - `showInParentQueue` nao pode criar registros sintéticos nem alterar a persistencia da fila real.
 - `ProductGroup.showInDisplay` e a flag de visibilidade operacional do grupo. Quando falsa, o grupo continua agrupando itens, mas o titulo nao deve aparecer em displays nem na impressao. O default de novos grupos e oculto (`false`).
 - A impressao em papel da fila deve seguir a mesma regra visual do display correspondente: item materializado nao mostra `2x`, e prefixo de quantidade so aparece acima de 1 em itens internos nao materializados.
+- `display.display_type` usa os valores canonicos `production`, `conference` e `tracking`; `products`, `orders` e `tv` sao apenas aliases legados para leitura/migracao.
+- Pedido de mesa ou comanda (`table`/`tab`) pode entrar em preparo antes do pagamento; pagamento nao e gate universal de producao.
+- Pagamento antes da producao so e obrigatorio quando a politica do modo/canal deixar isso explicito, como no balcao/prepaid checkout. Nos demais fluxos, pagamento pode acontecer antes, depois ou na entrega conforme a configuracao operacional.
+- Pedido delivery sai para entrega somente depois da producao. Cobranca na entrega e responsabilidade do nosso entregador apenas quando a entrega tambem for nossa; em marketplaces como iFood/99 com entregador proprio da plataforma, a cobranca e responsabilidade deles.
 
 ## Regra transversal de grupos compartilhados
 - `product_group.company_id` e a fonte de escopo da empresa para o grupo.
