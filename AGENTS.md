@@ -36,6 +36,8 @@
 - Pedido de mesa ou comanda (`table`/`tab`) pode entrar em preparo antes do pagamento; pagamento nao e gate universal de producao.
 - Pagamento antes da producao so e obrigatorio quando a politica do modo/canal deixar isso explicito, como no balcao/prepaid checkout. Nos demais fluxos, pagamento pode acontecer antes, depois ou na entrega conforme a configuracao operacional.
 - Pedido delivery sai para entrega somente depois da producao. Cobranca na entrega e responsabilidade do nosso entregador apenas quando a entrega tambem for nossa; em marketplaces como iFood/99 com entregador proprio da plataforma, a cobranca e responsabilidade deles.
+- Antes de abrir fluxo `APP_TYPE=DELIVERY`, resolver se a entrega e nossa. Pedidos iFood/99 com entregador da plataforma nao devem entrar na fila/tela do nosso DELIVERY; ficam aguardando confirmacao/ciclo externo do marketplace.
+- Abrir/fechar caixa pertence ao `APP_TYPE=POS` como cash register/cash drawer para conferencia do dinheiro recebido pelo operador; nao modelar caixa como etapa propria do fluxo de producao ou delivery.
 
 ## Regra transversal de grupos compartilhados
 - `product_group.company_id` e a fonte de escopo da empresa para o grupo.
