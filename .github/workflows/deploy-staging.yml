@@ -36,20 +36,28 @@ jobs:
                     git reset --hard origin/staging
                     git clean -ffd
                   '
-                  COMPOSER_BIN="$(command -v composer || true)"
-                  if [ -z "$COMPOSER_BIN" ]; then
-                    for candidate in /usr/local/bin/composer /usr/bin/composer "$HOME/bin/composer"; do
+                  run_composer() {
+                    if command -v composer >/dev/null 2>&1; then
+                      composer "$@"
+                      return
+                    fi
+
+                    for candidate in /usr/local/bin/composer /usr/bin/composer "$HOME/bin/composer" "$HOME/composer.phar" "$HOME/bin/composer.phar" composer.phar; do
                       if [ -x "$candidate" ]; then
-                        COMPOSER_BIN="$candidate"
-                        break
+                        "$candidate" "$@"
+                        return
+                      fi
+
+                      if [ -f "$candidate" ]; then
+                        php "$candidate" "$@"
+                        return
                       fi
                     done
-                  fi
-                  if [ -z "$COMPOSER_BIN" ]; then
+
                     echo "Composer not found on remote server"
                     exit 1
-                  fi
-                  "$COMPOSER_BIN" install --no-interaction --no-suggest
+                  }
+                  run_composer install --no-interaction --no-suggest
                   rm -rf var/cache/prod/pools/system
                   rm -rf var/cache/prod/doctrine/orm
                   rm -f var/cache/prod/serialization.php
