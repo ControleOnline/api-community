@@ -87,4 +87,4 @@ jobs:
       - name: Install Dependencies
         run: composer install --no-interaction --no-progress --prefer-dist
       - name: Run PHPUnit
-        run: php bin/phpunit
+        run: ./vendor/bin/phpunit
