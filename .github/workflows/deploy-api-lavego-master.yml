@@ -121,6 +121,8 @@ jobs:
                   rm -rf var/cache/prod/doctrine/orm
                   rm -f var/cache/prod/serialization.php
                   "$PHP_BIN" -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null
+                  "$PHP_BIN" bin/console doctrine:migrations:sync-metadata-storage --configuration=config/migrations/multi_tenancy.yaml --no-interaction
+                  "$PHP_BIN" bin/console doctrine:migrations:migrate --configuration=config/migrations/multi_tenancy.yaml --no-interaction
                   "$PHP_BIN" bin/console tenant:migrations:migrate --no-interaction
                   mkdir -p var/log
                   nohup "$PHP_BIN" bin/console tenant:messenger:consume async --domain="$DOMAIN" >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
