@@ -13,5 +13,6 @@ doctrine_migrations:
         'DoctrineMigrations\Tasks': '%kernel.project_dir%/modules/controleonline/tasks/migrations'
         'DoctrineMigrations\Ead': '%kernel.project_dir%/modules/controleonline/ead/migrations'
         'DoctrineMigrations\Users': '%kernel.project_dir%/modules/controleonline/users/migrations'
+        'DoctrineMigrations\MultiTenancy': '%kernel.project_dir%/modules/controleonline/multi-tenancy/migrations'
         'DoctrineMigrations\ZTenantSeed': '%kernel.project_dir%/modules/controleonline/common/migrations/tenant_seed'
     enable_profiler: false
