@@ -1,24 +1,3 @@
 controllers:
     resource: ../../src/Controller/
     type: attribute
-controleonline_users:
-    resource: ../../modules/controleonline/users/src/Controller/
-    type: attribute
-controleonline_financial:
-    resource: ../../modules/controleonline/financial/src/Controller/
-    type: attribute
-controleonline_orders:
-    resource: ../../modules/controleonline/orders/src/Controller/
-    type: attribute
-controleonline_products:
-    resource: ../../modules/controleonline/products/src/Controller/
-    type: attribute
-controleonline_websocket:
-    resource: ../../modules/controleonline/websocket-server/src/Controller/
-    type: attribute
-controleonline_common:
-    resource: ../../modules/controleonline/common/src/Controller/
-    type: attribute    
-controleonline_food:
-    resource: ../../modules/controleonline/integration/src/Controller/
-    type: attribute    

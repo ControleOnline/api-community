@@ -1,1 +1,0 @@
-php bin/console api:upgrade-resource -f

@@ -4,12 +4,20 @@ checks:
 build:
   nodes:
     analysis:
+      environment:
+        php:
+          version: "8.3.0"
       dependencies:
-        after:
+        override:
+          - composer self-update --2
+          - composer install --no-interaction --no-progress --prefer-dist --no-scripts --no-security-blocking
           - composer require --dev --no-interaction --no-progress --no-scripts squizlabs/php_codesniffer:^3.11
       tests:
         override:
-          - php-scrutinizer-run
+          - command: phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.xml
+            coverage:
+              file: coverage.xml
+              format: php-clover
           - command: phpcs-run
             use_website_config: true
 

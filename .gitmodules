@@ -37,9 +37,9 @@
 	path = modules/controleonline/ead
 	url = https://github.com/ControleOnline/api-platform-ead.git
 	branch = master
-[submodule "modules/controleonline/dashboard"]
-	path = modules/controleonline/dashboard
-	url = https://github.com/ControleOnline/api-platform-dashboard.git
+[submodule "modules/controleonline/report"]
+	path = modules/controleonline/report
+	url = https://github.com/ControleOnline/api-platform-report.git
 	branch = master
 [submodule "modules/controleonline/common"]
 	path = modules/controleonline/common
@@ -76,4 +76,8 @@
 [submodule "modules/controleonline/spc-sdk"]
 	path = modules/controleonline/spc-sdk
 	url = https://github.com/ControleOnline/spc-sdk-php.git
+	branch = master
+[submodule "modules/controleonline/smoke-tests-playground"]
+	path = modules/controleonline/smoke-tests-playground
+	url = https://github.com/ControleOnline/smoke-tests-playground.git
 	branch = master

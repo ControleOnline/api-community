@@ -42,18 +42,31 @@ security:
         - { path: ^/docs$, roles: PUBLIC_ACCESS }
         - { path: ^/token$, roles: PUBLIC_ACCESS }
         - { path: ^/create-account, roles: PUBLIC_ACCESS }
+        - { path: ^/password_recoveries$, roles: PUBLIC_ACCESS }
+        - { path: ^/recovery_accesses$, roles: PUBLIC_ACCESS }
+        - { path: ^/account_verifications$, roles: PUBLIC_ACCESS }
         - { path: ^/themes-colors.css$, roles: PUBLIC_ACCESS }
         - { path: ^/languages$, roles: PUBLIC_ACCESS }
         - { path: ^/people/company/default$, roles: PUBLIC_ACCESS }
+        - { path: ^/shop/franchises$, roles: PUBLIC_ACCESS }
+        - { path: ^/shop/categories$, roles: PUBLIC_ACCESS }
+        - { path: ^/shop/categories/.*$, roles: PUBLIC_ACCESS }
         - { path: ^/translates$, roles: PUBLIC_ACCESS }
-        - { path: ^/cart$, roles: PUBLIC_ACCESS }
-        - { path: ^/files/.*$, roles: PUBLIC_ACCESS }
+        - { path: ^/anonymous-cart$, roles: PUBLIC_ACCESS }
+        - { path: ^/anonymous-cart/items$, roles: PUBLIC_ACCESS }
+        - { path: ^/[^/]+/files/.*$, roles: PUBLIC_ACCESS }
         - { path: ^/webhook/, roles: PUBLIC_ACCESS }
         - { path: ^/oauth/, roles: PUBLIC_ACCESS }
         - { path: ^/pix$, roles: PUBLIC_ACCESS }
         - { path: ^/bitcoin$, roles: PUBLIC_ACCESS }
-        - { path: ^/categories$, roles: PUBLIC_ACCESS }        
-        - { path: ^/categories/.*$, roles: PUBLIC_ACCESS }
         - { path: ^/debug$, roles: PUBLIC_ACCESS }
-        - { path: ^/products$, roles: PUBLIC_ACCESS }        
+        - { path: ^/product-showcases/catalog$, roles: PUBLIC_ACCESS }
+        - { path: ^/products$, roles: PUBLIC_ACCESS }
+        - { path: ^/products/.*$, roles: PUBLIC_ACCESS }
+        - { path: ^/product_groups$, roles: PUBLIC_ACCESS }
+        - { path: ^/product_groups/.*$, roles: PUBLIC_ACCESS }
+        - { path: ^/product_group_products$, roles: PUBLIC_ACCESS }
+        - { path: ^/product_group_products/.*$, roles: PUBLIC_ACCESS }
+        - { path: ^/product_group_parents$, roles: PUBLIC_ACCESS }
+        - { path: ^/product_group_parents/.*$, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
