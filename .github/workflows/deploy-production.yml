@@ -20,6 +20,7 @@ jobs:
           script: |
                   set -e
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+                  export COMPOSER_ALLOW_SUPERUSER=1
                   cd ~/sistemas/controleonline/api
                   RESTART_FILE="$PWD/public/.lsphp_restart.txt"
                   git fetch origin

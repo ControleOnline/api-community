@@ -37,6 +37,7 @@ jobs:
                   ### ### ### ### ### ### ###
 
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+                  export COMPOSER_ALLOW_SUPERUSER=1
                   cd ~/api # <<< ---------------------------------------------------------local correto, mesmo para a api definitiva. não trocar!
                   git fetch origin
                   git checkout master
