@@ -31,6 +31,7 @@ jobs:
           password: ${{ secrets.PASS_API_LAVEGO }}
           port: ${{ secrets.PORT_API_LAVEGO }}
           script: |
+                  set -e
                   ##### ATENÇÃO!!! #####
                   DOMAIN="api.lave-go.com"
                   ### ### ### ### ### ### ###

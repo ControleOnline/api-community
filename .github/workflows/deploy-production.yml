@@ -18,6 +18,7 @@ jobs:
           key: ${{ secrets.CONTROLEONLINE }}
           port: ${{ secrets.PORT }}
           script: |
+                  set -e
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
                   cd ~/sistemas/controleonline/api
                   RESTART_FILE="$PWD/public/.lsphp_restart.txt"

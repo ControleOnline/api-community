@@ -17,6 +17,7 @@ jobs:
           username: ${{ secrets.DEV_USER }}
           password: ${{ secrets.DEV_PASS }}
           script: |
+                  set -e
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
                   cd /var/www/api-community
                   RESTART_FILE="$PWD/public/.lsphp_restart.txt"
