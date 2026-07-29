@@ -52,7 +52,8 @@ security:
         - { path: ^/shop/categories$, roles: PUBLIC_ACCESS }
         - { path: ^/shop/categories/.*$, roles: PUBLIC_ACCESS }
         - { path: ^/translates$, roles: PUBLIC_ACCESS }
-        - { path: ^/cart$, roles: PUBLIC_ACCESS }
+        - { path: ^/anonymous-cart$, roles: PUBLIC_ACCESS }
+        - { path: ^/anonymous-cart/items$, roles: PUBLIC_ACCESS }
         - { path: ^/[^/]+/files/.*$, roles: PUBLIC_ACCESS }
         - { path: ^/webhook/, roles: PUBLIC_ACCESS }
         - { path: ^/oauth/, roles: PUBLIC_ACCESS }
