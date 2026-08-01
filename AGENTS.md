@@ -28,7 +28,9 @@
 - `order_product_queues` e a árvore de `orderProducts` sao contratos diferentes.
 - A fila de producao persiste apenas o que entrou na producao; a visibilidade de filho no pai e regra visual do consumidor.
 - `showInParentQueue` nao pode criar registros sintéticos nem alterar a persistencia da fila real.
-- `ProductGroup.showInDisplay` e a flag de visibilidade operacional do grupo. Quando falsa, o grupo continua agrupando itens, mas o titulo nao deve aparecer em displays nem na impressao. O default de novos grupos e oculto (`false`).
+- `ProductGroup.showInDisplay` controla o titulo do grupo nos displays e `ProductGroup.showInPrint` controla o titulo impresso, com fallback para `showInDisplay` em registros legados. O grupo continua agrupando itens quando os titulos estao ocultos; o default de novos grupos e oculto (`false`).
+- A apresentacao compacta de `tracking` e `conference` pertence ao `Display`: identificacao de fila (`none`, `name`, `short_label` ou `icon`), indicador de status (`bullet` ou `line`), exibicao de `1x` e permissao global para nomes de grupos. A `Queue` e dona do nome, identificacao curta e icone; o produto continua apenas escolhendo sua fila.
+- A semantica visual de customizacoes pertence ao `ProductGroup.customizationType` (`neutral`, `addition` ou `removal`). `ProductGroupProduct.showInParentQueue` continua sendo apenas a regra de visibilidade do item incorporado na fila do pai.
 - A impressao em papel da fila deve seguir a mesma regra visual do display correspondente: item materializado nao mostra `2x`, e prefixo de quantidade so aparece acima de 1 em itens internos nao materializados.
 - `display.display_type` usa os valores canonicos `production`, `conference` e `tracking`; `products`, `orders` e `tv` sao apenas aliases legados para leitura/migracao.
 - Pedido de mesa ou comanda (`table`/`tab`) pode entrar em preparo antes do pagamento; pagamento nao e gate universal de producao.
