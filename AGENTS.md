@@ -2,11 +2,9 @@
 - `api-community/key.local` guarda a chave de API de um usuário de teste. Use quando precisar validar autenticação real.
 - Quando precisar acessar um ambiente por SSH para depurar ou publicar, consulte a tabela `servers` do banco do ambiente. Ela concentra os dados operacionais do acesso (`app_host`, `host`, `user`, `port` e `password`) e é a fonte de verdade para esse tipo de conexão.
 
-## Qualidade
-- Rodar lint e testes antes de concluir.
-- Não introduzir breaking changes sem destacar.
-- Preferir mudanças pequenas e isoladas.
-- Corrigir deprecações no trecho tocado.
+## Qualidade de código
+- A barra comum de modularizacao, testes, smoke tests e limite de tamanho de componentes vive em `https://github.com/ControleOnline/agents-mcp/blob/master/skills/shared/code-quality.md`.
+- Use essa skill como fonte oficial de aprovacao tecnica para qualquer mudanca de codigo no `api-community`.
 
 ## Convenções gerais
 - Preferir constantes em entidades em vez de duplicar catálogos em services.
