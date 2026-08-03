@@ -5,10 +5,7 @@ API - Controle Online
 
 
 ### Submodules
-```bash
-git submodule update --init --recursive
-git submodule update --recursive
-```
+[Instalacao e dependencias](https://github.com/ControleOnline/api-community/wiki/Instalacao)
 
 
 ### Front Ends
@@ -40,4 +37,8 @@ git submodule update --recursive
   <img src="https://contrib.rocks/image?repo=ControleOnline/api-community" />
 </a>
 
+## Links obrigatorios
 
+- [Documentacao para clientes](http://ajuda.controleonline.com/)
+- [Site institucional](http://controleonline.com/)
+- [Wiki tecnica](https://github.com/ControleOnline/api-community/wiki)
