@@ -20,7 +20,13 @@ jobs:
                   set -e
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
                   export COMPOSER_ALLOW_SUPERUSER=1
-                  cd /var/www/api-community-dev
+                  TARGET="/var/www/api-community-dev"
+                  if [ ! -d "$TARGET/.git" ]; then
+                    echo "Bootstrap: cloning api-community@dev into $TARGET"
+                    mkdir -p /var/www
+                    git clone --branch dev --recurse-submodules https://github.com/ControleOnline/api-community.git "$TARGET"
+                  fi
+                  cd "$TARGET"
                   RESTART_FILE="$PWD/public/.lsphp_restart.txt"
                   git fetch origin
                   git checkout dev
