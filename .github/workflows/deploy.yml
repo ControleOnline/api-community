@@ -1,0 +1,219 @@
+# Single deploy pipeline for dev / staging / master.
+# Step 1 (configure) resolves environment variables from the branch.
+# Step 2 (deploy) consumes those outputs — one process, no per-env copies.
+# LaveGo whitelabel remains separate (workflow_dispatch / branch xxx only).
+name: Deploy
+
+on:
+  push:
+    branches: [dev, staging, master]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Environment to deploy"
+        required: true
+        type: choice
+        options: [dev, staging, master]
+
+concurrency:
+  group: deploy-${{ github.event.inputs.target || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  # ─── Step 1: resolve environment ───────────────────────────────────────────
+  configure:
+    name: "1 · Configure environment"
+    runs-on: ubuntu-latest
+    outputs:
+      env: ${{ steps.set.outputs.env }}
+      branch: ${{ steps.set.outputs.branch }}
+      remote_path: ${{ steps.set.outputs.remote_path }}
+      messenger_domain: ${{ steps.set.outputs.messenger_domain }}
+      auth_mode: ${{ steps.set.outputs.auth_mode }}
+      bootstrap: ${{ steps.set.outputs.bootstrap }}
+      github_environment: ${{ steps.set.outputs.github_environment }}
+    steps:
+      - name: Map branch → environment config
+        id: set
+        run: |
+          set -e
+          REF="${{ github.event.inputs.target || github.ref_name }}"
+          case "$REF" in
+            dev)
+              ENV=dev; BRANCH=dev
+              REMOTE_PATH=/var/www/api-community-dev
+              MESSENGER_DOMAIN=d.controleonline.com
+              AUTH_MODE=password; BOOTSTRAP=true; GH_ENV=dev
+              ;;
+            staging)
+              ENV=staging; BRANCH=staging
+              REMOTE_PATH=/var/www/api-community
+              MESSENGER_DOMAIN=s.controleonline.com
+              AUTH_MODE=password; BOOTSTRAP=false; GH_ENV=staging
+              ;;
+            master)
+              ENV=master; BRANCH=master
+              REMOTE_PATH='~/sistemas/controleonline/api'
+              MESSENGER_DOMAIN=api.controleonline.com
+              AUTH_MODE=key; BOOTSTRAP=false; GH_ENV=production
+              ;;
+            *)
+              echo "Unsupported target: $REF (expected dev|staging|master)"
+              exit 1
+              ;;
+          esac
+          {
+            echo "env=$ENV"
+            echo "branch=$BRANCH"
+            echo "remote_path=$REMOTE_PATH"
+            echo "messenger_domain=$MESSENGER_DOMAIN"
+            echo "auth_mode=$AUTH_MODE"
+            echo "bootstrap=$BOOTSTRAP"
+            echo "github_environment=$GH_ENV"
+          } >> "$GITHUB_OUTPUT"
+          echo "Configured: env=$ENV branch=$BRANCH path=$REMOTE_PATH auth=$AUTH_MODE"
+
+  # ─── Step 2: deploy ────────────────────────────────────────────────────────
+  deploy:
+    name: "2 · Deploy (${{ needs.configure.outputs.env }})"
+    needs: configure
+    runs-on: ubuntu-latest
+    environment: ${{ needs.configure.outputs.github_environment }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Validate required secrets for environment
+        run: |
+          set -e
+          ENV="${{ needs.configure.outputs.env }}"
+          case "$ENV" in
+            dev)
+              test -n "${{ secrets.DEV_HOST }}" || { echo "Missing DEV_HOST"; exit 1; }
+              test -n "${{ secrets.DEV_USER }}" || { echo "Missing DEV_USER"; exit 1; }
+              test -n "${{ secrets.DEV_PASS }}" || { echo "Missing DEV_PASS"; exit 1; }
+              ;;
+            staging)
+              test -n "${{ secrets.STAGING_HOST }}" || { echo "Missing STAGING_HOST"; exit 1; }
+              test -n "${{ secrets.STAGING_USER }}" || { echo "Missing STAGING_USER"; exit 1; }
+              test -n "${{ secrets.STAGING_PASS }}" || { echo "Missing STAGING_PASS"; exit 1; }
+              ;;
+            master)
+              test -n "${{ secrets.API_HOST }}" || { echo "Missing API_HOST"; exit 1; }
+              test -n "${{ secrets.USER }}" || { echo "Missing USER"; exit 1; }
+              test -n "${{ secrets.CONTROLEONLINE }}" || { echo "Missing CONTROLEONLINE (SSH key)"; exit 1; }
+              ;;
+          esac
+
+      - name: Deploy application over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ needs.configure.outputs.env == 'dev' && secrets.DEV_HOST || needs.configure.outputs.env == 'staging' && secrets.STAGING_HOST || secrets.API_HOST }}
+          username: ${{ needs.configure.outputs.env == 'dev' && secrets.DEV_USER || needs.configure.outputs.env == 'staging' && secrets.STAGING_USER || secrets.USER }}
+          password: ${{ needs.configure.outputs.auth_mode == 'password' && (needs.configure.outputs.env == 'dev' && secrets.DEV_PASS || secrets.STAGING_PASS) || '' }}
+          key: ${{ needs.configure.outputs.auth_mode == 'key' && secrets.CONTROLEONLINE || '' }}
+          port: ${{ needs.configure.outputs.auth_mode == 'key' && secrets.PORT || 22 }}
+          script_stop: true
+          envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP
+          script: |
+            set -e
+            export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+            export COMPOSER_ALLOW_SUPERUSER=1
+
+            BRANCH="${DEPLOY_BRANCH}"
+            TARGET="${REMOTE_PATH}"
+            TARGET="${TARGET/#\~/$HOME}"
+
+            if [ "${BOOTSTRAP}" = "true" ] && [ ! -d "$TARGET/.git" ]; then
+              echo "Bootstrap: cloning api-community@${BRANCH} into $TARGET"
+              mkdir -p "$(dirname "$TARGET")"
+              git clone --branch "$BRANCH" --recurse-submodules https://github.com/ControleOnline/api-community.git "$TARGET"
+            fi
+
+            cd "$TARGET"
+            RESTART_FILE="$PWD/public/.lsphp_restart.txt"
+
+            git fetch origin
+            if git show-ref --verify --quiet "refs/heads/${BRANCH}"; then
+              git checkout "$BRANCH"
+            else
+              git checkout -B "$BRANCH" "origin/${BRANCH}"
+            fi
+            git reset --hard "origin/${BRANCH}"
+            git clean -ffd
+
+            git submodule sync --recursive
+            git submodule update --recursive --init
+            git submodule foreach --recursive "
+              set -e
+              git fetch origin
+              if git show-ref --verify --quiet refs/heads/${BRANCH}; then
+                git checkout ${BRANCH}
+              else
+                git checkout -B ${BRANCH} origin/${BRANCH}
+              fi
+              git reset --hard origin/${BRANCH}
+              git clean -ffd
+            "
+
+            run_composer() {
+              if command -v composer >/dev/null 2>&1; then
+                composer "$@"
+                return
+              fi
+              for candidate in /usr/local/bin/composer /usr/bin/composer "$HOME/bin/composer" "$HOME/composer.phar" "$HOME/bin/composer.phar" composer.phar; do
+                if [ -x "$candidate" ]; then
+                  "$candidate" "$@"
+                  return
+                fi
+                if [ -f "$candidate" ]; then
+                  php "$candidate" "$@"
+                  return
+                fi
+              done
+              echo "Composer not found on remote server"
+              exit 1
+            }
+
+            run_composer install --no-interaction --no-suggest
+            rm -rf var/cache/prod/pools/system
+            rm -rf var/cache/prod/doctrine/orm
+            rm -f var/cache/prod/serialization.php
+            php -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null
+            php bin/console doctrine:migrations:sync-metadata-storage --configuration=config/migrations/multi_tenancy.yaml --no-interaction
+            php bin/console doctrine:migrations:migrate --configuration=config/migrations/multi_tenancy.yaml --no-interaction
+            php bin/console tenant:migrations:migrate --no-interaction
+            mkdir -p var/log
+            nohup php bin/console tenant:messenger:consume async --domain="${MESSENGER_DOMAIN}" >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
+            touch "$HOME/.lsphp_restart.txt" 2>/dev/null || true
+            touch "$RESTART_FILE" 2>/dev/null || true
+            if command -v systemctl >/dev/null 2>&1; then
+              sudo -n systemctl reload php8.3-fpm 2>/dev/null || sudo -n service php8.3-fpm reload 2>/dev/null || true
+            fi
+            rm -f "$HOME/.lsphp_restart.txt" "$RESTART_FILE" 2>/dev/null || true
+            echo "Deploy OK: $(git rev-parse --short HEAD) @ ${BRANCH} → ${TARGET}"
+        env:
+          DEPLOY_BRANCH: ${{ needs.configure.outputs.branch }}
+          REMOTE_PATH: ${{ needs.configure.outputs.remote_path }}
+          MESSENGER_DOMAIN: ${{ needs.configure.outputs.messenger_domain }}
+          BOOTSTRAP: ${{ needs.configure.outputs.bootstrap }}
+
+  # ─── Step 3: tests ─────────────────────────────────────────────────────────
+  tests:
+    name: "3 · Tests"
+    needs: [configure, deploy]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.configure.outputs.branch }}
+          submodules: recursive
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          coverage: none
+          tools: composer:v2
+      - name: Install Dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+      - name: Run PHPUnit
+        run: ./vendor/bin/phpunit
