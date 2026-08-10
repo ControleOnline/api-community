@@ -7,7 +7,7 @@
 # enviando o que está em *MASTER*
 #
 
-name: Deploy API NEW LaveGo
+name: Deploy API LaveGo
 on:
   push:
     branches: [xxx]
