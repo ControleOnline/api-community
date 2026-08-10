@@ -5,7 +5,7 @@
 # NÃO ALTERAR !!!
 #
 
-name: Deploy API NEW LaveGo
+name: Deploy APINEW LaveGo
 on:
   push:
     branches: [master]
