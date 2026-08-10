@@ -13,9 +13,9 @@ jobs:
       - name: Update Controle Online
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.DEV_HOST }}
-          username: ${{ secrets.DEV_USER }}
-          password: ${{ secrets.DEV_PASS }}
+          host: ${{ secrets.STAGING_HOST }}
+          username: ${{ secrets.STAGING_USER }}
+          password: ${{ secrets.STAGING_PASS }}
           script: |
                   set -e
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
