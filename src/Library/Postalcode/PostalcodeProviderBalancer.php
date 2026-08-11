@@ -8,52 +8,56 @@ use App\Library\Postalcode\GoogleMaps\GoogleMapsServiceProvider;
 use App\Library\Postalcode\Postmon\PostmonServiceProvider;
 use App\Library\Postalcode\Viacep\ViacepServiceProvider;
 
+/**
+ * CEP lookup balancer.
+ * Order (priority): Postmon → ViaCEP → Google Maps.
+ */
 class PostalcodeProviderBalancer
 {
-  /**
-   * Execution order. Must change only if you
-   * want to change the priority
-   */
-  private $providers = [
-    'viacep'     => ViacepServiceProvider::class,
+  private array $providers = [
     'postmon'    => PostmonServiceProvider::class,
+    'viacep'     => ViacepServiceProvider::class,
     'googlemaps' => GoogleMapsServiceProvider::class,
   ];
 
+  private ?string $currentProviderKey = null;
   private $currentProvider = null;
 
   public function search(string $postalCode): Address
   {
+    $postalCode = preg_replace('/\D+/', '', $postalCode) ?? '';
+    $keys = array_keys($this->providers);
+
+    if ($this->currentProviderKey === null) {
+      $this->currentProviderKey = $keys[0];
+      $this->currentProvider = new $this->providers[$this->currentProviderKey]();
+    }
+
     try {
-
-      if ($this->currentProvider === null) {
-        $this->currentProvider = current($this->providers);
-        $this->currentProvider = new $this->currentProvider;
-      }
-
       return $this->currentProvider->getAddress($postalCode);
     } catch (\Exception $e) {
-      if ($e instanceof ProviderRequestException) {
+      if ($e instanceof ProviderRequestException || $e instanceof \Exception) {
         $this->setNextProvider();
-
         return $this->search($postalCode);
       }
+      throw $e;
     }
   }
 
   public function getProviderCodeName(): string
   {
-    return key($this->providers);
+    return $this->currentProviderKey ?? (array_keys($this->providers)[0] ?? '');
   }
 
   private function setNextProvider(): void
   {
-    $nextProvider = next($this->providers);
-
-    if ($nextProvider === false) {
+    $keys = array_keys($this->providers);
+    $idx = array_search($this->currentProviderKey, $keys, true);
+    $nextIdx = ($idx === false) ? 0 : $idx + 1;
+    if ($nextIdx >= count($keys)) {
       throw new \Exception('Postalcode services are not available');
     }
-
-    $this->currentProvider = new $nextProvider;
+    $this->currentProviderKey = $keys[$nextIdx];
+    $this->currentProvider = new $this->providers[$this->currentProviderKey]();
   }
 }

@@ -42,6 +42,17 @@ class GoogleMapsService implements PostalcodeService
     $number      = empty($number     ) ? false : current($number     );
     $postalCode  = empty($postalCode ) ? false : current($postalCode );
 
+    $lat = null;
+    $lng = null;
+    $formatted = null;
+    if (!empty($result->results[0]->geometry->location)) {
+      $lat = $result->results[0]->geometry->location->lat ?? null;
+      $lng = $result->results[0]->geometry->location->lng ?? null;
+    }
+    if (!empty($result->results[0]->formatted_address)) {
+      $formatted = $result->results[0]->formatted_address;
+    }
+
     return (new Address)
       ->setCountry   ('Brasil')
       ->setState     ($stateName  === false ? '' : $stateName ->short_name)
@@ -50,8 +61,12 @@ class GoogleMapsService implements PostalcodeService
       ->setDistrict  ($district   === false ? '' : $district  ->long_name )
       ->setStreet    ($street     === false ? '' : $street    ->long_name )
       ->setNumber    ($number     === false ? '' : $number    ->long_name )
-      ->setPostalCode($postalCode === false ? '' : $postalCode->long_name )
+      ->setPostalCode($postalCode === false ? '' : preg_replace('/\D+/', '', $postalCode->long_name))
       ->setComplement('')
+      ->setLatitude($lat)
+      ->setLongitude($lng)
+      ->setFormatted($formatted)
+      ->setProvider('googlemaps')
     ;
   }
 

@@ -128,4 +128,72 @@ class Address
   {
     return $this->complement;
   }
+
+  private $latitude = null;
+  private $longitude = null;
+  private $provider = null;
+  private $formatted = null;
+
+  public function setLatitude($latitude): self
+  {
+    $this->latitude = $latitude === null || $latitude === '' ? null : (float) $latitude;
+    return $this;
+  }
+
+  public function getLatitude()
+  {
+    return $this->latitude;
+  }
+
+  public function setLongitude($longitude): self
+  {
+    $this->longitude = $longitude === null || $longitude === '' ? null : (float) $longitude;
+    return $this;
+  }
+
+  public function getLongitude()
+  {
+    return $this->longitude;
+  }
+
+  public function setProvider(?string $provider): self
+  {
+    $this->provider = $provider;
+    return $this;
+  }
+
+  public function getProvider(): ?string
+  {
+    return $this->provider;
+  }
+
+  public function setFormatted(?string $formatted): self
+  {
+    $this->formatted = $formatted;
+    return $this;
+  }
+
+  public function getFormatted(): ?string
+  {
+    return $this->formatted;
+  }
+
+  public function toArray(): array
+  {
+    return [
+      'postalCode' => $this->getPostalCode(),
+      'street' => $this->getStreet(),
+      'number' => $this->getNumber(),
+      'complement' => $this->getComplement(),
+      'district' => $this->getDistrict(),
+      'city' => $this->getCity(),
+      'state' => $this->getState(),
+      'uf' => $this->getUF(),
+      'country' => $this->getCountry(),
+      'latitude' => $this->getLatitude(),
+      'longitude' => $this->getLongitude(),
+      'provider' => $this->getProvider(),
+      'formatted' => $this->getFormatted(),
+    ];
+  }
 }
