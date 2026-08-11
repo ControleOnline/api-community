@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use Symfony\Component\HttpFoundation\RequestStack;
-use App\Library\Utils\WordPress;
+use ControleOnline\Library\Utils\WordPress;
 use ControleOnline\Entity\Posts;
 
 class WordPressService
