@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Library\Postalcode\PostalcodeProviderBalancer;
+use ControleOnline\Library\Postalcode\PostalcodeProviderBalancer;
 use Doctrine\ORM\EntityManagerInterface;
 use ControleOnline\Entity\Country;
 use ControleOnline\Entity\State;

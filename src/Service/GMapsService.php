@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use Symfony\Component\HttpFoundation\RequestStack;
-use App\Library\Utils\GMaps;
+use ControleOnline\Library\Utils\GMaps;
 use ControleOnline\Entity\GeoPlace;
 
 class GMapsService

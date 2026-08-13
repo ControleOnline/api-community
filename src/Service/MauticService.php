@@ -4,10 +4,10 @@ namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-use App\Library\Utils\Mautic\Prospect;
-use App\Library\Utils\Mautic\Client\Contacts;
-use App\Library\Utils\Mautic\Model\Company;
-use App\Library\Utils\Mautic\Model\Contact;
+use ControleOnline\Library\Utils\Mautic\Prospect;
+use ControleOnline\Library\Utils\Mautic\Client\Contacts;
+use ControleOnline\Library\Utils\Mautic\Model\Company;
+use ControleOnline\Library\Utils\Mautic\Model\Contact;
 
 use ControleOnline\Entity\People as Provider;
 use ControleOnline\Entity\PeopleDomain;
