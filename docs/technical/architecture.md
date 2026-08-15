@@ -104,6 +104,8 @@ docker-compose exec php bin/console doctrine:migrations:migrate
 | `php` | Build local (PHP-FPM) | — |
 | `nginx` | nginx:1.12.1 | 80 |
 
+> **Nota:** a versão `nginx:1.12.1` reflete a configuração atual em `docker-compose.yml`. Recomenda-se atualizar para uma versão LTS recente (ex.: `nginx:1.26`).
+
 ## Segurança {#seguranca}
 
 - Autenticação via token (configurado em `config/routes.yaml`).
