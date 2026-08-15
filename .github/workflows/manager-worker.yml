@@ -1,0 +1,144 @@
+name: Manager Worker
+
+on:
+  push:
+    branches: [master, dev, staging]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+# Orquestrador: Manager resolve/cria issue e decide quais workers invocar.
+# Padrão de branch da org = master (não usar main).
+jobs:
+  manager:
+    name: Manager — resolve + plano de workers
+    runs-on: ubuntu-latest
+    outputs:
+      issue_number: ${{ steps.mgr.outputs.issue_number }}
+      created: ${{ steps.mgr.outputs.created }}
+      run_qa: ${{ steps.mgr.outputs.run_qa }}
+      run_security: ${{ steps.mgr.outputs.run_security }}
+      run_docs: ${{ steps.mgr.outputs.run_docs }}
+      run_gates: ${{ steps.mgr.outputs.run_gates }}
+      base_branch: ${{ steps.mgr.outputs.base_branch }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Manager subworker
+        id: mgr
+        uses: ./.github/actions/workers/manager
+        with:
+          gh_token: ${{ secrets.GH_TOKEN }}
+          branch: ${{ github.ref_name }}
+
+  # Workers invocados pelo plano do Manager (paralelo quando ambos true)
+  qa:
+    name: QA (invocado pelo Manager)
+    needs: manager
+    if: needs.manager.outputs.run_qa == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/workers/qa
+        with:
+          gh_token: ${{ secrets.GH_TOKEN }}
+          issue_number: ${{ needs.manager.outputs.issue_number }}
+          base_branch: ${{ needs.manager.outputs.base_branch }}
+
+  security:
+    name: Security (invocado pelo Manager)
+    needs: manager
+    if: needs.manager.outputs.run_security == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/workers/security
+        with:
+          gh_token: ${{ secrets.GH_TOKEN }}
+          issue_number: ${{ needs.manager.outputs.issue_number }}
+          base_branch: ${{ needs.manager.outputs.base_branch }}
+
+  technical-documenter:
+    name: Technical Documenter (invocado pelo Manager)
+    needs: manager
+    if: needs.manager.outputs.run_docs == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/workers/technical-documenter
+        with:
+          gh_token: ${{ secrets.GH_TOKEN }}
+          issue_number: ${{ needs.manager.outputs.issue_number }}
+          base_branch: ${{ needs.manager.outputs.base_branch }}
+
+  # master: se faltar gate do quarteto → tags + workers faltantes
+  master-gates:
+    name: Master gates (quarteto)
+    needs: manager
+    if: needs.manager.outputs.run_gates == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      need_qa: ${{ steps.check.outputs.need_qa }}
+      need_security: ${{ steps.check.outputs.need_security }}
+      need_docs: ${{ steps.check.outputs.need_docs }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect quarteto e tags
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          ISSUE: ${{ needs.manager.outputs.issue_number }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          LABELS=$(gh issue view "$ISSUE" --repo "$REPO" --json labels --jq '[.labels[].name] | join(",")')
+          echo "Labels: $LABELS"
+
+          need_qa=false
+          need_security=false
+          need_docs=false
+
+          echo "$LABELS" | grep -q 'qa:accepted' || need_qa=true
+          echo "$LABELS" | grep -q 'security:accepted' || need_security=true
+          echo "$LABELS" | grep -q 'agent:technical-documenter:done' || need_docs=true
+
+          echo "need_qa=$need_qa" >> "$GITHUB_OUTPUT"
+          echo "need_security=$need_security" >> "$GITHUB_OUTPUT"
+          echo "need_docs=$need_docs" >> "$GITHUB_OUTPUT"
+
+          [ "$need_qa" = true ] && gh issue edit "$ISSUE" --repo "$REPO" --add-label "agent:qa" || true
+          [ "$need_security" = true ] && gh issue edit "$ISSUE" --repo "$REPO" --add-label "agent:security" || true
+          [ "$need_docs" = true ] && gh issue edit "$ISSUE" --repo "$REPO" --add-label "agent:technical-documenter" || true
+
+          gh issue comment "$ISSUE" --repo "$REPO" --body \
+            "Master gates (Manager): need_qa=$need_qa need_security=$need_security need_docs=$need_docs"
+
+  master-qa:
+    name: QA (master gap via Manager)
+    needs: [manager, master-gates]
+    if: needs.master-gates.outputs.need_qa == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/workers/qa
+        with:
+          gh_token: ${{ secrets.GH_TOKEN }}
+          issue_number: ${{ needs.manager.outputs.issue_number }}
+          base_branch: master
+
+  master-security:
+    name: Security (master gap via Manager)
+    needs: [manager, master-gates]
+    if: needs.master-gates.outputs.need_security == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/workers/security
+        with:
+          gh_token: ${{ secrets.GH_TOKEN }}
+          issue_number: ${{ needs.manager.outputs.issue_number }}
+          base_branch: master

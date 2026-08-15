@@ -1,0 +1,55 @@
+name: QA Worker
+description: Marca Copilot como QA na issue (fonte agents-mcp)
+inputs:
+  gh_token:
+    required: true
+  issue_number:
+    required: true
+  base_branch:
+    default: dev
+runs:
+  using: composite
+  steps:
+    - name: Assign Copilot as QA
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+        ISSUE: ${{ inputs.issue_number }}
+        REPO: ${{ github.repository }}
+        BASE: ${{ inputs.base_branch }}
+      run: |
+        set -euo pipefail
+        CUSTOM_INSTRUCTIONS='Atue 100% como QA do ControleOnline.
+Leia e siga OBRIGATORIAMENTE:
+https://raw.githubusercontent.com/ControleOnline/agents-mcp/master/agents/roles/qa/agent.md
+
+Também leia:
+- agents/skills/shared/operations/copilot-cooperation.md
+- agents/skills/shared/quality/ (se existir)
+- agents/skills/by-role/qa/README.md
+
+Regras:
+- Execute checklist de QA na issue
+- Labels: agent:qa → qa:accepted ou qa:rejected
+- NÃO implemente código de produto
+- Comente evidência objetiva do teste'
+
+        gh issue edit "$ISSUE" --repo "$REPO" --add-label "agent:qa" || true
+
+        gh api --method POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          "/repos/${REPO}/issues/${ISSUE}/assignees" \
+          --input - <<EOF
+        {
+          "assignees": ["copilot-swe-agent[bot]"],
+          "agent_assignment": {
+            "target_repo": "${REPO}",
+            "base_branch": "${BASE}",
+            "custom_instructions": $(echo "$CUSTOM_INSTRUCTIONS" | jq -Rs .)
+          }
+        }
+        EOF
+
+        gh issue comment "$ISSUE" --repo "$REPO" --body \
+          "Manager Worker disparou **QA**. Copilot deve seguir agents-mcp/roles/qa."

@@ -1,0 +1,55 @@
+name: Technical Documenter Worker
+description: Marca Copilot como technical-documenter na issue (fonte agents-mcp)
+inputs:
+  gh_token:
+    required: true
+  issue_number:
+    required: true
+  base_branch:
+    default: master
+runs:
+  using: composite
+  steps:
+    - name: Assign Copilot as technical-documenter
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+        ISSUE: ${{ inputs.issue_number }}
+        REPO: ${{ github.repository }}
+        BASE: ${{ inputs.base_branch }}
+      run: |
+        set -euo pipefail
+        CUSTOM_INSTRUCTIONS='Atue 100% como technical-documenter do ControleOnline.
+Leia e siga OBRIGATORIAMENTE:
+https://raw.githubusercontent.com/ControleOnline/agents-mcp/master/agents/roles/technical-documenter/agent.md
+
+Também leia:
+- agents/skills/shared/operations/copilot-cooperation.md
+- agents/skills/shared/documentation/documentation-governance.md
+- agents/skills/by-role/technical-documenter/README.md
+
+Regras:
+- Wiki técnica é fonte primária
+- Labels: agent:technical-documenter e agent:technical-documenter:done
+- NÃO implemente código de produto
+- Ao terminar: aplique agent:technical-documenter:done e remova agent:technical-documenter'
+
+        gh issue edit "$ISSUE" --repo "$REPO" --add-label "agent:technical-documenter" || true
+
+        gh api --method POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          "/repos/${REPO}/issues/${ISSUE}/assignees" \
+          --input - <<EOF
+        {
+          "assignees": ["copilot-swe-agent[bot]"],
+          "agent_assignment": {
+            "target_repo": "${REPO}",
+            "base_branch": "${BASE}",
+            "custom_instructions": $(echo "$CUSTOM_INSTRUCTIONS" | jq -Rs .)
+          }
+        }
+        EOF
+
+        gh issue comment "$ISSUE" --repo "$REPO" --body \
+          "Manager Worker disparou **technical-documenter**. Copilot deve seguir agents-mcp/roles/technical-documenter."
