@@ -10,3 +10,13 @@
 - Sempre que for executar uma tarefa, você deve criar um branch à partir de master, com o nome task-{id} onde o ID é o número da tarefa no github.
 - Caso não exista a tarefa, antes de executar qualquer coisa, crie a tarefa seguindo padrões definidos no `https://github.com/ControleOnline/agents-mcp`.
 - Ao entregar a tarefa, documente no github e faça merge dela para dentro do branch staging.
+
+## Navegação técnica
+
+| Categoria | Documento |
+|-----------|-----------|
+| Home da wiki | [docs/wiki/Home.md](docs/wiki/Home.md) |
+| Arquitetura geral | [docs/technical/architecture.md](docs/technical/architecture.md) |
+| CI/CD e automação | [docs/technical/ci-automation.md](docs/technical/ci-automation.md) |
+| Wiki GitHub | https://github.com/ControleOnline/api-community/wiki |
+| agents-mcp (regras transversais) | https://github.com/ControleOnline/agents-mcp |
