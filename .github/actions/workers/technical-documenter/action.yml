@@ -1,5 +1,5 @@
 name: Technical Documenter Worker
-description: Marca Copilot como technical-documenter na issue (fonte agents-mcp)
+description: Assign Copilot as technical-documenter — rules live only in agents-mcp
 inputs:
   gh_token:
     required: true
@@ -19,20 +19,16 @@ runs:
         BASE: ${{ inputs.base_branch }}
       run: |
         set -euo pipefail
+        # Regras 100% no agents-mcp — não copiar checklist/labels aqui
         CUSTOM_INSTRUCTIONS='Atue 100% como technical-documenter do ControleOnline.
-Leia e siga OBRIGATORIAMENTE:
+Leia e siga OBRIGATORIAMENTE (fonte canônica única):
 https://raw.githubusercontent.com/ControleOnline/agents-mcp/master/agents/roles/technical-documenter/agent.md
 
 Também leia:
-- agents/skills/shared/operations/copilot-cooperation.md
-- agents/skills/shared/documentation/documentation-governance.md
-- agents/skills/by-role/technical-documenter/README.md
+https://raw.githubusercontent.com/ControleOnline/agents-mcp/master/agents/skills/shared/operations/copilot-cooperation.md
+https://raw.githubusercontent.com/ControleOnline/agents-mcp/master/agents/skills/by-role/technical-documenter/README.md
 
-Regras:
-- Wiki técnica é fonte primária
-- Labels: agent:technical-documenter e agent:technical-documenter:done
-- NÃO implemente código de produto
-- Ao terminar: aplique agent:technical-documenter:done e remova agent:technical-documenter'
+Não use regras embutidas neste assignment; a fonte acima prevalece.'
 
         gh issue edit "$ISSUE" --repo "$REPO" --add-label "agent:technical-documenter" || true
 
@@ -40,7 +36,7 @@ Regras:
           -H "Accept: application/vnd.github+json" \
           -H "X-GitHub-Api-Version: 2022-11-28" \
           "/repos/${REPO}/issues/${ISSUE}/assignees" \
-          --input - <<EOF
+          --input - <<EOFINNER
         {
           "assignees": ["copilot-swe-agent[bot]"],
           "agent_assignment": {
@@ -49,7 +45,7 @@ Regras:
             "custom_instructions": $(echo "$CUSTOM_INSTRUCTIONS" | jq -Rs .)
           }
         }
-        EOF
+        EOFINNER
 
         gh issue comment "$ISSUE" --repo "$REPO" --body \
-          "Manager Worker disparou **technical-documenter**. Copilot deve seguir agents-mcp/roles/technical-documenter."
+          "Manager Worker → **technical-documenter**. Fonte: agents-mcp/agents/roles/technical-documenter/agent.md"
