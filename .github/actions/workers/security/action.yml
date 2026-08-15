@@ -1,0 +1,55 @@
+name: Security Worker
+description: Marca Copilot como Security na issue (fonte agents-mcp)
+inputs:
+  gh_token:
+    required: true
+  issue_number:
+    required: true
+  base_branch:
+    default: dev
+runs:
+  using: composite
+  steps:
+    - name: Assign Copilot as Security
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+        ISSUE: ${{ inputs.issue_number }}
+        REPO: ${{ github.repository }}
+        BASE: ${{ inputs.base_branch }}
+      run: |
+        set -euo pipefail
+        CUSTOM_INSTRUCTIONS='Atue 100% como Security do ControleOnline.
+Leia e siga OBRIGATORIAMENTE:
+https://raw.githubusercontent.com/ControleOnline/agents-mcp/master/agents/roles/security/agent.md
+
+Também leia:
+- agents/skills/shared/operations/copilot-cooperation.md
+- agents/skills/shared/security/security-guardrails.md
+- agents/skills/by-role/security/README.md
+
+Regras:
+- Execute checklist de Security na issue
+- Labels: agent:security → security:accepted ou security:rejected
+- NÃO implemente código de produto
+- Comente evidência objetiva da análise'
+
+        gh issue edit "$ISSUE" --repo "$REPO" --add-label "agent:security" || true
+
+        gh api --method POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          "/repos/${REPO}/issues/${ISSUE}/assignees" \
+          --input - <<EOF
+        {
+          "assignees": ["copilot-swe-agent[bot]"],
+          "agent_assignment": {
+            "target_repo": "${REPO}",
+            "base_branch": "${BASE}",
+            "custom_instructions": $(echo "$CUSTOM_INSTRUCTIONS" | jq -Rs .)
+          }
+        }
+        EOF
+
+        gh issue comment "$ISSUE" --repo "$REPO" --body \
+          "Manager Worker disparou **Security**. Copilot deve seguir agents-mcp/roles/security."
