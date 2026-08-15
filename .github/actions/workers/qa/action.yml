@@ -1,5 +1,5 @@
 name: QA Worker
-description: Assign Copilot as QA — rules live only in agents-mcp
+description: Assign Copilot as QA — single link to agents-mcp
 inputs:
   gh_token:
     required: true
@@ -19,16 +19,9 @@ runs:
         BASE: ${{ inputs.base_branch }}
       run: |
         set -euo pipefail
-        # Regras 100% no agents-mcp — não copiar checklist/labels aqui
         CUSTOM_INSTRUCTIONS='Atue 100% como QA do ControleOnline.
-Leia e siga OBRIGATORIAMENTE (fonte canônica única):
-https://raw.githubusercontent.com/ControleOnline/agents-mcp/master/agents/roles/qa/agent.md
-
-Também leia:
-https://raw.githubusercontent.com/ControleOnline/agents-mcp/master/agents/skills/shared/operations/copilot-cooperation.md
-https://raw.githubusercontent.com/ControleOnline/agents-mcp/master/agents/skills/by-role/qa/README.md
-
-Não use regras embutidas neste assignment; a fonte acima prevalece.'
+Leia e siga OBRIGATORIAMENTE a fonte canônica única:
+https://raw.githubusercontent.com/ControleOnline/agents-mcp/master/agents/roles/qa/agent.md'
 
         gh issue edit "$ISSUE" --repo "$REPO" --add-label "agent:qa" || true
 
