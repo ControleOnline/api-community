@@ -7,6 +7,12 @@ API - Controle Online
 ### Submodules
 [Instalacao e dependencias](https://github.com/ControleOnline/api-community/wiki/Instalacao)
 
+## Public signup compatibility
+
+The main API exposes the legacy public signup route `^/users/create-account$` in `config/packages/security.yaml` so older web clients can reach the current initial registration flow without authentication.
+
+Keep this alias aligned with the canonical `POST /create-account` endpoint in the people module.
+
 
 ### Front Ends
 
