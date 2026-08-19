@@ -1,6 +1,6 @@
 #
-# este script só é executado manualmente
-# ele envia para o domínio *APINEW* o que está em *STANGING*
+# este script agora é executado automaticamente
+# ele envia para o domínio *APINEW* o que está em *MASTER*
 #
 # NÃO ALTERAR !!!
 #
@@ -8,7 +8,7 @@
 name: Deploy API NEW LaveGo
 on:
   push:
-    branches: [xxx]
+    branches: [master]
   workflow_dispatch:
   
 jobs:
@@ -36,8 +36,8 @@ jobs:
                   export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
                   cd ~/api
                   git fetch origin
-                  git checkout staging
-                  git reset --hard origin/staging
+                  git checkout master
+                  git reset --hard origin/master
 
                   git clean -ffd
                   git submodule sync --recursive
@@ -45,12 +45,12 @@ jobs:
                   
                   git submodule foreach --recursive '
                     git fetch origin
-                    if git show-ref --verify --quiet refs/heads/staging; then
-                      git checkout staging
+                    if git show-ref --verify --quiet refs/heads/master; then
+                      git checkout master
                     else
-                      git checkout -B staging origin/staging
+                      git checkout -B master origin/master
                     fi
-                    git reset --hard origin/staging
+                    git reset --hard origin/master
                     git clean -ffd
                   '
 
