@@ -3,6 +3,12 @@
 # API - Controle Online
 API - Controle Online
 
+### Cadastro inicial (auto-cadastro)
+
+Os endpoints públicos de cadastro inicial aceitos pelo backend são:
+
+- `POST /create-account`
+- `POST /users/create-account` (compatibilidade com front-end legado)
 
 ### Submodules
 [Instalacao e dependencias](https://github.com/ControleOnline/api-community/wiki/Instalacao)
