@@ -117,4 +117,4 @@ docker-compose exec php bin/console doctrine:migrations:migrate
 
 - [Wiki técnica (GitHub)](https://github.com/ControleOnline/api-community/wiki)
 - [CI/CD e automação](./ci-automation.md)
-- [Home da documentação](../wiki/Home.md)
+- [Home da documentação](https://github.com/ControleOnline/api-community/wiki)

@@ -99,6 +99,6 @@ Executa verificações automáticas em pull requests (lint, testes, análise est
 ## Links relacionados
 
 - [Arquitetura geral](./architecture.md)
-- [Home da documentação](../wiki/Home.md)
+- [Home da documentação](https://github.com/ControleOnline/api-community/wiki)
 - [Wiki técnica (GitHub)](https://github.com/ControleOnline/api-community/wiki)
 - [agents-mcp](https://github.com/ControleOnline/agents-mcp) — fonte canônica dos agents
