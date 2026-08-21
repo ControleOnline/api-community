@@ -7,6 +7,8 @@
 # enviando o que está em *MASTER*
 #
 
+xxx <<<=== para não correr o risco de ser executado por engano
+
 name: Deploy API NEW LaveGo
 on:
   push:
