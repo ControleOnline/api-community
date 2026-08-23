@@ -49,6 +49,7 @@ security:
         - { path: ^/account_verifications$, roles: PUBLIC_ACCESS }
         - { path: ^/themes-colors.css$, roles: PUBLIC_ACCESS }
         - { path: ^/languages$, roles: PUBLIC_ACCESS }
+        - { path: ^/timezones$, roles: PUBLIC_ACCESS }
         - { path: ^/people/company/default$, roles: PUBLIC_ACCESS }
         - { path: ^/shop/franchises$, roles: PUBLIC_ACCESS }
         - { path: ^/shop/categories$, roles: PUBLIC_ACCESS }
