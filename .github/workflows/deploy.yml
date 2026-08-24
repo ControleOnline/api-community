@@ -112,7 +112,9 @@ jobs:
           password: ${{ needs.configure.outputs.auth_mode == 'password' && (needs.configure.outputs.env == 'dev' && secrets.DEV_PASS || secrets.STAGING_PASS) || '' }}
           key: ${{ needs.configure.outputs.auth_mode == 'key' && secrets.CONTROLEONLINE || '' }}
           port: ${{ needs.configure.outputs.auth_mode == 'key' && secrets.PORT || 22 }}
-          script_stop: true
+          # set -e in the script provides fail-fast behavior. script_stop
+          # rewrites every input line and breaks shell functions/loops.
+          script_stop: false
           envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP
           script: |
             set -e
