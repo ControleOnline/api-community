@@ -229,6 +229,9 @@ jobs:
             echo "Evidence preserved: $EVIDENCE_DIR"
             sed -n '/^module=/p;/^head=/p;/^expected=/p;/^file=/p;/^match=/p' "$EVIDENCE_DIR/people/origin-analysis.txt" "$EVIDENCE_DIR/users/origin-analysis.txt"
 
+            # Evidence remains private, but release files must be traversable
+            # by the PHP runtime user.
+            umask 022
             git -C modules/controleonline/people reset --hard
             git -C modules/controleonline/people clean -ffd
             git -C modules/controleonline/users reset --hard
@@ -236,6 +239,7 @@ jobs:
 
             git submodule sync --recursive
             git submodule update --recursive --init --force
+            chmod -R a+rX modules/controleonline
 
             # Parent gitlinks are authoritative. Never replace them with each
             # submodule's branch tip during a release deployment.
