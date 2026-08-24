@@ -141,79 +141,154 @@ jobs:
             git reset --hard "origin/${BRANCH}"
             git clean -ffd
 
-            git submodule sync --recursive
-            git submodule update --recursive --init
-            git submodule foreach --recursive "
-              set -e
-              git fetch origin
-              if git show-ref --verify --quiet refs/heads/${BRANCH}; then
-                git checkout ${BRANCH}
-              else
-                git checkout -B ${BRANCH} origin/${BRANCH}
-              fi
-              git reset --hard origin/${BRANCH}
-              git clean -ffd
-            "
+            # api-community#78 recovery: preserve the two known dirty module
+            # worktrees before cleaning them.  composer.json installs
+            # controleonline/* into these same paths, so prior composer runs
+            # can overwrite the submodule checkouts.
+            EVIDENCE_ROOT="$HOME/deploy-evidence/api-community-78"
+            EVIDENCE_DIR="$EVIDENCE_ROOT/$(date -u +%Y%m%dT%H%M%SZ)"
+            umask 077
+            mkdir -p "$EVIDENCE_DIR"
 
-            run_composer() {
-              if command -v composer >/dev/null 2>&1; then
-                composer "$@"
-                return
+            audit_module() {
+              module="$1"
+              slug="${module##*/}"
+              repo="$TARGET/$module"
+              mkdir -p "$EVIDENCE_DIR/$slug"
+
+              git -C "$repo" status --porcelain=v2 --untracked-files=all > "$EVIDENCE_DIR/$slug/status.porcelain-v2"
+              git -C "$repo" diff --binary > "$EVIDENCE_DIR/$slug/worktree.patch"
+              git -C "$repo" diff --cached --binary > "$EVIDENCE_DIR/$slug/index.patch"
+              git -C "$repo" ls-files --others --exclude-standard -z > "$EVIDENCE_DIR/$slug/untracked.zlist"
+              if [ -s "$EVIDENCE_DIR/$slug/untracked.zlist" ]; then
+                tar -C "$repo" --null -T "$EVIDENCE_DIR/$slug/untracked.zlist" -czf "$EVIDENCE_DIR/$slug/untracked.tar.gz"
               fi
-              for candidate in /usr/local/bin/composer /usr/bin/composer "$HOME/bin/composer" "$HOME/composer.phar" "$HOME/bin/composer.phar" composer.phar; do
-                if [ -x "$candidate" ]; then
-                  "$candidate" "$@"
-                  return
-                fi
-                if [ -f "$candidate" ]; then
-                  php "$candidate" "$@"
-                  return
+
+              {
+                echo "module=$module"
+                echo "head=$(git -C "$repo" rev-parse HEAD)"
+                echo "expected=$(git -C "$TARGET" ls-tree HEAD "$module" | awk '{print $3}')"
+                for path in \
+                  src/Entity/PeopleLink.php \
+                  src/Service/PeopleRoleService.php \
+                  src/State/PeopleLinkUpsertProcessor.php \
+                  src/Controller/Oauth/Discord/DiscordConnectController.php
+                do
+                  [ -f "$repo/$path" ] || continue
+                  blob=$(git -C "$repo" hash-object "$path")
+                  echo "file=$path blob=$blob sha256=$(sha256sum "$repo/$path" | awk '{print $1}')"
+                  git -C "$repo" log --all --format=%H -- "$path" | while read -r commit; do
+                    candidate=$(git -C "$repo" rev-parse "$commit:$path" 2>/dev/null || true)
+                    if [ "$candidate" = "$blob" ]; then
+                      git -C "$repo" show -s --format='match=%H author_date=%aI subject=%s' "$commit"
+                    fi
+                  done
+                done
+              } > "$EVIDENCE_DIR/$slug/origin-analysis.txt"
+
+              # Fail closed: remove only the paths named in run 32736920319,
+              # and only when their exact blob already exists in Git history.
+              git -C "$repo" status --porcelain --untracked-files=all > "$EVIDENCE_DIR/$slug/status.short"
+              cut -c4- "$EVIDENCE_DIR/$slug/status.short" | while IFS= read -r path; do
+                [ -n "$path" ] || continue
+                case "$slug:$path" in
+                  people:src/Entity/PeopleLink.php|people:src/Service/PeopleRoleService.php|people:src/State/PeopleLinkUpsertProcessor.php|users:src/Controller/Oauth/Discord/DiscordConnectController.php)
+                    ;;
+                  *)
+                    echo "Refusing cleanup of unexpected path: $module/$path"
+                    exit 1
+                    ;;
+                esac
+
+                blob=$(git -C "$repo" hash-object "$path")
+                matched=false
+                for commit in $(git -C "$repo" log --all --format=%H -- "$path"); do
+                  candidate=$(git -C "$repo" rev-parse "$commit:$path" 2>/dev/null || true)
+                  if [ "$candidate" = "$blob" ]; then
+                    matched=true
+                    break
+                  fi
+                done
+                if [ "$matched" != true ]; then
+                  echo "Refusing cleanup of unmatched blob: $module/$path $blob"
+                  exit 1
                 fi
               done
-              echo "Composer not found on remote server"
-              exit 1
+
+              sha256sum "$EVIDENCE_DIR/$slug"/* > "$EVIDENCE_DIR/$slug/SHA256SUMS"
             }
 
-            run_composer install --no-interaction --no-suggest
+            audit_module modules/controleonline/people
+            audit_module modules/controleonline/users
+            echo "Evidence preserved: $EVIDENCE_DIR"
+            sed -n '/^module=/p;/^head=/p;/^expected=/p;/^file=/p;/^match=/p' "$EVIDENCE_DIR/people/origin-analysis.txt" "$EVIDENCE_DIR/users/origin-analysis.txt"
+
+            git -C modules/controleonline/people reset --hard
+            git -C modules/controleonline/people clean -ffd
+            git -C modules/controleonline/users reset --hard
+            git -C modules/controleonline/users clean -ffd
+
+            git submodule sync --recursive
+            git submodule update --recursive --init --force
+
+            # Parent gitlinks are authoritative. Never replace them with each
+            # submodule's branch tip during a release deployment.
+            if git submodule status --recursive | grep -Eq '^[+-U]'; then
+              echo "Submodule checkout does not match the parent gitlinks"
+              git submodule status --recursive
+              exit 1
+            fi
+
+            # Safe recovery scope: 88b6662..4768929 changes only the people
+            # gitlink. Composer would overwrite pinned modules (installer-paths),
+            # and migrations are not authorized for this staging recovery.
+            echo "Composer skipped: dependency manifests unchanged in recovery delta"
+            echo "Database migrations skipped: not authorized for api-community#78 recovery"
             rm -rf var/cache/prod/pools/system
             rm -rf var/cache/prod/doctrine/orm
             rm -f var/cache/prod/serialization.php
             php -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null
-            php bin/console doctrine:migrations:sync-metadata-storage --configuration=config/migrations/multi_tenancy.yaml --no-interaction
-            php bin/console doctrine:migrations:migrate --configuration=config/migrations/multi_tenancy.yaml --no-interaction
-            php bin/console tenant:migrations:migrate --no-interaction
             mkdir -p var/log
-            nohup php bin/console tenant:messenger:consume async --domain="${MESSENGER_DOMAIN}" >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
             touch "$HOME/.lsphp_restart.txt" 2>/dev/null || true
             touch "$RESTART_FILE" 2>/dev/null || true
             if command -v systemctl >/dev/null 2>&1; then
               sudo -n systemctl reload php8.3-fpm 2>/dev/null || sudo -n service php8.3-fpm reload 2>/dev/null || true
             fi
             rm -f "$HOME/.lsphp_restart.txt" "$RESTART_FILE" 2>/dev/null || true
-            echo "Deploy OK: $(git rev-parse --short HEAD) @ ${BRANCH} → ${TARGET}"
+            echo "Deploy OK: $(git rev-parse HEAD) @ ${BRANCH} → ${TARGET}"
+            echo "websocket-server pin: $(git ls-tree HEAD modules/controleonline/websocket-server | awk '{print $3}')"
+            echo "people pin: $(git ls-tree HEAD modules/controleonline/people | awk '{print $3}')"
         env:
           DEPLOY_BRANCH: ${{ needs.configure.outputs.branch }}
           REMOTE_PATH: ${{ needs.configure.outputs.remote_path }}
           MESSENGER_DOMAIN: ${{ needs.configure.outputs.messenger_domain }}
           BOOTSTRAP: ${{ needs.configure.outputs.bootstrap }}
 
-  # ─── Step 3: tests ─────────────────────────────────────────────────────────
+  # ─── Step 3: recovery verification ──────────────────────────────────────────
   tests:
-    name: "3 · Tests"
+    name: "3 · Verify api-community#78 recovery"
     needs: [configure, deploy]
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v5
         with:
           ref: ${{ needs.configure.outputs.branch }}
           submodules: recursive
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.4"
-          coverage: none
-          tools: composer:v2
-      - name: Install Dependencies
-        run: composer install --no-interaction --no-progress --prefer-dist
-      - name: Run PHPUnit
-        run: ./vendor/bin/phpunit
+      - name: Verify immutable release inputs
+        run: |
+          set -e
+          test "$(git rev-parse HEAD)" = "4768929ea80fd57f2ad6e6b9441c7af53b0c098a"
+          test "$(git ls-tree HEAD modules/controleonline/websocket-server | awk '{print $3}')" = "a6d95fcfd7c8ee525c14c0da800c8a0a48c421b1"
+          test "$(git -C modules/controleonline/websocket-server rev-parse HEAD)" = "a6d95fcfd7c8ee525c14c0da800c8a0a48c421b1"
+      - name: Verify public staging health
+        run: |
+          set -e
+          for url in \
+            https://s.controleonline.com/people/company/default \
+            https://s.controleonline.com/themes-colors.css
+          do
+            status=$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' --retry 3 --retry-all-errors "$url")
+            test "$status" = "200" || { echo "Unhealthy: $status $url"; exit 1; }
+            echo "Healthy: $status $url"
+          done
