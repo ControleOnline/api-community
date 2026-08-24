@@ -132,7 +132,11 @@ jobs:
             cd "$TARGET"
             RESTART_FILE="$PWD/public/.lsphp_restart.txt"
 
-            git fetch origin
+            # Fetch only the deployment ref. Fetching every remote branch with
+            # recurseSubmodules enabled can chase orphaned gitlinks unrelated
+            # to staging (observed with financial during recovery attempt 1).
+            git -c fetch.recurseSubmodules=false fetch origin \
+              "+refs/heads/${BRANCH}:refs/remotes/origin/${BRANCH}"
             if git show-ref --verify --quiet "refs/heads/${BRANCH}"; then
               git checkout "$BRANCH"
             else
