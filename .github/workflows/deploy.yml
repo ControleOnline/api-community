@@ -132,7 +132,7 @@ jobs:
             cd "$TARGET"
             RESTART_FILE="$PWD/public/.lsphp_restart.txt"
 
-            git fetch origin
+            git -c submodule.recurse=false fetch --no-recurse-submodules origin
             if git show-ref --verify --quiet "refs/heads/${BRANCH}"; then
               git checkout "$BRANCH"
             else
