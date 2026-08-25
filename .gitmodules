@@ -81,7 +81,3 @@
 	path = modules/controleonline/smoke-tests-playground
 	url = https://github.com/ControleOnline/smoke-tests-playground.git
 	branch = master
-[submodule "docs/wiki"]
-	path = docs/wiki
-	url = https://github.com/ControleOnline/api-community.wiki.git
-	branch = master
