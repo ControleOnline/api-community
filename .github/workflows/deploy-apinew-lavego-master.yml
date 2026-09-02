@@ -123,15 +123,17 @@ jobs:
                   ### Garante que os processos essenciais da aplicação ###
                   ### estejam sempre registrados no crontab do servidor ###
 
+                  # Ownership único do websocket: app:cron:run (não bind direto na 8080).
                   CRON_LINES=(
-                    "* * * * * cd ~/api && $PHP_BIN bin/console websocket:start --domain=$DOMAIN -p 8080 -b 0.0.0.0"
+                    "* * * * * cd ~/api && $PHP_BIN bin/console app:cron:run --env=prod --no-debug"
                     "* * * * * cd ~/api && $PHP_BIN bin/console tenant:messenger:consume async --domain=$DOMAIN"
                     "* * * * * cd ~/api && $PHP_BIN bin/console tenant:integration:start --domain=$DOMAIN"
                     "* * * * * cd ~/api && $PHP_BIN bin/console import:start --domain=$DOMAIN"
                     "* * * * * cd ~/api && $PHP_BIN bin/console app:maintenance:run --domain=$DOMAIN"
                   )
 
-                  CURRENT_CRON=$(crontab -l 2>/dev/null)
+                  CURRENT_CRON=$(crontab -l 2>/dev/null || true)
+                  CURRENT_CRON=$(printf '%s\n' "$CURRENT_CRON" | grep -vF 'websocket:start' || true)
 
                   for LINE in "${CRON_LINES[@]}"; do
                     if echo "$CURRENT_CRON" | grep -qF "$LINE"; then
