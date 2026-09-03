@@ -129,10 +129,10 @@ jobs:
               git clone --branch "$BRANCH" --recurse-submodules https://github.com/ControleOnline/api-community.git "$TARGET"
             fi
 
-            cd "$TARGET"
-            RESTART_FILE="$PWD/public/.lsphp_restart.txt"
+cd "$TARGET"
+RESTART_FILE="$PWD/public/.lsphp_restart.txt"
 
-            git -c submodule.recurse=false fetch --no-recurse-submodules origin
+git -c submodule.recurse=false fetch --no-recurse-submodules origin
             if git show-ref --verify --quiet "refs/heads/${BRANCH}"; then
               git checkout "$BRANCH"
             else
@@ -143,7 +143,7 @@ jobs:
 
             git submodule sync --recursive
             git submodule update --recursive --init
-            git submodule foreach --recursive "
+git submodule foreach --recursive "
               set -e
               git fetch origin
               if git show-ref --verify --quiet refs/heads/${BRANCH}; then
@@ -153,9 +153,16 @@ jobs:
               fi
               git reset --hard origin/${BRANCH}
               git clean -ffd
-            "
+"
 
-            run_composer() {
+# Stop legacy per-tenant workers before Composer/migrations. The central cron
+# is the only owner after deployment; stale workers can exhaust process slots.
+pkill -TERM -f "bin/console tenant:messenger:consume.*--domain=${MESSENGER_DOMAIN}" 2>/dev/null || true
+pkill -TERM -f "bin/console tenant:integration:start.*--domain=${MESSENGER_DOMAIN}" 2>/dev/null || true
+pkill -TERM -f "bin/console websocket:start.*--domain=${MESSENGER_DOMAIN}" 2>/dev/null || true
+sleep 2
+
+run_composer() {
               if command -v composer >/dev/null 2>&1; then
                 composer "$@"
                 return
