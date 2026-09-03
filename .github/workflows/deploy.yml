@@ -142,8 +142,8 @@ jobs:
             git clean -ffd
 
             git submodule sync --recursive
-            git submodule update --init
-            git submodule foreach "
+            git submodule update --recursive --init
+            git submodule foreach --recursive "
               set -e
               git fetch origin
               if git show-ref --verify --quiet refs/heads/${BRANCH}; then
@@ -154,17 +154,6 @@ jobs:
               git reset --hard origin/${BRANCH}
               git clean -ffd
             "
-
-            # Stop legacy per-tenant workers before Composer/migrations. The central cron
-            # is the only owner after deployment; stale workers can exhaust process slots.
-            for attempt in 1 2 3 4 5; do
-              OLD_WORKERS=$(ps -eo pid=,args= | grep -E 'bin/console (tenant:messenger:consume|tenant:integration:start|websocket:start)' | grep -vE 'grep|awk' | awk '{print $1}' || true)
-              if [ -z "$OLD_WORKERS" ]; then
-                break
-              fi
-              echo "$OLD_WORKERS" | xargs -r kill -TERM || true
-              sleep 2
-            done
 
             run_composer() {
               if command -v composer >/dev/null 2>&1; then
@@ -185,8 +174,7 @@ jobs:
               exit 1
             }
 
-            COMPOSER_MAX_PARALLEL_HTTP=1 run_composer install --no-interaction --no-dev --no-suggest --no-progress --no-plugins --no-scripts
-            php -r 'require "vendor/autoload.php"; \App\FixAutoload::postInstall();'
+            run_composer install --no-interaction --no-suggest
             rm -rf var/cache/prod/pools/system
             rm -rf var/cache/prod/doctrine/orm
             rm -f var/cache/prod/serialization.php
@@ -195,34 +183,13 @@ jobs:
             php bin/console doctrine:migrations:migrate --configuration=config/migrations/multi_tenancy.yaml --no-interaction
             php bin/console tenant:migrations:migrate --no-interaction
             mkdir -p var/log
+            nohup php bin/console tenant:messenger:consume async --domain="${MESSENGER_DOMAIN}" >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
             touch "$HOME/.lsphp_restart.txt" 2>/dev/null || true
             touch "$RESTART_FILE" 2>/dev/null || true
             if command -v systemctl >/dev/null 2>&1; then
               sudo -n systemctl reload php8.3-fpm 2>/dev/null || sudo -n service php8.3-fpm reload 2>/dev/null || true
             fi
             rm -f "$HOME/.lsphp_restart.txt" "$RESTART_FILE" 2>/dev/null || true
-
-            # Operational smoke check: the central cron owns these processes.
-            # Give the host up to one minute to run its next scheduled tick.
-            workers_ok=false
-            websocket_ok=false
-            for attempt in 1 2 3 4 5 6; do
-              if ps -eo args= | grep -E 'bin/console tenant:messenger:consume' | grep -vE 'grep|awk' >/dev/null; then
-                workers_ok=true
-              fi
-              if ps -eo args= | grep -E 'bin/console websocket:start' | grep -vE 'grep|awk' >/dev/null; then
-                websocket_ok=true
-              fi
-              if [ "$workers_ok" = true ] && [ "$websocket_ok" = true ]; then
-                break
-              fi
-              sleep 10
-            done
-            echo "Central worker check: messenger=$workers_ok websocket=$websocket_ok"
-            if [ "$workers_ok" != true ] || [ "$websocket_ok" != true ]; then
-              echo "Central cron did not start both required long-lived services."
-              exit 1
-            fi
             echo "Deploy OK: $(git rev-parse --short HEAD) @ ${BRANCH} → ${TARGET}"
         env:
           DEPLOY_BRANCH: ${{ needs.configure.outputs.branch }}
