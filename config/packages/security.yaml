@@ -1,0 +1,75 @@
+security:
+    password_hashers:
+        ControleOnline\Entity\User:
+            algorithm: auto
+
+    providers:
+        app_user_provider:
+            entity:
+                class: ControleOnline\Entity\User
+                property: username
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            stateless: true
+            lazy: true
+            provider: app_user_provider
+            custom_authenticators:
+                - ControleOnline\Security\TokenAuthenticator
+            json_login:
+                check_path: /token
+                username_path: username
+                password_path: password
+
+    role_hierarchy:
+        ROLE_SUPER: [ROLE_SUPER, ROLE_HUMAN, ROLE_OWNER, ROLE_DIRECTOR, ROLE_MANAGER, ROLE_SALESMAN, ROLE_AFTER_SALES, ROLE_EMPLOYEE]
+        ROLE_OWNER: [ROLE_OWNER, ROLE_HUMAN]
+        ROLE_DIRECTOR: [ROLE_DIRECTOR, ROLE_HUMAN]
+        ROLE_MANAGER: [ROLE_MANAGER, ROLE_HUMAN]
+        ROLE_SALESMAN: [ROLE_SALESMAN, ROLE_HUMAN]
+        ROLE_AFTER_SALES: [ROLE_AFTER_SALES, ROLE_HUMAN]
+        ROLE_EMPLOYEE: [ROLE_EMPLOYEE, ROLE_HUMAN]
+        ROLE_CLIENT: ROLE_CLIENT
+        ROLE_PROVIDER: ROLE_PROVIDER
+        ROLE_FRANCHISEE: ROLE_FRANCHISEE
+        ROLE_HUMAN: ROLE_HUMAN
+
+    access_control:
+        - { path: ^/$, roles: PUBLIC_ACCESS }
+        - { path: ^/docs$, roles: PUBLIC_ACCESS }
+        - { path: ^/token$, roles: PUBLIC_ACCESS }
+        - { path: ^/users/create-account$, roles: PUBLIC_ACCESS }
+        - { path: ^/create-account, roles: PUBLIC_ACCESS }
+        - { path: ^/users/create-account$, roles: PUBLIC_ACCESS }
+        - { path: ^/password_recoveries$, roles: PUBLIC_ACCESS }
+        - { path: ^/recovery_accesses$, roles: PUBLIC_ACCESS }
+        - { path: ^/account_verifications$, roles: PUBLIC_ACCESS }
+        - { path: ^/themes-colors.css$, roles: PUBLIC_ACCESS }
+        - { path: ^/languages$, roles: PUBLIC_ACCESS }
+        - { path: ^/timezones$, roles: PUBLIC_ACCESS }
+        - { path: ^/people/company/default$, roles: PUBLIC_ACCESS }
+        - { path: ^/shop/franchises$, roles: PUBLIC_ACCESS }
+        - { path: ^/shop/categories$, roles: PUBLIC_ACCESS }
+        - { path: ^/shop/categories/.*$, roles: PUBLIC_ACCESS }
+        - { path: ^/translates$, roles: PUBLIC_ACCESS }
+        - { path: ^/anonymous-cart$, roles: PUBLIC_ACCESS }
+        - { path: ^/anonymous-cart/items$, roles: PUBLIC_ACCESS }
+        - { path: ^/[^/]+/files/.*$, roles: PUBLIC_ACCESS }
+        - { path: ^/webhook/, roles: PUBLIC_ACCESS }
+        - { path: ^/oauth/, roles: PUBLIC_ACCESS }
+        - { path: ^/pix$, roles: PUBLIC_ACCESS }
+        - { path: ^/bitcoin$, roles: PUBLIC_ACCESS }
+        - { path: ^/debug$, roles: PUBLIC_ACCESS }
+        - { path: ^/product-showcases/catalog$, roles: PUBLIC_ACCESS }
+        - { path: ^/products$, roles: PUBLIC_ACCESS }
+        - { path: ^/products/.*$, roles: PUBLIC_ACCESS }
+        - { path: ^/product_groups$, roles: PUBLIC_ACCESS }
+        - { path: ^/product_groups/.*$, roles: PUBLIC_ACCESS }
+        - { path: ^/product_group_products$, roles: PUBLIC_ACCESS }
+        - { path: ^/product_group_products/.*$, roles: PUBLIC_ACCESS }
+        - { path: ^/product_group_parents$, roles: PUBLIC_ACCESS }
+        - { path: ^/product_group_parents/.*$, roles: PUBLIC_ACCESS }
+        - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
