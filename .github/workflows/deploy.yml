@@ -157,9 +157,10 @@ jobs:
 
             # Stop legacy per-tenant workers before Composer/migrations. The central cron
             # is the only owner after deployment; stale workers can exhaust process slots.
-            pkill -TERM -f "bin/console tenant:messenger:consume.*--domain=${MESSENGER_DOMAIN}" 2>/dev/null || true
-            pkill -TERM -f "bin/console tenant:integration:start.*--domain=${MESSENGER_DOMAIN}" 2>/dev/null || true
-            pkill -TERM -f "bin/console websocket:start.*--domain=${MESSENGER_DOMAIN}" 2>/dev/null || true
+            OLD_WORKERS=$(ps -eo pid=,args= | grep -E 'bin/console (tenant:messenger:consume|tenant:integration:start|websocket:start)' | grep -vE 'grep|awk' | awk '{print $1}' || true)
+            if [ -n "$OLD_WORKERS" ]; then
+              echo "$OLD_WORKERS" | xargs -r kill -TERM || true
+            fi
             sleep 2
 
             run_composer() {
