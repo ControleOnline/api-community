@@ -18,6 +18,7 @@
 | Smoke-Test-Flows (alias catálogo) | https://github.com/ControleOnline/api-community/wiki/Smoke-Test-Flows |
 | Arquitetura (repo) | https://github.com/ControleOnline/api-community/blob/master/docs/technical/architecture.md |
 | CI/CD (repo) | https://github.com/ControleOnline/api-community/blob/master/docs/technical/ci-automation.md |
+| Websocket ownership 8080 | https://github.com/ControleOnline/api-community/wiki/Websocket-Ownership-Porta-8080 |
 
 ### Módulos relacionados
 
