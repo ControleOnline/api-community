@@ -46,6 +46,7 @@
         "nelmio/cors-bundle": "^2.5",
         "nfephp-org/sped-cte": "dev-master",
         "nfephp-org/sped-da": "dev-master",
+        "nfephp-org/sped-mdfe": "dev-master",
         "nfephp-org/sped-nfe": "dev-master",
         "nfephp-org/sped-pos": "dev-master",
         "phpdocumentor/reflection-docblock": "^5.4",
