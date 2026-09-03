@@ -1,4 +1,0 @@
-migrations_paths:
-    'DoctrineMigrations\MultiTenancy': 'modules/controleonline/multi-tenancy/migrations'
-table_storage:
-    table_name: 'doctrine_migration_versions'
