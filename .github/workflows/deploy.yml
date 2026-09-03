@@ -157,11 +157,14 @@ jobs:
 
             # Stop legacy per-tenant workers before Composer/migrations. The central cron
             # is the only owner after deployment; stale workers can exhaust process slots.
-            OLD_WORKERS=$(ps -eo pid=,args= | grep -E 'bin/console (tenant:messenger:consume|tenant:integration:start|websocket:start)' | grep -vE 'grep|awk' | awk '{print $1}' || true)
-            if [ -n "$OLD_WORKERS" ]; then
+            for attempt in 1 2 3 4 5; do
+              OLD_WORKERS=$(ps -eo pid=,args= | grep -E 'bin/console (tenant:messenger:consume|tenant:integration:start|websocket:start)' | grep -vE 'grep|awk' | awk '{print $1}' || true)
+              if [ -z "$OLD_WORKERS" ]; then
+                break
+              fi
               echo "$OLD_WORKERS" | xargs -r kill -TERM || true
-            fi
-            sleep 2
+              sleep 2
+            done
 
             run_composer() {
               if command -v composer >/dev/null 2>&1; then
@@ -182,7 +185,7 @@ jobs:
               exit 1
             }
 
-            run_composer install --no-interaction --no-suggest --no-progress --no-plugins --no-scripts
+            COMPOSER_MAX_PARALLEL_HTTP=1 run_composer install --no-interaction --no-dev --no-suggest --no-progress --no-plugins --no-scripts
             php -r 'require "vendor/autoload.php"; \App\FixAutoload::postInstall();'
             rm -rf var/cache/prod/pools/system
             rm -rf var/cache/prod/doctrine/orm
