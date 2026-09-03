@@ -1,0 +1,38 @@
+name: Pull Request Checks
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pull-request-checks-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  baseline-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+          tools: composer:v2
+
+      - name: Validate composer manifest
+        run: composer validate --no-check-publish --strict
+
+      - name: Check PHP syntax
+        run: find src modules tests bin config -type f \( -name '*.php' -o -name '*.phtml' \) -print0 | xargs -0 -r -n1 php -l
+
+      - name: Check diff hygiene
+        run: git diff --check

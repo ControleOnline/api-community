@@ -1,0 +1,17 @@
+doctrine_migrations:
+    migrations_paths:
+        'DoctrineMigrations\Common': '%kernel.project_dir%/modules/controleonline/common/migrations'
+        'DoctrineMigrations\People': '%kernel.project_dir%/modules/controleonline/people/migrations'
+        'DoctrineMigrations\Contract': '%kernel.project_dir%/modules/controleonline/contract/migrations'
+        'DoctrineMigrations\Products': '%kernel.project_dir%/modules/controleonline/products/migrations'
+        'DoctrineMigrations\Orders': '%kernel.project_dir%/modules/controleonline/orders/migrations'
+        'DoctrineMigrations\Financial': '%kernel.project_dir%/modules/controleonline/financial/migrations'
+        'DoctrineMigrations\Accounting': '%kernel.project_dir%/modules/controleonline/accounting/migrations'
+        'DoctrineMigrations\Logistic': '%kernel.project_dir%/modules/controleonline/logistic/migrations'
+        'DoctrineMigrations\Integration': '%kernel.project_dir%/modules/controleonline/integration/migrations'
+        'DoctrineMigrations\Queue': '%kernel.project_dir%/modules/controleonline/queue/migrations'
+        'DoctrineMigrations\Tasks': '%kernel.project_dir%/modules/controleonline/tasks/migrations'
+        'DoctrineMigrations\Ead': '%kernel.project_dir%/modules/controleonline/ead/migrations'
+        'DoctrineMigrations\Users': '%kernel.project_dir%/modules/controleonline/users/migrations'
+        'DoctrineMigrations\ZTenantSeed': '%kernel.project_dir%/modules/controleonline/common/migrations/tenant_seed'
+    enable_profiler: false

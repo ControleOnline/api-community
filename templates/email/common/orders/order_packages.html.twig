@@ -1,0 +1,48 @@
+    <div class="row-box" style="clear:both;padding: 30px;">
+        <h5>
+            <label class="control-label label-title" style="color: #002c5d;font-weight: bold;font-size: 20px;">
+                Detalhes dos produtos
+            </label>
+        </h5>
+
+        <table width="100%">
+            <tr>
+                <td>Cubagem</td>
+                <td>Tipo de Material</td>
+                <td>Valor da Nota Fiscal</td>
+            </tr>
+            <tr>
+                <td>
+                    {{ order_product.cubage }}
+                </td>
+                <td>
+                    {{ order_product.type   }}
+                </td>
+                <td>
+                    {{ order_product.total  }}
+                </td>
+            </tr>
+        </table>
+        <div class="box-product-size box-size" style="margin-top:30px;border-top: 1px solid #bbbaba;padding-top:20px;">
+            <table width="100%">
+                <tr>
+                    <td>Qtd</td>
+                    <td>Peso</td>
+                    <td>Altura</td>
+                    <td>Largura</td>
+                    <td>Profundidade</td>
+                </tr>
+
+                {% for package in order_packages %}
+                    <tr>
+                        <td>{{ package.qtd    }}</td>
+                        <td>{{ package.weight }}</td>
+                        <td>{{ package.height }}</td>
+                        <td>{{ package.width  }}</td>
+                        <td>{{ package.depth  }}</td>
+                    </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>

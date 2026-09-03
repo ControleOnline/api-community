@@ -1,0 +1,44 @@
+name: Security Worker
+description: Assign Copilot as Security — single link to agents-mcp
+inputs:
+  gh_token:
+    required: true
+  issue_number:
+    required: true
+  base_branch:
+    default: dev
+runs:
+  using: composite
+  steps:
+    - name: Assign Copilot as Security
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+        ISSUE: ${{ inputs.issue_number }}
+        REPO: ${{ github.repository }}
+        BASE: ${{ inputs.base_branch }}
+      run: |
+        set -euo pipefail
+        CUSTOM_INSTRUCTIONS='Atue 100% como Security do ControleOnline.
+Leia e siga OBRIGATORIAMENTE a fonte canônica única:
+https://raw.githubusercontent.com/ControleOnline/agents-mcp/master/agents/roles/security/agent.md'
+
+        gh issue edit "$ISSUE" --repo "$REPO" --add-label "agent:security" || true
+
+        gh api --method POST \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          "/repos/${REPO}/issues/${ISSUE}/assignees" \
+          --input - <<EOFINNER
+        {
+          "assignees": ["copilot-swe-agent[bot]"],
+          "agent_assignment": {
+            "target_repo": "${REPO}",
+            "base_branch": "${BASE}",
+            "custom_instructions": $(echo "$CUSTOM_INSTRUCTIONS" | jq -Rs .)
+          }
+        }
+        EOFINNER
+
+        gh issue comment "$ISSUE" --repo "$REPO" --body \
+          "Manager Worker → **Security**. Fonte: agents-mcp/agents/roles/security/agent.md"
