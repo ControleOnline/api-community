@@ -181,7 +181,7 @@ jobs:
               exit 1
             }
 
-            run_composer install --no-interaction --no-suggest
+            run_composer install --no-interaction --no-suggest --no-progress --no-plugins --no-scripts
             rm -rf var/cache/prod/pools/system
             rm -rf var/cache/prod/doctrine/orm
             rm -f var/cache/prod/serialization.php
