@@ -183,7 +183,6 @@ jobs:
             php bin/console doctrine:migrations:migrate --configuration=config/migrations/multi_tenancy.yaml --no-interaction
             php bin/console tenant:migrations:migrate --no-interaction
             mkdir -p var/log
-            nohup php bin/console tenant:messenger:consume async --domain="${MESSENGER_DOMAIN}" >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
             touch "$HOME/.lsphp_restart.txt" 2>/dev/null || true
             touch "$RESTART_FILE" 2>/dev/null || true
             if command -v systemctl >/dev/null 2>&1; then
