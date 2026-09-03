@@ -142,8 +142,8 @@ jobs:
             git clean -ffd
 
             git submodule sync --recursive
-            git submodule update --recursive --init
-            git submodule foreach --recursive "
+            git submodule update --init
+            git submodule foreach "
               set -e
               git fetch origin
               if git show-ref --verify --quiet refs/heads/${BRANCH}; then
