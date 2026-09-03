@@ -201,6 +201,28 @@ jobs:
               sudo -n systemctl reload php8.3-fpm 2>/dev/null || sudo -n service php8.3-fpm reload 2>/dev/null || true
             fi
             rm -f "$HOME/.lsphp_restart.txt" "$RESTART_FILE" 2>/dev/null || true
+
+            # Operational smoke check: the central cron owns these processes.
+            # Give the host up to one minute to run its next scheduled tick.
+            workers_ok=false
+            websocket_ok=false
+            for attempt in 1 2 3 4 5 6; do
+              if ps -eo args= | grep -E 'bin/console tenant:messenger:consume' | grep -vE 'grep|awk' >/dev/null; then
+                workers_ok=true
+              fi
+              if ps -eo args= | grep -E 'bin/console websocket:start' | grep -vE 'grep|awk' >/dev/null; then
+                websocket_ok=true
+              fi
+              if [ "$workers_ok" = true ] && [ "$websocket_ok" = true ]; then
+                break
+              fi
+              sleep 10
+            done
+            echo "Central worker check: messenger=$workers_ok websocket=$websocket_ok"
+            if [ "$workers_ok" != true ] || [ "$websocket_ok" != true ]; then
+              echo "Central cron did not start both required long-lived services."
+              exit 1
+            fi
             echo "Deploy OK: $(git rev-parse --short HEAD) @ ${BRANCH} → ${TARGET}"
         env:
           DEPLOY_BRANCH: ${{ needs.configure.outputs.branch }}
