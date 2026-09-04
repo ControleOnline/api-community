@@ -19,6 +19,8 @@ doctrine:
 
     orm:
         dql:
+            string_functions:
+                find_in_set: DoctrineExtensions\Query\Mysql\FindInSet
             numeric_functions:
                 acos: DoctrineExtensions\Query\Mysql\Acos
                 cos: DoctrineExtensions\Query\Mysql\Cos
