@@ -170,7 +170,12 @@ jobs:
               exit 1
             }
 
-            run_composer install --no-interaction --no-suggest
+            if composer validate --no-check-publish --no-interaction >/dev/null 2>&1; then
+              run_composer install --no-interaction --no-suggest
+            else
+              echo "composer.lock is stale; refreshing dependencies"
+              run_composer update --no-interaction --no-progress --with-all-dependencies
+            fi
             rm -rf var/cache/prod/pools/system
             rm -rf var/cache/prod/doctrine/orm
             rm -f var/cache/prod/serialization.php
