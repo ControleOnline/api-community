@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class MigrationDownMethodsTest extends TestCase
 {
-    public function testTenantMigrationDownMethodsAreNoOps(): void
+    public function testTenantMigrationsDeclareValidDownMethods(): void
     {
         $migrationFiles = glob(dirname(__DIR__) . '/modules/controleonline/*/migrations/Version*.php') ?: [];
         sort($migrationFiles);
@@ -19,15 +19,11 @@ class MigrationDownMethodsTest extends TestCase
             $downBody = $this->extractDownMethodBody($contents);
 
             if ($downBody === null) {
-                continue;
-            }
-
-            if (trim($downBody) !== 'return;') {
                 $violations[] = str_replace(dirname(__DIR__) . '/', '', $migrationFile);
             }
         }
 
-        self::assertSame([], $violations, 'Migration down() methods must remain no-op.');
+        self::assertSame([], $violations, 'Migration down() methods must contain an explicit implementation.');
     }
 
     private function extractDownMethodBody(string $contents): ?string

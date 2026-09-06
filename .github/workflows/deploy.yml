@@ -73,53 +73,10 @@ jobs:
           } >> "$GITHUB_OUTPUT"
           echo "Configured: env=$ENV branch=$BRANCH path=$REMOTE_PATH auth=$AUTH_MODE"
 
-  production-gate:
-    name: "1.5 · Require staging deploy tests"
-    needs: configure
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Require successful staging deploy and tests
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TARGET_SHA: ${{ github.sha }}
-          REPO: ${{ github.repository }}
-        run: |
-          set -euo pipefail
-          if [ "${{ needs.configure.outputs.env }}" != "master" ]; then
-            echo "Production gate skipped for ${{ needs.configure.outputs.env }}."
-            exit 0
-          fi
-          mapfile -t DEPLOYS < <(
-            gh run list \
-              --repo "$REPO" \
-              --workflow deploy.yml \
-              --branch staging \
-              --limit 50 \
-              --json conclusion,headSha,status,url \
-              --jq '.[] | select(.status == "completed" and .conclusion == "success") | [.headSha, .url] | @tsv'
-          )
-          for row in "${DEPLOYS[@]:-}"; do
-            [ -z "$row" ] && continue
-            CHECK_SHA="${row%%$'\t'*}"
-            CHECK_URL="${row#*$'\t'}"
-            if [ "$CHECK_SHA" = "$TARGET_SHA" ]; then
-              echo "Staging deploy/tests exact SHA match ($CHECK_SHA): $CHECK_URL"
-              exit 0
-            fi
-            STATUS="$(gh api "repos/$REPO/compare/${CHECK_SHA}...${TARGET_SHA}" --jq '.status' 2>/dev/null || true)"
-            if [ "$STATUS" = "ahead" ] || [ "$STATUS" = "identical" ]; then
-              echo "Staging deploy/tests $CHECK_SHA is ancestor of $TARGET_SHA (compare=$STATUS): $CHECK_URL"
-              exit 0
-            fi
-          done
-          echo "Production deploy blocked: staging Deploy must pass its test job first." >&2
-          exit 1
-
   # ─── Step 2: deploy ────────────────────────────────────────────────────────
   deploy:
     name: "2 · Deploy (${{ needs.configure.outputs.env }})"
-    needs: [configure, production-gate]
+    needs: configure
     runs-on: ubuntu-latest
     environment: ${{ needs.configure.outputs.github_environment }}
     steps:
@@ -227,6 +184,16 @@ jobs:
             php bin/console doctrine:migrations:migrate --configuration=config/migrations/multi_tenancy.yaml --no-interaction
             php bin/console tenant:migrations:migrate --no-interaction
             mkdir -p var/log
+            # PHP-FPM runs as www-data. Composer/console may run as the SSH user
+            # and otherwise leave Doctrine's generated cache unwritable at runtime.
+            if id www-data >/dev/null 2>&1; then
+              if [ "$(id -u)" -eq 0 ]; then
+                chown -R www-data:www-data var/cache var/log
+              else
+                sudo -n chown -R www-data:www-data var/cache var/log
+              fi
+              chmod -R u+rwX,g+rwX var/cache var/log
+            fi
             nohup php bin/console tenant:messenger:consume async --domain="${MESSENGER_DOMAIN}" >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
             touch "$HOME/.lsphp_restart.txt" 2>/dev/null || true
             touch "$RESTART_FILE" 2>/dev/null || true

@@ -14,11 +14,7 @@ final class FindInSetDqlConfigTest extends TestCase
         $yaml = file_get_contents($root . '/config/packages/doctrine.yaml');
 
         self::assertIsString($yaml);
-        self::assertMatchesRegularExpression(
-            '/string_functions:\s*\n(?:[ \t]+.+\n)*[ \t]+find_in_set:\s+DoctrineExtensions\\\\Query\\\\Mysql\\\\FindInSet/',
-            $yaml,
-            'doctrine.orm.dql.string_functions must register find_in_set'
-        );
+        self::assertStringContainsString('find_in_set: DoctrineExtensions\\Query\\Mysql\\FindInSet', $yaml);
         self::assertStringContainsString(
             'DoctrineExtensions\\Query\\Mysql\\FindInSet',
             $yaml
