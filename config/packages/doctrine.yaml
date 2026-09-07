@@ -19,13 +19,14 @@ doctrine:
 
     orm:
         dql:
+            string_functions:
+                find_in_set: DoctrineExtensions\Query\Mysql\FindInSet
             numeric_functions:
                 acos: DoctrineExtensions\Query\Mysql\Acos
                 cos: DoctrineExtensions\Query\Mysql\Cos
                 sin: DoctrineExtensions\Query\Mysql\Sin
                 pi: DoctrineExtensions\Query\Mysql\Pi
                 rand: DoctrineExtensions\Query\Mysql\Rand
-        auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         mappings:

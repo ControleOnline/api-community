@@ -29,7 +29,7 @@
         "controleonline/websocket-server": "dev-master",
         "controleonline/whatsapp-sdk": "dev-master",
         "ctodobom/api-inter": "dev-master",
-        "doctrine/doctrine-bundle": "^2.12",
+        "doctrine/doctrine-bundle": "^3.3",
         "doctrine/doctrine-migrations-bundle": "^3.7",
         "doctrine/orm": "^3.2",
         "dompdf/dompdf": "^3.0",
@@ -50,31 +50,31 @@
         "nfephp-org/sped-pos": "dev-master",
         "phpdocumentor/reflection-docblock": "^5.4",
         "phpoffice/phpspreadsheet": "^5.0",
-        "symfony/asset": "^7.0",
-        "symfony/console": "^7.0",
-        "symfony/doctrine-messenger": "^7.0",
-        "symfony/dotenv": "^7.0",
-        "symfony/expression-language": "^7.0",
+        "symfony/asset": "^8.1",
+        "symfony/console": "^8.1",
+        "symfony/doctrine-messenger": "^8.1",
+        "symfony/dotenv": "^8.1",
+        "symfony/expression-language": "^8.1",
         "symfony/flex": "^2.4",
-        "symfony/framework-bundle": "^7.0",
-        "symfony/google-mailer": "^7.0",
-        "symfony/http-client": "^7.0",
-        "symfony/lock": "^7.0",
-        "symfony/mailer": "^7.0",
-        "symfony/messenger": "^7.0",
-        "symfony/monolog-bundle": "^3.10",
-        "symfony/property-access": "^7.0",
-        "symfony/property-info": "^7.0",
-        "symfony/runtime": "^7.0",
-        "symfony/scheduler": "^7.0",
-        "symfony/security-bundle": "^7.0",
-        "symfony/security-core": "^7.0",
-        "symfony/security-http": "^7.0",
-        "symfony/serializer": "^7.0",
-        "symfony/twig-bundle": "^7.0",
-        "symfony/validator": "^7.0",
-        "symfony/var-dumper": "^7.0",
-        "symfony/yaml": "^7.0",
+        "symfony/framework-bundle": "^8.1",
+        "symfony/google-mailer": "^8.1",
+        "symfony/http-client": "^8.1",
+        "symfony/lock": "^8.1",
+        "symfony/mailer": "^8.1",
+        "symfony/messenger": "^8.1",
+        "symfony/monolog-bundle": "^4.0",
+        "symfony/property-access": "^8.1",
+        "symfony/property-info": "^8.1",
+        "symfony/runtime": "^8.1",
+        "symfony/scheduler": "^8.1",
+        "symfony/security-bundle": "^8.1",
+        "symfony/security-core": "^8.1",
+        "symfony/security-http": "^8.1",
+        "symfony/serializer": "^8.1",
+        "symfony/twig-bundle": "^8.1",
+        "symfony/validator": "^8.1",
+        "symfony/var-dumper": "^8.1",
+        "symfony/yaml": "^8.1",
         "tecnickcom/tcpdf": "^6.7",
         "vich/uploader-bundle": "^2.3",
         "webonyx/graphql-php": "^15.12"
@@ -82,12 +82,12 @@
     "require-dev": {
         "phpunit/phpunit": "^12.1",
         "rector/rector": "^2.0",
-        "symfony/browser-kit": "^7.0",
-        "symfony/css-selector": "^7.0",
+        "symfony/browser-kit": "^8.1",
+        "symfony/css-selector": "^8.1",
         "symfony/maker-bundle": "^1.60",
-        "symfony/phpunit-bridge": "^7.0",
-        "symfony/stopwatch": "^7.0",
-        "symfony/web-profiler-bundle": "^7.0"
+        "symfony/phpunit-bridge": "^8.1",
+        "symfony/stopwatch": "^8.1",
+        "symfony/web-profiler-bundle": "^8.1"
     },
     "conflict": {
         "symfony/symfony": "*"
@@ -99,7 +99,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\": "tests/"
+            "App\\Tests\\": "tests/",
+            "ControleOnline\\SmokeTestsPlayground\\Tests\\": "modules/controleonline/smoke-tests-playground/tests/"
         }
     },
     "config": {
@@ -155,7 +156,7 @@
         },
         "symfony": {
             "allow-contrib": true,
-            "require": "^7.0",
+            "require": "^8.1",
             "docker": false
         }
     }
