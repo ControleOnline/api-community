@@ -198,7 +198,7 @@
             ],
             "authors": [
                 {
-                    "name": "Kévin Dunglas",
+                    "name": "K\u00e9vin Dunglas",
                     "email": "kevin@dunglas.fr",
                     "homepage": "https://dunglas.fr"
                 }
@@ -646,12 +646,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-accounting.git",
-                "reference": "888b775970e4325d478b3282211893546f3ba028"
+                "reference": "eabb18809d2eb7b1f3799011609af066c1b0a40e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-accounting/zipball/888b775970e4325d478b3282211893546f3ba028",
-                "reference": "888b775970e4325d478b3282211893546f3ba028",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-accounting/zipball/eabb18809d2eb7b1f3799011609af066c1b0a40e",
+                "reference": "eabb18809d2eb7b1f3799011609af066c1b0a40e",
                 "shasum": ""
             },
             "default-branch": true,
@@ -1531,9 +1531,9 @@
             "license": [
                 "LGPL-3.0-or-later"
             ],
-            "description": "Acesso à API do Banco Inter",
+            "description": "Acesso \u00e0 API do Banco Inter",
             "keywords": [
-                "Banco Inter Intermedium Boletos Cobrança"
+                "Banco Inter Intermedium Boletos Cobran\u00e7a"
             ],
             "support": {
                 "issues": "https://github.com/allgood/APInter-PHP/issues",
@@ -3111,7 +3111,7 @@
                     "email": "igor@wiedler.ch"
                 }
             ],
-            "description": "Événement is a very simple event dispatching library for PHP",
+            "description": "\u00c9v\u00e9nement is a very simple event dispatching library for PHP",
             "keywords": [
                 "event-dispatcher",
                 "event-emitter"
@@ -3390,7 +3390,7 @@
                     "homepage": "https://github.com/Nyholm"
                 },
                 {
-                    "name": "Márk Sági-Kazár",
+                    "name": "M\u00e1rk S\u00e1gi-Kaz\u00e1r",
                     "email": "mark.sagikazar@gmail.com",
                     "homepage": "https://github.com/sagikazarmark"
                 },
@@ -3589,7 +3589,7 @@
                     "homepage": "https://github.com/Nyholm"
                 },
                 {
-                    "name": "Márk Sági-Kazár",
+                    "name": "M\u00e1rk S\u00e1gi-Kaz\u00e1r",
                     "email": "mark.sagikazar@gmail.com",
                     "homepage": "https://github.com/sagikazarmark"
                 },
@@ -3599,7 +3599,7 @@
                     "homepage": "https://github.com/Tobion"
                 },
                 {
-                    "name": "Márk Sági-Kazár",
+                    "name": "M\u00e1rk S\u00e1gi-Kaz\u00e1r",
                     "email": "mark.sagikazar@gmail.com",
                     "homepage": "https://sagikazarmark.hu"
                 }
@@ -3785,7 +3785,7 @@
                     "email": "igor@wiedler.ch"
                 },
                 {
-                    "name": "Robert Schönthal",
+                    "name": "Robert Sch\u00f6nthal",
                     "email": "seroscho@googlemail.com"
                 }
             ],
@@ -4175,7 +4175,7 @@
                     "email": "pabs@pablotron.org"
                 },
                 {
-                    "name": "Jonatan Männchen",
+                    "name": "Jonatan M\u00e4nnchen",
                     "email": "jonatan@maennchen.ch"
                 },
                 {
@@ -4183,7 +4183,7 @@
                     "email": "donatj@gmail.com"
                 },
                 {
-                    "name": "András Kolesár",
+                    "name": "Andr\u00e1s Koles\u00e1r",
                     "email": "kolesar@kolesar.hu"
                 }
             ],
@@ -4760,7 +4760,7 @@
                     "homepage": "https://github.com/nfephp-org/sped-common/graphs/contributors"
                 }
             ],
-            "description": "sped-common é parte do projeto NFePHP.",
+            "description": "sped-common \u00e9 parte do projeto NFePHP.",
             "homepage": "https://github.com/nfephp-org/sped-common",
             "keywords": [
                 "nfe",
@@ -4836,7 +4836,7 @@
                     "homepage": "https://github.com/nfephp-org/sped-cte/graphs/contributors"
                 }
             ],
-            "description": "API para geração e comunicação da CTe com as SEFAZ autorizadoras.",
+            "description": "API para gera\u00e7\u00e3o e comunica\u00e7\u00e3o da CTe com as SEFAZ autorizadoras.",
             "homepage": "https://github.com/nfephp-org/sped-cte",
             "keywords": [
                 "cte",
@@ -4912,7 +4912,7 @@
                     "homepage": "https://github.com/nfephp-org/sped-da/graphs/contributors"
                 }
             ],
-            "description": "sped-da contêm as classes para criação dos documentos auxiliares referidos no projeto Sped.",
+            "description": "sped-da cont\u00eam as classes para cria\u00e7\u00e3o dos documentos auxiliares referidos no projeto Sped.",
             "homepage": "https://github.com/nfephp-org/sped-da",
             "keywords": [
                 "CCe",
@@ -5079,7 +5079,7 @@
                     "homepage": "https://github.com/nfephp-org/sped-nfe/graphs/contributors"
                 }
             ],
-            "description": "API para geração e comunicação da NFe e NFCe com as SEFAZ autorizadoras.",
+            "description": "API para gera\u00e7\u00e3o e comunica\u00e7\u00e3o da NFe e NFCe com as SEFAZ autorizadoras.",
             "homepage": "https://github.com/nfephp-org/sped-nfe",
             "keywords": [
                 "nfce",
@@ -5145,7 +5145,7 @@
                     "role": "Developer"
                 }
             ],
-            "description": "Biblioteca para impressão da DANFCe em impressoras térmicas compatíveis.",
+            "description": "Biblioteca para impress\u00e3o da DANFCe em impressoras t\u00e9rmicas compat\u00edveis.",
             "homepage": "https://github.com/nfephp-org/sped-pos",
             "keywords": [
                 "nfce",
@@ -6084,7 +6084,7 @@
             ],
             "authors": [
                 {
-                    "name": "Christian Lück",
+                    "name": "Christian L\u00fcck",
                     "email": "christian@clue.engineering",
                     "homepage": "https://clue.engineering/"
                 },
@@ -6160,7 +6160,7 @@
             ],
             "authors": [
                 {
-                    "name": "Christian Lück",
+                    "name": "Christian L\u00fcck",
                     "email": "christian@clue.engineering",
                     "homepage": "https://clue.engineering/"
                 },
@@ -6234,7 +6234,7 @@
             ],
             "authors": [
                 {
-                    "name": "Christian Lück",
+                    "name": "Christian L\u00fcck",
                     "email": "christian@clue.engineering",
                     "homepage": "https://clue.engineering/"
                 },
@@ -6311,7 +6311,7 @@
                     "homepage": "https://sorgalla.com/"
                 },
                 {
-                    "name": "Christian Lück",
+                    "name": "Christian L\u00fcck",
                     "email": "christian@clue.engineering",
                     "homepage": "https://clue.engineering/"
                 },
@@ -6380,7 +6380,7 @@
             ],
             "authors": [
                 {
-                    "name": "Christian Lück",
+                    "name": "Christian L\u00fcck",
                     "email": "christian@clue.engineering",
                     "homepage": "https://clue.engineering/"
                 },
@@ -6509,7 +6509,7 @@
             ],
             "authors": [
                 {
-                    "name": "Christian Lück",
+                    "name": "Christian L\u00fcck",
                     "email": "christian@clue.engineering",
                     "homepage": "https://clue.engineering/"
                 },
@@ -6584,7 +6584,7 @@
             ],
             "authors": [
                 {
-                    "name": "Christian Lück",
+                    "name": "Christian L\u00fcck",
                     "email": "christian@clue.engineering",
                     "homepage": "https://clue.engineering/"
                 },
@@ -8819,7 +8819,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jérémy Derussé",
+                    "name": "J\u00e9r\u00e9my Deruss\u00e9",
                     "email": "jeremy@derusse.com"
                 },
                 {
@@ -10308,7 +10308,7 @@
             ],
             "authors": [
                 {
-                    "name": "Kévin Dunglas",
+                    "name": "K\u00e9vin Dunglas",
                     "email": "dunglas@gmail.com"
                 },
                 {
@@ -12006,7 +12006,7 @@
             ],
             "authors": [
                 {
-                    "name": "Kévin Dunglas",
+                    "name": "K\u00e9vin Dunglas",
                     "email": "dunglas@gmail.com"
                 },
                 {
@@ -13177,7 +13177,7 @@
             ],
             "authors": [
                 {
-                    "name": "Ondřej Mirtes"
+                    "name": "Ond\u0159ej Mirtes"
                 },
                 {
                     "name": "Markus Staab"
@@ -14784,7 +14784,7 @@
                     "email": "fabien@symfony.com"
                 },
                 {
-                    "name": "Jean-François Simon",
+                    "name": "Jean-Fran\u00e7ois Simon",
                     "email": "jeanfrancois.simon@sensiolabs.com"
                 },
                 {
