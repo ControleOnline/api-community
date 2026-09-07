@@ -18,7 +18,7 @@
 | env | branch | remote path | messenger domain | auth | secrets |
 |-----|--------|-------------|------------------|------|---------|
 | dev | dev | `/var/www/api-community-dev` | d.controleonline.com | password | `DEV_HOST`, `DEV_USER`, `DEV_PASS` |
-| staging | staging | `/var/www/api-community` | s.controleonline.com | password | `STAGING_HOST`, `STAGING_USER`, `STAGING_PASS` |
+| staging | staging | `/var/www/api-community` | s.controleonline.com | SSH key + passphrase | `STAGING_HOST`, `STAGING_USER`, `STAGING_KEY`, `STAGING_PASS` |
 | master | master | `~/sistemas/controleonline/api` | api.controleonline.com | key | `API_HOST`, `USER`, `CONTROLEONLINE`, `PORT` |
 
 GitHub **Environments** usados: `dev`, `staging`, `production` (protection rules opcionais).
@@ -34,5 +34,5 @@ GitHub **Environments** usados: `dev`, `staging`, `production` (protection rules
 Settings → Secrets and variables → Actions (repo ou org):
 
 - Dev: `DEV_HOST`, `DEV_USER`, `DEV_PASS`
-- Staging: `STAGING_HOST`, `STAGING_USER`, `STAGING_PASS`
+- Staging: `STAGING_HOST`, `STAGING_USER`, `STAGING_KEY` (private key), `STAGING_PASS` (key passphrase)
 - Production: `API_HOST`, `USER`, `CONTROLEONLINE`, `PORT`

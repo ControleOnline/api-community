@@ -49,7 +49,7 @@ jobs:
               ENV=staging; BRANCH=staging
               REMOTE_PATH=/var/www/api-community
               MESSENGER_DOMAIN=s.controleonline.com
-              AUTH_MODE=password; BOOTSTRAP=false; GH_ENV=staging
+              AUTH_MODE=key; BOOTSTRAP=false; GH_ENV=staging
               ;;
             master)
               ENV=master; BRANCH=master
@@ -95,7 +95,8 @@ jobs:
             staging)
               test -n "${{ secrets.STAGING_HOST }}" || { echo "Missing STAGING_HOST"; exit 1; }
               test -n "${{ secrets.STAGING_USER }}" || { echo "Missing STAGING_USER"; exit 1; }
-              test -n "${{ secrets.STAGING_PASS }}" || { echo "Missing STAGING_PASS"; exit 1; }
+              test -n "${{ secrets.STAGING_KEY }}" || { echo "Missing STAGING_KEY (SSH private key)"; exit 1; }
+              test -n "${{ secrets.STAGING_PASS }}" || { echo "Missing STAGING_PASS (SSH key passphrase)"; exit 1; }
               ;;
             master)
               test -n "${{ secrets.API_HOST }}" || { echo "Missing API_HOST"; exit 1; }
@@ -109,8 +110,9 @@ jobs:
         with:
           host: ${{ needs.configure.outputs.env == 'dev' && secrets.DEV_HOST || needs.configure.outputs.env == 'staging' && secrets.STAGING_HOST || secrets.API_HOST }}
           username: ${{ needs.configure.outputs.env == 'dev' && secrets.DEV_USER || needs.configure.outputs.env == 'staging' && secrets.STAGING_USER || secrets.USER }}
-          password: ${{ needs.configure.outputs.auth_mode == 'password' && (needs.configure.outputs.env == 'dev' && secrets.DEV_PASS || secrets.STAGING_PASS) || '' }}
-          key: ${{ needs.configure.outputs.auth_mode == 'key' && secrets.CONTROLEONLINE || '' }}
+          password: ${{ needs.configure.outputs.auth_mode == 'password' && secrets.DEV_PASS || '' }}
+          key: ${{ needs.configure.outputs.env == 'staging' && secrets.STAGING_KEY || needs.configure.outputs.env == 'master' && secrets.CONTROLEONLINE || '' }}
+          passphrase: ${{ needs.configure.outputs.env == 'staging' && secrets.STAGING_PASS || '' }}
           port: ${{ needs.configure.outputs.auth_mode == 'key' && secrets.PORT || 22 }}
           script_stop: true
           envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP
@@ -189,17 +191,17 @@ jobs:
             if id www-data >/dev/null 2>&1; then
               if [ "$(id -u)" -eq 0 ]; then
                 chown -R www-data:www-data var/cache var/log
+                chmod -R u+rwX,g+rwX var/cache var/log
+              elif [ ! -w var/cache ] || [ ! -w var/log ]; then
+                echo "Remote deploy user cannot write var/cache or var/log; provision shared PHP-FPM permissions first" >&2
+                exit 1
               else
-                sudo -n chown -R www-data:www-data var/cache var/log
+                echo "Using pre-provisioned shared permissions for $(id -un) and www-data"
               fi
-              chmod -R u+rwX,g+rwX var/cache var/log
             fi
             nohup php bin/console tenant:messenger:consume async --domain="${MESSENGER_DOMAIN}" >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
             touch "$HOME/.lsphp_restart.txt" 2>/dev/null || true
             touch "$RESTART_FILE" 2>/dev/null || true
-            if command -v systemctl >/dev/null 2>&1; then
-              sudo -n systemctl reload php8.3-fpm 2>/dev/null || sudo -n service php8.3-fpm reload 2>/dev/null || true
-            fi
             rm -f "$HOME/.lsphp_restart.txt" "$RESTART_FILE" 2>/dev/null || true
             echo "Deploy OK: $(git rev-parse --short HEAD) @ ${BRANCH} → ${TARGET}"
         env:
