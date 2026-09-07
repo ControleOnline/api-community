@@ -27,7 +27,6 @@ doctrine:
                 sin: DoctrineExtensions\Query\Mysql\Sin
                 pi: DoctrineExtensions\Query\Mysql\Pi
                 rand: DoctrineExtensions\Query\Mysql\Rand
-        auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         mappings:
