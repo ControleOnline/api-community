@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class ContactDataValidator extends ConstraintValidator
 {
-    public function validate($value, Constraint $constraint)
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof ContactData) {
             throw new UnexpectedTypeException($constraint, ContactData::class);

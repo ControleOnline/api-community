@@ -3,9 +3,21 @@
 # API - Controle Online
 API - Controle Online
 
+### Cadastro inicial (auto-cadastro)
+
+Os endpoints públicos de cadastro inicial aceitos pelo backend são:
+
+- `POST /create-account`
+- `POST /users/create-account` (compatibilidade com front-end legado)
 
 ### Submodules
 [Instalacao e dependencias](https://github.com/ControleOnline/api-community/wiki/Instalacao)
+
+## Public signup compatibility
+
+The main API exposes the legacy public signup route `^/users/create-account$` in `config/packages/security.yaml` so older web clients can reach the current initial registration flow without authentication.
+
+Keep this alias aligned with the canonical `POST /create-account` endpoint in the people module.
 
 
 ### Front Ends

@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class FullAddressValidator extends ConstraintValidator
 {
-    public function validate($value, Constraint $constraint)
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof FullAddress) {
             throw new UnexpectedTypeException($constraint, FullAddress::class);

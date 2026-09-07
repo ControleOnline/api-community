@@ -2,8 +2,9 @@ parameters:
     env(VARNISH_URL): ""
 
 api_platform:
-    enable_re_doc: true
-    enable_swagger_ui: true
+    enable_re_doc: false
+    enable_scalar: true
+    enable_swagger_ui: false
     defaults:
         normalization_context:
             enable_max_depth: true
@@ -30,8 +31,8 @@ api_platform:
     version: 1.0.0
     swagger:
         api_keys:
-            apiKey:
-                name: Authorization
+            apiToken:
+                name: API-TOKEN
                 type: header
     collection:
         pagination:
