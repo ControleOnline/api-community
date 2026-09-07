@@ -646,12 +646,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-accounting.git",
-                "reference": "888b775970e4325d478b3282211893546f3ba028"
+                "reference": "eabb18809d2eb7b1f3799011609af066c1b0a40e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-accounting/zipball/888b775970e4325d478b3282211893546f3ba028",
-                "reference": "888b775970e4325d478b3282211893546f3ba028",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-accounting/zipball/eabb18809d2eb7b1f3799011609af066c1b0a40e",
+                "reference": "eabb18809d2eb7b1f3799011609af066c1b0a40e",
                 "shasum": ""
             },
             "default-branch": true,
@@ -678,7 +678,7 @@
                 "issues": "https://github.com/ControleOnline/api-platform-accounting/issues",
                 "source": "https://github.com/ControleOnline/api-platform-accounting/tree/master"
             },
-            "time": "2026-09-03T23:02:45+00:00"
+            "time": "2026-09-07T00:56:03+00:00"
         },
         {
             "name": "controleonline/common",
