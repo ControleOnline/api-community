@@ -173,14 +173,14 @@ jobs:
             }
 
             if composer validate --no-check-publish --no-interaction >/dev/null 2>&1; then
-              run_composer install --no-interaction --no-suggest
+              run_composer install --no-interaction --no-suggest --no-scripts
             else
               echo "composer.lock is stale; refreshing dependencies"
-              run_composer update --no-interaction --no-progress --with-all-dependencies
+              run_composer update --no-interaction --no-progress --with-all-dependencies --no-scripts
             fi
-            rm -rf var/cache/prod/pools/system
-            rm -rf var/cache/prod/doctrine/orm
-            rm -f var/cache/prod/serialization.php
+            php -r 'require "vendor/autoload.php"; App\FixAutoload::postInstall();'
+            rm -rf var/cache/prod
+            php bin/console cache:clear --no-warmup --env=prod --no-debug
             php -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null
             php bin/console doctrine:migrations:sync-metadata-storage --configuration=config/migrations/multi_tenancy.yaml --no-interaction
             php bin/console doctrine:migrations:migrate --configuration=config/migrations/multi_tenancy.yaml --no-interaction
