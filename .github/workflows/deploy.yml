@@ -118,6 +118,7 @@ jobs:
           envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP
           script: |
             set -e
+            # Keep tool resolution inside the remote SSH script.
             export PATH="$HOME/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
             export COMPOSER_ALLOW_SUPERUSER=1
 
