@@ -4,9 +4,9 @@
 
 ## Escopo
 
-O `api-community/dev` deve consumir `ControleOnline/people@9cf1bda434765badfb3a10fbe6c2c5c3966475f5`, publicado em `api-community/master` no commit `6d7e62d144e1beb82e6bf7c4e97d1855fe60c253`.
+O `api-community/dev` deve consumir `ControleOnline/api-platform-people@e8d1fc7c6bbdca4bf1d2d6b677ed61b3a55f9e94`, publicado na branch remota `task-687`.
 
-Esse pin inclui o `PeopleItemProvider` nas operações `Put`/`Delete` e a resolução de escopo que considera vínculos inativos, permitindo editar um contato inativo sem o falso `404`.
+O delta de task usa o pin remoto `ControleOnline/api-platform-people` (branch `task-687`), que inclui o `PeopleItemProvider` nas operações `Put`/`Delete` e a resolução de escopo que considera vínculos inativos, permitindo editar um contato inativo sem o falso `404`. O `PeopleCompanyScopeGuard` agora exige `people_link.enable = true` nas relações de escopo, impedindo autorização por vínculo revogado; o teste regressivo é `PeopleCompanyScopeGuardTest::testDoesNotAuthorizeThroughDisabledCallerCompanyLink`.
 
 ## Manifesto do smoke visual
 
