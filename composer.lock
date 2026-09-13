@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "53388efd75c617783c32b52aa607f95a",
+    "content-hash": "3da002edbda769d8598e8d87911e2ce9",
     "packages": [
         {
             "name": "api-platform/core",
@@ -862,7 +862,7 @@
                 "controleonline/common": "*",
                 "google/auth": "^1.45",
                 "guzzlehttp/guzzle": "^7.9",
-                "symfony/lock": "*"
+                "symfony/lock": "^7.4 || ^8.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^12.1"
@@ -1243,12 +1243,12 @@
             },
             "require": {
                 "php": "^8.2",
-                "symfony/config": "*",
-                "symfony/console": "*",
-                "symfony/dependency-injection": "*",
-                "symfony/framework-bundle": "*",
-                "symfony/process": "*",
-                "symfony/yaml": "*"
+                "symfony/config": "^7.4 || ^8.1",
+                "symfony/console": "^7.4 || ^8.1",
+                "symfony/dependency-injection": "^7.4 || ^8.1",
+                "symfony/framework-bundle": "^7.4 || ^8.1",
+                "symfony/process": "^7.4 || ^8.1",
+                "symfony/yaml": "^7.4 || ^8.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.6"
@@ -4780,8 +4780,8 @@
                 "ext-simplexml": "*",
                 "ext-soap": "*",
                 "ext-zlib": "*",
-                "justinrainbow/json-schema": "^5.2",
-                "nfephp-org/sped-common": "^5.0",
+                "justinrainbow/json-schema": "^5.2 || ^6.5",
+                "nfephp-org/sped-common": "^5.1.17",
                 "php": ">=7.0"
             },
             "require-dev": {
@@ -15072,6 +15072,7 @@
         "controleonline/accounting": 20,
         "controleonline/common": 20,
         "controleonline/contract": 20,
+        "controleonline/report": 20,
         "controleonline/ead": 20,
         "controleonline/financial": 20,
         "controleonline/integration": 20,
@@ -15082,7 +15083,6 @@
         "controleonline/people": 20,
         "controleonline/products": 20,
         "controleonline/queue": 20,
-        "controleonline/report": 20,
         "controleonline/smoke-tests-playground": 20,
         "controleonline/spc-sdk": 20,
         "controleonline/tasks": 20,
@@ -15103,6 +15103,6 @@
         "ext-fileinfo": "*",
         "ext-iconv": "*"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }
