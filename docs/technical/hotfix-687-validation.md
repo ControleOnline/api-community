@@ -24,6 +24,10 @@ Etapas que devem possuir captura sanitizada no ambiente de staging:
 
 As capturas devem omitir tokens, cookies, e-mails reais e identificadores pessoais. O resultado remoto do smoke deve registrar ambiente, data, SHA do superprojeto e SHA do submódulo `people`.
 
+## Check obrigatório corrigido
+
+O workflow `Deploy` teve a indentação do `export PATH` restaurada dentro do bloco `appleboy/ssh-action` em `dev`; isso evita um workflow sem jobs e permite que o job `tests` seja criado. A correção será verificada no merge remoto em `dev`.
+
 ## Critério automatizado focado
 
 O check obrigatório do backend é a execução do conjunto PHPUnit focado em `People`/`people_link`, incluindo o caminho `PUT /people/{id}` para um registro `enable=false`. A saída do runner deve ser anexada pela validação, sem substituir as capturas da jornada visual.
