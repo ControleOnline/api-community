@@ -49,7 +49,7 @@ jobs:
               ENV=staging; BRANCH=staging
               REMOTE_PATH=/var/www/api-community
               MESSENGER_DOMAIN=s.controleonline.com
-              AUTH_MODE=key; BOOTSTRAP=false; GH_ENV=staging
+              AUTH_MODE=password; BOOTSTRAP=false; GH_ENV=staging
               ;;
             master)
               ENV=master; BRANCH=master
@@ -82,6 +82,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Validate SSH authentication routing
+        run: node --test tests/Workflow/staging-ssh-auth.test.mjs
+
       - name: Validate required secrets for environment
         run: |
           set -e
@@ -95,8 +98,7 @@ jobs:
             staging)
               test -n "${{ secrets.STAGING_HOST }}" || { echo "Missing STAGING_HOST"; exit 1; }
               test -n "${{ secrets.STAGING_USER }}" || { echo "Missing STAGING_USER"; exit 1; }
-              test -n "${{ secrets.STAGING_KEY }}" || { echo "Missing STAGING_KEY (SSH private key)"; exit 1; }
-              test -n "${{ secrets.STAGING_PASS }}" || { echo "Missing STAGING_PASS (SSH key passphrase)"; exit 1; }
+              test -n "${{ secrets.STAGING_PASS }}" || { echo "Missing STAGING_PASS (SSH login password)"; exit 1; }
               ;;
             master)
               test -n "${{ secrets.API_HOST }}" || { echo "Missing API_HOST"; exit 1; }
@@ -110,9 +112,8 @@ jobs:
         with:
           host: ${{ needs.configure.outputs.env == 'dev' && secrets.DEV_HOST || needs.configure.outputs.env == 'staging' && secrets.STAGING_HOST || secrets.API_HOST }}
           username: ${{ needs.configure.outputs.env == 'dev' && secrets.DEV_USER || needs.configure.outputs.env == 'staging' && secrets.STAGING_USER || secrets.USER }}
-          password: ${{ needs.configure.outputs.auth_mode == 'password' && secrets.DEV_PASS || '' }}
-          key: ${{ needs.configure.outputs.env == 'staging' && secrets.STAGING_KEY || needs.configure.outputs.env == 'master' && secrets.CONTROLEONLINE || '' }}
-          passphrase: ${{ needs.configure.outputs.env == 'staging' && secrets.STAGING_PASS || '' }}
+          password: ${{ needs.configure.outputs.env == 'dev' && secrets.DEV_PASS || needs.configure.outputs.env == 'staging' && secrets.STAGING_PASS || '' }}
+          key: ${{ needs.configure.outputs.env == 'master' && secrets.CONTROLEONLINE || '' }}
           port: ${{ needs.configure.outputs.auth_mode == 'key' && secrets.PORT || 22 }}
           script_stop: true
           envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP
