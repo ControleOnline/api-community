@@ -4,9 +4,9 @@
 
 ## Escopo
 
-O `api-community/dev` deve consumir `ControleOnline/people@9cf1bda434765badfb3a10fbe6c2c5c3966475f5`, publicado em `api-community/master` no commit `6d7e62d144e1beb82e6bf7c4e97d1855fe60c253`.
+O `api-community/dev` deve consumir `ControleOnline/api-platform-people@e8d1fc7c6bbdca4bf1d2d6b677ed61b3a55f9e94`, publicado na branch remota `task-687`.
 
-Esse pin inclui o `PeopleItemProvider` nas operações `Put`/`Delete` e a resolução de escopo que considera vínculos inativos, permitindo editar um contato inativo sem o falso `404`.
+O delta de task usa o pin remoto `ControleOnline/api-platform-people` (branch `task-687`), que inclui o `PeopleItemProvider` nas operações `Put`/`Delete` e a resolução de escopo que considera vínculos inativos, permitindo editar um contato inativo sem o falso `404`. O `PeopleCompanyScopeGuard` agora exige `people_link.enable = true` nas relações de escopo, impedindo autorização por vínculo revogado; o teste regressivo é `PeopleCompanyScopeGuardTest::testDoesNotAuthorizeThroughDisabledCallerCompanyLink`.
 
 ## Manifesto do smoke visual
 
@@ -23,6 +23,10 @@ Etapas que devem possuir captura sanitizada no ambiente de staging:
 7. retorno à lista com o item atualizado.
 
 As capturas devem omitir tokens, cookies, e-mails reais e identificadores pessoais. O resultado remoto do smoke deve registrar ambiente, data, SHA do superprojeto e SHA do submódulo `people`.
+
+## Check obrigatório corrigido
+
+O workflow `Deploy` teve a indentação do `export PATH` restaurada dentro do bloco `appleboy/ssh-action` em `dev`; isso evita um workflow sem jobs e permite que o job `tests` seja criado. A correção será verificada no merge remoto em `dev`.
 
 ## Critério automatizado focado
 

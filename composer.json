@@ -1,4 +1,6 @@
 {
+    "name": "controleonline/api-community",
+    "description": "ControleOnline community API",
     "license": "MIT",
     "require": {
         "php": "^8.3|^8.4",
