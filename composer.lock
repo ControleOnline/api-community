@@ -810,12 +810,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-financial.git",
-                "reference": "3831cb349acc21f7e83e1d820026bea82a4a1d73"
+                "reference": "12cfeae3068fe4c630dcb29ab1e6ce1e6645dc70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-financial/zipball/3831cb349acc21f7e83e1d820026bea82a4a1d73",
-                "reference": "3831cb349acc21f7e83e1d820026bea82a4a1d73",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-financial/zipball/12cfeae3068fe4c630dcb29ab1e6ce1e6645dc70",
+                "reference": "12cfeae3068fe4c630dcb29ab1e6ce1e6645dc70",
                 "shasum": ""
             },
             "default-branch": true,
