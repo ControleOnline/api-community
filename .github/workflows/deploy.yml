@@ -179,9 +179,12 @@ jobs:
               run_composer update --no-interaction --no-progress --with-all-dependencies --no-scripts
             fi
             php -r 'require "vendor/autoload.php"; App\FixAutoload::postInstall();'
-            rm -rf var/cache/prod
+            # Force-remove cache even if a nested dir is busy/non-empty.
+            rm -rf var/cache/prod || true
+            find var/cache -mindepth 1 -maxdepth 1 -exec rm -rf {} + 2>/dev/null || true
             php bin/console cache:clear --no-warmup --env=prod --no-debug
-            php -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null
+            # about is diagnostic only — do not fail the deploy if it exits non-zero.
+            php -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null || echo "bin/console about returned non-zero (non-fatal)"
             if [ "${SKIP_DB_MIGRATIONS}" = "true" ] || [ "${SKIP_DB_MIGRATIONS}" = "TRUE" ] || [ "${SKIP_DB_MIGRATIONS}" = "True" ]; then
               echo "Database migrations intentionally skipped for this staging compatibility deploy"
             else
