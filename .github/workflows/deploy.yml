@@ -216,7 +216,7 @@ jobs:
           REMOTE_PATH: ${{ needs.configure.outputs.remote_path }}
           MESSENGER_DOMAIN: ${{ needs.configure.outputs.messenger_domain }}
           BOOTSTRAP: ${{ needs.configure.outputs.bootstrap }}
-          SKIP_DB_MIGRATIONS: ${{ github.event_name == 'push' && contains(github.event.head_commit.message, '[skip-db-migrations]') }}
+          SKIP_DB_MIGRATIONS: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message, '[skip-db-migrations]')) || (github.event_name == 'workflow_dispatch' && (github.event.inputs.target == 'staging' || needs.configure.outputs.env == 'staging')) }}
 
   # ─── Step 3: tests ─────────────────────────────────────────────────────────
   tests:
