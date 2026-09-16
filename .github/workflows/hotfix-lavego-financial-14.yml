@@ -1,0 +1,87 @@
+name: Hotfix LaveGo staging financial 14
+
+on:
+  push:
+    branches:
+      - hotfix-lavego-financial-14
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy exact financial hotfix without migrations
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_APINEW_LAVEGO }}
+          username: ${{ secrets.USER_APINEW_LAVEGO }}
+          password: ${{ secrets.PASS_APINEW_LAVEGO }}
+          port: ${{ secrets.PORT_APINEW_LAVEGO }}
+          script: |
+            set -Eeuo pipefail
+
+            ROOT="$HOME/api"
+            MODULE="$ROOT/modules/controleonline/financial"
+            TARGET="cb1d17386b2f6c43d1788a25c737af13a3dc957f"
+
+            cd "$MODULE"
+            if [ -n "$(git status --porcelain)" ]; then
+              echo "Financial module is dirty; refusing deployment"
+              exit 1
+            fi
+
+            PREVIOUS="$(git rev-parse HEAD)"
+            echo "Previous financial SHA: $PREVIOUS"
+            echo "Target financial SHA:   $TARGET"
+
+            git fetch origin task-14
+            git cat-file -e "$TARGET^{commit}"
+
+            if git merge-base --is-ancestor "$TARGET" "$PREVIOUS"; then
+              echo "Hotfix already present in served financial history"
+              exit 0
+            fi
+
+            if ! git merge-base --is-ancestor "$PREVIOUS" "$TARGET"; then
+              echo "Served financial SHA diverges from the hotfix line; refusing deployment"
+              exit 1
+            fi
+
+            rollback() {
+              echo "Deployment failed; rolling financial module back to $PREVIOUS"
+              cd "$MODULE"
+              git checkout --detach "$PREVIOUS"
+              rm -rf "$ROOT/var/cache/prod/pools/system" "$ROOT/var/cache/prod/doctrine/orm"
+              rm -f "$ROOT/var/cache/prod/serialization.php"
+            }
+            trap rollback ERR
+
+            git checkout --detach "$TARGET"
+
+            PHP_BIN="$(command -v ea-php84 || true)"
+            if [ -z "$PHP_BIN" ]; then
+              for candidate in /usr/local/bin/ea-php84 /opt/cpanel/ea-php84/root/usr/bin/php; do
+                if [ -x "$candidate" ]; then
+                  PHP_BIN="$candidate"
+                  break
+                fi
+              done
+            fi
+            if [ -z "$PHP_BIN" ]; then
+              echo "PHP 8.4 not found"
+              exit 1
+            fi
+
+            "$PHP_BIN" -l "$MODULE/src/Service/InvoiceService.php"
+            grep -q 'public function isCanceledStatus' "$MODULE/src/Service/InvoiceService.php"
+
+            rm -rf "$ROOT/var/cache/prod/pools/system" "$ROOT/var/cache/prod/doctrine/orm"
+            rm -f "$ROOT/var/cache/prod/serialization.php"
+
+            test "$(git -C "$MODULE" rev-parse HEAD)" = "$TARGET"
+            trap - ERR
+            echo "Deploy OK: financial $TARGET; database migrations skipped"
+
+      - name: Read-only HTTP smoke
+        run: |
+          set -euo pipefail
+          test "$(curl -sS -o /dev/null -w '%{http_code}' --connect-timeout 8 --max-time 25 https://apinew.lave-go.com/robots.txt)" = "200"
