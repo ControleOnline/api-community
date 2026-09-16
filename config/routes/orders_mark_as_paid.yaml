@@ -1,0 +1,7 @@
+# app-community#797 — expose MarkOrderAsPaidController from controleonline/orders vendor package
+order_mark_as_paid:
+    path: /orders/{orderId}/mark-as-paid
+    controller: ControleOnline\Controller\MarkOrderAsPaidController
+    methods: [POST]
+    requirements:
+        orderId: '\d+'
