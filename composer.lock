@@ -1023,12 +1023,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-orders.git",
-                "reference": "f8388d9a9791457a8d81fbdb0c2e5147cbb9bcfd"
+                "reference": "0e1752d7f5e4415aa89adcac397a8f1e0bb31d3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-orders/zipball/f8388d9a9791457a8d81fbdb0c2e5147cbb9bcfd",
-                "reference": "f8388d9a9791457a8d81fbdb0c2e5147cbb9bcfd",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-orders/zipball/0e1752d7f5e4415aa89adcac397a8f1e0bb31d3b",
+                "reference": "0e1752d7f5e4415aa89adcac397a8f1e0bb31d3b",
                 "shasum": ""
             },
             "require": {
