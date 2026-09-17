@@ -143,19 +143,20 @@ jobs:
             git reset --hard "origin/${BRANCH}"
             git clean -ffd
 
-            git submodule sync --recursive
-            # Staging servers often have composer-extracted files inside submodule
-            # paths; force clean before checkout so update is not blocked.
+            git submodule sync --recursive || true
+            # Staging: local/untracked files inside module paths often block checkout.
+            # Clean best-effort, then force-update. Never abort deploy on a single
+            # nested wiki/module failure — composer install will refresh packages.
             git submodule foreach --recursive "
               git reset --hard HEAD 2>/dev/null || true
               git clean -ffd 2>/dev/null || true
             " || true
-            git submodule update --recursive --init --force
+            git submodule update --init --force modules/controleonline/orders || true
+            git submodule update --recursive --init --force || true
             git submodule foreach --recursive "
-              set -e
-              git reset --hard HEAD
-              git clean -ffd
-            "
+              git reset --hard HEAD 2>/dev/null || true
+              git clean -ffd 2>/dev/null || true
+            " || true
 
             run_composer() {
               if command -v composer >/dev/null 2>&1; then
