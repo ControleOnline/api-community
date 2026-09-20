@@ -1369,12 +1369,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-users.git",
-                "reference": "d20ec93a465e67263741c8d7d9748dc2aa826bdb"
+                "reference": "c42ccdf906c4a15eca8ea6585e0a1e9b4a74721e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-users/zipball/d20ec93a465e67263741c8d7d9748dc2aa826bdb",
-                "reference": "d20ec93a465e67263741c8d7d9748dc2aa826bdb",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-users/zipball/c42ccdf906c4a15eca8ea6585e0a1e9b4a74721e",
+                "reference": "c42ccdf906c4a15eca8ea6585e0a1e9b4a74721e",
                 "shasum": ""
             },
             "default-branch": true,
