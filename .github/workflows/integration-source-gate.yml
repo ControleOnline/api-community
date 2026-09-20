@@ -1,0 +1,65 @@
+name: Integration source gate
+
+on:
+  pull_request:
+    branches: [dev, staging, master]
+    types: [opened, synchronize, reopened, edited, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  source-policy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce task or frozen RC source
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          set -eu
+          if [ "$BASE_REF" = "dev" ]; then
+            echo "$HEAD_REF" | grep -Eq '^task-[1-9][0-9]*$' || {
+              echo "::error::dev only accepts task-<numeric issue>."
+              exit 1
+            }
+            exit 0
+          fi
+
+          echo "$HEAD_REF" | grep -Eq '^rc/[0-9]+\.[0-9]+\.[0-9]+-rc\.[1-9][0-9]*$' || {
+            echo "::error::$BASE_REF only accepts a frozen rc/X.Y.Z-rc.N source."
+            exit 1
+          }
+
+      - uses: actions/checkout@v4
+        if: github.base_ref != 'dev'
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Validate frozen RC manifest
+        if: github.base_ref != 'dev'
+        run: |
+          set -eu
+          test -f .release/rc-manifest.json || {
+            echo "::error::Missing .release/rc-manifest.json"
+            exit 1
+          }
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const m = JSON.parse(fs.readFileSync('.release/rc-manifest.json', 'utf8'));
+          const branch = process.env.HEAD_REF;
+          const match = /^rc\/(\d+\.\d+\.\d+)-rc\.([1-9][0-9]*)$/.exec(branch);
+          if (!match) throw new Error('invalid RC branch');
+          if (m.branch !== branch || m.version !== match[1] || Number(m.rc) !== Number(match[2])) throw new Error('manifest identity mismatch');
+          if (m.frozen !== true) throw new Error('manifest is not frozen');
+          if (!Array.isArray(m.tasks) || m.tasks.length < 1 || m.tasks.length > 5) throw new Error('RC must contain 1..5 tasks');
+          if (new Set(m.tasks.map(Number)).size !== m.tasks.length) throw new Error('duplicate RC tasks');
+          if (!/^[0-9a-f]{40}$/i.test(String(m.baseMaster || ''))) throw new Error('invalid baseMaster');
+          const repos = m.repositories || {};
+          if (!Object.keys(repos).length) throw new Error('empty repositories manifest');
+          for (const [repo, sha] of Object.entries(repos)) {
+            if (!/^ControleOnline\/[A-Za-z0-9_.-]+$/.test(repo) || !/^[0-9a-f]{40}$/i.test(String(sha))) throw new Error('invalid repository manifest entry');
+          }
+          console.log('Frozen RC manifest valid:', branch, m.tasks);
+          NODE
