@@ -185,7 +185,7 @@ jobs:
             fi
             php -r 'require "vendor/autoload.php"; App\FixAutoload::postInstall();'
             # Force-remove cache even if a nested dir is busy/non-empty.
-            rm -rf var/cache/prod || true
+            rm -rf var/cache/* || true
             find var/cache -mindepth 1 -maxdepth 1 -exec rm -rf {} + 2>/dev/null || true
             php bin/console cache:clear --no-warmup --env=prod --no-debug
             # about is diagnostic only — do not fail the deploy if it exits non-zero.
