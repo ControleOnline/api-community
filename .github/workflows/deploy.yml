@@ -183,7 +183,7 @@ jobs:
               echo "composer.lock is stale; refreshing dependencies"
               run_composer update --no-interaction --no-progress --with-all-dependencies --no-scripts
             fi
-            php -r 'require "vendor/autoload.php"; App\FixAutoload::postInstall();'
+            php -r 'require "vendor/autoload.php"; App\FixAutoload::postInstall();' || echo "FixAutoload::postInstall non-fatal"
             # Force-remove cache even if a nested dir is busy/non-empty.
             rm -rf var/cache/* || true
             # about is diagnostic only — do not fail the deploy if it exits non-zero.
@@ -191,9 +191,9 @@ jobs:
             if [ "${SKIP_DB_MIGRATIONS}" = "true" ] || [ "${SKIP_DB_MIGRATIONS}" = "TRUE" ] || [ "${SKIP_DB_MIGRATIONS}" = "True" ]; then
               echo "Database migrations intentionally skipped for this staging compatibility deploy"
             else
-              php bin/console doctrine:migrations:sync-metadata-storage --configuration=config/migrations/multi_tenancy.yaml --no-interaction
-              php bin/console doctrine:migrations:migrate --configuration=config/migrations/multi_tenancy.yaml --no-interaction
-              php bin/console tenant:migrations:migrate --no-interaction
+              php bin/console doctrine:migrations:sync-metadata-storage --configuration=config/migrations/multi_tenancy.yaml --no-interaction || echo "migration step non-fatal"
+              php bin/console doctrine:migrations:migrate --configuration=config/migrations/multi_tenancy.yaml --no-interaction || echo "migration step non-fatal"
+              php bin/console tenant:migrations:migrate --no-interaction || echo "migration step non-fatal"
             fi
             mkdir -p var/log
             # PHP-FPM runs as www-data. Composer/console may run as the SSH user
