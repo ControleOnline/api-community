@@ -158,6 +158,7 @@ jobs:
               git clean -ffd 2>/dev/null || true
             " || true
 
+            set +e  # do not abort staging deploy on non-critical steps
             run_composer() {
               if command -v composer >/dev/null 2>&1; then
                 composer "$@"
@@ -196,6 +197,7 @@ jobs:
               php bin/console tenant:migrations:migrate --no-interaction || echo "migration step non-fatal"
             fi
             mkdir -p var/log
+            php -d opcache.enable_cli=0 bin/console cache:warmup --env=prod --no-debug || echo "cache warmup non-fatal"
             # PHP-FPM runs as www-data. Composer/console may run as the SSH user
             # and otherwise leave Doctrine's generated cache unwritable at runtime.
             if id www-data >/dev/null 2>&1; then
