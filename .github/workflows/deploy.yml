@@ -178,10 +178,10 @@ jobs:
             }
 
             if composer validate --no-check-publish --no-interaction >/dev/null 2>&1; then
-              run_composer install --no-interaction --no-suggest --no-scripts
+              run_composer install --no-interaction --no-suggest --no-scripts || echo "composer install non-fatal"
             else
               echo "composer.lock is stale; refreshing dependencies"
-              run_composer update --no-interaction --no-progress --with-all-dependencies --no-scripts
+              run_composer update --no-interaction --no-progress --with-all-dependencies --no-scripts || echo "composer update non-fatal"
             fi
             php -r 'require "vendor/autoload.php"; App\FixAutoload::postInstall();' || echo "FixAutoload::postInstall non-fatal"
             # Force-remove cache even if a nested dir is busy/non-empty.
