@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Tests;
+
 use PHPUnit\Framework\TestCase;
 
 require_once dirname(__DIR__) . '/src/FixAutoload.php';
