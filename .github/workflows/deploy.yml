@@ -206,7 +206,7 @@ jobs:
                 chmod -R u+rwX,g+rwX var/cache var/log
               elif [ ! -w var/cache ] || [ ! -w var/log ]; then
                 echo "Remote deploy user cannot write var/cache or var/log; provision shared PHP-FPM permissions first" >&2
-    echo "continuing without chown (non-fatal)" >&2
+                echo "continuing without chown (non-fatal)" >&2
               else
                 echo "Using pre-provisioned shared permissions for $(id -un) and www-data"
               fi
