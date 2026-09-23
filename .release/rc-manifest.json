@@ -1,15 +1,22 @@
 {
-  "branch": "rc/1.10.31-rc.10",
+  "branch": "rc/1.10.31-rc.11",
   "version": "1.10.31",
-  "rc": 10,
+  "rc": 11,
   "frozen": true,
   "tasks": [805, 832, 837],
-  "baseMaster": "ebd8f1c6ea52ca86982911f3cbe3f65679eb848d",
+  "baseMaster": "2061599cefdbb62ffa6f10d21cbf3424ee35adfc",
   "repositories": {
-    "ControleOnline/api-community": "ebd8f1c6ea52ca86982911f3cbe3f65679eb848d",
+    "ControleOnline/api-community": "2061599cefdbb62ffa6f10d21cbf3424ee35adfc",
     "ControleOnline/app-community": "dd4d4faf7ce6da5b0d853180709d150b7d56433c",
     "ControleOnline/ui-manager": "f08b84ec0711f979717fbd3037fc2a7420a59bb3",
     "ControleOnline/api-platform-financial": "ee494c35cf2623fcf86b19d9347250fc3ef4e9ed",
-    "ControleOnline/api-platform-orders": "0ce3f06537439d85c7602ca19710b6c8ac5230f3"
+    "ControleOnline/api-platform-orders": "0ce3f06537439d85c7602ca19710b6c8ac5230f3",
+    "ControleOnline/api-platform-common": "82f9f30766836bfb58fed511b8b3e5c6d75a7e6a",
+    "ControleOnline/api-platform-logistic": "7387e244b879b274ebd0449ab2e73c05139d9c5c",
+    "ControleOnline/api-platform-people": "06951c2a48efc12052fd3fde510bf8ff984620e2",
+    "ControleOnline/api-platform-products": "570189a374b36787293d2c9611e4bc782495a19c",
+    "ControleOnline/spc-sdk-php": "aee639feffdfa2d3b809c0224ba51e8b2900e74a",
+    "ControleOnline/api-platform-websocket-server": "d9d78a8377948f27a60bbdcc14eef82025e76e75",
+    "ControleOnline/whatsapp-sdk-php": "1878b84efc10f7906f49641ad7834845e9e2ece5"
   }
 }
