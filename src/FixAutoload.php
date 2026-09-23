@@ -56,20 +56,33 @@ class FixAutoload
 
     public static function deleteDirectory($path)
     {
-        if (is_dir($path)) {
-            $files = glob($path . '/{.,}*', GLOB_BRACE);
-            foreach ($files as $file) {
-                if (is_dir($file)) {
-                    if (basename($file) !== '.' && basename($file) !== '..') {
-                        self::deleteDirectory($file);
-                    }
-                } else {
-                    unlink($file);
-                }
-            }
-            rmdir($path);
-        } elseif (is_file($path)) {
+        // Composer may leave directory symlinks under vendor/. Treat links as
+        // filesystem entries, not directories, or cleanup can follow a link
+        // and delete files from the linked module checkout.
+        if (is_link($path) || is_file($path)) {
             unlink($path);
+            return;
+        }
+
+        if (!is_dir($path)) {
+            return;
+        }
+
+        $entries = scandir($path);
+        if ($entries === false) {
+            throw new \RuntimeException(sprintf('Unable to read directory during cleanup: %s', $path));
+        }
+
+        foreach ($entries as $entry) {
+            if ($entry === '.' || $entry === '..') {
+                continue;
+            }
+
+            self::deleteDirectory($path . DIRECTORY_SEPARATOR . $entry);
+        }
+
+        if (!rmdir($path)) {
+            throw new \RuntimeException(sprintf('Unable to remove directory during cleanup: %s', $path));
         }
     }
 
