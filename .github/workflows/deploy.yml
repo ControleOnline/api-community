@@ -198,7 +198,7 @@ jobs:
             php -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null || echo "bin/console about returned non-zero (non-fatal)"
             echo "Symfony runtime check completed"
             if [ "${SKIP_DB_MIGRATIONS}" = "true" ] || [ "${SKIP_DB_MIGRATIONS}" = "TRUE" ] || [ "${SKIP_DB_MIGRATIONS}" = "True" ]; then
-              echo "Database migrations intentionally skipped for this staging compatibility deploy"
+              echo "Database migrations intentionally skipped for this deploy ([skip-db-migrations]); no schema changes are included"
             else
               php bin/console doctrine:migrations:sync-metadata-storage --configuration=config/migrations/multi_tenancy.yaml --no-interaction
               php bin/console doctrine:migrations:migrate --configuration=config/migrations/multi_tenancy.yaml --no-interaction
