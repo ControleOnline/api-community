@@ -42,7 +42,7 @@ jobs:
             dev)
               ENV=dev; BRANCH=dev
               REMOTE_PATH=/var/www/api-community-dev
-              MESSENGER_DOMAIN=d.controleonline.com
+              MESSENGER_DOMAIN=dd.controleonline.com
               AUTH_MODE=password; BOOTSTRAP=true; GH_ENV=dev
               ;;
             staging)
