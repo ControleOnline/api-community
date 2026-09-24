@@ -198,7 +198,7 @@
             ],
             "authors": [
                 {
-                    "name": "Kévin Dunglas",
+                    "name": "K\u00e9vin Dunglas",
                     "email": "kevin@dunglas.fr",
                     "homepage": "https://dunglas.fr"
                 }
@@ -686,12 +686,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-common.git",
-                "reference": "19679e30c57ef72574a80384a64cb3f3ed6a1291"
+                "reference": "82f9f30766836bfb58fed511b8b3e5c6d75a7e6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-common/zipball/19679e30c57ef72574a80384a64cb3f3ed6a1291",
-                "reference": "19679e30c57ef72574a80384a64cb3f3ed6a1291",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-common/zipball/82f9f30766836bfb58fed511b8b3e5c6d75a7e6a",
+                "reference": "82f9f30766836bfb58fed511b8b3e5c6d75a7e6a",
                 "shasum": ""
             },
             "require-dev": {
@@ -810,12 +810,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-financial.git",
-                "reference": "3831cb349acc21f7e83e1d820026bea82a4a1d73"
+                "reference": "ee494c35cf2623fcf86b19d9347250fc3ef4e9ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-financial/zipball/3831cb349acc21f7e83e1d820026bea82a4a1d73",
-                "reference": "3831cb349acc21f7e83e1d820026bea82a4a1d73",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-financial/zipball/ee494c35cf2623fcf86b19d9347250fc3ef4e9ed",
+                "reference": "ee494c35cf2623fcf86b19d9347250fc3ef4e9ed",
                 "shasum": ""
             },
             "default-branch": true,
@@ -899,12 +899,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-logistic.git",
-                "reference": "e6e4dd8d7dfa598c3084342cab869687bf2fabe3"
+                "reference": "7387e244b879b274ebd0449ab2e73c05139d9c5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-logistic/zipball/e6e4dd8d7dfa598c3084342cab869687bf2fabe3",
-                "reference": "e6e4dd8d7dfa598c3084342cab869687bf2fabe3",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-logistic/zipball/7387e244b879b274ebd0449ab2e73c05139d9c5c",
+                "reference": "7387e244b879b274ebd0449ab2e73c05139d9c5c",
                 "shasum": ""
             },
             "default-branch": true,
@@ -1023,12 +1023,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-orders.git",
-                "reference": "91ccaf9d063fb0542a7409c8e4fb765330dd54c5"
+                "reference": "0ce3f06537439d85c7602ca19710b6c8ac5230f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-orders/zipball/91ccaf9d063fb0542a7409c8e4fb765330dd54c5",
-                "reference": "91ccaf9d063fb0542a7409c8e4fb765330dd54c5",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-orders/zipball/0ce3f06537439d85c7602ca19710b6c8ac5230f3",
+                "reference": "0ce3f06537439d85c7602ca19710b6c8ac5230f3",
                 "shasum": ""
             },
             "require": {
@@ -1070,12 +1070,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-people.git",
-                "reference": "227834a4199f61ca82ab1f2f2792aa071161cfc9"
+                "reference": "06951c2a48efc12052fd3fde510bf8ff984620e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-people/zipball/227834a4199f61ca82ab1f2f2792aa071161cfc9",
-                "reference": "227834a4199f61ca82ab1f2f2792aa071161cfc9",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-people/zipball/06951c2a48efc12052fd3fde510bf8ff984620e2",
+                "reference": "06951c2a48efc12052fd3fde510bf8ff984620e2",
                 "shasum": ""
             },
             "default-branch": true,
@@ -1110,12 +1110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-products.git",
-                "reference": "521b20e70eb7f79218be91a84f17076ade2182fc"
+                "reference": "570189a374b36787293d2c9611e4bc782495a19c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-products/zipball/521b20e70eb7f79218be91a84f17076ade2182fc",
-                "reference": "521b20e70eb7f79218be91a84f17076ade2182fc",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-products/zipball/570189a374b36787293d2c9611e4bc782495a19c",
+                "reference": "570189a374b36787293d2c9611e4bc782495a19c",
                 "shasum": ""
             },
             "default-branch": true,
@@ -1283,12 +1283,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/spc-sdk-php.git",
-                "reference": "a07b750a5249dfca22d9e408ac7d0726548f9966"
+                "reference": "aee639feffdfa2d3b809c0224ba51e8b2900e74a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/spc-sdk-php/zipball/a07b750a5249dfca22d9e408ac7d0726548f9966",
-                "reference": "a07b750a5249dfca22d9e408ac7d0726548f9966",
+                "url": "https://api.github.com/repos/ControleOnline/spc-sdk-php/zipball/aee639feffdfa2d3b809c0224ba51e8b2900e74a",
+                "reference": "aee639feffdfa2d3b809c0224ba51e8b2900e74a",
                 "shasum": ""
             },
             "require": {
@@ -1369,12 +1369,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-users.git",
-                "reference": "d20ec93a465e67263741c8d7d9748dc2aa826bdb"
+                "reference": "c42ccdf906c4a15eca8ea6585e0a1e9b4a74721e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-users/zipball/d20ec93a465e67263741c8d7d9748dc2aa826bdb",
-                "reference": "d20ec93a465e67263741c8d7d9748dc2aa826bdb",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-users/zipball/c42ccdf906c4a15eca8ea6585e0a1e9b4a74721e",
+                "reference": "c42ccdf906c4a15eca8ea6585e0a1e9b4a74721e",
                 "shasum": ""
             },
             "default-branch": true,
@@ -1409,12 +1409,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-websocket-server.git",
-                "reference": "45d0ccff1023e1358fb34e0f881b3525064ee64f"
+                "reference": "d9d78a8377948f27a60bbdcc14eef82025e76e75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-websocket-server/zipball/45d0ccff1023e1358fb34e0f881b3525064ee64f",
-                "reference": "45d0ccff1023e1358fb34e0f881b3525064ee64f",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-websocket-server/zipball/d9d78a8377948f27a60bbdcc14eef82025e76e75",
+                "reference": "d9d78a8377948f27a60bbdcc14eef82025e76e75",
                 "shasum": ""
             },
             "require": {
@@ -1455,12 +1455,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/whatsapp-sdk-php.git",
-                "reference": "2d756505e3d826c94c7550b3d283a0267c86da6f"
+                "reference": "1878b84efc10f7906f49641ad7834845e9e2ece5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/whatsapp-sdk-php/zipball/2d756505e3d826c94c7550b3d283a0267c86da6f",
-                "reference": "2d756505e3d826c94c7550b3d283a0267c86da6f",
+                "url": "https://api.github.com/repos/ControleOnline/whatsapp-sdk-php/zipball/1878b84efc10f7906f49641ad7834845e9e2ece5",
+                "reference": "1878b84efc10f7906f49641ad7834845e9e2ece5",
                 "shasum": ""
             },
             "require": {
@@ -1531,9 +1531,9 @@
             "license": [
                 "LGPL-3.0-or-later"
             ],
-            "description": "Acesso à API do Banco Inter",
+            "description": "Acesso \u00e0 API do Banco Inter",
             "keywords": [
-                "Banco Inter Intermedium Boletos Cobrança"
+                "Banco Inter Intermedium Boletos Cobran\u00e7a"
             ],
             "support": {
                 "issues": "https://github.com/allgood/APInter-PHP/issues",
@@ -3096,7 +3096,7 @@
                     "email": "igor@wiedler.ch"
                 }
             ],
-            "description": "Événement is a very simple event dispatching library for PHP",
+            "description": "\u00c9v\u00e9nement is a very simple event dispatching library for PHP",
             "keywords": [
                 "event-dispatcher",
                 "event-emitter"
@@ -3375,7 +3375,7 @@
                     "homepage": "https://github.com/Nyholm"
                 },
                 {
-                    "name": "Márk Sági-Kazár",
+                    "name": "M\u00e1rk S\u00e1gi-Kaz\u00e1r",
                     "email": "mark.sagikazar@gmail.com",
                     "homepage": "https://github.com/sagikazarmark"
                 },
@@ -3574,7 +3574,7 @@
                     "homepage": "https://github.com/Nyholm"
                 },
                 {
-                    "name": "Márk Sági-Kazár",
+                    "name": "M\u00e1rk S\u00e1gi-Kaz\u00e1r",
                     "email": "mark.sagikazar@gmail.com",
                     "homepage": "https://github.com/sagikazarmark"
                 },
@@ -3584,7 +3584,7 @@
                     "homepage": "https://github.com/Tobion"
                 },
                 {
-                    "name": "Márk Sági-Kazár",
+                    "name": "M\u00e1rk S\u00e1gi-Kaz\u00e1r",
                     "email": "mark.sagikazar@gmail.com",
                     "homepage": "https://sagikazarmark.hu"
                 }
@@ -3770,7 +3770,7 @@
                     "email": "igor@wiedler.ch"
                 },
                 {
-                    "name": "Robert Schönthal",
+                    "name": "Robert Sch\u00f6nthal",
                     "email": "seroscho@googlemail.com"
                 }
             ],
@@ -4160,7 +4160,7 @@
                     "email": "pabs@pablotron.org"
                 },
                 {
-                    "name": "Jonatan Männchen",
+                    "name": "Jonatan M\u00e4nnchen",
                     "email": "jonatan@maennchen.ch"
                 },
                 {
@@ -4168,7 +4168,7 @@
                     "email": "donatj@gmail.com"
                 },
                 {
-                    "name": "András Kolesár",
+                    "name": "Andr\u00e1s Koles\u00e1r",
                     "email": "kolesar@kolesar.hu"
                 }
             ],
@@ -4745,7 +4745,7 @@
                     "homepage": "https://github.com/nfephp-org/sped-common/graphs/contributors"
                 }
             ],
-            "description": "sped-common é parte do projeto NFePHP.",
+            "description": "sped-common \u00e9 parte do projeto NFePHP.",
             "homepage": "https://github.com/nfephp-org/sped-common",
             "keywords": [
                 "nfe",
@@ -4821,7 +4821,7 @@
                     "homepage": "https://github.com/nfephp-org/sped-cte/graphs/contributors"
                 }
             ],
-            "description": "API para geração e comunicação da CTe com as SEFAZ autorizadoras.",
+            "description": "API para gera\u00e7\u00e3o e comunica\u00e7\u00e3o da CTe com as SEFAZ autorizadoras.",
             "homepage": "https://github.com/nfephp-org/sped-cte",
             "keywords": [
                 "cte",
@@ -4897,7 +4897,7 @@
                     "homepage": "https://github.com/nfephp-org/sped-da/graphs/contributors"
                 }
             ],
-            "description": "sped-da contêm as classes para criação dos documentos auxiliares referidos no projeto Sped.",
+            "description": "sped-da cont\u00eam as classes para cria\u00e7\u00e3o dos documentos auxiliares referidos no projeto Sped.",
             "homepage": "https://github.com/nfephp-org/sped-da",
             "keywords": [
                 "CCe",
@@ -5064,7 +5064,7 @@
                     "homepage": "https://github.com/nfephp-org/sped-nfe/graphs/contributors"
                 }
             ],
-            "description": "API para geração e comunicação da NFe e NFCe com as SEFAZ autorizadoras.",
+            "description": "API para gera\u00e7\u00e3o e comunica\u00e7\u00e3o da NFe e NFCe com as SEFAZ autorizadoras.",
             "homepage": "https://github.com/nfephp-org/sped-nfe",
             "keywords": [
                 "nfce",
@@ -5130,7 +5130,7 @@
                     "role": "Developer"
                 }
             ],
-            "description": "Biblioteca para impressão da DANFCe em impressoras térmicas compatíveis.",
+            "description": "Biblioteca para impress\u00e3o da DANFCe em impressoras t\u00e9rmicas compat\u00edveis.",
             "homepage": "https://github.com/nfephp-org/sped-pos",
             "keywords": [
                 "nfce",
@@ -6069,7 +6069,7 @@
             ],
             "authors": [
                 {
-                    "name": "Christian Lück",
+                    "name": "Christian L\u00fcck",
                     "email": "christian@clue.engineering",
                     "homepage": "https://clue.engineering/"
                 },
@@ -6145,7 +6145,7 @@
             ],
             "authors": [
                 {
-                    "name": "Christian Lück",
+                    "name": "Christian L\u00fcck",
                     "email": "christian@clue.engineering",
                     "homepage": "https://clue.engineering/"
                 },
@@ -6219,7 +6219,7 @@
             ],
             "authors": [
                 {
-                    "name": "Christian Lück",
+                    "name": "Christian L\u00fcck",
                     "email": "christian@clue.engineering",
                     "homepage": "https://clue.engineering/"
                 },
@@ -6296,7 +6296,7 @@
                     "homepage": "https://sorgalla.com/"
                 },
                 {
-                    "name": "Christian Lück",
+                    "name": "Christian L\u00fcck",
                     "email": "christian@clue.engineering",
                     "homepage": "https://clue.engineering/"
                 },
@@ -6365,7 +6365,7 @@
             ],
             "authors": [
                 {
-                    "name": "Christian Lück",
+                    "name": "Christian L\u00fcck",
                     "email": "christian@clue.engineering",
                     "homepage": "https://clue.engineering/"
                 },
@@ -6494,7 +6494,7 @@
             ],
             "authors": [
                 {
-                    "name": "Christian Lück",
+                    "name": "Christian L\u00fcck",
                     "email": "christian@clue.engineering",
                     "homepage": "https://clue.engineering/"
                 },
@@ -6569,7 +6569,7 @@
             ],
             "authors": [
                 {
-                    "name": "Christian Lück",
+                    "name": "Christian L\u00fcck",
                     "email": "christian@clue.engineering",
                     "homepage": "https://clue.engineering/"
                 },
@@ -8755,7 +8755,7 @@
             ],
             "authors": [
                 {
-                    "name": "Jérémy Derussé",
+                    "name": "J\u00e9r\u00e9my Deruss\u00e9",
                     "email": "jeremy@derusse.com"
                 },
                 {
@@ -10228,7 +10228,7 @@
             ],
             "authors": [
                 {
-                    "name": "Kévin Dunglas",
+                    "name": "K\u00e9vin Dunglas",
                     "email": "dunglas@gmail.com"
                 },
                 {
@@ -11866,7 +11866,7 @@
             ],
             "authors": [
                 {
-                    "name": "Kévin Dunglas",
+                    "name": "K\u00e9vin Dunglas",
                     "email": "dunglas@gmail.com"
                 },
                 {
@@ -13037,7 +13037,7 @@
             ],
             "authors": [
                 {
-                    "name": "Ondřej Mirtes"
+                    "name": "Ond\u0159ej Mirtes"
                 },
                 {
                     "name": "Markus Staab"
@@ -14643,7 +14643,7 @@
                     "email": "fabien@symfony.com"
                 },
                 {
-                    "name": "Jean-François Simon",
+                    "name": "Jean-Fran\u00e7ois Simon",
                     "email": "jeanfrancois.simon@sensiolabs.com"
                 },
                 {
