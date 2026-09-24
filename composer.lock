@@ -686,12 +686,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-common.git",
-                "reference": "19679e30c57ef72574a80384a64cb3f3ed6a1291"
+                "reference": "82f9f30766836bfb58fed511b8b3e5c6d75a7e6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-common/zipball/19679e30c57ef72574a80384a64cb3f3ed6a1291",
-                "reference": "19679e30c57ef72574a80384a64cb3f3ed6a1291",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-common/zipball/82f9f30766836bfb58fed511b8b3e5c6d75a7e6a",
+                "reference": "82f9f30766836bfb58fed511b8b3e5c6d75a7e6a",
                 "shasum": ""
             },
             "require-dev": {
@@ -899,12 +899,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-logistic.git",
-                "reference": "e6e4dd8d7dfa598c3084342cab869687bf2fabe3"
+                "reference": "7387e244b879b274ebd0449ab2e73c05139d9c5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-logistic/zipball/e6e4dd8d7dfa598c3084342cab869687bf2fabe3",
-                "reference": "e6e4dd8d7dfa598c3084342cab869687bf2fabe3",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-logistic/zipball/7387e244b879b274ebd0449ab2e73c05139d9c5c",
+                "reference": "7387e244b879b274ebd0449ab2e73c05139d9c5c",
                 "shasum": ""
             },
             "default-branch": true,
@@ -1023,12 +1023,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-orders.git",
-                "reference": "0e1752d7f5e4415aa89adcac397a8f1e0bb31d3b"
+                "reference": "0ce3f06537439d85c7602ca19710b6c8ac5230f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-orders/zipball/0e1752d7f5e4415aa89adcac397a8f1e0bb31d3b",
-                "reference": "0e1752d7f5e4415aa89adcac397a8f1e0bb31d3b",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-orders/zipball/0ce3f06537439d85c7602ca19710b6c8ac5230f3",
+                "reference": "0ce3f06537439d85c7602ca19710b6c8ac5230f3",
                 "shasum": ""
             },
             "require": {
@@ -1070,12 +1070,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-people.git",
-                "reference": "227834a4199f61ca82ab1f2f2792aa071161cfc9"
+                "reference": "06951c2a48efc12052fd3fde510bf8ff984620e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-people/zipball/227834a4199f61ca82ab1f2f2792aa071161cfc9",
-                "reference": "227834a4199f61ca82ab1f2f2792aa071161cfc9",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-people/zipball/06951c2a48efc12052fd3fde510bf8ff984620e2",
+                "reference": "06951c2a48efc12052fd3fde510bf8ff984620e2",
                 "shasum": ""
             },
             "default-branch": true,
@@ -1110,12 +1110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-products.git",
-                "reference": "521b20e70eb7f79218be91a84f17076ade2182fc"
+                "reference": "570189a374b36787293d2c9611e4bc782495a19c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-products/zipball/521b20e70eb7f79218be91a84f17076ade2182fc",
-                "reference": "521b20e70eb7f79218be91a84f17076ade2182fc",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-products/zipball/570189a374b36787293d2c9611e4bc782495a19c",
+                "reference": "570189a374b36787293d2c9611e4bc782495a19c",
                 "shasum": ""
             },
             "default-branch": true,
@@ -1283,12 +1283,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/spc-sdk-php.git",
-                "reference": "a07b750a5249dfca22d9e408ac7d0726548f9966"
+                "reference": "aee639feffdfa2d3b809c0224ba51e8b2900e74a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/spc-sdk-php/zipball/a07b750a5249dfca22d9e408ac7d0726548f9966",
-                "reference": "a07b750a5249dfca22d9e408ac7d0726548f9966",
+                "url": "https://api.github.com/repos/ControleOnline/spc-sdk-php/zipball/aee639feffdfa2d3b809c0224ba51e8b2900e74a",
+                "reference": "aee639feffdfa2d3b809c0224ba51e8b2900e74a",
                 "shasum": ""
             },
             "require": {
@@ -1409,12 +1409,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/api-platform-websocket-server.git",
-                "reference": "45d0ccff1023e1358fb34e0f881b3525064ee64f"
+                "reference": "d9d78a8377948f27a60bbdcc14eef82025e76e75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/api-platform-websocket-server/zipball/45d0ccff1023e1358fb34e0f881b3525064ee64f",
-                "reference": "45d0ccff1023e1358fb34e0f881b3525064ee64f",
+                "url": "https://api.github.com/repos/ControleOnline/api-platform-websocket-server/zipball/d9d78a8377948f27a60bbdcc14eef82025e76e75",
+                "reference": "d9d78a8377948f27a60bbdcc14eef82025e76e75",
                 "shasum": ""
             },
             "require": {
@@ -1455,12 +1455,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ControleOnline/whatsapp-sdk-php.git",
-                "reference": "2d756505e3d826c94c7550b3d283a0267c86da6f"
+                "reference": "1878b84efc10f7906f49641ad7834845e9e2ece5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ControleOnline/whatsapp-sdk-php/zipball/2d756505e3d826c94c7550b3d283a0267c86da6f",
-                "reference": "2d756505e3d826c94c7550b3d283a0267c86da6f",
+                "url": "https://api.github.com/repos/ControleOnline/whatsapp-sdk-php/zipball/1878b84efc10f7906f49641ad7834845e9e2ece5",
+                "reference": "1878b84efc10f7906f49641ad7834845e9e2ece5",
                 "shasum": ""
             },
             "require": {
