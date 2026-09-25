@@ -8,6 +8,30 @@ require_once dirname(__DIR__) . '/src/FixAutoload.php';
 
 final class FixAutoloadDeleteDirectoryTest extends TestCase
 {
+    public function testSourceModuleResolutionIsEnabledOnlyInDevelopment(): void
+    {
+        $original = getenv('APP_ENV');
+
+        try {
+            putenv('APP_ENV=dev');
+            self::assertTrue(\App\FixAutoload::shouldUseSourceModules());
+
+            putenv('APP_ENV=prod');
+            self::assertFalse(\App\FixAutoload::shouldUseSourceModules());
+            \App\FixAutoload::postInstall();
+            self::assertTrue(
+                is_dir(dirname(__DIR__) . '/vendor/controleonline/common')
+                || is_dir(dirname(__DIR__) . '/modules/controleonline/common/src')
+            );
+        } finally {
+            if ($original === false) {
+                putenv('APP_ENV');
+            } else {
+                putenv('APP_ENV=' . $original);
+            }
+        }
+    }
+
     public function testDeleteDirectoryUnlinksDirectorySymlinkWithoutDeletingItsTarget(): void
     {
         $root = sys_get_temp_dir() . '/fix-autoload-' . bin2hex(random_bytes(8));

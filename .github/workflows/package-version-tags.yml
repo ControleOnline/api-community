@@ -1,0 +1,42 @@
+name: Package version tags
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: List missing tags without creating them
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: package-version-tags
+  cancel-in-progress: false
+
+jobs:
+  tag-releases:
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      - name: Create missing package version tags
+        env:
+          PACKAGE_TAG_TOKEN: ${{ secrets.PACKAGE_TAG_TOKEN }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          if [ "$DRY_RUN" = "true" ]; then
+            node scripts/tag-package-versions.mjs --dry-run
+          else
+            node scripts/tag-package-versions.mjs
+          fi
