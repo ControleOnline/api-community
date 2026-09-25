@@ -29,6 +29,14 @@ GitHub **Environments** usados: `dev`, `staging`, `production` (protection rules
 2. Cada deploy sincroniza **só** `origin/<branch>` no parent e nos submodules.
 3. **LaveGo** (whitelabel) fica fora deste fluxo — ver `deploy-api-lavego-*` / `deploy-apinew-*` (`workflow_dispatch`).
 
+## Composer modules
+
+- `composer.json` pins every `controleonline/*` production package to an exact stable version; `composer.lock` records the exact registry artifact and commit.
+- `scripts/validate-composer-release-pins.php` checks that each requirement, lock entry, and API submodule gitlink names the same version and commit. CI and deploy fail on a missing or mismatched pin; deploy never runs `composer update` to repair a stale lock.
+- `dev` installs the locked packages and then redirects Composer autoloading to the local `modules/controleonline` checkouts for source development.
+- `staging` and `master` install with `--no-dev --no-scripts`; autoloading stays under `vendor/controleonline` and the local-source rewrite is skipped.
+- To publish a module, merge its task changes into `dev`, have Security review them, tag the approved commit with its stable `vX.Y.Z` release, then update the API requirement, lock entry, and module gitlink together.
+
 ## Secrets
 
 Settings → Secrets and variables → Actions (repo ou org):

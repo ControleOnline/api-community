@@ -7,20 +7,20 @@ use Rector\Doctrine\Set\DoctrineSetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
-        __DIR__ . '/modules/controleonline/multi-tenancy/src/Entity',
-        __DIR__ . '/modules/controleonline/products/src/Entity',
-        __DIR__ . '/modules/controleonline/common/src/Entity',
-        __DIR__ . '/modules/controleonline/financial/src/Entity',
-        __DIR__ . '/modules/controleonline/contract/src/Entity',
-        __DIR__ . '/modules/controleonline/report/src/Entity',
-        __DIR__ . '/modules/controleonline/ead/src/Entity',
-        __DIR__ . '/modules/controleonline/orders/src/Entity',
-        __DIR__ . '/modules/controleonline/people/src/Entity',
-        __DIR__ . '/modules/controleonline/queue/src/Entity',
-        __DIR__ . '/modules/controleonline/logistic/src/Entity',
-        __DIR__ . '/modules/controleonline/users/src/Entity',
-        __DIR__ . '/modules/controleonline/tasks/src/Entity',
-        __DIR__ . '/modules/controleonline/accounting/src/Entity',
+        __DIR__ . '/vendor/controleonline/multi-tenancy/src/Entity',
+        __DIR__ . '/vendor/controleonline/products/src/Entity',
+        __DIR__ . '/vendor/controleonline/common/src/Entity',
+        __DIR__ . '/vendor/controleonline/financial/src/Entity',
+        __DIR__ . '/vendor/controleonline/contract/src/Entity',
+        __DIR__ . '/vendor/controleonline/report/src/Entity',
+        __DIR__ . '/vendor/controleonline/ead/src/Entity',
+        __DIR__ . '/vendor/controleonline/orders/src/Entity',
+        __DIR__ . '/vendor/controleonline/people/src/Entity',
+        __DIR__ . '/vendor/controleonline/queue/src/Entity',
+        __DIR__ . '/vendor/controleonline/logistic/src/Entity',
+        __DIR__ . '/vendor/controleonline/users/src/Entity',
+        __DIR__ . '/vendor/controleonline/tasks/src/Entity',
+        __DIR__ . '/vendor/controleonline/accounting/src/Entity',
     ]);
 
     $rectorConfig->sets([
@@ -34,7 +34,7 @@ return static function (RectorConfig $rectorConfig): void {
     //$rectorConfig->rule(GroupsToContextRector::class);
 
     $rectorConfig->skip([
-        // Exemplo: __DIR__ . '/modules/controleonline/some-module/src/Entity/SpecificEntity.php',
+        // Exemplo: __DIR__ . '/vendor/controleonline/some-module/src/Entity/SpecificEntity.php',
     ]);
 
     $rectorConfig->importNames();

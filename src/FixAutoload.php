@@ -26,8 +26,23 @@ class FixAutoload
 
     public static function postInstall()
     {
-        //if (isset(self::$envVars['APP_ENV']) && self::$envVars['APP_ENV'] === 'dev')
+        if (!self::shouldUseSourceModules()) {
+            return;
+        }
+
         self::replaceInComposerFiles();
+    }
+
+    public static function shouldUseSourceModules(): bool
+    {
+        $appEnv = getenv('APP_ENV');
+        if ($appEnv === false || $appEnv === '') {
+            $localEnvPath = __DIR__ . '/../.env.local';
+            $localEnv = is_file($localEnvPath) ? self::readEnvFile($localEnvPath) : [];
+            $appEnv = $localEnv['APP_ENV'] ?? 'prod';
+        }
+
+        return strtolower($appEnv) === 'dev';
     }
 
     private static function readEnvFile(string $filePath): array

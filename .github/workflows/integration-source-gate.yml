@@ -20,10 +20,12 @@ jobs:
         run: |
           set -eu
           if [ "$BASE_REF" = "dev" ]; then
-            echo "dev accepts all sources without an RC."
+            echo "$HEAD_REF" | grep -Eq '^task-[1-9][0-9]*$' || {
+              echo "::error::dev only accepts task-<numeric issue>."
+              exit 1
+            }
             exit 0
           fi
-          echo "$HEAD_REF" | grep -Eq '^automation/reset-rc-[0-9]+\.[0-9]+\.[0-9]+-rc\.[1-9][0-9]*-staging-' && exit 0
           echo "$HEAD_REF" | grep -Eq '^rc/[0-9]+\.[0-9]+\.[0-9]+-rc\.[1-9][0-9]*$' || {
             echo "::error::$BASE_REF only accepts a frozen rc/X.Y.Z-rc.N source."
             exit 1
@@ -47,9 +49,7 @@ jobs:
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
           const m = JSON.parse(fs.readFileSync('.release/rc-manifest.json', 'utf8'));
-          const source = process.env.HEAD_REF;
-          const reset = /^automation\/reset-(rc\/\d+\.\d+\.\d+-rc\.[1-9][0-9]*)-staging-/.exec(source);
-          const branch = reset ? reset[1] : source;
+          const branch = process.env.HEAD_REF;
           const match = /^rc\/(\d+\.\d+\.\d+)-rc\.([1-9][0-9]*)$/.exec(branch);
           if (!match) throw new Error('invalid RC branch');
           if (m.branch !== branch || m.version !== match[1] || Number(m.rc) !== Number(match[2])) throw new Error('manifest identity mismatch');

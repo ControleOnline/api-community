@@ -99,7 +99,7 @@ node_modules/**/*
 ###< phpunit/phpunit ###
 .DS_Store
 
-/modules/controeonline/*
+/modules/controleonline/*
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###

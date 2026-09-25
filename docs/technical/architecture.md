@@ -38,12 +38,12 @@ O `api-community` é a **API REST/GraphQL central** do ecossistema ControleOnlin
 
 ## Módulos {#modulos}
 
-O `api-community` carrega módulos de dois locais:
+O `api-community` instala versões estáveis dos módulos pelo Composer. No ambiente de desenvolvimento, os pacotes podem ser redirecionados para clones locais da branch `dev`:
 
-1. **`modules/controleonline/<nome>/`** — módulos instalados como path repositories locais (development/monorepo).
-2. **`vendor/controleonline/<nome>/`** — pacotes instalados via Composer.
+1. **`modules/controleonline/<nome>/`** — clones de código fonte usados apenas em `APP_ENV=dev`.
+2. **`vendor/controleonline/<nome>/`** — pacotes Composer usados em produção e instalados em `dev` antes da resolução opcional pelo código fonte.
 
-O Kernel garante que o mesmo pacote não seja carregado duas vezes (deduplicação por `composer.json > name`).
+O worker de desenvolvimento clona apenas os vinte repositórios permitidos e apenas a branch `dev`. O `FixAutoload` preserva `vendor/` em produção.
 
 ### Lista de módulos ativos
 

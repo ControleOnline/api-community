@@ -22,7 +22,6 @@
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>tests</directory>
-            <directory suffix="Test.php">modules/controleonline</directory>
         </testsuite>
     </testsuites>
 </phpunit>
