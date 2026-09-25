@@ -41,13 +41,13 @@ jobs:
           case "$REF" in
             dev)
               ENV=dev; BRANCH=dev
-              REMOTE_PATH=/var/www/api-community-dev
+              REMOTE_PATH=/home/dev/api-community
               MESSENGER_DOMAIN=d.controleonline.com
               AUTH_MODE=password; BOOTSTRAP=true; GH_ENV=dev
               ;;
             staging)
               ENV=staging; BRANCH=staging
-              REMOTE_PATH=/var/www/api-community
+              REMOTE_PATH=/home/staging/api-community
               MESSENGER_DOMAIN=s.controleonline.com
               AUTH_MODE=password; BOOTSTRAP=false; GH_ENV=staging
               ;;
@@ -89,12 +89,10 @@ jobs:
           case "$ENV" in
             dev)
               test -n "${{ secrets.DEV_HOST }}" || { echo "Missing DEV_HOST"; exit 1; }
-              test -n "${{ secrets.DEV_USER }}" || { echo "Missing DEV_USER"; exit 1; }
               test -n "${{ secrets.DEV_PASS }}" || { echo "Missing DEV_PASS"; exit 1; }
               ;;
             staging)
               test -n "${{ secrets.STAGING_HOST }}" || { echo "Missing STAGING_HOST"; exit 1; }
-              test -n "${{ secrets.STAGING_USER }}" || { echo "Missing STAGING_USER"; exit 1; }
               test -n "${{ secrets.STAGING_PASS }}" || { echo "Missing STAGING_PASS (SSH login password)"; exit 1; }
               ;;
             master)
@@ -108,7 +106,7 @@ jobs:
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ needs.configure.outputs.env == 'dev' && secrets.DEV_HOST || needs.configure.outputs.env == 'staging' && secrets.STAGING_HOST || secrets.API_HOST }}
-          username: ${{ needs.configure.outputs.env == 'dev' && secrets.DEV_USER || needs.configure.outputs.env == 'staging' && secrets.STAGING_USER || secrets.USER }}
+          username: ${{ needs.configure.outputs.env == 'dev' && 'dev' || needs.configure.outputs.env == 'staging' && 'staging' || secrets.USER }}
           password: ${{ needs.configure.outputs.env == 'dev' && secrets.DEV_PASS || needs.configure.outputs.env == 'staging' && secrets.STAGING_PASS || '' }}
           key: ${{ needs.configure.outputs.env == 'master' && secrets.CONTROLEONLINE || '' }}
           passphrase: ${{ needs.configure.outputs.env == 'staging' && secrets.STAGING_PASS || '' }}
@@ -119,7 +117,6 @@ jobs:
             set -e
             # Keep tool resolution inside the remote SSH script.
             export PATH="$HOME/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
-            export COMPOSER_ALLOW_SUPERUSER=1
 
             BRANCH="${DEPLOY_BRANCH}"
             TARGET="${REMOTE_PATH}"
@@ -146,7 +143,7 @@ jobs:
             git submodule sync --recursive || true
             # Staging: local/untracked files inside module paths often block checkout.
             # Clean best-effort, then force-update. Never abort deploy on a single
-            # nested wiki/module failure — composer install will refresh packages.
+            # nested wiki/module failure — composer install --no-dev --optimize-autoloader  will refresh packages.
             git submodule foreach --recursive "
               git reset --hard HEAD 2>/dev/null || true
               git clean -ffd 2>/dev/null || true
@@ -178,7 +175,7 @@ jobs:
             }
 
             if composer validate --no-check-publish --no-interaction >/dev/null 2>&1; then
-              run_composer install --no-interaction --no-suggest --no-scripts
+              run_composer install --no-dev --optimize-autoloader  --no-interaction --no-suggest --no-scripts
             else
               echo "composer.lock is stale; refreshing dependencies"
               run_composer update --no-interaction --no-progress --with-all-dependencies --no-scripts
@@ -206,19 +203,6 @@ jobs:
             fi
             echo "Database migration steps completed"
             mkdir -p var/log
-            # PHP-FPM runs as www-data. Composer/console may run as the SSH user
-            # and otherwise leave Doctrine's generated cache unwritable at runtime.
-            if id www-data >/dev/null 2>&1; then
-              if [ "$(id -u)" -eq 0 ]; then
-                chown -R www-data:www-data var/cache var/log
-                chmod -R u+rwX,g+rwX var/cache var/log
-              elif [ ! -w var/cache ] || [ ! -w var/log ]; then
-                echo "Remote deploy user cannot write var/cache or var/log; provision shared PHP-FPM permissions first" >&2
-                exit 1
-              else
-                echo "Using pre-provisioned shared permissions for $(id -un) and www-data"
-              fi
-            fi
             nohup php bin/console tenant:messenger:consume async --domain="${MESSENGER_DOMAIN}" >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
             touch "$HOME/.lsphp_restart.txt" 2>/dev/null || true
             touch "$RESTART_FILE" 2>/dev/null || true
@@ -248,6 +232,6 @@ jobs:
           coverage: none
           tools: composer:v2
       - name: Install Dependencies
-        run: composer install --no-interaction --no-progress --prefer-dist
+        run: composer install --no-dev --optimize-autoloader  --no-interaction --no-progress --prefer-dist
       - name: Run PHPUnit
         run: ./vendor/bin/phpunit
