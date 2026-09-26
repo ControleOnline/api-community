@@ -1,15 +1,15 @@
 {
   "version": "1.10.33",
-  "rc": 1,
-  "branch": "rc/1.10.33-rc.1",
+  "rc": 2,
+  "branch": "rc/1.10.33-rc.2",
   "baseMaster": "5cedee513a93096610b1594c3653e0ad693bb6ca",
   "tasks": [
     909
   ],
   "repositories": {
-    "ControleOnline/api-community": "b7d3cd13d1e0d9c2d6979993f1f18e3ad0ae9399",
+    "ControleOnline/api-community": "a374d3acfb2e682244f723d1f30d86c28c70ff9e",
     "ControleOnline/api-platform-orders": "68e8693314fddce4888267ea5d1cc21065366e93"
   },
   "frozen": true,
-  "notes": "RC #909 mark-as-paid open/paid settle (never closed/closed)"
+  "notes": "RC #909 mark-as-paid; rc.2 adds ours-merge of staging for PR-based promote (no force-push)"
 }
