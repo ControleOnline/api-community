@@ -1,15 +1,13 @@
 {
   "version": "1.10.33",
-  "rc": 4,
-  "branch": "rc/1.10.33-rc.4",
-  "baseMaster": "5cedee513a93096610b1594c3653e0ad693bb6ca",
-  "tasks": [
-    909
-  ],
+  "rc": 5,
+  "branch": "rc/1.10.33-rc.5",
+  "baseMaster": "58852e53d5d9c04582d8d62709914d5228233fda",
+  "tasks": [909],
   "repositories": {
-    "ControleOnline/api-community": "d3e96b456f980b264bef0e27083873daffd2348c",
-    "ControleOnline/api-platform-orders": "8c34399768fcd781f55c05ca0c22138c4bc82a78"
+    "ControleOnline/api-community": "PLACEHOLDER",
+    "ControleOnline/api-platform-orders": "1d5271ef7b9f479b39f18c94d7321e46abad9bd2"
   },
   "frozen": true,
-  "notes": "#909 payment settle open/paid only \u2014 never closed for order"
+  "notes": "#909 already-quitado applies open/paid"
 }
