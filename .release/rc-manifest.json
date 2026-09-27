@@ -1,15 +1,16 @@
 {
   "version": "1.10.33",
-  "rc": 6,
-  "branch": "rc/1.10.33-rc.6",
-  "baseMaster": "94ecc943706605f1eb6aa553b973a4b1a508d04a",
+  "rc": 7,
+  "branch": "rc/1.10.33-rc.7",
+  "baseMaster": "3f58c9afff72e6ab0d9588139b296245810c3c79",
   "tasks": [
     909
   ],
   "repositories": {
-    "ControleOnline/api-community": "75a7eddf825ab526cc8fb179207f8a85b755bdba",
+    "ControleOnline/api-community": "e40ba7c9c621f41285cf4e7428da36f62c540d2e",
+    "ControleOnline/api-platform-financial": "08dbfda3beb32d8095cda588731387d0170f2c1b",
     "ControleOnline/api-platform-orders": "618f476c7d595dfbb57aa7ccc057ba8d556a3f20"
   },
   "frozen": true,
-  "notes": "#909 orders@618f476 quitado reconcile"
+  "notes": "hotfix isCanceledStatus for cancel"
 }
