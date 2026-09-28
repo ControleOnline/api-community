@@ -56,7 +56,7 @@ jobs:
 
 
 
-                  ### OBRIGATÓRIO PARA FUNCIONAR COM O PHP 8.4 - NÃO REMOVER ###
+                  ### OBRIGATÓRIO PARA FUNCIONAR COM O PHP 8.5 - NÃO REMOVER ###
 
                   ### ATENÇÃO!!! >>> public_html -> ~/api/public/
                   ### public_html é um alias apontado para ~/api/public/
@@ -90,7 +90,7 @@ jobs:
                     done
                   fi
                   if [ -z "$PHP_BIN" ]; then
-                    echo "PHP 8.4 not found on remote server"
+                    echo "PHP 8.5 not found on remote server"
                     exit 1
                   fi
 
