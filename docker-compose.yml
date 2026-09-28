@@ -33,7 +33,7 @@ services:
     working_dir: /app
     tty: true
     extra_hosts:
-      - "nelsys-api.local:172.18.0.3"
+      - "api-community.local:172.18.0.3"
     ports:
       - "3003:3003"
     volumes:

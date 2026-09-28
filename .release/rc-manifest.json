@@ -1,15 +1,14 @@
 {
-  "version": "1.10.33",
-  "rc": 8,
-  "branch": "rc/1.10.33-rc.8",
-  "baseMaster": "f63b853243ba99b7e7dbe58f0eb4042ecaf20820",
+  "version": "1.10.34",
+  "rc": 1,
+  "branch": "rc/1.10.34-rc.1",
+  "baseMaster": "8b3075877888bfdb8988d46043d0b4f819afcac1",
   "tasks": [
-    909
+    918
   ],
   "repositories": {
-    "ControleOnline/api-community": "c8f3f588b625e6b136bb42c38fd77a6facd158d7",
-    "ControleOnline/api-platform-orders": "7e98f3c071d1830512e2a2592a83f719a5e45463"
+    "ControleOnline/api-community": "e4dfa658ddcac3b99d2e1923d3535d495998b793"
   },
   "frozen": true,
-  "notes": "#909 settle after new invoice"
+  "notes": "#918 api-community Packagist \u2014 remove modules gitlinks"
 }
