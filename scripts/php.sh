@@ -1,12 +1,11 @@
 sudo apt install composer -y
 
-sudo chmod o+x /var/www/api-community
 sudo tee /etc/nginx/sites-available/staging.controleonline.com.conf > /dev/null <<'EOF'
 server {
     listen 80;
     server_name s.controleonline.com staging.controleonline.com dev.controleonline.com;
 
-    root /var/www/api-community/public;
+    root /home/staging/api-community/public;
     index index.php;
 
     client_max_body_size 2G;
@@ -14,7 +13,7 @@ server {
     location ^~ /.well-known/acme-challenge/ {
         auth_basic off;
         allow all;
-        root /var/www/api-community/public;
+        root /home/staging/api-community/public;
     }
 
     location / {
