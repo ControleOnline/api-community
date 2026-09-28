@@ -1,14 +1,14 @@
 {
-  "version": "1.10.34",
+  "version": "1.10.35",
   "rc": 1,
-  "branch": "rc/1.10.34-rc.1",
-  "baseMaster": "8b3075877888bfdb8988d46043d0b4f819afcac1",
+  "branch": "rc/1.10.35-rc.1",
+  "baseMaster": "dd6a963fa058d6ad2c2a4da2aaee8ec3bb4f51a2",
   "tasks": [
     918
   ],
   "repositories": {
-    "ControleOnline/api-community": "e4dfa658ddcac3b99d2e1923d3535d495998b793"
+    "ControleOnline/api-community": "cc335ea05051536470d8c509bcab32cacad31d97"
   },
   "frozen": true,
-  "notes": "#918 api-community Packagist \u2014 remove modules gitlinks"
+  "notes": "#918 docs/ only wiki submodule"
 }
