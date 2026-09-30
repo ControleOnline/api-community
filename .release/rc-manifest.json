@@ -1,14 +1,14 @@
 {
-  "version": "1.10.34",
+  "version": "1.10.36",
   "rc": 1,
-  "branch": "rc/1.10.34-rc.1",
-  "baseMaster": "8b3075877888bfdb8988d46043d0b4f819afcac1",
+  "branch": "rc/1.10.36-rc.1",
+  "baseMaster": "5497ff4bf34250cdd3c8d2caa1fcf0f898f53567",
   "tasks": [
-    918
+    162
   ],
   "repositories": {
-    "ControleOnline/api-community": "e4dfa658ddcac3b99d2e1923d3535d495998b793"
+    "ControleOnline/api-community": "2f678b6eff5083c80f003af4ba00fae086a4f36e"
   },
   "frozen": true,
-  "notes": "#918 api-community Packagist \u2014 remove modules gitlinks"
+  "notes": "#162 FixAutoload no-op + vendor doctrine migrations + exact composer pins"
 }
