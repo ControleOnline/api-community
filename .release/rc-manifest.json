@@ -1,14 +1,14 @@
 {
   "version": "1.10.37",
-  "rc": 2,
-  "branch": "rc/1.10.37-rc.2",
-  "baseMaster": "99229ca3ad4e5a34884f8ead472f8d6c2ffe5067",
+  "rc": 3,
+  "branch": "rc/1.10.37-rc.3",
+  "baseMaster": "2eba93741b9dfbae56f9738c71c139ebac25ed65",
   "tasks": [
     167
   ],
   "repositories": {
-    "ControleOnline/api-community": "49d91db9c0386f755a1020aef409bcd8f78b0a0c"
+    "ControleOnline/api-community": "c90b6be0e8cc27ae80f86bcdf9a8825cd11145b9"
   },
   "frozen": true,
-  "notes": "#167 only packages with src/Entity; exclude websocket-server"
+  "notes": "#167 post-install rewrite all vendor modules\u2192vendor paths"
 }
