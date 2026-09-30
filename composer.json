@@ -28,7 +28,7 @@
         "controleonline/spc-sdk": "1.0.0",
         "controleonline/tasks": "1.0.2",
         "controleonline/users": "1.0.2",
-        "controleonline/websocket-server": "1.0.0",
+        "controleonline/websocket-server": "1.0.3",
         "controleonline/whatsapp-sdk": "1.0.0",
         "ctodobom/api-inter": "dev-master",
         "doctrine/doctrine-bundle": "^3.3",
