@@ -1,4 +1,3 @@
-# API Platform resource/entity paths — only existing dirs
 api_platform:
     mapping:
         paths:
@@ -32,5 +31,3 @@ api_platform:
             - "%kernel.project_dir%/vendor/controleonline/report/src/Resource"
             - "%kernel.project_dir%/vendor/controleonline/multi-tenancy/src/Entity"
             - "%kernel.project_dir%/vendor/controleonline/multi-tenancy/src/Resource"
-            - "%kernel.project_dir%/vendor/controleonline/legacy/src/Entity"
-            - "%kernel.project_dir%/vendor/controleonline/legacy/src/Resource"

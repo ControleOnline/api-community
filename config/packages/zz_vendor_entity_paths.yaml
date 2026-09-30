@@ -1,5 +1,4 @@
-# Only packages that ship src/Entity under vendor/controleonline/*
-# Do NOT list packages without Entity (e.g. websocket-server) — Doctrine fails closed.
+# Doctrine mappings only for installed packages that ship src/Entity
 doctrine:
     orm:
         mappings:
@@ -93,9 +92,3 @@ doctrine:
                 dir: "%kernel.project_dir%/vendor/controleonline/multi-tenancy/src/Entity"
                 prefix: 'ControleOnline\Entity'
                 alias: ControleOnlineMultiTenancy
-            ControleOnlineLegacy:
-                is_bundle: false
-                type: attribute
-                dir: "%kernel.project_dir%/vendor/controleonline/legacy/src/Entity"
-                prefix: 'ControleOnline\Entity'
-                alias: ControleOnlineLegacy
