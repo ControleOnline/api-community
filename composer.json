@@ -127,9 +127,11 @@
             "echo '{\"directory\" : \"public/vendor/\"}' > .bowerrc"
         ],
         "post-install-cmd": [
+            "php scripts/rewrite-vendor-module-paths.php",
             "@auto-scripts"
         ],
         "post-update-cmd": [
+            "php scripts/rewrite-vendor-module-paths.php",
             "@auto-scripts"
         ]
     },
