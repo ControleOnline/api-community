@@ -1,14 +1,14 @@
 {
-  "version": "1.10.36",
+  "version": "1.10.37",
   "rc": 1,
-  "branch": "rc/1.10.36-rc.1",
-  "baseMaster": "5497ff4bf34250cdd3c8d2caa1fcf0f898f53567",
+  "branch": "rc/1.10.37-rc.1",
+  "baseMaster": "48de2593472b4cee95c5ff1d1d8e44aa42a2fbd9",
   "tasks": [
-    162
+    167
   ],
   "repositories": {
-    "ControleOnline/api-community": "2f678b6eff5083c80f003af4ba00fae086a4f36e"
+    "ControleOnline/api-community": "9266e0bdaf61ee796504bd90153a86fdd72af727"
   },
   "frozen": true,
-  "notes": "#162 FixAutoload no-op + vendor doctrine migrations + exact composer pins"
+  "notes": "#167 vendor entity paths; skip package doctrine modules/ mappings"
 }
