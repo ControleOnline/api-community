@@ -7,7 +7,7 @@
     167
   ],
   "repositories": {
-    "ControleOnline/api-community": "6e0a8721168d18290444ca8e1f0792b43bfb1ad9"
+    "ControleOnline/api-community": "49d91db9c0386f755a1020aef409bcd8f78b0a0c"
   },
   "frozen": true,
   "notes": "#167 only packages with src/Entity; exclude websocket-server"
