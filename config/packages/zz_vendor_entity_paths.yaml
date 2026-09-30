@@ -1,5 +1,4 @@
-# AUTO: overrides package doctrine mappings that still point to modules/
-# Loaded LAST by Kernel after vendor/controleonline/*/config
+# Doctrine mappings only for installed packages that ship src/Entity
 doctrine:
     orm:
         mappings:
@@ -93,15 +92,3 @@ doctrine:
                 dir: "%kernel.project_dir%/vendor/controleonline/multi-tenancy/src/Entity"
                 prefix: 'ControleOnline\Entity'
                 alias: ControleOnlineMultiTenancy
-            ControleOnlineWebsocketServer:
-                is_bundle: false
-                type: attribute
-                dir: "%kernel.project_dir%/vendor/controleonline/websocket-server/src/Entity"
-                prefix: 'ControleOnline\Entity'
-                alias: ControleOnlineWebsocketServer
-            ControleOnlineLegacy:
-                is_bundle: false
-                type: attribute
-                dir: "%kernel.project_dir%/vendor/controleonline/legacy/src/Entity"
-                prefix: 'ControleOnline\Entity'
-                alias: ControleOnlineLegacy
