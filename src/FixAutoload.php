@@ -2,9 +2,13 @@
 
 namespace App;
 
+/**
+ * Legacy helper from the git-submodule era.
+ * Packagist installs live under vendor/controleonline — do NOT rewrite
+ * autoload paths to modules/ or delete vendor packages.
+ */
 class FixAutoload
 {
-
     private static $envVars;
 
     public function __construct()
@@ -18,23 +22,26 @@ class FixAutoload
             'vendor/composer/autoload_classmap.php',
             'vendor/composer/autoload_psr4.php',
             'vendor/composer/autoload_static.php',
-            'vendor/composer/instaled.php',
-            'vendor/composer/intaled.json'
-
+            'vendor/composer/installed.php',
+            'vendor/composer/installed.json',
         ];
     }
 
+    /**
+     * @deprecated No-op since Packagist migration. Kept so deploy scripts
+     * that still call postInstall() do not break.
+     */
     public static function postInstall()
     {
-        //if (isset(self::$envVars['APP_ENV']) && self::$envVars['APP_ENV'] === 'dev')
-        self::replaceInComposerFiles();
+        // Intentionally empty: modules/controleonline/* are no longer the
+        // source of truth; packages resolve from vendor/controleonline/*.
+        error_log('App\\FixAutoload::postInstall is a no-op (Packagist vendor paths).');
     }
 
     private static function readEnvFile(string $filePath): array
     {
         $envVariables = [];
         if (!file_exists($filePath)) {
-            error_log("Arquivo .env não encontrado: $filePath");
             return $envVariables;
         }
 
@@ -45,8 +52,7 @@ class FixAutoload
             }
             if (preg_match('/^([A-Z0-9_]+)=(.*)$/', $line, $matches)) {
                 $key = $matches[1];
-                $value = $matches[2];
-                $value = trim($value, '"\'');
+                $value = trim($matches[2], '"\'');
                 $envVariables[$key] = $value;
             }
         }
@@ -56,9 +62,6 @@ class FixAutoload
 
     public static function deleteDirectory($path)
     {
-        // Composer may leave directory symlinks under vendor/. Treat links as
-        // filesystem entries, not directories, or cleanup can follow a link
-        // and delete files from the linked module checkout.
         if (is_link($path) || is_file($path)) {
             unlink($path);
             return;
@@ -77,26 +80,11 @@ class FixAutoload
             if ($entry === '.' || $entry === '..') {
                 continue;
             }
-
             self::deleteDirectory($path . DIRECTORY_SEPARATOR . $entry);
         }
 
         if (!rmdir($path)) {
             throw new \RuntimeException(sprintf('Unable to remove directory during cleanup: %s', $path));
         }
-    }
-
-    private static function replaceInComposerFiles()
-    {
-        $path = '/../modules/controleonline';
-        $classmapFiles = self::getPaths();
-        foreach ($classmapFiles as $classmapFile) {
-            if (file_exists($classmapFile)) {
-                $classmapContent = file_get_contents($classmapFile);
-                $modifiedContent = str_replace('/controleonline', $path, $classmapContent);
-                file_put_contents($classmapFile, $modifiedContent);
-            }
-        }
-        self::deleteDirectory(__DIR__ . '/../vendor/controleonline');
     }
 }
