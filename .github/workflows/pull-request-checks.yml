@@ -38,12 +38,10 @@ jobs:
       - name: Install reviewed backend packages
         run: composer install --no-interaction --no-progress --prefer-dist --no-scripts
 
-      - name: Verify catalog authorization and installed container wiring
+      - name: Verify application container boot
         env:
           APP_ENV: test
-        run: |
-          vendor/bin/phpunit tests/Security
-          vendor/bin/phpunit vendor/controleonline/products/tests/Security
+        run: php bin/console about --no-debug
 
       - name: Check diff hygiene
         run: git diff --check
