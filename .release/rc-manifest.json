@@ -7,7 +7,7 @@
     167
   ],
   "repositories": {
-    "ControleOnline/api-community": "9266e0bdaf61ee796504bd90153a86fdd72af727"
+    "ControleOnline/api-community": "b82a49e57b6c5100e4c153b7dfe044f1a82934f0"
   },
   "frozen": true,
   "notes": "#167 vendor entity paths; skip package doctrine modules/ mappings"
