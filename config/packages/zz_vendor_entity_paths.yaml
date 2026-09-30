@@ -1,0 +1,107 @@
+# AUTO: overrides package doctrine mappings that still point to modules/
+# Loaded LAST by Kernel after vendor/controleonline/*/config
+doctrine:
+    orm:
+        mappings:
+            ControleOnlineUsers:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/users/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlineUsers
+            ControleOnlineCommon:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/common/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlineCommon
+            ControleOnlinePeople:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/people/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlinePeople
+            ControleOnlineOrders:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/orders/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlineOrders
+            ControleOnlineProducts:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/products/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlineProducts
+            ControleOnlineFinancial:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/financial/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlineFinancial
+            ControleOnlineAccounting:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/accounting/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlineAccounting
+            ControleOnlineLogistic:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/logistic/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlineLogistic
+            ControleOnlineIntegration:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/integration/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlineIntegration
+            ControleOnlineQueue:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/queue/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlineQueue
+            ControleOnlineTasks:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/tasks/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlineTasks
+            ControleOnlineEad:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/ead/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlineEad
+            ControleOnlineContract:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/contract/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlineContract
+            ControleOnlineReport:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/report/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlineReport
+            ControleOnlineMultiTenancy:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/multi-tenancy/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlineMultiTenancy
+            ControleOnlineWebsocketServer:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/websocket-server/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlineWebsocketServer
+            ControleOnlineLegacy:
+                is_bundle: false
+                type: attribute
+                dir: "%kernel.project_dir%/vendor/controleonline/legacy/src/Entity"
+                prefix: 'ControleOnline\Entity'
+                alias: ControleOnlineLegacy

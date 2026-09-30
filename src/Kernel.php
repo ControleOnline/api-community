@@ -17,7 +17,7 @@ class Kernel extends BaseKernel
 
     private const CONFIG_EXTS = '.{php,xml,yaml,yml}';
     private const MODULE_CONFIG_DIR_PATTERNS = [
-        '/modules/*/*/config',
+        // modules/ removed — Packagist packages only
         '/vendor/controleonline/*/config',
     ];
 
@@ -61,8 +61,19 @@ class Kernel extends BaseKernel
         $loader->load($confDir . '/{services}_' . $this->environment . self::CONFIG_EXTS, 'glob');
 
         foreach ($this->getModuleConfigDirs() as $configDir) {
-            $loader->load($configDir . '/config' . self::CONFIG_EXTS, 'glob');
+            // Load package services only. Do NOT load package config.yaml /
+            // packages/doctrine.yaml / packages/api_platform.yaml — those still
+            // point at modules/controleonline/* (removed). Paths come from
+            // zz_vendor_*.yaml below.
+            if (is_dir($configDir . '/services')) {
+                $loader->load($configDir . '/services/*' . self::CONFIG_EXTS, 'glob');
+            }
+            $loader->load($configDir . '/services' . self::CONFIG_EXTS, 'glob');
         }
+
+        // Entity + API Platform resource paths under vendor/controleonline/*
+        $loader->load($confDir . '/packages/zz_vendor_entity_paths.yaml');
+        $loader->load($confDir . '/packages/zz_vendor_api_platform_paths.yaml');
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void
