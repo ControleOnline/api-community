@@ -7,7 +7,7 @@
     167
   ],
   "repositories": {
-    "ControleOnline/api-community": "9efab9503d832b278f21d17e6df3db1abeaf3d5f"
+    "ControleOnline/api-community": "350578ea3bc85ba92ab22a3478aac08dcd29be3d"
   },
   "frozen": true,
   "notes": "#167 remove composer.lock from git"
