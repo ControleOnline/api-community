@@ -1,14 +1,14 @@
 {
   "version": "1.10.37",
-  "rc": 1,
-  "branch": "rc/1.10.37-rc.1",
-  "baseMaster": "48de2593472b4cee95c5ff1d1d8e44aa42a2fbd9",
+  "rc": 2,
+  "branch": "rc/1.10.37-rc.2",
+  "baseMaster": "99229ca3ad4e5a34884f8ead472f8d6c2ffe5067",
   "tasks": [
     167
   ],
   "repositories": {
-    "ControleOnline/api-community": "b82a49e57b6c5100e4c153b7dfe044f1a82934f0"
+    "ControleOnline/api-community": "49d91db9c0386f755a1020aef409bcd8f78b0a0c"
   },
   "frozen": true,
-  "notes": "#167 vendor entity paths; skip package doctrine modules/ mappings"
+  "notes": "#167 only packages with src/Entity; exclude websocket-server"
 }
