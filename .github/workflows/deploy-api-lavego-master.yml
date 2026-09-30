@@ -62,7 +62,7 @@ jobs:
 
 
 
-                  ### OBRIGATÓRIO PARA FUNCIONAR COM O PHP 8.4 - NÃO REMOVER ###
+                  ### OBRIGATÓRIO PARA FUNCIONAR COM O PHP 8.5 - NÃO REMOVER ###
 
                   
                   ### public_html é onde a api LEGADA chama a pasta SISTEMA # <<< --------mudar o nome para legado e criar um alias (de sábado para domingo
@@ -102,7 +102,7 @@ jobs:
                     done
                   fi
                   if [ -z "$PHP_BIN" ]; then
-                    echo "PHP 8.4 not found on remote server"
+                    echo "PHP 8.5 not found on remote server"
                     exit 1
                   fi
 
