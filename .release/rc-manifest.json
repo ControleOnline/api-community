@@ -1,14 +1,14 @@
 {
   "version": "1.10.37",
-  "rc": 2,
-  "branch": "rc/1.10.37-rc.2",
-  "baseMaster": "99229ca3ad4e5a34884f8ead472f8d6c2ffe5067",
+  "rc": 4,
+  "branch": "rc/1.10.37-rc.4",
+  "baseMaster": "2eba93741b9dfbae56f9738c71c139ebac25ed65",
   "tasks": [
     167
   ],
   "repositories": {
-    "ControleOnline/api-community": "49d91db9c0386f755a1020aef409bcd8f78b0a0c"
+    "ControleOnline/api-community": "aabba38954a61abc84447a301a21a8546166eb7b"
   },
   "frozen": true,
-  "notes": "#167 only packages with src/Entity; exclude websocket-server"
+  "notes": "#167 packages v1.0.2 vendor paths; no post-install"
 }
