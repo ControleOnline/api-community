@@ -7,7 +7,7 @@
     162
   ],
   "repositories": {
-    "ControleOnline/api-community": "2e3b0bde5a6352a9fe44bad267d70173695efe95"
+    "ControleOnline/api-community": "2f678b6eff5083c80f003af4ba00fae086a4f36e"
   },
   "frozen": true,
   "notes": "#162 FixAutoload no-op + vendor doctrine migrations + exact composer pins"
