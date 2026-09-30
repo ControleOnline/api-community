@@ -1,14 +1,13 @@
 {
   "version": "1.10.37",
-  "rc": 5,
-  "branch": "rc/1.10.37-rc.5",
-  "baseMaster": "9cf662596e4a424e2e5d8e9c64f02848e7fde1bf",
+  "rc": 6,
+  "branch": "rc/1.10.37-rc.6",
+  "baseMaster": "cc21b9776dc82a5741fdc61de102a5bd0417ae09",
   "tasks": [
     167
   ],
   "repositories": {
-    "ControleOnline/api-community": "350578ea3bc85ba92ab22a3478aac08dcd29be3d"
+    "ControleOnline/api-community": "100d0cef6a89b98d9b660211ed792848655a33a8"
   },
-  "frozen": true,
-  "notes": "#167 remove composer.lock from git"
+  "frozen": true
 }
