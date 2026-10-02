@@ -29,3 +29,12 @@ services:
     App\Controller\:
         resource: "../src/Controller"
         tags: ["controller.service_arguments"]
+
+
+    # MCP module (controleonline/mcp)
+    ControleOnline\Service\McpServerService:
+        arguments:
+            $readOnly: true
+
+    ControleOnline\Controller\McpController:
+        tags: ['controller.service_arguments']
