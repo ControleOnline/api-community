@@ -113,7 +113,8 @@ jobs:
           key: ${{ needs.configure.outputs.env == 'master' && secrets.CONTROLEONLINE || '' }}
           passphrase: ${{ needs.configure.outputs.env == 'staging' && secrets.STAGING_PASS || '' }}
           port: ${{ needs.configure.outputs.env == 'master' && secrets.PORT || 22 }}
-          script_stop: true
+          # set -e in the remote script preserves if/else and function control flow.
+          # Per-line script_stop instrumentation breaks false conditional branches.
           envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP,SKIP_DB_MIGRATIONS
           script: |
             set -e
