@@ -2,14 +2,13 @@
   "version": "1.10.40",
   "rc": 1,
   "branch": "rc/1.10.40-rc.1",
-  "baseMaster": "0e2e683",
+  "baseMaster": "0e2e683c81603c91ced896bbebf993157984ba83",
   "tasks": [
     191
   ],
   "repositories": {
-    "ControleOnline/api-community": "7d50d9fd962de426c032a6328a42b1368d4cff59",
-    "ControleOnline/api-platform-mcp": "6ede41b"
+    "ControleOnline/api-community": "d69da5e68aeb2312b6476ceeec71db2c6a03b739",
+    "ControleOnline/api-platform-mcp": "6ede41b81702a34c781bf3ec2bbc5161f3d0d3bb"
   },
-  "frozen": true,
-  "notes": "MCP module install read-only /mcp endpoint. Human authorized promotion 2026-10-02."
+  "frozen": true
 }
