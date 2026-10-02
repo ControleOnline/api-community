@@ -20,6 +20,12 @@ final class ProductCatalogWiringTest extends KernelTestCase
         return Kernel::class;
     }
 
+    public function testInstalledCommonExposesTrustedPublicCatalogScope(): void
+    {
+        $method = new \ReflectionMethod(\ControleOnline\Service\PublicShopCategoryService::class, 'resolvePublicShopCompanyId');
+        self::assertTrue($method->isPublic(), 'Installed common must expose the trusted Shop scope used by products.');
+    }
+
     public function testInstalledCatalogResourcesCarryCompanyWriteAuthorization(): void
     {
         self::bootKernel();
