@@ -1,0 +1,3 @@
+controleonline_mcp:
+    resource: ../../vendor/controleonline/mcp/src/Controller/
+    type: attribute
