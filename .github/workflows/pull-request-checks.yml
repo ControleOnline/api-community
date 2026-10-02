@@ -24,15 +24,24 @@ jobs:
 
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: '8.5'
           coverage: none
           tools: composer:v2
 
       - name: Validate composer manifest
-        run: composer validate --no-check-publish --strict
+        # Exact first-party versions freeze the reviewed package composition.
+        run: composer validate --no-check-all --no-check-publish --strict
 
       - name: Check PHP syntax
-        run: find src modules tests bin config -type f \( -name '*.php' -o -name '*.phtml' \) -print0 | xargs -0 -r -n1 php -l
+        run: find src tests bin config -type f \( -name '*.php' -o -name '*.phtml' \) -print0 | xargs -0 -r -n1 php -l
+
+      - name: Install reviewed backend packages
+        run: composer install --no-interaction --no-progress --prefer-dist --no-scripts
+
+      - name: Verify application container boot
+        env:
+          APP_ENV: test
+        run: php bin/console about --no-debug
 
       - name: Check diff hygiene
         run: git diff --check
