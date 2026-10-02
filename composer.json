@@ -11,7 +11,7 @@
         "beberlei/doctrineextensions": "^1.5",
         "composer/installers": "^2.2",
         "controleonline/accounting": "1.0.2",
-        "controleonline/common": "1.0.3",
+        "controleonline/common": "1.0.4",
         "controleonline/contract": "1.0.2",
         "controleonline/report": "1.0.2",
         "controleonline/ead": "1.0.2",
