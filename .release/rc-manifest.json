@@ -3,9 +3,11 @@
   "rc": 1,
   "branch": "rc/1.10.40-rc.1",
   "baseMaster": "0e2e683",
-  "tasks": [191],
+  "tasks": [
+    191
+  ],
   "repositories": {
-    "ControleOnline/api-community": "c96667d6fb3b6b2f993713f74275247b216d025f",
+    "ControleOnline/api-community": "7d50d9fd962de426c032a6328a42b1368d4cff59",
     "ControleOnline/api-platform-mcp": "6ede41b"
   },
   "frozen": true,
