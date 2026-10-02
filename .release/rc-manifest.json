@@ -2,12 +2,13 @@
   "version": "1.10.40",
   "rc": 2,
   "branch": "rc/1.10.40-rc.2",
-  "baseStaging": "96c696c",
-  "baseMasterNote": "rc.1 is pure from master 0e2e683; rc.2 overlays #191 on current staging for source-policy without force-reset",
-  "tasks": [191],
+  "baseMaster": "0e2e683c81603c91ced896bbebf993157984ba83",
+  "tasks": [
+    191
+  ],
   "repositories": {
-    "ControleOnline/api-community": "dac2791577db5cfe5e5a0265b59c5dad4e37a009",
-    "ControleOnline/api-platform-mcp": "6ede41b"
+    "ControleOnline/api-community": "209ba3e7cdca5d937315487bcf942be210033c71",
+    "ControleOnline/api-platform-mcp": "6ede41b81702a34c781bf3ec2bbc5161f3d0d3bb"
   },
   "frozen": true
 }
