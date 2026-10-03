@@ -104,6 +104,12 @@ jobs:
               ;;
           esac
 
+      - name: Encode temporary Composer credential
+        id: composer-token
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: echo "value=$(printf '%s' "$GITHUB_TOKEN" | base64 -w0)" >> "$GITHUB_OUTPUT"
+
       - name: Deploy application over SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -115,13 +121,15 @@ jobs:
           port: ${{ needs.configure.outputs.env == 'master' && secrets.PORT || 22 }}
           # set -e in the remote script preserves if/else and function control flow.
           # Per-line script_stop instrumentation breaks false conditional branches.
-          envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP,SKIP_DB_MIGRATIONS,GITHUB_TOKEN
+          envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP,SKIP_DB_MIGRATIONS,GITHUB_TOKEN_BASE64
           script: |
             set -e
             # Keep tool resolution inside the remote SSH script.
             export PATH="$HOME/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
             export COMPOSER_ALLOW_SUPERUSER=1
-            if [ -n "${GITHUB_TOKEN:-}" ]; then
+            if [ -n "${GITHUB_TOKEN_BASE64:-}" ]; then
+              GITHUB_TOKEN="$(printf '%s' "$GITHUB_TOKEN_BASE64" | base64 -d)"
+              export GITHUB_TOKEN
               export COMPOSER_AUTH="$(php -r 'echo json_encode(["github-oauth" => ["github.com" => getenv("GITHUB_TOKEN")]], JSON_THROW_ON_ERROR);')"
             fi
 
@@ -185,7 +193,7 @@ jobs:
 
             if composer validate --no-check-publish --no-interaction >/dev/null 2>&1; then
               run_composer install --no-interaction --no-suggest --no-scripts
-            unset COMPOSER_AUTH GITHUB_TOKEN
+            unset COMPOSER_AUTH GITHUB_TOKEN GITHUB_TOKEN_BASE64
             else
               echo "composer.lock is stale; refreshing dependencies"
               run_composer update --no-interaction --no-progress --with-all-dependencies --no-scripts
@@ -238,7 +246,7 @@ jobs:
           MESSENGER_DOMAIN: ${{ needs.configure.outputs.messenger_domain }}
           BOOTSTRAP: ${{ needs.configure.outputs.bootstrap }}
           SKIP_DB_MIGRATIONS: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message, '[skip-db-migrations]')) || (github.event_name == 'workflow_dispatch' && (github.event.inputs.target == 'staging' || needs.configure.outputs.env == 'staging')) }}
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN_BASE64: ${{ steps.composer-token.outputs.value }}
 
   # ─── Step 3: tests ─────────────────────────────────────────────────────────
   tests:
