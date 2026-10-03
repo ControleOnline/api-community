@@ -18,6 +18,7 @@ security:
             lazy: true
             provider: app_user_provider
             custom_authenticators:
+                - ControleOnline\Security\OAuthAccessTokenAuthenticator
                 - ControleOnline\Security\TokenAuthenticator
             json_login:
                 check_path: /token
@@ -47,6 +48,9 @@ security:
         - { path: ^/password_recoveries$, roles: PUBLIC_ACCESS }
         - { path: ^/recovery_accesses$, roles: PUBLIC_ACCESS }
         - { path: ^/account_verifications$, roles: PUBLIC_ACCESS }
+        - { path: ^/\.well-known/oauth-(authorization-server|protected-resource)$, roles: PUBLIC_ACCESS }
+        - { path: ^/mcp$, methods: [OPTIONS], roles: PUBLIC_ACCESS }
+        - { path: ^/oauth/authorize$, methods: [POST], roles: ROLE_HUMAN }
         - { path: ^/themes-colors.css$, roles: PUBLIC_ACCESS }
         - { path: ^/languages$, roles: PUBLIC_ACCESS }
         - { path: ^/timezones$, roles: PUBLIC_ACCESS }

@@ -57,4 +57,27 @@ final class DeployShellControlFlowTest extends TestCase
         self::assertNotSame(0, $exit);
         self::assertNotContains('MUST_NOT_DEPLOY', $output);
     }
+
+    public function testCleanupPreservesRetiredComposerManagedModulePaths(): void
+    {
+        $script = $this->deployScript();
+
+        self::assertStringContainsString(
+            "git clean -ffd -e '/modules/controleonline/'",
+            $script
+        );
+    }
+
+    public function testMcpAndOAuthPackagesResolveFromPackagistBranches(): void
+    {
+        $composer = json_decode(
+            file_get_contents(dirname(__DIR__, 2).'/composer.json'),
+            true,
+            flags: JSON_THROW_ON_ERROR
+        );
+
+        self::assertArrayNotHasKey('repositories', $composer);
+        self::assertSame('dev-task-197@dev', $composer['require']['controleonline/users'] ?? null);
+        self::assertSame('dev-dev@dev', $composer['require']['controleonline/mcp'] ?? null);
+    }
 }
