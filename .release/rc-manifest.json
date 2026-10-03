@@ -1,14 +1,167 @@
 {
-  "version": "1.10.40",
+  "version": "1.10.41",
   "rc": 1,
-  "branch": "rc/1.10.40-rc.1",
-  "baseMaster": "0e2e683c81603c91ced896bbebf993157984ba83",
+  "branch": "rc/1.10.41-rc.1",
   "tasks": [
-    191
+    912,
+    875,
+    967,
+    857
   ],
   "repositories": {
-    "ControleOnline/api-community": "48634ee3bcee950af3e45bb70ed7615662a3f165",
+    "ControleOnline/api-platform-common": "ebcfb2ed46129bb1caae8d8d91d2ad40f5c804b4",
+    "ControleOnline/api-platform-products": "cae3a0077eb01d58ca69137a3c32ba7abb2d68a6",
+    "ControleOnline/ui-default": "adcecf7a6bc4581ca0afb270587d3472f973d7f1",
+    "ControleOnline/ui-orders": "8e479b21323827963732a89085ffeb70d3a82462",
+    "ControleOnline/ui-products": "f6208952a44af2accfc3f250796e40a74f279c67",
+    "ControleOnline/ui-people": "034573deb587471f6dde8bbe824e0fe5e1ab1509",
+    "ControleOnline/ui-common": "cf8569dd590aec1dfaf7aa6708a5d3e6e8cf590b",
     "ControleOnline/api-platform-mcp": "6ede41b81702a34c781bf3ec2bbc5161f3d0d3bb"
   },
-  "frozen": true
+  "frozen": true,
+  "dependencyMode": "published-packages",
+  "npmPackages": {
+    "@controleonline/ui-default": {
+      "version": "1.0.275",
+      "gitHead": "adcecf7a6bc4581ca0afb270587d3472f973d7f1",
+      "integrity": "sha512-Z98Z3SmIAf6BNXr+jLOFb67QEa0uQtVvIgRpz9uf7+qJ0pjFNYEyY3WsZN6qRLFEpATLNf/iuqTeAp5kOmxIDg=="
+    },
+    "@controleonline/ui-orders": {
+      "version": "1.3.39",
+      "gitHead": "8e479b21323827963732a89085ffeb70d3a82462",
+      "integrity": "sha512-f9ZFObgKGMGVJUFEOZPzwIfPSKNq1SpJODG9q1lBdM80JDYcvA7piR93Dz5dxE5fLVNGihhPlRNDPcWP131f0Q=="
+    },
+    "@controleonline/ui-products": {
+      "version": "1.0.35",
+      "gitHead": "f6208952a44af2accfc3f250796e40a74f279c67",
+      "integrity": "sha512-+ZxaGlkhUXgd032xcB8tyvJTOKThFpZ2poy1fn/FD4MBDkervfoyz1uCQEqJVd0QOb4nmHlvYMqALbG8/lkE1Q=="
+    },
+    "@controleonline/ui-people": {
+      "version": "1.0.94",
+      "gitHead": "034573deb587471f6dde8bbe824e0fe5e1ab1509",
+      "integrity": "sha512-uQP7JXeje0OUABiWpg4bnI8USv8yLLaoscl5A3b+LKrBExMmZRccQpQx7af1jSHTSXtkRXj7HB2HhOlyv3KBwg=="
+    },
+    "@controleonline/ui-common": {
+      "version": "1.2.88",
+      "gitHead": "cf8569dd590aec1dfaf7aa6708a5d3e6e8cf590b",
+      "integrity": "sha512-aMRyJ+Og562dENw7PvY3edJfE22/yQQ3jeFjrLzA68cHTqRq41Y5nkbQbntDjgvoZn+hdt40VBvIGz2gPsW00Q=="
+    },
+    "@controleonline/ui-manager": {
+      "version": "1.0.17",
+      "gitHead": null,
+      "integrity": "sha512-OSHBf0u5rEDAdCwiSJrhfehMuD3jNc63doJsyXc2uCRwrhe0TS/KsNK+YfK1+04lEJCagDGW1wR5vL4tntP3Rg=="
+    }
+  },
+  "composerPackages": {
+    "controleonline/accounting": {
+      "version": "1.0.2",
+      "source": "29d0155985fc30cd37561efcb60b2fb27629f677"
+    },
+    "controleonline/common": {
+      "version": "1.0.4",
+      "source": "ebcfb2ed46129bb1caae8d8d91d2ad40f5c804b4"
+    },
+    "controleonline/contract": {
+      "version": "1.0.2",
+      "source": "e4213b50edf2815dd60e48f1ab6a80e1501ec808"
+    },
+    "controleonline/ead": {
+      "version": "1.0.2",
+      "source": "218f541939ed09a39b9d9e86dda5b6ddf9f38164"
+    },
+    "controleonline/financial": {
+      "version": "1.0.2",
+      "source": "7421b83ef5c13bf16beaa8ff4412c885d15ac3a5"
+    },
+    "controleonline/integration": {
+      "version": "1.0.2",
+      "source": "a281a91da98743af66057a1e197e1a4fe8f4a130"
+    },
+    "controleonline/logistic": {
+      "version": "1.0.2",
+      "source": "4d6ff2780487d1b453f60098012868a391492c65"
+    },
+    "controleonline/messages-sdk": {
+      "version": "1.0.0",
+      "source": "9853ea4dd51a3269037145e15849e5f422471941"
+    },
+    "controleonline/multi-tenancy": {
+      "version": "1.0.2",
+      "source": "e4ef527f58773e2f9ebc5e820c1acfa407c0db26"
+    },
+    "controleonline/orders": {
+      "version": "1.0.3",
+      "source": "195fd1b735fffb37522dbdd2bb271fa4511a2e62"
+    },
+    "controleonline/people": {
+      "version": "1.0.2",
+      "source": "328f76fbb4889a25cc3926c23a515a11f24b08d4"
+    },
+    "controleonline/products": {
+      "version": "1.0.3",
+      "source": "cae3a0077eb01d58ca69137a3c32ba7abb2d68a6"
+    },
+    "controleonline/queue": {
+      "version": "1.0.2",
+      "source": "040bd612453087d35738eff3b30490977976c8fc"
+    },
+    "controleonline/report": {
+      "version": "1.0.2",
+      "source": "0c7e156eb36d54fe0a97b4dabd7bb656c71ee67f"
+    },
+    "controleonline/smoke-tests-playground": {
+      "version": "1.0.2",
+      "source": "d7b60887055bd7350395673d3e9375aa42cc2bc7"
+    },
+    "controleonline/spc-sdk": {
+      "version": "1.0.0",
+      "source": "d7b2986f11c6b549421cdb9b5125d47f96a246dd"
+    },
+    "controleonline/tasks": {
+      "version": "1.0.2",
+      "source": "b316e289fdc35c97b6f4934afb3256bbfed0137d"
+    },
+    "controleonline/users": {
+      "version": "1.0.2",
+      "source": "843456d302c9f660922b283fdf9aef48c875f32e"
+    },
+    "controleonline/websocket-server": {
+      "version": "1.0.3",
+      "source": "0f6076eb0d681869dc52a8702e2a1c47bbb771b4"
+    },
+    "controleonline/whatsapp-sdk": {
+      "version": "1.0.0",
+      "source": "b3c18ac1b0d3bae445732bf6018237df970b5c55"
+    },
+    "controleonline/mcp": {
+      "version": "1.0.0",
+      "source": "6ede41b81702a34c781bf3ec2bbc5161f3d0d3bb"
+    }
+  },
+  "security": {
+    "857": "https://github.com/ControleOnline/app-community/issues/857#issuecomment-5952551531",
+    "912": "https://github.com/ControleOnline/app-community/issues/912#issuecomment-5970495112",
+    "875": "https://github.com/ControleOnline/app-community/issues/875#issuecomment-5952553102",
+    "967": "existing acceptance for ui-people@1.0.94 / 034573deb587471f6dde8bbe824e0fe5e1ab1509"
+  },
+  "testedDev": {
+    "ControleOnline/app-community": "8133ae0f401f6e72b22b9286da536535db5fa384",
+    "ControleOnline/api-community": "aa763675dd955977a0b8d67928913b4e0721957a"
+  },
+  "compositionSources": {
+    "ControleOnline/app-community": "b4f2e18b337ae27f37b9519522810526b30c8080",
+    "ControleOnline/api-community": "2ed4d56e4f05e4815b235314e88e1a4f121eb508"
+  },
+  "baseMaster": "2e1adb8d995a181ff65b638cf12afafdb10ed7ae",
+  "releaseSourceTaskSnapshots": {
+    "ControleOnline/api-community#912": "804f6d9a53bd45d2c015d4bd10fac55e32c1f165"
+  },
+  "preservedMasterTasks": [
+    191
+  ],
+  "devIntegration": "3629111476d8f1e4e5367e59eb2e9315f0068f5d",
+  "compatibleAppRc": {
+    "branch": "rc/1.10.39-rc.2",
+    "sha": "b4f2e18b337ae27f37b9519522810526b30c8080"
+  }
 }
