@@ -142,7 +142,9 @@ jobs:
               git checkout -B "$BRANCH" "origin/${BRANCH}"
             fi
             git reset --hard "origin/${BRANCH}"
-            git clean -ffd
+            # Legacy module checkouts may contain files owned by another deploy user.
+            # Packages are restored by Composer below; preserve these retired paths.
+            git clean -ffd -e '/modules/controleonline/'
 
             git submodule sync --recursive || true
             # Staging: local/untracked files inside module paths often block checkout.

@@ -57,4 +57,14 @@ final class DeployShellControlFlowTest extends TestCase
         self::assertNotSame(0, $exit);
         self::assertNotContains('MUST_NOT_DEPLOY', $output);
     }
+
+    public function testCleanupPreservesRetiredComposerManagedModulePaths(): void
+    {
+        $script = $this->deployScript();
+
+        self::assertStringContainsString(
+            "git clean -ffd -e '/modules/controleonline/'",
+            $script
+        );
+    }
 }
