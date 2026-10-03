@@ -92,6 +92,7 @@ final class DeployShellControlFlowTest extends TestCase
             self::assertStringContainsString('GITHUB_TOKEN_BASE64', $step['with']['envs'] ?? '');
             self::assertStringContainsString('COMPOSER_AUTH', $step['with']['script'] ?? '');
             self::assertStringContainsString('base64 -d', $step['with']['script'] ?? '');
+            self::assertStringContainsString("tr -d '[:space:]'", $step['with']['script'] ?? '');
             self::assertStringContainsString('unset COMPOSER_AUTH GITHUB_TOKEN GITHUB_TOKEN_BASE64', $step['with']['script'] ?? '');
             return;
         }
