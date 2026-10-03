@@ -115,12 +115,15 @@ jobs:
           port: ${{ needs.configure.outputs.env == 'master' && secrets.PORT || 22 }}
           # set -e in the remote script preserves if/else and function control flow.
           # Per-line script_stop instrumentation breaks false conditional branches.
-          envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP,SKIP_DB_MIGRATIONS
+          envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP,SKIP_DB_MIGRATIONS,GITHUB_TOKEN
           script: |
             set -e
             # Keep tool resolution inside the remote SSH script.
             export PATH="$HOME/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
             export COMPOSER_ALLOW_SUPERUSER=1
+            if [ -n "${GITHUB_TOKEN:-}" ]; then
+              export COMPOSER_AUTH="$(php -r 'echo json_encode(["github-oauth" => ["github.com" => getenv("GITHUB_TOKEN")]], JSON_THROW_ON_ERROR);')"
+            fi
 
             BRANCH="${DEPLOY_BRANCH}"
             TARGET="${REMOTE_PATH}"
@@ -182,6 +185,7 @@ jobs:
 
             if composer validate --no-check-publish --no-interaction >/dev/null 2>&1; then
               run_composer install --no-interaction --no-suggest --no-scripts
+            unset COMPOSER_AUTH GITHUB_TOKEN
             else
               echo "composer.lock is stale; refreshing dependencies"
               run_composer update --no-interaction --no-progress --with-all-dependencies --no-scripts
@@ -234,6 +238,7 @@ jobs:
           MESSENGER_DOMAIN: ${{ needs.configure.outputs.messenger_domain }}
           BOOTSTRAP: ${{ needs.configure.outputs.bootstrap }}
           SKIP_DB_MIGRATIONS: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message, '[skip-db-migrations]')) || (github.event_name == 'workflow_dispatch' && (github.event.inputs.target == 'staging' || needs.configure.outputs.env == 'staging')) }}
+          GITHUB_TOKEN: ${{ github.token }}
 
   # ─── Step 3: tests ─────────────────────────────────────────────────────────
   tests:

@@ -67,4 +67,22 @@ final class DeployShellControlFlowTest extends TestCase
             $script
         );
     }
+
+    public function testComposerGetsTemporaryGithubAuthenticationForVcsDependencies(): void
+    {
+        $workflow = Yaml::parseFile(dirname(__DIR__, 2).'/.github/workflows/deploy.yml');
+        foreach ($workflow['jobs']['deploy']['steps'] as $step) {
+            if (($step['name'] ?? '') !== 'Deploy application over SSH') {
+                continue;
+            }
+
+            self::assertSame('${{ github.token }}', $step['env']['GITHUB_TOKEN'] ?? null);
+            self::assertStringContainsString('GITHUB_TOKEN', $step['with']['envs'] ?? '');
+            self::assertStringContainsString('COMPOSER_AUTH', $step['with']['script'] ?? '');
+            self::assertStringContainsString('unset COMPOSER_AUTH GITHUB_TOKEN', $step['with']['script'] ?? '');
+            return;
+        }
+
+        self::fail('SSH deploy step missing');
+    }
 }
