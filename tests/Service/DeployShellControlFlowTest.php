@@ -68,23 +68,16 @@ final class DeployShellControlFlowTest extends TestCase
         );
     }
 
-    public function testTemporaryComposerPackagesUsePublicDistArchives(): void
+    public function testMcpAndOAuthPackagesResolveFromPackagistBranches(): void
     {
         $composer = json_decode(
             file_get_contents(dirname(__DIR__, 2).'/composer.json'),
             true,
             flags: JSON_THROW_ON_ERROR
         );
-        $packages = [];
-        foreach ($composer['repositories'] as $repository) {
-            if (($repository['type'] ?? null) === 'package') {
-                $packages[$repository['package']['name']] = $repository['package'];
-            }
-        }
 
-        self::assertSame('zip', $packages['controleonline/users']['dist']['type'] ?? null);
-        self::assertSame('zip', $packages['controleonline/mcp']['dist']['type'] ?? null);
-        self::assertStringContainsString('/archive/refs/heads/', $packages['controleonline/users']['dist']['url'] ?? '');
-        self::assertStringContainsString('/archive/refs/heads/', $packages['controleonline/mcp']['dist']['url'] ?? '');
+        self::assertArrayNotHasKey('repositories', $composer);
+        self::assertSame('dev-task-197@dev', $composer['require']['controleonline/users'] ?? null);
+        self::assertSame('dev-dev@dev', $composer['require']['controleonline/mcp'] ?? null);
     }
 }
