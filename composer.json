@@ -142,42 +142,6 @@
             "docker": false
         }
     },
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "controleonline/users",
-                "version": "dev-task-197",
-                "dist": {
-                    "url": "https://github.com/ControleOnline/api-platform-users/archive/refs/heads/task-197.zip",
-                    "type": "zip"
-                },
-                "autoload": {
-                    "psr-4": {
-                        "ControleOnline\\": "src/"
-                    }
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "controleonline/mcp",
-                "version": "dev-dev",
-                "dist": {
-                    "url": "https://github.com/ControleOnline/api-platform-mcp/archive/refs/heads/dev.zip",
-                    "type": "zip"
-                },
-                "autoload": {
-                    "psr-4": {
-                        "ControleOnline\\": "src/",
-                        "ControleOnline\\Service\\": "src/Service/",
-                        "ControleOnline\\Controller\\": "src/Controller/"
-                    }
-                }
-            }
-        }
-    ],
     "minimum-stability": "stable",
     "prefer-stable": true
 }
