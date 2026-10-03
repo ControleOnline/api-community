@@ -15,7 +15,7 @@
         "controleonline/contract": "1.0.2",
         "controleonline/report": "1.0.2",
         "controleonline/ead": "1.0.2",
-        "controleonline/financial": "1.0.2",
+        "controleonline/financial": "dev-dev@dev",
         "controleonline/integration": "1.0.2",
         "controleonline/logistic": "1.0.2",
         "controleonline/messages-sdk": "1.0.0",
