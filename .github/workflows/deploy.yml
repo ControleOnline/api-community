@@ -128,7 +128,7 @@ jobs:
             export PATH="$HOME/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
             export COMPOSER_ALLOW_SUPERUSER=1
             if [ -n "${GITHUB_TOKEN_BASE64:-}" ]; then
-              GITHUB_TOKEN="$(printf '%s' "$GITHUB_TOKEN_BASE64" | base64 -d)"
+              GITHUB_TOKEN="$(printf '%s' "$GITHUB_TOKEN_BASE64" | base64 -d | tr -d '[:space:]')"
               export GITHUB_TOKEN
               export COMPOSER_AUTH="$(php -r 'echo json_encode(["github-oauth" => ["github.com" => getenv("GITHUB_TOKEN")]], JSON_THROW_ON_ERROR);')"
             fi
