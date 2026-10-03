@@ -68,35 +68,23 @@ final class DeployShellControlFlowTest extends TestCase
         );
     }
 
-    public function testComposerGetsTemporaryGithubAuthenticationForVcsDependencies(): void
+    public function testTemporaryComposerPackagesUsePublicDistArchives(): void
     {
-        $workflow = Yaml::parseFile(dirname(__DIR__, 2).'/.github/workflows/deploy.yml');
-        $tokenStep = null;
-        foreach ($workflow['jobs']['deploy']['steps'] as $step) {
-            if (($step['name'] ?? '') === 'Encode temporary Composer credential') {
-                $tokenStep = $step;
-                break;
+        $composer = json_decode(
+            file_get_contents(dirname(__DIR__, 2).'/composer.json'),
+            true,
+            flags: JSON_THROW_ON_ERROR
+        );
+        $packages = [];
+        foreach ($composer['repositories'] as $repository) {
+            if (($repository['type'] ?? null) === 'package') {
+                $packages[$repository['package']['name']] = $repository['package'];
             }
         }
 
-        self::assertNotNull($tokenStep);
-        self::assertSame('${{ github.token }}', $tokenStep['env']['GITHUB_TOKEN'] ?? null);
-        self::assertStringContainsString('base64', $tokenStep['run'] ?? '');
-
-        foreach ($workflow['jobs']['deploy']['steps'] as $step) {
-            if (($step['name'] ?? '') !== 'Deploy application over SSH') {
-                continue;
-            }
-
-            self::assertSame('${{ steps.composer-token.outputs.value }}', $step['env']['GITHUB_TOKEN_BASE64'] ?? null);
-            self::assertStringContainsString('GITHUB_TOKEN_BASE64', $step['with']['envs'] ?? '');
-            self::assertStringContainsString('COMPOSER_AUTH', $step['with']['script'] ?? '');
-            self::assertStringContainsString('base64 -d', $step['with']['script'] ?? '');
-            self::assertStringContainsString("tr -d '[:space:]'", $step['with']['script'] ?? '');
-            self::assertStringContainsString('unset COMPOSER_AUTH GITHUB_TOKEN GITHUB_TOKEN_BASE64', $step['with']['script'] ?? '');
-            return;
-        }
-
-        self::fail('SSH deploy step missing');
+        self::assertSame('zip', $packages['controleonline/users']['dist']['type'] ?? null);
+        self::assertSame('zip', $packages['controleonline/mcp']['dist']['type'] ?? null);
+        self::assertStringContainsString('/archive/refs/heads/', $packages['controleonline/users']['dist']['url'] ?? '');
+        self::assertStringContainsString('/archive/refs/heads/', $packages['controleonline/mcp']['dist']['url'] ?? '');
     }
 }
