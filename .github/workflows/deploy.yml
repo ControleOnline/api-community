@@ -149,6 +149,8 @@ jobs:
             RESTART_FILE="$PWD/public/.lsphp_restart.txt"
 
             if [ "${DEPLOY_OPERATION}" = "cache-recovery" ]; then
+              echo "Cache recovery identity: $(id -un) (uid $(id -u), groups $(id -Gn))"
+              stat -c 'Cache directory: %A %U:%G %n' var var/cache 2>/dev/null || true
               if rm -rf var/cache/* 2>/dev/null; then
                 echo "Symfony cache removed"
               elif command -v sudo >/dev/null 2>&1 && sudo -n rm -rf var/cache/* 2>/dev/null; then
