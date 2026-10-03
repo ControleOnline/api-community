@@ -79,7 +79,8 @@
         "symfony/yaml": "^8.1",
         "tecnickcom/tcpdf": "^6.7",
         "vich/uploader-bundle": "^2.3",
-        "webonyx/graphql-php": "^15.12"
+        "webonyx/graphql-php": "^15.12",
+        "controleonline/mcp": "dev-master@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^12.1",
@@ -140,5 +141,12 @@
             "docker": false
         }
     },
-    "repositories": []
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/ControleOnline/api-platform-mcp.git"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
