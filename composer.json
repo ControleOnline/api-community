@@ -11,7 +11,7 @@
         "beberlei/doctrineextensions": "^1.5",
         "composer/installers": "^2.2",
         "controleonline/accounting": "1.0.2",
-        "controleonline/common": "1.0.2",
+        "controleonline/common": "1.0.4",
         "controleonline/contract": "1.0.2",
         "controleonline/report": "1.0.2",
         "controleonline/ead": "1.0.2",
@@ -22,7 +22,7 @@
         "controleonline/multi-tenancy": "1.0.2",
         "controleonline/orders": "1.0.3",
         "controleonline/people": "1.0.2",
-        "controleonline/products": "1.0.2",
+        "controleonline/products": "1.0.3",
         "controleonline/queue": "1.0.2",
         "controleonline/smoke-tests-playground": "1.0.2",
         "controleonline/spc-sdk": "1.0.0",
@@ -80,7 +80,7 @@
         "tecnickcom/tcpdf": "^6.7",
         "vich/uploader-bundle": "^2.3",
         "webonyx/graphql-php": "^15.12",
-        "controleonline/mcp": "dev-master@dev"
+        "controleonline/mcp": "1.0.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^12.1",
@@ -141,12 +141,7 @@
             "docker": false
         }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/ControleOnline/api-platform-mcp.git"
-        }
-    ],
+    "repositories": [],
     "minimum-stability": "stable",
     "prefer-stable": true
 }
