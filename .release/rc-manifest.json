@@ -1,16 +1,57 @@
 {
-  "version": "1.10.42",
+  "version": "1.10.41",
   "rc": 1,
-  "branch": "rc/1.10.42-rc.1",
-  "baseMaster": "94871e56bec1c41abf8a65ab6ba2cfb817fc75ea",
+  "branch": "rc/1.10.41-rc.1",
   "tasks": [
-    209
+    912,
+    875,
+    967,
+    857
   ],
   "repositories": {
-    "ControleOnline/api-community": "90a0b181a2d4dfe55a196bbc8f766a4c69f4d0d2"
+    "ControleOnline/api-platform-common": "ebcfb2ed46129bb1caae8d8d91d2ad40f5c804b4",
+    "ControleOnline/api-platform-products": "cae3a0077eb01d58ca69137a3c32ba7abb2d68a6",
+    "ControleOnline/ui-default": "adcecf7a6bc4581ca0afb270587d3472f973d7f1",
+    "ControleOnline/ui-orders": "8e479b21323827963732a89085ffeb70d3a82462",
+    "ControleOnline/ui-products": "f6208952a44af2accfc3f250796e40a74f279c67",
+    "ControleOnline/ui-people": "034573deb587471f6dde8bbe824e0fe5e1ab1509",
+    "ControleOnline/ui-common": "cf8569dd590aec1dfaf7aa6708a5d3e6e8cf590b",
+    "ControleOnline/api-platform-mcp": "6ede41b81702a34c781bf3ec2bbc5161f3d0d3bb"
   },
   "frozen": true,
   "dependencyMode": "published-packages",
+  "npmPackages": {
+    "@controleonline/ui-default": {
+      "version": "1.0.275",
+      "gitHead": "adcecf7a6bc4581ca0afb270587d3472f973d7f1",
+      "integrity": "sha512-Z98Z3SmIAf6BNXr+jLOFb67QEa0uQtVvIgRpz9uf7+qJ0pjFNYEyY3WsZN6qRLFEpATLNf/iuqTeAp5kOmxIDg=="
+    },
+    "@controleonline/ui-orders": {
+      "version": "1.3.39",
+      "gitHead": "8e479b21323827963732a89085ffeb70d3a82462",
+      "integrity": "sha512-f9ZFObgKGMGVJUFEOZPzwIfPSKNq1SpJODG9q1lBdM80JDYcvA7piR93Dz5dxE5fLVNGihhPlRNDPcWP131f0Q=="
+    },
+    "@controleonline/ui-products": {
+      "version": "1.0.35",
+      "gitHead": "f6208952a44af2accfc3f250796e40a74f279c67",
+      "integrity": "sha512-+ZxaGlkhUXgd032xcB8tyvJTOKThFpZ2poy1fn/FD4MBDkervfoyz1uCQEqJVd0QOb4nmHlvYMqALbG8/lkE1Q=="
+    },
+    "@controleonline/ui-people": {
+      "version": "1.0.94",
+      "gitHead": "034573deb587471f6dde8bbe824e0fe5e1ab1509",
+      "integrity": "sha512-uQP7JXeje0OUABiWpg4bnI8USv8yLLaoscl5A3b+LKrBExMmZRccQpQx7af1jSHTSXtkRXj7HB2HhOlyv3KBwg=="
+    },
+    "@controleonline/ui-common": {
+      "version": "1.2.88",
+      "gitHead": "cf8569dd590aec1dfaf7aa6708a5d3e6e8cf590b",
+      "integrity": "sha512-aMRyJ+Og562dENw7PvY3edJfE22/yQQ3jeFjrLzA68cHTqRq41Y5nkbQbntDjgvoZn+hdt40VBvIGz2gPsW00Q=="
+    },
+    "@controleonline/ui-manager": {
+      "version": "1.0.17",
+      "gitHead": null,
+      "integrity": "sha512-OSHBf0u5rEDAdCwiSJrhfehMuD3jNc63doJsyXc2uCRwrhe0TS/KsNK+YfK1+04lEJCagDGW1wR5vL4tntP3Rg=="
+    }
+  },
   "composerPackages": {
     "controleonline/accounting": {
       "version": "1.0.2",
@@ -98,14 +139,27 @@
     }
   },
   "security": {
-    "209": "https://github.com/ControleOnline/api-community/issues/209#issuecomment-5974137184"
+    "857": "https://github.com/ControleOnline/app-community/issues/857#issuecomment-5952551531",
+    "912": "https://github.com/ControleOnline/app-community/issues/912#issuecomment-5970495112",
+    "875": "https://github.com/ControleOnline/app-community/issues/875#issuecomment-5952553102",
+    "967": "existing acceptance for ui-people@1.0.94 / 034573deb587471f6dde8bbe824e0fe5e1ab1509"
   },
   "testedDev": {
-    "ControleOnline/api-community": "156925b80bd40f6576ff593318aacffca51e0927"
+    "ControleOnline/app-community": "8133ae0f401f6e72b22b9286da536535db5fa384",
+    "ControleOnline/api-community": "aa763675dd955977a0b8d67928913b4e0721957a"
   },
+  "compositionSources": {
+    "ControleOnline/app-community": "b4f2e18b337ae27f37b9519522810526b30c8080",
+    "ControleOnline/api-community": "2ed4d56e4f05e4815b235314e88e1a4f121eb508"
+  },
+  "baseMaster": "2e1adb8d995a181ff65b638cf12afafdb10ed7ae",
   "releaseSourceTaskSnapshots": {
-    "ControleOnline/api-community#209": "b8b3d3150c3db46ddff271d6e2fbaee8e9f1b91e"
+    "ControleOnline/api-community#912": "804f6d9a53bd45d2c015d4bd10fac55e32c1f165"
   },
+  "preservedMasterTasks": [
+    191
+  ],
+  "devIntegration": "3629111476d8f1e4e5367e59eb2e9315f0068f5d",
   "compatibleAppRc": {
     "branch": "rc/1.10.39-rc.2",
     "sha": "b4f2e18b337ae27f37b9519522810526b30c8080"

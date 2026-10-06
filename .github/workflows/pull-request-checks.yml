@@ -43,5 +43,8 @@ jobs:
           APP_ENV: test
         run: php bin/console about --no-debug
 
+      - name: Verify waiter consumer contracts
+        run: composer test:waiter
+
       - name: Check diff hygiene
         run: git diff --check
