@@ -96,7 +96,7 @@ final class DeployShellControlFlowTest extends TestCase
         self::assertStringNotContainsString('migrations:migrate', $recovery);
     }
 
-    public function testMcpAndOAuthPackagesResolveFromPackagistBranches(): void
+    public function testMcpAndOAuthPackagesResolveFromExactPublishedVersions(): void
     {
         $composer = json_decode(
             file_get_contents(dirname(__DIR__, 2).'/composer.json'),
@@ -105,7 +105,7 @@ final class DeployShellControlFlowTest extends TestCase
         );
 
         self::assertArrayNotHasKey('repositories', $composer);
-        self::assertSame('dev-task-197@dev', $composer['require']['controleonline/users'] ?? null);
-        self::assertSame('dev-dev@dev', $composer['require']['controleonline/mcp'] ?? null);
+        self::assertMatchesRegularExpression('/^\\d+\\.\\d+\\.\\d+$/', $composer['require']['controleonline/users'] ?? '');
+        self::assertMatchesRegularExpression('/^\\d+\\.\\d+\\.\\d+$/', $composer['require']['controleonline/mcp'] ?? '');
     }
 }
