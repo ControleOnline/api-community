@@ -36,5 +36,12 @@ services:
         arguments:
             $readOnly: true
 
+    ControleOnline\Service\McpReadQueryProviderInterface:
+        alias: App\Service\McpReadQueryProvider
+
+    App\Service\McpReadQueryProvider:
+        arguments:
+            $timezone: '%timezone%'
+
     ControleOnline\Controller\McpController:
         tags: ['controller.service_arguments']

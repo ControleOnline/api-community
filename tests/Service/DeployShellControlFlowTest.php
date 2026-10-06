@@ -57,4 +57,55 @@ final class DeployShellControlFlowTest extends TestCase
         self::assertNotSame(0, $exit);
         self::assertNotContains('MUST_NOT_DEPLOY', $output);
     }
+
+    public function testCleanupPreservesRetiredComposerManagedModulePaths(): void
+    {
+        $script = $this->deployScript();
+
+        self::assertStringContainsString(
+            "git clean -ffd -e '/modules/controleonline/'",
+            $script
+        );
+    }
+
+    public function testCacheCleanupMustSucceedBeforeDeployCanContinue(): void
+    {
+        $script = $this->deployScript();
+
+        self::assertStringContainsString('if rm -rf var/cache/* 2>/dev/null; then', $script);
+        self::assertStringContainsString('sudo -n rm -rf var/cache/* 2>/dev/null', $script);
+        self::assertStringContainsString('Unable to clear Symfony cache', $script);
+        self::assertStringContainsString('exit 1', $script);
+    }
+
+    public function testCacheRecoveryOperationDoesNotInstallPackagesOrRunMigrations(): void
+    {
+        $script = $this->deployScript();
+        $start = strpos($script, 'if [ "${DEPLOY_OPERATION}" = "cache-recovery" ]; then');
+        $end = strpos($script, 'git -c submodule.recurse=false fetch', $start);
+
+        self::assertNotFalse($start);
+        self::assertNotFalse($end);
+
+        $recovery = substr($script, $start, $end - $start);
+        self::assertStringContainsString('cache:clear --env=prod --no-debug', $recovery);
+        self::assertStringContainsString('cache:warmup --env=prod --no-debug', $recovery);
+        self::assertStringContainsString('touch "$RESTART_FILE"', $recovery);
+        self::assertStringContainsString('exit 0', $recovery);
+        self::assertStringNotContainsString('composer ', $recovery);
+        self::assertStringNotContainsString('migrations:migrate', $recovery);
+    }
+
+    public function testMcpAndOAuthPackagesResolveFromExactPublishedVersions(): void
+    {
+        $composer = json_decode(
+            file_get_contents(dirname(__DIR__, 2).'/composer.json'),
+            true,
+            flags: JSON_THROW_ON_ERROR
+        );
+
+        self::assertArrayNotHasKey('repositories', $composer);
+        self::assertMatchesRegularExpression('/^\\d+\\.\\d+\\.\\d+$/', $composer['require']['controleonline/users'] ?? '');
+        self::assertMatchesRegularExpression('/^\\d+\\.\\d+\\.\\d+$/', $composer['require']['controleonline/mcp'] ?? '');
+    }
 }

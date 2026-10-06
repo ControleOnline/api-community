@@ -8,7 +8,7 @@ class MigrationDownMethodsTest extends TestCase
 {
     public function testTenantMigrationsDeclareValidDownMethods(): void
     {
-        $migrationFiles = glob(dirname(__DIR__) . '/modules/controleonline/*/migrations/Version*.php') ?: [];
+        $migrationFiles = glob(dirname(__DIR__) . '/vendor/controleonline/*/migrations/Version*.php') ?: [];
         sort($migrationFiles);
 
         self::assertNotEmpty($migrationFiles);
