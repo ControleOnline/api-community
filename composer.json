@@ -134,7 +134,8 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "test:waiter": "vendor/bin/phpunit --configuration phpunit.waiter.xml.dist"
+        "test:waiter": "vendor/bin/phpunit --configuration phpunit.waiter.xml.dist",
+        "test:backend": "vendor/bin/phpunit --configuration phpunit.xml.dist"
     },
     "extra": {
         "symfony": {

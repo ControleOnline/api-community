@@ -46,5 +46,8 @@ jobs:
       - name: Verify waiter consumer contracts
         run: composer test:waiter
 
+      - name: Verify complete backend suite
+        run: composer test:backend
+
       - name: Check diff hygiene
         run: git diff --check
