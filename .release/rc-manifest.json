@@ -1,167 +1,390 @@
 {
-  "version": "1.10.41",
+  "version": "1.10.43",
   "rc": 1,
-  "branch": "rc/1.10.41-rc.1",
+  "branch": "rc/1.10.43-rc.1",
+  "baseMaster": "36cd8c2024a195c62824e20275064a920ca8741e",
   "tasks": [
-    912,
-    875,
-    967,
-    857
+    975
   ],
+  "taskRepositories": {
+    "975": "ControleOnline/app-community"
+  },
   "repositories": {
-    "ControleOnline/api-platform-common": "ebcfb2ed46129bb1caae8d8d91d2ad40f5c804b4",
-    "ControleOnline/api-platform-products": "cae3a0077eb01d58ca69137a3c32ba7abb2d68a6",
-    "ControleOnline/ui-default": "adcecf7a6bc4581ca0afb270587d3472f973d7f1",
-    "ControleOnline/ui-orders": "8e479b21323827963732a89085ffeb70d3a82462",
-    "ControleOnline/ui-products": "f6208952a44af2accfc3f250796e40a74f279c67",
-    "ControleOnline/ui-people": "034573deb587471f6dde8bbe824e0fe5e1ab1509",
-    "ControleOnline/ui-common": "cf8569dd590aec1dfaf7aa6708a5d3e6e8cf590b",
-    "ControleOnline/api-platform-mcp": "6ede41b81702a34c781bf3ec2bbc5161f3d0d3bb"
+    "ControleOnline/ui-common": "4919724c04f3d6e66280db4c9e2a66db65c47cc0",
+    "ControleOnline/ui-default": "f0083eb73074f402e81f4e0c832af0bb829c2047",
+    "ControleOnline/ui-orders": "bfe2f013dc9bcaf033ba0db80894f021bfb2fbfb",
+    "ControleOnline/ui-products": "57ba7787bac8ce2cc9b16e221bc10fc4fa767cb8",
+    "ControleOnline/ui-financial": "f44009570753b267c2b4e6eb4c9876c8b2ff40e2",
+    "ControleOnline/api-platform-common": "1ed215c1c2270575fe7264c0b6d4fd9a705a4dd0",
+    "ControleOnline/api-platform-orders": "3e62b53bb658c231a5510a262f673417f0304044",
+    "ControleOnline/api-platform-financial": "986ff2ac8b167ffd2e711707e1667fcc53edaf4e",
+    "ControleOnline/api-platform-integration": "055626cbbbcda56306bdd9d83d34b5b5372ac627",
+    "ControleOnline/api-platform-queue": "be5467f177c7e65c57845d6afde7b0a53e414283",
+    "ControleOnline/api-platform-websocket-server": "8d36d6525019e8eb2a0f4d739f5535a0c5192e4b",
+    "ControleOnline/api-platform-mcp": "0c8b67ac001fdabd6da9eca668d5a999ca2e7cd8",
+    "ControleOnline/api-platform-users": "453b7eae37d5b147dcbe15bb376ed8a057c4284c",
+    "ControleOnline/api-community": "dc3e1cdc1d9b6b007792c27b968ce0afe8f0d20b"
   },
   "frozen": true,
   "dependencyMode": "published-packages",
   "npmPackages": {
-    "@controleonline/ui-default": {
-      "version": "1.0.275",
-      "gitHead": "adcecf7a6bc4581ca0afb270587d3472f973d7f1",
-      "integrity": "sha512-Z98Z3SmIAf6BNXr+jLOFb67QEa0uQtVvIgRpz9uf7+qJ0pjFNYEyY3WsZN6qRLFEpATLNf/iuqTeAp5kOmxIDg=="
+    "@controleonline/react-native-cielo-payment": {
+      "version": "1.0.5",
+      "gitHead": "579b421fb08840cba545d67b3b14f0b3c4aaa529",
+      "integrity": "sha512-z+vR9QH+qBJWIPO11St00tQ+D6poojwcPU5psA7XrzfizFxHbKaZl6Q3tr9d7btryAqLaAovt3StZsG18nsb4w==",
+      "tarball": "https://registry.npmjs.org/@controleonline/react-native-cielo-payment/-/react-native-cielo-payment-1.0.5.tgz"
     },
-    "@controleonline/ui-orders": {
-      "version": "1.3.39",
-      "gitHead": "8e479b21323827963732a89085ffeb70d3a82462",
-      "integrity": "sha512-f9ZFObgKGMGVJUFEOZPzwIfPSKNq1SpJODG9q1lBdM80JDYcvA7piR93Dz5dxE5fLVNGihhPlRNDPcWP131f0Q=="
+    "@controleonline/react-native-getnet-payment": {
+      "version": "1.0.0",
+      "gitHead": "35a837bd36ae294668636fe252609cdb321ced05",
+      "integrity": "sha512-Y57E6s1/WKvqeA5W0Qwgzxr7Wy1JmAJpE/aqzyiAHamPeoxLGf4g9fGh5P89cDOYvobayiVwwQtSjOwHdl4jag==",
+      "tarball": "https://registry.npmjs.org/@controleonline/react-native-getnet-payment/-/react-native-getnet-payment-1.0.0.tgz"
     },
-    "@controleonline/ui-products": {
-      "version": "1.0.35",
-      "gitHead": "f6208952a44af2accfc3f250796e40a74f279c67",
-      "integrity": "sha512-+ZxaGlkhUXgd032xcB8tyvJTOKThFpZ2poy1fn/FD4MBDkervfoyz1uCQEqJVd0QOb4nmHlvYMqALbG8/lkE1Q=="
+    "@controleonline/react-native-infinitepay-payment": {
+      "version": "1.0.5",
+      "gitHead": "098545eea0323f1f564d4cce3ec1d7962115536f",
+      "integrity": "sha512-O++hcybZdyTy0cWUMM3ZaKS6MficqWRyADuw+rJ3glH+SInn74IHuhNTAmyxRblAK6f1iR6RMvOVP3gnhfydqw==",
+      "tarball": "https://registry.npmjs.org/@controleonline/react-native-infinitepay-payment/-/react-native-infinitepay-payment-1.0.5.tgz"
     },
-    "@controleonline/ui-people": {
-      "version": "1.0.94",
-      "gitHead": "034573deb587471f6dde8bbe824e0fe5e1ab1509",
-      "integrity": "sha512-uQP7JXeje0OUABiWpg4bnI8USv8yLLaoscl5A3b+LKrBExMmZRccQpQx7af1jSHTSXtkRXj7HB2HhOlyv3KBwg=="
+    "@controleonline/ui-accounting": {
+      "version": "1.0.19",
+      "gitHead": null,
+      "integrity": "sha512-z1qkPsLc9JYzUOgu49D/Cu8VBdn+l+lu1uvDEwguhm/BzqbBcP4shaJ1oWWDOSElbstTNAcOAWL27op7l1sIkA==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-accounting/-/ui-accounting-1.0.19.tgz"
+    },
+    "@controleonline/ui-carrier": {
+      "version": "1.0.29",
+      "gitHead": "ab475658a93a1287dec60e47ee67e94cc5ef89a2",
+      "integrity": "sha512-fz3wJQYr6aDJ8Cine0ejkyE1UUHIIHujUnJciG3ih7stDQmK4r5kox+P8ImDJeOp9V2BmNzYf/rN7GYw+sXLzg==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-carrier/-/ui-carrier-1.0.29.tgz"
     },
     "@controleonline/ui-common": {
-      "version": "1.2.88",
-      "gitHead": "cf8569dd590aec1dfaf7aa6708a5d3e6e8cf590b",
-      "integrity": "sha512-aMRyJ+Og562dENw7PvY3edJfE22/yQQ3jeFjrLzA68cHTqRq41Y5nkbQbntDjgvoZn+hdt40VBvIGz2gPsW00Q=="
+      "version": "1.2.89",
+      "gitHead": "4919724c04f3d6e66280db4c9e2a66db65c47cc0",
+      "integrity": "sha512-OMN2rKz5LEbYFLREBsDcvhWhkQ2aDGBvF1Cq3bc5dyY1WQY9TWC2aULREgxN0l3GbtQT6mhjox61LPV/JiZCMA==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-common/-/ui-common-1.2.89.tgz"
+    },
+    "@controleonline/ui-config": {
+      "version": "1.0.24",
+      "gitHead": null,
+      "integrity": "sha512-VNgT/wV+YPX3XGkSDVPpcTWA1HlHjAPSFq50E3LHFctiBmMj4t1JGMk+OngQQrLFcEHuPwWcwHDvTntfmkXydg==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-config/-/ui-config-1.0.24.tgz"
+    },
+    "@controleonline/ui-contracts": {
+      "version": "1.6.81",
+      "gitHead": null,
+      "integrity": "sha512-RHI5m/fR0ve7HVFAEHVNmvoFb/DumHmrW8aWax2zlQ5KLqQ8O2OMkgPcXMJKmMz/FQSMv7O4H0hgoj47VIKnMQ==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-contracts/-/ui-contracts-1.6.81.tgz"
+    },
+    "@controleonline/ui-crm": {
+      "version": "1.0.44",
+      "gitHead": "f2b8a1efb07a446c691db833cfc011e27d46d85a",
+      "integrity": "sha512-Jqpt+2vWs5SaKjLE4INbNfkvnlRGnjziJJSdbkc0+7WLGTwPIOBNLeOp7PIh1zKAUkIy3RqQynvLPbS55hGHQw==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-crm/-/ui-crm-1.0.44.tgz"
+    },
+    "@controleonline/ui-customers": {
+      "version": "1.0.82",
+      "gitHead": "bc75a8f1b3a3ff86692ae1b8b5052325212c732d",
+      "integrity": "sha512-jVeVMCfgde0AnA1nchvnDyev9R8p+4qamZVgSY6lDX0LCL0MoK/SMWmpQOiNoPImm9c2ATrfOFteXDNgOW38ug==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-customers/-/ui-customers-1.0.82.tgz"
+    },
+    "@controleonline/ui-default": {
+      "version": "1.0.276",
+      "gitHead": "f0083eb73074f402e81f4e0c832af0bb829c2047",
+      "integrity": "sha512-DE6omQV38ZI9nFMH2Xq4IKu61F+6uyGjl7K3RdfiMui5icImQ8puX9os9WVWUxqryp2NXVWGluaCmKTCu1//Bw==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-default/-/ui-default-1.0.276.tgz"
+    },
+    "@controleonline/ui-employee": {
+      "version": "1.0.28",
+      "gitHead": null,
+      "integrity": "sha512-iBHh3GOB0UKKKYghtC0C99j7CaNLou8XlU5OpqRLzOGCaTKz1OjyzNPV66FiHy5As0b7i4/d+A1LRZKm6uDuFw==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-employee/-/ui-employee-1.0.28.tgz"
+    },
+    "@controleonline/ui-financial": {
+      "version": "1.1.41",
+      "gitHead": "f44009570753b267c2b4e6eb4c9876c8b2ff40e2",
+      "integrity": "sha512-3BU7MZSsStaQipcil6NQNPpoClM+xXmnoxCYDDUeKPcBmidQYFvyaaT7axrato51xdu+B1nV20/T0x+3To84mA==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-financial/-/ui-financial-1.1.41.tgz"
+    },
+    "@controleonline/ui-layout": {
+      "version": "1.0.15",
+      "gitHead": null,
+      "integrity": "sha512-L1odWt2xc+4WgHXStyOzW+xr+ogcKuuPb8rfSa85ORuzWiuYryMX4d0t+r9X5w8hPONbNBA1VlWDSo9yWgqYxQ==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-layout/-/ui-layout-1.0.15.tgz"
+    },
+    "@controleonline/ui-login": {
+      "version": "1.0.107",
+      "gitHead": "8138e39836756d26c5a23e80cae0af6dcf645feb",
+      "integrity": "sha512-FM95wjIyuDF0l+wWVx8Oo6MU93ePbTXmnzH907/UgifMAFoMvaYEwLCq/+YIbU2UsLwyHO60LLdWkGenoMBWtQ==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-login/-/ui-login-1.0.107.tgz"
+    },
+    "@controleonline/ui-logistic": {
+      "version": "1.0.41",
+      "gitHead": "52b576232b8805a236458f5ef63e18f9d52564d9",
+      "integrity": "sha512-Nhth9r0gXZiFr4euX/6IQRHIErNFLeYdevl4bZYU2o19fB8oin+Fga5j7KvEAig4P/XekcDYq/qDVDihSUxscQ==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-logistic/-/ui-logistic-1.0.41.tgz"
     },
     "@controleonline/ui-manager": {
       "version": "1.0.17",
       "gitHead": null,
-      "integrity": "sha512-OSHBf0u5rEDAdCwiSJrhfehMuD3jNc63doJsyXc2uCRwrhe0TS/KsNK+YfK1+04lEJCagDGW1wR5vL4tntP3Rg=="
+      "integrity": "sha512-OSHBf0u5rEDAdCwiSJrhfehMuD3jNc63doJsyXc2uCRwrhe0TS/KsNK+YfK1+04lEJCagDGW1wR5vL4tntP3Rg==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-manager/-/ui-manager-1.0.17.tgz"
+    },
+    "@controleonline/ui-orders": {
+      "version": "1.3.42",
+      "gitHead": "bfe2f013dc9bcaf033ba0db80894f021bfb2fbfb",
+      "integrity": "sha512-bQoIfVijEKgZO0imi+0a7+DgIljjoaAzI++SHy8Zrg4d24/1A5EWpuKz6vL8uHlYqpkDk1Et9HxcfZZbDx5lkA==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-orders/-/ui-orders-1.3.42.tgz"
+    },
+    "@controleonline/ui-people": {
+      "version": "1.0.94",
+      "gitHead": "034573deb587471f6dde8bbe824e0fe5e1ab1509",
+      "integrity": "sha512-uQP7JXeje0OUABiWpg4bnI8USv8yLLaoscl5A3b+LKrBExMmZRccQpQx7af1jSHTSXtkRXj7HB2HhOlyv3KBwg==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-people/-/ui-people-1.0.94.tgz"
+    },
+    "@controleonline/ui-ppc": {
+      "version": "1.0.56",
+      "gitHead": "eb9b8fc5adde925c1c9e18503fc2d96620a4faf5",
+      "integrity": "sha512-EUKx+v3vV0OFfXXEs0KTyypTqWimtGIspckMayr8+r53uES1cRwkTAyCC2rCW3T1CYbeJMJE/7M7ApoN5zkIMg==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-ppc/-/ui-ppc-1.0.56.tgz"
+    },
+    "@controleonline/ui-products": {
+      "version": "1.0.36",
+      "gitHead": "57ba7787bac8ce2cc9b16e221bc10fc4fa767cb8",
+      "integrity": "sha512-jHThOSGbsXwOnyzMCJ261x3xCSO4cwAKBF1k51w+41JUW6RjKxovEyDTV7Vx32FXHi1LkrhCuJLLiNd/mAv+5g==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-products/-/ui-products-1.0.36.tgz"
+    },
+    "@controleonline/ui-professionals": {
+      "version": "1.0.32",
+      "gitHead": null,
+      "integrity": "sha512-2fV/pgAD8er3mv4wo5lh13HNSF2dshtbAoSCw4VLRRWfqFvfyRpUZWZdU9HCVfSar93mwWzaWLDkLRzKdJZZaA==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-professionals/-/ui-professionals-1.0.32.tgz"
+    },
+    "@controleonline/ui-providers": {
+      "version": "1.0.28",
+      "gitHead": "b3f4aad73699915c98b6e82d647547efd237deb6",
+      "integrity": "sha512-cG9YGDh4oPfPkPKl4MHTJlPSjXHdHttTdJHkA4g6yeJsgCtS80f0bIulVNQp/rNivBi3TfqKsntFFDs1AaRH1Q==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-providers/-/ui-providers-1.0.28.tgz"
+    },
+    "@controleonline/ui-report": {
+      "version": "1.2.49",
+      "gitHead": "a9a12c16c5c6ff2685ae7a91bfd9aeb861a289a6",
+      "integrity": "sha512-AaUiufYN+CsJN0ZPzUaeEeEObw0U1hYvkw6GIjgP2b4YidBgjr191NoLxLB66ecwo5yUGe931e0dRKdto2mxHA==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-report/-/ui-report-1.2.49.tgz"
+    },
+    "@controleonline/ui-shop": {
+      "version": "1.0.16",
+      "gitHead": null,
+      "integrity": "sha512-+O8SsYJfWvs4HlPYil0r7ZCNTU2M/2NxCZg3Qyk0gZ9rJDVyRCGSEumb4st/vF2T3l5AxnUAXNUFolJjuNiMGA==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-shop/-/ui-shop-1.0.16.tgz"
+    },
+    "@controleonline/ui-support": {
+      "version": "1.0.20",
+      "gitHead": null,
+      "integrity": "sha512-Nx50D9TWCTD53+5KSeAMQ6N9e6x+zAqu8lGFEruQYnTB7p9vhzWS4e0Z3JGHvKPJSnDM+gUvyD1DssItT4iUqw==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-support/-/ui-support-1.0.20.tgz"
+    },
+    "@controleonline/ui-tasks": {
+      "version": "1.1.64",
+      "gitHead": null,
+      "integrity": "sha512-Rm7VDXs+A0PAQOhz1fS1c2PBn9ScCsDhdsL7bVcclOmHomlryGrlQdN3oHfpeiheqGMvVqBPo5Pljxy3gO+T2A==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-tasks/-/ui-tasks-1.1.64.tgz"
+    },
+    "@controleonline/ui-tests": {
+      "version": "1.0.24",
+      "gitHead": "d15c2da0f1f74af87b3cb9ba8a02f60331fd7c5c",
+      "integrity": "sha512-xq5PIeyNyvKCyG60URLihdGcnKUjIsHDBF0Agm4qn4ytxJVZ02kCPGOPz8opo50EiGP/I1qk4ObgzdsghjUbrA==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-tests/-/ui-tests-1.0.24.tgz"
+    },
+    "@controleonline/ui-translate": {
+      "version": "1.1.65",
+      "gitHead": null,
+      "integrity": "sha512-/k1rT0VGQ5KBmd/ManW5orEOXaLePvTvXBHBpKGpeFa0YeAPTJBeojihsClJ5ZrCPDuks2zekqreAuOJW78lmw==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-translate/-/ui-translate-1.1.65.tgz"
+    },
+    "@controleonline/ui-users": {
+      "version": "1.0.50",
+      "gitHead": "539e02f4c0dc8f0e6236e1f2b860d968391a922a",
+      "integrity": "sha512-OtIKH6/oPtkQ9thpQdUNks1UkzU7mulbEdqFujWweJaDCo/De7L6CNDiSq5Ojst8B5Uqu1POH6nMdyI1sv5VOA==",
+      "tarball": "https://registry.npmjs.org/@controleonline/ui-users/-/ui-users-1.0.50.tgz"
     }
   },
   "composerPackages": {
     "controleonline/accounting": {
       "version": "1.0.2",
-      "source": "29d0155985fc30cd37561efcb60b2fb27629f677"
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-accounting.git",
+        "type": "git",
+        "reference": "29d0155985fc30cd37561efcb60b2fb27629f677"
+      }
     },
     "controleonline/common": {
-      "version": "1.0.4",
-      "source": "ebcfb2ed46129bb1caae8d8d91d2ad40f5c804b4"
+      "version": "1.0.5",
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-common.git",
+        "type": "git",
+        "reference": "1ed215c1c2270575fe7264c0b6d4fd9a705a4dd0"
+      }
     },
     "controleonline/contract": {
       "version": "1.0.2",
-      "source": "e4213b50edf2815dd60e48f1ab6a80e1501ec808"
-    },
-    "controleonline/ead": {
-      "version": "1.0.2",
-      "source": "218f541939ed09a39b9d9e86dda5b6ddf9f38164"
-    },
-    "controleonline/financial": {
-      "version": "1.0.2",
-      "source": "7421b83ef5c13bf16beaa8ff4412c885d15ac3a5"
-    },
-    "controleonline/integration": {
-      "version": "1.0.2",
-      "source": "a281a91da98743af66057a1e197e1a4fe8f4a130"
-    },
-    "controleonline/logistic": {
-      "version": "1.0.2",
-      "source": "4d6ff2780487d1b453f60098012868a391492c65"
-    },
-    "controleonline/messages-sdk": {
-      "version": "1.0.0",
-      "source": "9853ea4dd51a3269037145e15849e5f422471941"
-    },
-    "controleonline/multi-tenancy": {
-      "version": "1.0.2",
-      "source": "e4ef527f58773e2f9ebc5e820c1acfa407c0db26"
-    },
-    "controleonline/orders": {
-      "version": "1.0.3",
-      "source": "195fd1b735fffb37522dbdd2bb271fa4511a2e62"
-    },
-    "controleonline/people": {
-      "version": "1.0.2",
-      "source": "328f76fbb4889a25cc3926c23a515a11f24b08d4"
-    },
-    "controleonline/products": {
-      "version": "1.0.3",
-      "source": "cae3a0077eb01d58ca69137a3c32ba7abb2d68a6"
-    },
-    "controleonline/queue": {
-      "version": "1.0.2",
-      "source": "040bd612453087d35738eff3b30490977976c8fc"
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-contract.git",
+        "type": "git",
+        "reference": "e4213b50edf2815dd60e48f1ab6a80e1501ec808"
+      }
     },
     "controleonline/report": {
       "version": "1.0.2",
-      "source": "0c7e156eb36d54fe0a97b4dabd7bb656c71ee67f"
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-report.git",
+        "type": "git",
+        "reference": "0c7e156eb36d54fe0a97b4dabd7bb656c71ee67f"
+      }
+    },
+    "controleonline/ead": {
+      "version": "1.0.2",
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-ead.git",
+        "type": "git",
+        "reference": "218f541939ed09a39b9d9e86dda5b6ddf9f38164"
+      }
+    },
+    "controleonline/financial": {
+      "version": "1.0.3",
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-financial.git",
+        "type": "git",
+        "reference": "986ff2ac8b167ffd2e711707e1667fcc53edaf4e"
+      }
+    },
+    "controleonline/integration": {
+      "version": "1.0.3",
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-integration.git",
+        "type": "git",
+        "reference": "055626cbbbcda56306bdd9d83d34b5b5372ac627"
+      }
+    },
+    "controleonline/logistic": {
+      "version": "1.0.2",
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-logistic.git",
+        "type": "git",
+        "reference": "4d6ff2780487d1b453f60098012868a391492c65"
+      }
+    },
+    "controleonline/messages-sdk": {
+      "version": "1.0.0",
+      "source": {
+        "url": "https://github.com/ControleOnline/messages-sdk-php.git",
+        "type": "git",
+        "reference": "9853ea4dd51a3269037145e15849e5f422471941"
+      }
+    },
+    "controleonline/multi-tenancy": {
+      "version": "1.0.2",
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-multi-tenancy.git",
+        "type": "git",
+        "reference": "e4ef527f58773e2f9ebc5e820c1acfa407c0db26"
+      }
+    },
+    "controleonline/orders": {
+      "version": "1.0.4",
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-orders.git",
+        "type": "git",
+        "reference": "3e62b53bb658c231a5510a262f673417f0304044"
+      }
+    },
+    "controleonline/people": {
+      "version": "1.0.2",
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-people.git",
+        "type": "git",
+        "reference": "328f76fbb4889a25cc3926c23a515a11f24b08d4"
+      }
+    },
+    "controleonline/products": {
+      "version": "1.0.3",
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-products.git",
+        "type": "git",
+        "reference": "cae3a0077eb01d58ca69137a3c32ba7abb2d68a6"
+      }
+    },
+    "controleonline/queue": {
+      "version": "1.0.3",
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-queue.git",
+        "type": "git",
+        "reference": "be5467f177c7e65c57845d6afde7b0a53e414283"
+      }
     },
     "controleonline/smoke-tests-playground": {
       "version": "1.0.2",
-      "source": "d7b60887055bd7350395673d3e9375aa42cc2bc7"
+      "source": {
+        "url": "https://github.com/ControleOnline/smoke-tests-playground.git",
+        "type": "git",
+        "reference": "d7b60887055bd7350395673d3e9375aa42cc2bc7"
+      }
     },
     "controleonline/spc-sdk": {
       "version": "1.0.0",
-      "source": "d7b2986f11c6b549421cdb9b5125d47f96a246dd"
+      "source": {
+        "url": "https://github.com/ControleOnline/spc-sdk-php.git",
+        "type": "git",
+        "reference": "d7b2986f11c6b549421cdb9b5125d47f96a246dd"
+      }
     },
     "controleonline/tasks": {
       "version": "1.0.2",
-      "source": "b316e289fdc35c97b6f4934afb3256bbfed0137d"
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-tasks.git",
+        "type": "git",
+        "reference": "b316e289fdc35c97b6f4934afb3256bbfed0137d"
+      }
     },
     "controleonline/users": {
-      "version": "1.0.2",
-      "source": "843456d302c9f660922b283fdf9aef48c875f32e"
+      "version": "1.0.4",
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-users.git",
+        "type": "git",
+        "reference": "453b7eae37d5b147dcbe15bb376ed8a057c4284c"
+      }
     },
     "controleonline/websocket-server": {
-      "version": "1.0.3",
-      "source": "0f6076eb0d681869dc52a8702e2a1c47bbb771b4"
+      "version": "1.0.4",
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-websocket-server.git",
+        "type": "git",
+        "reference": "8d36d6525019e8eb2a0f4d739f5535a0c5192e4b"
+      }
     },
     "controleonline/whatsapp-sdk": {
       "version": "1.0.0",
-      "source": "b3c18ac1b0d3bae445732bf6018237df970b5c55"
+      "source": {
+        "url": "https://github.com/ControleOnline/whatsapp-sdk-php.git",
+        "type": "git",
+        "reference": "b3c18ac1b0d3bae445732bf6018237df970b5c55"
+      }
     },
     "controleonline/mcp": {
-      "version": "1.0.0",
-      "source": "6ede41b81702a34c781bf3ec2bbc5161f3d0d3bb"
+      "version": "1.0.2",
+      "source": {
+        "url": "https://github.com/ControleOnline/api-platform-mcp.git",
+        "type": "git",
+        "reference": "0c8b67ac001fdabd6da9eca668d5a999ca2e7cd8"
+      }
     }
   },
-  "security": {
-    "857": "https://github.com/ControleOnline/app-community/issues/857#issuecomment-5952551531",
-    "912": "https://github.com/ControleOnline/app-community/issues/912#issuecomment-5970495112",
-    "875": "https://github.com/ControleOnline/app-community/issues/875#issuecomment-5952553102",
-    "967": "existing acceptance for ui-people@1.0.94 / 034573deb587471f6dde8bbe824e0fe5e1ab1509"
+  "approvedDev": {
+    "ControleOnline/app-community": "e4f5ab093da8a476d25fab045a601c8601f21021",
+    "ControleOnline/api-community": "dc02812e52c9d9f667b52982df5a2087e2bcf2ba"
   },
-  "testedDev": {
-    "ControleOnline/app-community": "8133ae0f401f6e72b22b9286da536535db5fa384",
-    "ControleOnline/api-community": "aa763675dd955977a0b8d67928913b4e0721957a"
-  },
-  "compositionSources": {
-    "ControleOnline/app-community": "b4f2e18b337ae27f37b9519522810526b30c8080",
-    "ControleOnline/api-community": "2ed4d56e4f05e4815b235314e88e1a4f121eb508"
-  },
-  "baseMaster": "2e1adb8d995a181ff65b638cf12afafdb10ed7ae",
-  "releaseSourceTaskSnapshots": {
-    "ControleOnline/api-community#912": "804f6d9a53bd45d2c015d4bd10fac55e32c1f165"
-  },
-  "preservedMasterTasks": [
-    191
-  ],
-  "devIntegration": "3629111476d8f1e4e5367e59eb2e9315f0068f5d",
-  "compatibleAppRc": {
-    "branch": "rc/1.10.39-rc.2",
-    "sha": "b4f2e18b337ae27f37b9519522810526b30c8080"
-  }
+  "force_deploy": true,
+  "forcePolicySource": "https://github.com/ControleOnline/agents-mcp/blob/master/agents/roles/devops/agent.md",
+  "schemaChanges": false,
+  "consumerSnapshot": "dc3e1cdc1d9b6b007792c27b968ce0afe8f0d20b"
 }
