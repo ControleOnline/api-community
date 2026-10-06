@@ -14,6 +14,12 @@ on:
         required: true
         type: choice
         options: [dev, staging, master]
+      operation:
+        description: "Deploy the branch or recover its Symfony cache"
+        required: false
+        type: choice
+        default: deploy
+        options: [deploy, cache-recovery]
 
 concurrency:
   group: deploy-${{ github.event.inputs.target || github.ref_name }}
@@ -32,12 +38,18 @@ jobs:
       auth_mode: ${{ steps.set.outputs.auth_mode }}
       bootstrap: ${{ steps.set.outputs.bootstrap }}
       github_environment: ${{ steps.set.outputs.github_environment }}
+      operation: ${{ steps.set.outputs.operation }}
     steps:
       - name: Map branch → environment config
         id: set
         run: |
           set -e
           REF="${{ github.event.inputs.target || github.ref_name }}"
+          OPERATION="${{ github.event.inputs.operation || 'deploy' }}"
+          case "$OPERATION" in
+            deploy|cache-recovery) ;;
+            *) echo "Unsupported operation: $OPERATION"; exit 1 ;;
+          esac
           case "$REF" in
             dev)
               ENV=dev; BRANCH=dev
@@ -70,8 +82,9 @@ jobs:
             echo "auth_mode=$AUTH_MODE"
             echo "bootstrap=$BOOTSTRAP"
             echo "github_environment=$GH_ENV"
+            echo "operation=$OPERATION"
           } >> "$GITHUB_OUTPUT"
-          echo "Configured: env=$ENV branch=$BRANCH path=$REMOTE_PATH auth=$AUTH_MODE"
+          echo "Configured: env=$ENV branch=$BRANCH path=$REMOTE_PATH auth=$AUTH_MODE operation=$OPERATION"
 
   # ─── Step 2: deploy ────────────────────────────────────────────────────────
   deploy:
@@ -115,7 +128,7 @@ jobs:
           port: ${{ needs.configure.outputs.env == 'master' && secrets.PORT || 22 }}
           # set -e in the remote script preserves if/else and function control flow.
           # Per-line script_stop instrumentation breaks false conditional branches.
-          envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP,SKIP_DB_MIGRATIONS
+          envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP,SKIP_DB_MIGRATIONS,DEPLOY_OPERATION
           script: |
             set -e
             # Keep tool resolution inside the remote SSH script.
@@ -135,6 +148,22 @@ jobs:
             cd "$TARGET"
             RESTART_FILE="$PWD/public/.lsphp_restart.txt"
 
+            if [ "${DEPLOY_OPERATION}" = "cache-recovery" ]; then
+              if rm -rf var/cache/* 2>/dev/null; then
+                echo "Symfony cache removed"
+              elif command -v sudo >/dev/null 2>&1 && sudo -n rm -rf var/cache/* 2>/dev/null; then
+                echo "Symfony cache removed with elevated permissions"
+              else
+                echo "Unable to clear Symfony cache; grant the deploy user cache ownership or passwordless sudo" >&2
+                exit 1
+              fi
+              php bin/console cache:clear --env=prod --no-debug
+              php bin/console cache:warmup --env=prod --no-debug
+              touch "$RESTART_FILE"
+              echo "Symfony cache recovery completed"
+              exit 0
+            fi
+
             git -c submodule.recurse=false fetch --no-recurse-submodules origin
             if git show-ref --verify --quiet "refs/heads/${BRANCH}"; then
               git checkout "$BRANCH"
@@ -142,7 +171,9 @@ jobs:
               git checkout -B "$BRANCH" "origin/${BRANCH}"
             fi
             git reset --hard "origin/${BRANCH}"
-            git clean -ffd
+            # Legacy module checkouts may contain files owned by another deploy user.
+            # Packages are restored by Composer below; preserve these retired paths.
+            git clean -ffd -e '/modules/controleonline/'
 
             git submodule sync --recursive || true
             # Staging: local/untracked files inside module paths often block checkout.
@@ -193,9 +224,17 @@ jobs:
               echo "Composer module path reconciliation failed (exit ${status})" >&2
               exit "$status"
             fi
-            # Force-remove cache even if a nested dir is busy/non-empty.
-            rm -rf var/cache/* || true
-            echo "Symfony cache cleanup completed"
+            # Rebuild Symfony's compiled container for the current Composer packages.
+            # The deploy user may not own cache files created by PHP-FPM; escalate
+            # non-interactively or stop before serving a stale container.
+            if rm -rf var/cache/* 2>/dev/null; then
+              echo "Symfony cache cleanup completed"
+            elif command -v sudo >/dev/null 2>&1 && sudo -n rm -rf var/cache/* 2>/dev/null; then
+              echo "Symfony cache cleanup completed with elevated permissions"
+            else
+              echo "Unable to clear Symfony cache; grant the deploy user cache ownership or passwordless sudo" >&2
+              exit 1
+            fi
             # about is diagnostic only — do not fail the deploy if it exits non-zero.
             php -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null || echo "bin/console about returned non-zero (non-fatal)"
             echo "Symfony runtime check completed"
@@ -232,6 +271,7 @@ jobs:
           MESSENGER_DOMAIN: ${{ needs.configure.outputs.messenger_domain }}
           BOOTSTRAP: ${{ needs.configure.outputs.bootstrap }}
           SKIP_DB_MIGRATIONS: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message, '[skip-db-migrations]')) || (github.event_name == 'workflow_dispatch' && (github.event.inputs.target == 'staging' || needs.configure.outputs.env == 'staging')) }}
+          DEPLOY_OPERATION: ${{ needs.configure.outputs.operation }}
 
   # ─── Step 3: tests ─────────────────────────────────────────────────────────
   tests:
