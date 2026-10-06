@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/waiter-bootstrap.php" colors="false" cacheResult="false">
+  <testsuites>
+    <testsuite name="Reconciled waiter">
+      <file>vendor/controleonline/common/tests/Repository/ProductionConfirmationReadsTest.php</file>
+      <file>vendor/controleonline/common/tests/Serializer/ExtraDataNormalizerTest.php</file>
+      <file>vendor/controleonline/common/tests/Serializer/FileMetadataNormalizerTest.php</file>
+      <file>vendor/controleonline/common/tests/Service/OrderOperationReadReuseTest.php</file>
+      <file>vendor/controleonline/common/tests/Service/SystemLogWriterBatchTest.php</file>
+      <file>vendor/controleonline/common/tests/State/HydratedReadProviderTest.php</file>
+      <file>vendor/controleonline/financial/tests/Service/InvoiceServiceTabCompatibilityTest.php</file>
+      <file>vendor/controleonline/financial/tests/Service/InvoiceServiceTest.php</file>
+      <file>vendor/controleonline/integration/tests/Service/IntegrationBatchDispatcherTest.php</file>
+      <file>vendor/controleonline/orders/tests/Controller/AddProductsOrderActionResponseTest.php</file>
+      <file>vendor/controleonline/orders/tests/Controller/OrderDetailsControllerTest.php</file>
+      <file>vendor/controleonline/orders/tests/Entity/OrderSerializationContractTest.php</file>
+      <file>vendor/controleonline/orders/tests/Serializer/OrderCartHierarchyResponseTest.php</file>
+      <file>vendor/controleonline/orders/tests/Serializer/OrderCreationResponseTest.php</file>
+      <file>vendor/controleonline/orders/tests/Service/OrderDetailsReadLoaderTest.php</file>
+      <file>vendor/controleonline/orders/tests/Service/OrderDraftDiscardTest.php</file>
+      <file>vendor/controleonline/orders/tests/Service/OrderProductGroupLinkCandidatesTest.php</file>
+      <file>vendor/controleonline/orders/tests/Service/OrderServiceCustomizedPriceRegressionTest.php</file>
+      <file>vendor/controleonline/orders/tests/Service/OrderServiceTest.php</file>
+      <file>vendor/controleonline/orders/tests/Service/TabConsumptionPriceCalculatorTest.php</file>
+      <file>vendor/controleonline/queue/tests/Service/OrderProductQueueServiceTest.php</file>
+      <file>tests/Service/UserRegistrationInstalledContractTest.php</file>
+    </testsuite>
+  </testsuites>
+</phpunit>
