@@ -11,24 +11,24 @@
         "beberlei/doctrineextensions": "^1.5",
         "composer/installers": "^2.2",
         "controleonline/accounting": "1.0.2",
-        "controleonline/common": "1.0.4",
+        "controleonline/common": "1.0.5",
         "controleonline/contract": "1.0.2",
         "controleonline/report": "1.0.2",
         "controleonline/ead": "1.0.2",
-        "controleonline/financial": "dev-dev@dev",
-        "controleonline/integration": "1.0.2",
+        "controleonline/financial": "1.0.3",
+        "controleonline/integration": "1.0.3",
         "controleonline/logistic": "1.0.2",
         "controleonline/messages-sdk": "1.0.0",
         "controleonline/multi-tenancy": "1.0.2",
-        "controleonline/orders": "1.0.3",
+        "controleonline/orders": "1.0.4",
         "controleonline/people": "1.0.2",
         "controleonline/products": "1.0.3",
-        "controleonline/queue": "1.0.2",
+        "controleonline/queue": "1.0.3",
         "controleonline/smoke-tests-playground": "1.0.2",
         "controleonline/spc-sdk": "1.0.0",
         "controleonline/tasks": "1.0.2",
-        "controleonline/users": "dev-task-197@dev",
-        "controleonline/websocket-server": "1.0.3",
+        "controleonline/users": "1.0.4",
+        "controleonline/websocket-server": "1.0.4",
         "controleonline/whatsapp-sdk": "1.0.0",
         "ctodobom/api-inter": "dev-master",
         "doctrine/doctrine-bundle": "^3.3",
@@ -80,7 +80,7 @@
         "tecnickcom/tcpdf": "^6.7",
         "vich/uploader-bundle": "^2.3",
         "webonyx/graphql-php": "^15.12",
-        "controleonline/mcp": "dev-dev@dev",
+        "controleonline/mcp": "1.0.2",
         "symfony/form": "^8.1"
     },
     "require-dev": {
@@ -133,7 +133,9 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "test:waiter": "vendor/bin/phpunit --configuration phpunit.waiter.xml.dist",
+        "test:backend": "vendor/bin/phpunit --configuration phpunit.xml.dist"
     },
     "extra": {
         "symfony": {
