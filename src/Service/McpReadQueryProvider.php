@@ -138,16 +138,22 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
             $securityService->securityFilter($queryBuilder, $securityResourceClass, 'collection', $securityAlias);
 
             if ($dataset === 'sales') {
-                $queryBuilder->andWhere('o.orderType = :mcpOrderType')
+                $queryBuilder->andWhere('(IDENTITY(o.client) IN (:mcpCompanies) OR IDENTITY(o.provider) IN (:mcpCompanies))')
+                    ->setParameter('mcpCompanies', $companyIds)
+                    ->andWhere('o.orderType = :mcpOrderType')
                     ->setParameter('mcpOrderType', 'sale');
                 $queryBuilder->leftJoin('o.status', 'mcpStatus')
                     ->andWhere('mcpStatus.realStatus = :mcpClosedStatus')
                     ->setParameter('mcpClosedStatus', 'closed');
+            } elseif ($dataset === 'invoices') {
+                $queryBuilder->andWhere('(IDENTITY(o.payer) IN (:mcpCompanies) OR IDENTITY(o.receiver) IN (:mcpCompanies))')
+                    ->setParameter('mcpCompanies', $companyIds);
             } elseif ($dataset === 'products') {
                 $queryBuilder->andWhere('IDENTITY(o.company) IN (:mcpCompanies)')
                     ->setParameter('mcpCompanies', $companyIds);
             } elseif ($dataset === 'inventory') {
                 $queryBuilder->andWhere('IDENTITY(mcpInventory.people) IN (:mcpCompanies)')
+                    ->andWhere('IDENTITY(mcpProduct.company) IN (:mcpCompanies)')
                     ->setParameter('mcpCompanies', $companyIds);
             } elseif ($dataset === 'wallets') {
                 $queryBuilder->andWhere('IDENTITY(o.people) IN (:mcpCompanies)')

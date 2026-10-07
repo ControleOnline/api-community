@@ -238,6 +238,7 @@ final class McpReadQueryProviderTest extends TestCase
 
         self::assertSame(['original' => 'query'], $request->query->all());
         self::assertContains('IDENTITY(mcpInventory.people) IN (:mcpCompanies)', $where);
+        self::assertContains('IDENTITY(mcpProduct.company) IN (:mcpCompanies)', $where);
         self::assertContains('IDENTITY(mcpInventory.people) = :mcpCompany', $where);
         self::assertSame([12], $parameters['mcpCompanies']);
         self::assertSame(12, $parameters['mcpCompany']);
