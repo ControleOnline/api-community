@@ -19,6 +19,36 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 final class McpReadQueryProviderTest extends TestCase
 {
+    public function testUnauthorizedCompanyIdReturnsNoInventoryWithoutQueryingDatabase(): void
+    {
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->expects(self::never())->method('getRepository');
+
+        $scopeProvider = new class implements McpCompanyScopeProviderInterface {
+            public function listForCurrentUser(): array
+            {
+                return [['id' => 12, 'name' => 'Empresa autorizada', 'alias' => 'empresa-12']];
+            }
+        };
+
+        $provider = new McpReadQueryProvider(
+            $entityManager,
+            new RequestStack(),
+            $this->createMock(ContainerInterface::class),
+            $scopeProvider,
+            'America/Sao_Paulo',
+        );
+
+        self::assertSame([], $provider->query('inventory', [
+            'from' => null,
+            'to' => null,
+            'company_id' => 13,
+            'company_role' => null,
+            'aggregate' => false,
+            'limit' => 20,
+        ]));
+    }
+
     public function testInventoryIsCompanyScopedAndUsesAnAllowlistedProjection(): void
     {
         $query = $this->createMock(Query::class);
