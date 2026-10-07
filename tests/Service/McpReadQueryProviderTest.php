@@ -14,9 +14,13 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 final class McpReadQueryProviderTest extends TestCase
 {
@@ -107,7 +111,32 @@ final class McpReadQueryProviderTest extends TestCase
         $requestStack = new RequestStack();
         $request = new Request(['original' => 'query']);
         $requestStack->push($request);
-        $provider = new McpReadQueryProvider($entityManager, $requestStack, $container, $scopeProvider, 'America/Sao_Paulo');
+        $user = new class implements UserInterface {
+            public function getId(): int { return 42; }
+            public function getRoles(): array { return []; }
+            public function eraseCredentials(): void {}
+            public function getUserIdentifier(): string { return 'mcp-test-user'; }
+        };
+        $token = $this->createMock(TokenInterface::class);
+        $token->method('getUser')->willReturn($user);
+        $tokenStorage = $this->createMock(TokenStorageInterface::class);
+        $tokenStorage->method('getToken')->willReturn($token);
+        $logger = $this->createMock(LoggerInterface::class);
+        $logger->expects(self::once())
+            ->method('info')
+            ->with('MCP read query', self::callback(static function (array $context): bool {
+                self::assertSame(42, $context['user_id']);
+                self::assertSame('query_business_data', $context['tool']);
+                self::assertSame('wallets', $context['dataset']);
+                self::assertSame([12], $context['company_ids']);
+                self::assertTrue($context['company_scope_authorized']);
+                self::assertSame(1, $context['result_count']);
+                self::assertSame('success', $context['outcome']);
+                self::assertArrayNotHasKey('token', $context);
+                self::assertArrayNotHasKey('filters', $context);
+                return true;
+            }));
+        $provider = new McpReadQueryProvider($entityManager, $requestStack, $container, $scopeProvider, 'America/Sao_Paulo', $tokenStorage, $logger);
 
         $rows = $provider->query('wallets', [
             'from' => null,

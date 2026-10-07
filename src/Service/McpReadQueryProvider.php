@@ -9,6 +9,8 @@ use ControleOnline\Service\McpReadQueryProviderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Curated MCP read models. Every collection is tenant-local, company scoped,
@@ -55,6 +57,8 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
         private readonly ContainerInterface $container,
         private readonly McpCompanyScopeProviderInterface $companyScopeProvider,
         private readonly string $timezone,
+        private readonly ?TokenStorageInterface $tokenStorage = null,
+        private readonly ?LoggerInterface $logger = null,
     ) {
     }
 
@@ -79,11 +83,13 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
         $companies = $this->companyScopeProvider->listForCurrentUser();
         $companyIds = array_values(array_map(static fn (array $company): int => (int) $company['id'], $companies));
         if ($companyIds === []) {
+            $this->auditQuery($dataset, [], false, 0, 'empty_scope');
             return ($filters['aggregate'] ?? false) ? [['count' => 0, 'total' => 0.0]] : [];
         }
 
         $requestedCompanyId = $filters['company_id'] ?? null;
         if ($requestedCompanyId !== null && !in_array($requestedCompanyId, $companyIds, true)) {
+            $this->auditQuery($dataset, [$requestedCompanyId], false, 0, 'denied_company_scope');
             return ($filters['aggregate'] ?? false) ? [['count' => 0, 'total' => 0.0]] : [];
         }
 
@@ -196,6 +202,14 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
             }
             unset($row);
 
+            $this->auditQuery(
+                $dataset,
+                $requestedCompanyId === null ? $companyIds : [$requestedCompanyId],
+                true,
+                count($rows),
+                'success',
+            );
+
             return $rows;
         } finally {
             $request->query->replace($originalQuery);
@@ -218,5 +232,27 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
         }
 
         return $allowed[$role];
+    }
+
+    /** @param list<int> $companyIds */
+    private function auditQuery(string $dataset, array $companyIds, bool $companyScopeAuthorized, int $resultCount, string $outcome): void
+    {
+        if ($this->logger === null) {
+            return;
+        }
+
+        $user = $this->tokenStorage?->getToken()?->getUser();
+        $userId = is_object($user) && method_exists($user, 'getId') ? $user->getId() : null;
+
+        $this->logger->info('MCP read query', [
+            'occurred_at' => (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->format(\DateTimeInterface::ATOM),
+            'user_id' => $userId,
+            'tool' => 'query_business_data',
+            'dataset' => $dataset,
+            'company_ids' => $companyIds,
+            'company_scope_authorized' => $companyScopeAuthorized,
+            'result_count' => $resultCount,
+            'outcome' => $outcome,
+        ]);
     }
 }
