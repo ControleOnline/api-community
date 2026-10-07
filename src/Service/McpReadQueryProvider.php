@@ -35,6 +35,12 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
             'date_field' => null,
             'selection' => 'o.id AS id, o.product AS name, o.price AS price, o.type AS type, o.active AS active',
         ],
+        'inventory' => [
+            'class' => 'ControleOnline\\Entity\\ProductInventory',
+            'security_service' => 'ControleOnline\\Service\\ProductService',
+            'date_field' => null,
+            'selection' => 'mcpProduct.product AS product, mcpInventory.inventory AS inventory, o.available AS available, o.sales AS sales, o.purchases AS purchases, o.transit AS transit, o.minimum AS minimum, o.maximum AS maximum',
+        ],
     ];
 
     public function __construct(
@@ -52,6 +58,7 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
             ['name' => 'sales', 'description' => 'Sales orders with date, total, and order type.'],
             ['name' => 'invoices', 'description' => 'Invoices with date, total, and invoice type.'],
             ['name' => 'products', 'description' => 'Products with name, price, type, and active state.'],
+            ['name' => 'inventory', 'description' => 'Inventory quantities and thresholds for products in companies the user can access.'],
         ];
     }
 
@@ -88,8 +95,9 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
         if ($role !== null && $requestedCompanyId === null) {
             throw new \InvalidArgumentException('company_id is required when company_role is set');
         }
-        if ($dataset === 'products' && ($role !== null || $filters['from'] !== null || $filters['to'] !== null)) {
-            throw new \InvalidArgumentException('Product queries do not support company roles or date filters');
+        if (in_array($dataset, ['products', 'inventory'], true)
+            && ($role !== null || ($filters['from'] ?? null) !== null || ($filters['to'] ?? null) !== null)) {
+            throw new \InvalidArgumentException('Product and inventory queries do not support company roles or date filters');
         }
         if ($requestedCompanyId !== null && $role !== null) {
             $securityQuery[$this->roleFilter($dataset, $role)] = $requestedCompanyId;
@@ -100,11 +108,21 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
             $alias = 'o';
             $queryBuilder = $this->entityManager
                 ->getRepository($definition['class'])
-                ->createQueryBuilder($alias)
-                ->select($definition['selection']);
+                ->createQueryBuilder($alias);
+            if ($dataset === 'inventory') {
+                $queryBuilder->join('o.product', 'mcpProduct')
+                    ->join('o.inventory', 'mcpInventory')
+                    ->select($definition['selection']);
+            } else {
+                $queryBuilder->select($definition['selection']);
+            }
 
             $securityService = $this->container->get($definition['security_service']);
-            $securityService->securityFilter($queryBuilder, $definition['class'], 'collection', $alias);
+            $securityResourceClass = $dataset === 'inventory'
+                ? 'ControleOnline\\Entity\\Product'
+                : $definition['class'];
+            $securityAlias = $dataset === 'inventory' ? 'mcpProduct' : $alias;
+            $securityService->securityFilter($queryBuilder, $securityResourceClass, 'collection', $securityAlias);
 
             if ($dataset === 'sales') {
                 $queryBuilder->andWhere('o.orderType = :mcpOrderType')
@@ -115,12 +133,16 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
             } elseif ($dataset === 'products') {
                 $queryBuilder->andWhere('IDENTITY(o.company) IN (:mcpCompanies)')
                     ->setParameter('mcpCompanies', $companyIds);
+            } elseif ($dataset === 'inventory') {
+                $queryBuilder->andWhere('IDENTITY(mcpInventory.people) IN (:mcpCompanies)')
+                    ->setParameter('mcpCompanies', $companyIds);
             }
 
             if ($requestedCompanyId !== null && $role === null) {
                 $fields = match ($dataset) {
                     'sales' => ['IDENTITY(o.client)', 'IDENTITY(o.provider)'],
                     'invoices' => ['IDENTITY(o.payer)', 'IDENTITY(o.receiver)'],
+                    'inventory' => ['IDENTITY(mcpInventory.people)'],
                     default => ['IDENTITY(o.company)'],
                 };
                 $queryBuilder->andWhere(implode(' OR ', array_map(static fn (string $field): string => $field . ' = :mcpCompany', $fields)))
@@ -147,7 +169,7 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
                     ->andWhere('mcpOrderProduct.orderProduct IS NULL')
                     ->select('COUNT(DISTINCT o.id) AS count, COALESCE(SUM(mcpOrderProduct.total), 0) AS total');
             } else {
-                $queryBuilder->orderBy($dataset === 'products' ? 'o.id' : 'o.' . $definition['date_field'], 'DESC')
+                $queryBuilder->orderBy(in_array($dataset, ['products', 'inventory'], true) ? 'o.id' : 'o.' . $definition['date_field'], 'DESC')
                     ->setMaxResults((int) $filters['limit']);
             }
 
@@ -175,6 +197,8 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
             'sales' => ['customer' => 'client', 'supplier' => 'provider'],
             'invoices' => ['payer' => 'payer', 'receiver' => 'receiver'],
             'products' => [],
+            'inventory' => [],
+            default => [],
         };
 
         if (!isset($allowed[$role])) {
