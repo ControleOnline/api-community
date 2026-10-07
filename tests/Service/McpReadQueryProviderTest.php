@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ControleOnline\Integration\Tests\Service;
+namespace App\Tests\Service;
 
 use App\Service\McpReadQueryProvider;
 use ControleOnline\Service\McpCompanyScopeProviderInterface;
