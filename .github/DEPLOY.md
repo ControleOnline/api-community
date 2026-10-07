@@ -13,6 +13,12 @@
 - `push` em `dev` | `staging` | `master`
 - `workflow_dispatch` com escolha do target
 
+Para investigar falhas HTTP 500 em produção, execute manualmente `Deploy` com
+target `master` e operação `inspect-prod-errors`. A operação é somente leitura,
+consulta os últimos 1.000 registros de `var/log/prod.log` e mostra até 40 erros
+sem imprimir o contexto completo da requisição; parâmetros OAuth são mascarados.
+Ela não executa deploy, migrations ou PHPUnit.
+
 ## Config por ambiente (step 1)
 
 | env | branch | remote path | messenger domain | auth | secrets |
