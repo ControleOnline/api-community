@@ -206,7 +206,7 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
                 $dataset,
                 $requestedCompanyId === null ? $companyIds : [$requestedCompanyId],
                 true,
-                count($rows),
+                $aggregate && isset($rows[0]['count']) ? (int) $rows[0]['count'] : count($rows),
                 'success',
             );
 
