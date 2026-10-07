@@ -1,15 +1,15 @@
 {
-  "version": "1.10.45",
+  "version": "1.10.46",
   "rc": 1,
-  "branch": "rc/1.10.45-rc.1",
-  "baseMaster": "a54d7c4752c4d6c7fe20120588d7c4a9adef9791",
+  "branch": "rc/1.10.46-rc.1",
+  "baseMaster": "07850338f66382e2ebdd49b5b34d44aa0baadd63",
   "tasks": [
     973
   ],
   "repositories": {
-    "ControleOnline/api-community": "a54d7c4752c4d6c7fe20120588d7c4a9adef9791",
+    "ControleOnline/api-community": "07850338f66382e2ebdd49b5b34d44aa0baadd63",
     "ControleOnline/api-platform-mcp": "8beedfe08fba16a9568dc708a7ae92d4dc851311",
-    "ControleOnline/api-platform-users": "30dfb1a8180ac5292fbf188b864eebabd65a23c1"
+    "ControleOnline/api-platform-users": "9877b480b5e381770dcee8cb46bffa0d33ec7ada"
   },
   "frozen": true
 }

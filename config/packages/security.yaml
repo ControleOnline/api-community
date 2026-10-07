@@ -49,6 +49,7 @@ security:
         - { path: ^/recovery_accesses$, roles: PUBLIC_ACCESS }
         - { path: ^/account_verifications$, roles: PUBLIC_ACCESS }
         - { path: ^/\.well-known/oauth-(authorization-server|protected-resource)(?:/mcp(?:/[^/]+)?)?$, roles: PUBLIC_ACCESS }
+        - { path: ^/mcp/oauth/consent$, methods: [GET], roles: PUBLIC_ACCESS }
         - { path: ^/mcp(?:/[^/]+)?$, methods: [OPTIONS], roles: PUBLIC_ACCESS }
         - { path: ^/oauth/authorize$, methods: [POST], roles: ROLE_HUMAN }
         - { path: ^/themes-colors.css$, roles: PUBLIC_ACCESS }
