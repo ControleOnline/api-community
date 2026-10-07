@@ -41,6 +41,12 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
             'date_field' => null,
             'selection' => 'mcpProduct.product AS product, mcpInventory.inventory AS inventory, o.available AS available, o.sales AS sales, o.purchases AS purchases, o.transit AS transit, o.minimum AS minimum, o.maximum AS maximum',
         ],
+        'wallets' => [
+            'class' => 'ControleOnline\\Entity\\Wallet',
+            'security_service' => 'ControleOnline\\Service\\WalletService',
+            'date_field' => null,
+            'selection' => 'o.wallet AS wallet, o.balance AS balance',
+        ],
     ];
 
     public function __construct(
@@ -59,6 +65,7 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
             ['name' => 'invoices', 'description' => 'Invoices with date, total, and invoice type.'],
             ['name' => 'products', 'description' => 'Products with name, price, type, and active state.'],
             ['name' => 'inventory', 'description' => 'Inventory quantities and thresholds for products in companies the user can access.'],
+            ['name' => 'wallets', 'description' => 'Wallet names and current balances for companies the user can access.'],
         ];
     }
 
@@ -95,7 +102,7 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
         if ($role !== null && $requestedCompanyId === null) {
             throw new \InvalidArgumentException('company_id is required when company_role is set');
         }
-        if (in_array($dataset, ['products', 'inventory'], true)
+        if (in_array($dataset, ['products', 'inventory', 'wallets'], true)
             && ($role !== null || ($filters['from'] ?? null) !== null || ($filters['to'] ?? null) !== null)) {
             throw new \InvalidArgumentException('Product and inventory queries do not support company roles or date filters');
         }
@@ -136,6 +143,9 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
             } elseif ($dataset === 'inventory') {
                 $queryBuilder->andWhere('IDENTITY(mcpInventory.people) IN (:mcpCompanies)')
                     ->setParameter('mcpCompanies', $companyIds);
+            } elseif ($dataset === 'wallets') {
+                $queryBuilder->andWhere('IDENTITY(o.people) IN (:mcpCompanies)')
+                    ->setParameter('mcpCompanies', $companyIds);
             }
 
             if ($requestedCompanyId !== null && $role === null) {
@@ -143,6 +153,7 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
                     'sales' => ['IDENTITY(o.client)', 'IDENTITY(o.provider)'],
                     'invoices' => ['IDENTITY(o.payer)', 'IDENTITY(o.receiver)'],
                     'inventory' => ['IDENTITY(mcpInventory.people)'],
+                    'wallets' => ['IDENTITY(o.people)'],
                     default => ['IDENTITY(o.company)'],
                 };
                 $queryBuilder->andWhere(implode(' OR ', array_map(static fn (string $field): string => $field . ' = :mcpCompany', $fields)))
@@ -169,7 +180,7 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
                     ->andWhere('mcpOrderProduct.orderProduct IS NULL')
                     ->select('COUNT(DISTINCT o.id) AS count, COALESCE(SUM(mcpOrderProduct.total), 0) AS total');
             } else {
-                $queryBuilder->orderBy(in_array($dataset, ['products', 'inventory'], true) ? 'o.id' : 'o.' . $definition['date_field'], 'DESC')
+                $queryBuilder->orderBy(in_array($dataset, ['products', 'inventory', 'wallets'], true) ? 'o.id' : 'o.' . $definition['date_field'], 'DESC')
                     ->setMaxResults((int) $filters['limit']);
             }
 
@@ -198,6 +209,7 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
             'invoices' => ['payer' => 'payer', 'receiver' => 'receiver'],
             'products' => [],
             'inventory' => [],
+            'wallets' => [],
             default => [],
         };
 
