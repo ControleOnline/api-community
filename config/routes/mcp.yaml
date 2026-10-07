@@ -1,3 +1,10 @@
 controleonline_mcp:
     resource: ../../vendor/controleonline/mcp/src/Controller/
     type: attribute
+
+controleonline_mcp_tenant:
+    path: /mcp/{tenantDomain}
+    controller: ControleOnline\Controller\McpController
+    methods: [GET, POST, OPTIONS]
+    requirements:
+        tenantDomain: '[A-Za-z0-9.-]+'
