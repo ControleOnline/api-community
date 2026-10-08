@@ -34,10 +34,13 @@ services:
     # MCP module (controleonline/mcp)
     ControleOnline\Service\McpServerService:
         arguments:
-            $readOnly: true
+            $readOnly: false
 
     ControleOnline\Service\McpReadQueryProviderInterface:
         alias: App\Service\McpReadQueryProvider
+
+    ControleOnline\Service\McpWriteOperationProviderInterface:
+        alias: App\Service\McpWriteOperationProvider
 
     App\Service\McpReadQueryProvider:
         arguments:
