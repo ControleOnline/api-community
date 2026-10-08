@@ -80,7 +80,7 @@
         "tecnickcom/tcpdf": "^6.7",
         "vich/uploader-bundle": "^2.3",
         "webonyx/graphql-php": "^15.12",
-        "controleonline/mcp": "1.0.7",
+        "controleonline/mcp": "1.0.8",
         "symfony/form": "^8.1"
     },
     "require-dev": {
