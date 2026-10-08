@@ -43,5 +43,9 @@ services:
         arguments:
             $timezone: '%timezone%'
 
+    App\Service\McpOperationalReadQueryProvider:
+        arguments:
+            $timezone: '%timezone%'
+
     ControleOnline\Controller\McpController:
         tags: ['controller.service_arguments']
