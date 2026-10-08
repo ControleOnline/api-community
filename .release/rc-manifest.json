@@ -8,7 +8,7 @@
   ],
   "repositories": {
     "ControleOnline/api-community": "f9118b5cca9fbc5fabba463a4622773394ae5d19",
-    "ControleOnline/api-platform-mcp": "93568e90f719f5c863c557a43f00cdf47d9ba939",
+    "ControleOnline/api-platform-mcp": "93568e90f719f5c863ad732e69a61438240ad13c",
     "ControleOnline/api-platform-users": "9877b480b5e381770dcee8cb46bffa0d33ec7ada"
   },
   "frozen": true
