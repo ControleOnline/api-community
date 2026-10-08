@@ -68,9 +68,9 @@ jobs:
                     {
                       echo ''
                       echo '# php -- BEGIN cPanel-generated handler, do not edit'
-                      echo '# Set the "ea-php84" package as the default "PHP" programming language.'
+                      echo '# Set the "ea-php85" package as the default "PHP" programming language.'
                       echo '<IfModule mime_module>'
-                      echo '  AddHandler application/x-httpd-ea-php84 .php .php8 .phtml'
+                      echo '  AddHandler application/x-httpd-ea-php85 .php .php8 .phtml'
                       echo '</IfModule>'
                       echo '# php -- END cPanel-generated handler, do not edit'
                       echo ''
@@ -80,9 +80,9 @@ jobs:
 
 
 
-                  PHP_BIN="$(command -v ea-php84 || true)"
+                  PHP_BIN="$(command -v ea-php85 || true)"
                   if [ -z "$PHP_BIN" ]; then
-                    for candidate in /usr/local/bin/ea-php84 /opt/cpanel/ea-php84/root/usr/bin/php; do
+                    for candidate in /usr/local/bin/ea-php85 /opt/cpanel/ea-php85/root/usr/bin/php; do
                       if [ -x "$candidate" ]; then
                         PHP_BIN="$candidate"
                         break
