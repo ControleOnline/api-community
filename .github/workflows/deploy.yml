@@ -15,11 +15,11 @@ on:
         type: choice
         options: [dev, staging, master]
       operation:
-        description: "Deploy the branch or recover its Symfony cache"
+        description: "Deploy, recover Symfony cache, or inspect production errors"
         required: false
         type: choice
         default: deploy
-        options: [deploy, cache-recovery]
+        options: [deploy, cache-recovery, inspect-prod-errors]
 
 concurrency:
   group: deploy-${{ github.event.inputs.target || github.ref_name }}
@@ -47,7 +47,7 @@ jobs:
           REF="${{ github.event.inputs.target || github.ref_name }}"
           OPERATION="${{ github.event.inputs.operation || 'deploy' }}"
           case "$OPERATION" in
-            deploy|cache-recovery) ;;
+            deploy|cache-recovery|inspect-prod-errors) ;;
             *) echo "Unsupported operation: $OPERATION"; exit 1 ;;
           esac
           case "$REF" in
@@ -147,6 +147,33 @@ jobs:
 
             cd "$TARGET"
             RESTART_FILE="$PWD/public/.lsphp_restart.txt"
+
+            if [ "${DEPLOY_OPERATION}" = "inspect-prod-errors" ]; then
+              if [ "${BRANCH}" != "master" ]; then
+                echo "Production error inspection is available only for master" >&2
+                exit 1
+              fi
+
+              LOG_FILE="$PWD/var/log/prod.log"
+              if [ ! -r "$LOG_FILE" ]; then
+                echo "Production log is not readable: $LOG_FILE" >&2
+                exit 1
+              fi
+
+              ERROR_LINES="$(tail -n 1000 "$LOG_FILE" \
+                | grep -E 'request\.(CRITICAL|ERROR)|app\.(CRITICAL|ERROR)|Uncaught PHP Exception' \
+                | tail -n 40 \
+                | sed -E 's/ [{].*$//' \
+                | sed -E 's/((client_id|access_token|refresh_token|code_verifier|code_challenge|api-token|authorization|password|state|code)(=|%3D))[^& ,"}]+/\1[REDACTED]/Ig' \
+                || true)"
+
+              if [ -z "$ERROR_LINES" ]; then
+                echo "No production error entries found in the last 1000 log lines."
+              else
+                printf '%s\n' "$ERROR_LINES"
+              fi
+              exit 0
+            fi
 
             if [ "${DEPLOY_OPERATION}" = "cache-recovery" ]; then
               if rm -rf var/cache/* 2>/dev/null; then
@@ -277,6 +304,7 @@ jobs:
   tests:
     name: "3 · Tests"
     needs: [configure, deploy]
+    if: needs.configure.outputs.operation == 'deploy'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
