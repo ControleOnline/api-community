@@ -14,8 +14,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Psr\Log\LoggerInterface;
 
 /**
- * Curated MCP read models. Every collection is tenant-local, company scoped,
- * and projected to a fixed set of fields that excludes document and contact data.
+ * Tenant-local, company-scoped MCP queries. Detailed rows use the domain's
+ * read serialization groups and are sanitized before being returned to MCP.
  */
 final class McpReadQueryProvider implements McpReadQueryProviderInterface
 {
@@ -25,24 +25,28 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
             'security_service' => 'ControleOnline\\Service\\OrderService',
             'date_field' => 'orderDate',
             'selection' => 'o.id AS id, o.orderDate AS date, o.price AS total, o.orderType AS type',
+            'detail_group' => 'order_details:read',
         ],
         'orders' => [
             'class' => 'ControleOnline\\Entity\\Order',
             'security_service' => 'ControleOnline\\Service\\OrderService',
             'date_field' => 'orderDate',
             'selection' => 'o.id AS id, o.orderDate AS date, o.price AS total, o.orderType AS type',
+            'detail_group' => 'order_details:read',
         ],
         'invoices' => [
             'class' => 'ControleOnline\\Entity\\Invoice',
             'security_service' => 'ControleOnline\\Service\\InvoiceService',
             'date_field' => 'invoice_date',
             'selection' => 'o.id AS id, o.invoice_date AS date, o.price AS total, o.invoiceType AS type',
+            'detail_group' => 'invoice_details:read',
         ],
         'products' => [
             'class' => 'ControleOnline\\Entity\\Product',
             'security_service' => 'ControleOnline\\Service\\ProductService',
             'date_field' => null,
             'selection' => 'o.id AS id, o.product AS name, o.price AS price, o.type AS type, o.active AS active',
+            'detail_group' => 'product:read',
         ],
         'inventory' => [
             'class' => 'ControleOnline\\Entity\\ProductInventory',
@@ -78,16 +82,16 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
     public function getDatasets(): array
     {
         return [
-            ['name' => 'sales', 'description' => 'Sales orders with date, total, and order type.'],
-            ['name' => 'orders', 'description' => 'Orders of all types with date, total, and order type, including drafts and purchases.'],
-            ['name' => 'invoices', 'description' => 'Invoices with date, total, and invoice type.'],
-            ['name' => 'products', 'description' => 'Products with name, price, type, and active state.'],
+            ['name' => 'sales', 'description' => 'Detailed sales orders, including linked customer/supplier, status, products, quantities, prices, and preparation details.'],
+            ['name' => 'orders', 'description' => 'Detailed orders of all types, including linked people and order lines.'],
+            ['name' => 'invoices', 'description' => 'Detailed invoices, including linked payer/receiver, status, dates, payment details, and amounts.'],
+            ['name' => 'products', 'description' => 'Detailed catalog products, including the fields exposed by the domain product read model.'],
             ['name' => 'inventory', 'description' => 'Inventory quantities and thresholds for products in companies the user can access.'],
             ['name' => 'wallets', 'description' => 'Wallet names and current balances for companies the user can access.'],
-            ['name' => 'employees', 'description' => 'Employee names and roles linked to companies the user can access.'],
-            ['name' => 'clients', 'description' => 'Client names linked to companies the user can access.'],
-            ['name' => 'suppliers', 'description' => 'Supplier names linked to companies the user can access.'],
-            ['name' => 'salespeople', 'description' => 'Salesperson names linked to companies the user can access.'],
+            ['name' => 'employees', 'description' => 'Employee profiles, contacts, and available documents, only through an active people_link to an accessible company.'],
+            ['name' => 'clients', 'description' => 'Client profiles, contacts, and available documents, only through an active people_link to an accessible company or an authorized order/invoice.'],
+            ['name' => 'suppliers', 'description' => 'Supplier profiles, contacts, and available documents, only through an active people_link to an accessible company or an authorized order/invoice.'],
+            ['name' => 'salespeople', 'description' => 'Salesperson profiles, contacts, and available documents, only through an active people_link to an accessible company.'],
             ['name' => 'commissions', 'description' => 'Commission rates and minimums for salespeople in companies the user can manage.'],
             ['name' => 'configs', 'description' => 'Metadata for the devices configuration key only; configuration values and secrets are never returned.'],
             ['name' => 'devices', 'description' => 'Device aliases and types configured for companies the user can access; device credentials are excluded.'],
@@ -162,6 +166,11 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
                 $queryBuilder->select($definition['selection']);
             }
 
+            $detailed = !empty($definition['detail_group']) && !$aggregate;
+            if ($detailed) {
+                $queryBuilder->select('o');
+            }
+
             $securityService = $this->container->get($definition['security_service']);
             $securityResourceClass = $dataset === 'inventory'
                 ? 'ControleOnline\\Entity\\Product'
@@ -219,15 +228,40 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
                 }
             }
 
+            if (isset($filters['record_id'])) {
+                $queryBuilder->andWhere('o.id = :mcpRecordId')->setParameter('mcpRecordId', $filters['record_id']);
+            }
+
             if ($aggregate) {
                 // Aggregate only after the tenant, company scope, and securityFilter have constrained the query.
                 $this->applyAggregate($queryBuilder, $dataset, $definition, $groupBy, $companyIds);
             } else {
-                $queryBuilder->orderBy(in_array($dataset, ['products', 'inventory', 'wallets'], true) ? 'o.id' : 'o.' . $definition['date_field'], 'DESC')
+                $queryBuilder->orderBy(in_array($dataset, ['products', 'inventory', 'wallets'], true) ? 'o.id' : 'o.' . ($definition['date_field'] ?? 'id'), 'DESC')
+                    ->setFirstResult((int) ($filters['offset'] ?? 0))
                     ->setMaxResults((int) $filters['limit']);
             }
 
-            $rows = $queryBuilder->getQuery()->getArrayResult();
+            if ($detailed) {
+                $entities = $queryBuilder->getQuery()->getResult();
+                $rows = [];
+                foreach ($entities as $entity) {
+                    $row = $this->container->get(McpSafeEntityNormalizer::class)->normalize($entity, $definition['detail_group']);
+                    if ($dataset === 'sales' || $dataset === 'orders') {
+                        $row['client_id'] = $row['client']['id'] ?? null;
+                        $row['client_name'] = $row['client']['name'] ?? $row['client']['alias'] ?? null;
+                        $row['provider_id'] = $row['provider']['id'] ?? null;
+                        $row['provider_name'] = $row['provider']['name'] ?? $row['provider']['alias'] ?? null;
+                    } elseif ($dataset === 'invoices') {
+                        $row['payer_id'] = $row['payer']['id'] ?? null;
+                        $row['payer_name'] = $row['payer']['name'] ?? $row['payer']['alias'] ?? null;
+                        $row['receiver_id'] = $row['receiver']['id'] ?? null;
+                        $row['receiver_name'] = $row['receiver']['name'] ?? $row['receiver']['alias'] ?? null;
+                    }
+                    $rows[] = $row;
+                }
+            } else {
+                $rows = $queryBuilder->getQuery()->getArrayResult();
+            }
             if ($aggregate) {
                 foreach ($rows as &$row) {
                     $row['count'] = (int) $row['count'];
@@ -362,117 +396,8 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
      */
     private function queryPeopleLinks(string $dataset, array $companyIds, ?int $requestedCompanyId, array $filters, Request $request): array
     {
-        $aggregate = (bool) ($filters['aggregate'] ?? false);
-        $groupBy = $filters['group_by'] ?? [];
-        if (($filters['from'] ?? null) !== null || ($filters['to'] ?? null) !== null
-            || ($filters['company_role'] ?? null) !== null
-            || ($aggregate && $dataset === 'commissions')) {
-            throw new \InvalidArgumentException('People and commission queries do not support date or role filters; commission aggregates are not available');
-        }
-        if ($aggregate && array_diff($groupBy, ['company_id']) !== []) {
-            throw new \InvalidArgumentException('People aggregates only support grouping by company_id');
-        }
-
-        $originalQuery = $request->query->all();
-        $request->query->replace($dataset === 'commissions' || $requestedCompanyId === null
-            ? []
-            : ['company' => $requestedCompanyId]);
-
-        try {
-            $queryBuilder = $this->entityManager
-                ->getRepository('ControleOnline\\Entity\\PeopleLink')
-                ->createQueryBuilder('o');
-            $peopleLinkService = $this->container->get('ControleOnline\\Service\\PeopleLinkService');
-            $peopleLinkService->securityFilter($queryBuilder, 'ControleOnline\\Entity\\PeopleLink', 'collection', 'o');
-            $queryBuilder->andWhere('o.enable = :mcpLinkEnabled')
-                ->setParameter('mcpLinkEnabled', true)
-                ->andWhere('LOWER(o.linkType) LIKE :mcpLinkType');
-
-            $linkTypes = [
-                'employees' => 'employee',
-                'clients' => 'client',
-                'suppliers' => 'provider',
-                'salespeople' => 'salesman',
-                'commissions' => 'sellers-client',
-            ];
-            $queryBuilder->setParameter('mcpLinkType', '%' . $linkTypes[$dataset] . '%');
-
-            if ($dataset === 'commissions') {
-                $queryBuilder->join(
-                    'ControleOnline\\Entity\\PeopleLink',
-                    'mcpSalespersonCompany',
-                    'WITH',
-                    'mcpSalespersonCompany.people = o.company AND LOWER(mcpSalespersonCompany.linkType) LIKE :mcpSalesmanRole'
-                )
-                    ->andWhere('IDENTITY(mcpSalespersonCompany.company) IN (:mcpCompanies)')
-                    ->setParameter('mcpSalesmanRole', '%salesman%')
-                    ->setParameter('mcpCompanies', $requestedCompanyId === null ? $companyIds : [$requestedCompanyId])
-                    ->join('mcpSalespersonCompany.company', 'mcpEmployer')
-                    ->addSelect('mcpEmployer.id AS employer_id, mcpEmployer.name AS employer_name')
-                    ->orderBy('o.id', 'DESC')
-                    ->setMaxResults((int) $filters['limit']);
-
-                $rows = [];
-                foreach ($queryBuilder->getQuery()->getResult() as $result) {
-                    $link = is_array($result) ? ($result[0] ?? null) : $result;
-                    if (!$link instanceof \ControleOnline\Entity\PeopleLink) {
-                        continue;
-                    }
-                    if (!$peopleLinkService->canViewSalesmanCommissions($link)) {
-                        continue;
-                    }
-                    $rows[] = [
-                        'company_id' => (int) (is_array($result) ? ($result['employer_id'] ?? 0) : 0),
-                        'company' => (string) (is_array($result) ? ($result['employer_name'] ?? '') : ''),
-                        'salesperson' => (string) ($link->getCompany()?->getName() ?? ''),
-                        'client' => (string) ($link->getPeople()?->getName() ?? ''),
-                        'commission_rate' => $link->getComission(),
-                        'minimum_commission' => $link->getMinimumComission(),
-                    ];
-                }
-            } else {
-                $queryBuilder->join('o.company', 'mcpLinkCompany')
-                    ->join('o.people', 'mcpLinkedPerson')
-                    ->andWhere('IDENTITY(o.company) IN (:mcpCompanies)')
-                    ->setParameter('mcpCompanies', $requestedCompanyId === null ? $companyIds : [$requestedCompanyId]);
-                if ($aggregate) {
-                    $queryBuilder->select('COUNT(DISTINCT mcpLinkedPerson.id) AS count');
-                    if (in_array('company_id', $groupBy, true)) {
-                        $queryBuilder->addSelect('mcpLinkCompany.id AS company_id')
-                            ->groupBy('mcpLinkCompany.id')
-                            ->setMaxResults(100);
-                    }
-                } else {
-                    $queryBuilder->select('mcpLinkCompany.id AS company_id, mcpLinkCompany.name AS company, mcpLinkedPerson.id AS person_id, mcpLinkedPerson.name AS name, mcpLinkedPerson.alias AS alias, o.linkType AS relationship')
-                        ->orderBy('mcpLinkedPerson.name', 'ASC')
-                        ->setMaxResults((int) $filters['limit']);
-                }
-                $rows = $queryBuilder->getQuery()->getArrayResult();
-                if ($aggregate) {
-                    foreach ($rows as &$row) {
-                        $row['count'] = (int) $row['count'];
-                    }
-                    unset($row);
-                }
-            }
-
-            $resultCount = $aggregate && !in_array('company_id', $groupBy, true)
-                ? (int) ($rows[0]['count'] ?? 0)
-                : count($rows);
-            $this->auditQuery($dataset, $requestedCompanyId === null ? $companyIds : [$requestedCompanyId], true, $resultCount, 'success');
-            return $rows;
-        } catch (\Throwable $exception) {
-            $this->auditQuery(
-                $dataset,
-                $requestedCompanyId === null ? $companyIds : [$requestedCompanyId],
-                true,
-                0,
-                'query_error:' . $exception::class,
-            );
-            throw $exception;
-        } finally {
-            $request->query->replace($originalQuery);
-        }
+        return $this->container->get(McpPeopleLinkReadQueryProvider::class)
+            ->query($dataset, $companyIds, $requestedCompanyId, $filters, $request);
     }
 
     /** @param list<int> $companyIds */
