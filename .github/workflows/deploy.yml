@@ -175,6 +175,21 @@ jobs:
               exit 0
             fi
 
+            PHP_BIN=""
+            for candidate in "$(type -P ea-php85 || true)" "$(type -P php8.5 || true)" \
+              /opt/cpanel/ea-php85/root/usr/bin/php /opt/alt/php85/usr/bin/php \
+              /usr/local/bin/php85 "$(type -P php || true)"; do
+              if [ -n "$candidate" ] && [ -x "$candidate" ] \
+                && [ "$("$candidate" -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;' 2>/dev/null)" = "8.5" ]; then
+                PHP_BIN="$candidate"
+                break
+              fi
+            done
+            if [ -z "$PHP_BIN" ]; then
+              echo "PHP 8.5 CLI is required for this deployment" >&2
+              exit 1
+            fi
+
             if [ "${DEPLOY_OPERATION}" = "cache-recovery" ]; then
               if rm -rf var/cache/* 2>/dev/null; then
                 echo "Symfony cache removed"
@@ -184,8 +199,8 @@ jobs:
                 echo "Unable to clear Symfony cache; grant the deploy user cache ownership or passwordless sudo" >&2
                 exit 1
               fi
-              php bin/console cache:clear --env=prod --no-debug
-              php bin/console cache:warmup --env=prod --no-debug
+              "$PHP_BIN" bin/console cache:clear --env=prod --no-debug
+              "$PHP_BIN" bin/console cache:warmup --env=prod --no-debug
               touch "$RESTART_FILE"
               echo "Symfony cache recovery completed"
               exit 0
@@ -218,8 +233,9 @@ jobs:
             " || true
 
             run_composer() {
-              if command -v composer >/dev/null 2>&1; then
-                composer "$@"
+              COMPOSER_PATH="$(command -v composer || true)"
+              if [ -n "$COMPOSER_PATH" ]; then
+                "$PHP_BIN" "$COMPOSER_PATH" "$@"
                 return
               fi
               for candidate in /usr/local/bin/composer /usr/bin/composer "$HOME/bin/composer" "$HOME/composer.phar" "$HOME/bin/composer.phar" composer.phar; do
@@ -228,7 +244,7 @@ jobs:
                   return
                 fi
                 if [ -f "$candidate" ]; then
-                  php "$candidate" "$@"
+                  "$PHP_BIN" "$candidate" "$@"
                   return
                 fi
               done
@@ -236,7 +252,7 @@ jobs:
               exit 1
             }
 
-            if composer validate --no-check-publish --no-interaction >/dev/null 2>&1; then
+            if run_composer validate --no-check-publish --no-interaction >/dev/null 2>&1; then
               run_composer install --no-interaction --no-suggest --no-scripts
             else
               echo "composer.lock is stale; refreshing dependencies"
@@ -244,7 +260,7 @@ jobs:
             fi
             echo "Reconciling Composer module paths"
             # FixAutoload::postInstall is a no-op (Packagist); kept for compatibility
-            if php -d display_errors=1 -r 'require "vendor/autoload.php"; App\FixAutoload::postInstall();'; then
+            if "$PHP_BIN" -d display_errors=1 -r 'require "vendor/autoload.php"; App\FixAutoload::postInstall();'; then
               echo "Composer module path reconciliation completed"
             else
               status=$?
@@ -263,14 +279,14 @@ jobs:
               exit 1
             fi
             # about is diagnostic only — do not fail the deploy if it exits non-zero.
-            php -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null || echo "bin/console about returned non-zero (non-fatal)"
+            "$PHP_BIN" -d opcache.enable_cli=0 bin/console about --env=prod --no-debug >/dev/null || echo "bin/console about returned non-zero (non-fatal)"
             echo "Symfony runtime check completed"
             if [ "${SKIP_DB_MIGRATIONS}" = "true" ] || [ "${SKIP_DB_MIGRATIONS}" = "TRUE" ] || [ "${SKIP_DB_MIGRATIONS}" = "True" ]; then
               echo "Database migrations intentionally skipped for this deploy ([skip-db-migrations]); no schema changes are included"
             else
-              php bin/console doctrine:migrations:sync-metadata-storage --configuration=config/migrations/multi_tenancy.yaml --no-interaction
-              php bin/console doctrine:migrations:migrate --configuration=config/migrations/multi_tenancy.yaml --no-interaction
-              php bin/console tenant:migrations:migrate --no-interaction
+              "$PHP_BIN" bin/console doctrine:migrations:sync-metadata-storage --configuration=config/migrations/multi_tenancy.yaml --no-interaction
+              "$PHP_BIN" bin/console doctrine:migrations:migrate --configuration=config/migrations/multi_tenancy.yaml --no-interaction
+              "$PHP_BIN" bin/console tenant:migrations:migrate --no-interaction
             fi
             echo "Database migration steps completed"
             mkdir -p var/log
@@ -287,10 +303,10 @@ jobs:
                 echo "Using pre-provisioned shared permissions for $(id -un) and www-data"
               fi
             fi
-            nohup php bin/console tenant:messenger:consume async --domain="${MESSENGER_DOMAIN}" >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
+            nohup "$PHP_BIN" bin/console tenant:messenger:consume async --domain="${MESSENGER_DOMAIN}" >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
             touch "$HOME/.lsphp_restart.txt" 2>/dev/null || true
             touch "$RESTART_FILE" 2>/dev/null || true
-            rm -f "$HOME/.lsphp_restart.txt" "$RESTART_FILE" 2>/dev/null || true
+            echo "LiteSpeed restart markers set for the PHP 8.5 worker"
             echo "Deploy OK: $(git rev-parse --short HEAD) @ ${BRANCH} → ${TARGET}"
         env:
           DEPLOY_BRANCH: ${{ needs.configure.outputs.branch }}
@@ -314,7 +330,7 @@ jobs:
           submodules: recursive
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: "8.5"
           coverage: none
           tools: composer:v2
       - name: Install Dependencies
