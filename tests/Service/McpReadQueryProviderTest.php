@@ -42,7 +42,7 @@ final class McpReadQueryProviderTest extends TestCase
         );
 
         self::assertSame(
-            ['sales', 'orders', 'invoices', 'products', 'inventory', 'wallets', 'employees', 'clients', 'suppliers', 'salespeople', 'commissions'],
+            ['sales', 'orders', 'invoices', 'products', 'inventory', 'wallets', 'employees', 'clients', 'suppliers', 'salespeople', 'commissions', 'configs', 'devices', 'displays', 'production_queue'],
             array_column($provider->getDatasets(), 'name'),
         );
     }
@@ -127,12 +127,18 @@ final class McpReadQueryProviderTest extends TestCase
             }
         };
 
+        $requestStack = new RequestStack();
+        $container = $this->createMock(ContainerInterface::class);
+        $operational = new \App\Service\McpOperationalReadQueryProvider($entityManager, $requestStack, $container);
         $provider = new McpReadQueryProvider(
             $entityManager,
-            new RequestStack(),
-            $this->createMock(ContainerInterface::class),
+            $requestStack,
+            $container,
             $scopeProvider,
             'America/Sao_Paulo',
+            null,
+            null,
+            $operational,
         );
 
         self::assertSame([], $provider->query('inventory', [
@@ -151,6 +157,16 @@ final class McpReadQueryProviderTest extends TestCase
             'aggregate' => false,
             'limit' => 20,
         ]));
+        foreach (['configs', 'devices', 'displays', 'production_queue'] as $dataset) {
+            self::assertSame([], $provider->query($dataset, [
+                'from' => null,
+                'to' => null,
+                'company_id' => 13,
+                'company_role' => null,
+                'aggregate' => false,
+                'limit' => 20,
+            ]), $dataset);
+        }
     }
 
     public function testWalletBalancesAreCompanyScopedAndUseAnAllowlistedProjection(): void
