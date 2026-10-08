@@ -8,6 +8,7 @@ use App\Service\McpReadQueryProvider;
 use ControleOnline\Service\McpCompanyScopeProviderInterface;
 use ControleOnline\Service\McpReadQueryProviderInterface;
 use ControleOnline\Service\ProductService;
+use ControleOnline\Service\PeopleLinkService;
 use ControleOnline\Service\WalletService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -24,7 +25,97 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class McpReadQueryProviderTest extends TestCase
 {
-    public function testUnauthorizedCompanyIdReturnsNoInventoryWithoutQueryingDatabase(): void
+    public function testQueryCatalogIncludesOrdersSeparatelyFromClosedSales(): void
+    {
+        $scopeProvider = new class implements McpCompanyScopeProviderInterface {
+            public function listForCurrentUser(): array
+            {
+                return [];
+            }
+        };
+        $provider = new McpReadQueryProvider(
+            $this->createMock(EntityManagerInterface::class),
+            new RequestStack(),
+            $this->createMock(ContainerInterface::class),
+            $scopeProvider,
+            'America/Sao_Paulo',
+        );
+
+        self::assertSame(
+            ['sales', 'orders', 'invoices', 'products', 'inventory', 'wallets', 'employees', 'clients', 'suppliers', 'salespeople', 'commissions'],
+            array_column($provider->getDatasets(), 'name'),
+        );
+    }
+
+    public function testEmployeeDirectoryUsesPeopleLinkSecurityFilterAndCompanyScope(): void
+    {
+        $query = $this->createMock(Query::class);
+        $query->method('getArrayResult')->willReturn([[
+            'company_id' => 12,
+            'company' => 'Empresa A',
+            'person_id' => 44,
+            'name' => 'Funcionário A',
+            'alias' => 'funcionario-a',
+            'relationship' => 'employee',
+        ]]);
+        $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['join', 'select', 'andWhere', 'setParameter', 'orderBy', 'setMaxResults', 'getQuery'])
+            ->getMock();
+        foreach (['join', 'select', 'andWhere', 'setParameter', 'orderBy', 'setMaxResults'] as $method) {
+            $queryBuilder->method($method)->willReturnSelf();
+        }
+        $queryBuilder->method('getQuery')->willReturn($query);
+
+        $repository = $this->createMock(EntityRepository::class);
+        $repository->expects(self::once())->method('createQueryBuilder')->with('o')->willReturn($queryBuilder);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->expects(self::once())
+            ->method('getRepository')
+            ->with('ControleOnline\Entity\PeopleLink')
+            ->willReturn($repository);
+
+        $requestStack = new RequestStack();
+        $request = new Request(['original' => 'query']);
+        $requestStack->push($request);
+        $peopleLinkService = $this->getMockBuilder(PeopleLinkService::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['securityFilter'])
+            ->getMock();
+        $peopleLinkService->expects(self::once())
+            ->method('securityFilter')
+            ->with($queryBuilder, 'ControleOnline\Entity\PeopleLink', 'collection', 'o')
+            ->willReturnCallback(static function () use ($request): void {
+                self::assertSame(['company' => 12], $request->query->all());
+            });
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects(self::once())
+            ->method('get')
+            ->with('ControleOnline\Service\PeopleLinkService')
+            ->willReturn($peopleLinkService);
+        $scopeProvider = new class implements McpCompanyScopeProviderInterface {
+            public function listForCurrentUser(): array
+            {
+                return [['id' => 12, 'name' => 'Empresa A', 'alias' => 'empresa-a']];
+            }
+        };
+
+        $provider = new McpReadQueryProvider($entityManager, $requestStack, $container, $scopeProvider, 'America/Sao_Paulo');
+        $rows = $provider->query('employees', [
+            'from' => null,
+            'to' => null,
+            'company_id' => 12,
+            'company_role' => null,
+            'aggregate' => false,
+            'limit' => 20,
+        ]);
+
+        self::assertSame(['original' => 'query'], $request->query->all());
+        self::assertSame('Funcionário A', $rows[0]['name']);
+        self::assertArrayNotHasKey('document', $rows[0]);
+    }
+
+    public function testUnauthorizedCompanyIdReturnsNoDataWithoutQueryingDatabase(): void
     {
         $entityManager = $this->createMock(EntityManagerInterface::class);
         $entityManager->expects(self::never())->method('getRepository');
@@ -45,6 +136,14 @@ final class McpReadQueryProviderTest extends TestCase
         );
 
         self::assertSame([], $provider->query('inventory', [
+            'from' => null,
+            'to' => null,
+            'company_id' => 13,
+            'company_role' => null,
+            'aggregate' => false,
+            'limit' => 20,
+        ]));
+        self::assertSame([], $provider->query('employees', [
             'from' => null,
             'to' => null,
             'company_id' => 13,
