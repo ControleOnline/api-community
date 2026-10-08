@@ -133,8 +133,9 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
         $securityQuery = [];
         $role = $filters['company_role'] ?? null;
         $aggregate = (bool) ($filters['aggregate'] ?? false);
-        if ($aggregate && $dataset !== 'sales') {
-            throw new \InvalidArgumentException('Only closed sales can be aggregated');
+        $groupBy = $filters['group_by'] ?? [];
+        if ($aggregate && !in_array($dataset, ['sales', 'orders', 'invoices', 'products', 'inventory', 'wallets'], true)) {
+            throw new \InvalidArgumentException('Aggregates are not available for this dataset');
         }
         if ($role !== null && $requestedCompanyId === null) {
             throw new \InvalidArgumentException('company_id is required when company_role is set');
@@ -219,20 +220,24 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
             }
 
             if ($aggregate) {
-                // Replace the row projection only after all company security filters are applied.
-                $queryBuilder
-                    ->join('o.orderProducts', 'mcpOrderProduct')
-                    ->andWhere('mcpOrderProduct.orderProduct IS NULL')
-                    ->select('COUNT(DISTINCT o.id) AS count, COALESCE(SUM(mcpOrderProduct.total), 0) AS total');
+                // Aggregate only after the tenant, company scope, and securityFilter have constrained the query.
+                $this->applyAggregate($queryBuilder, $dataset, $definition, $groupBy, $companyIds);
             } else {
                 $queryBuilder->orderBy(in_array($dataset, ['products', 'inventory', 'wallets'], true) ? 'o.id' : 'o.' . $definition['date_field'], 'DESC')
                     ->setMaxResults((int) $filters['limit']);
             }
 
             $rows = $queryBuilder->getQuery()->getArrayResult();
-            if ($aggregate && isset($rows[0])) {
-                $rows[0]['count'] = (int) $rows[0]['count'];
-                $rows[0]['total'] = (float) $rows[0]['total'];
+            if ($aggregate) {
+                foreach ($rows as &$row) {
+                    $row['count'] = (int) $row['count'];
+                    foreach (['total', 'total_price', 'available', 'sales', 'purchases', 'transit', 'balance'] as $numericField) {
+                        if (isset($row[$numericField])) {
+                            $row[$numericField] = (float) $row[$numericField];
+                        }
+                    }
+                }
+                unset($row);
             }
             foreach ($rows as &$row) {
                 if (($row['date'] ?? null) instanceof \DateTimeInterface) {
@@ -264,6 +269,75 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
         }
     }
 
+    /** @param list<string> $groupBy @param list<int> $companyIds */
+    private function applyAggregate(object $queryBuilder, string $dataset, array $definition, array $groupBy, array $companyIds): void
+    {
+        $dateField = $definition['date_field'] ?? null;
+        $typeField = match ($dataset) {
+            'sales', 'orders' => 'o.orderType',
+            'invoices' => 'o.invoiceType',
+            'products' => 'o.type',
+            default => null,
+        };
+        $companyField = match ($dataset) {
+            'sales', 'orders' => 'CASE WHEN IDENTITY(o.client) IN (:mcpCompanies) THEN IDENTITY(o.client) ELSE IDENTITY(o.provider) END',
+            'invoices' => 'CASE WHEN IDENTITY(o.payer) IN (:mcpCompanies) THEN IDENTITY(o.payer) ELSE IDENTITY(o.receiver) END',
+            'products' => 'IDENTITY(o.company)',
+            'inventory' => 'IDENTITY(mcpInventory.people)',
+            'wallets' => 'IDENTITY(o.people)',
+            default => null,
+        };
+        $expressions = [];
+        foreach ($groupBy as $dimension) {
+            $expression = match ($dimension) {
+                'day' => $dateField !== null ? 'SUBSTRING(o.' . $dateField . ', 1, 10)' : null,
+                'month' => $dateField !== null ? 'SUBSTRING(o.' . $dateField . ', 1, 7)' : null,
+                'type' => $typeField,
+                'company_id' => $companyField,
+                'product' => $dataset === 'inventory' ? 'mcpProduct.product' : null,
+                'wallet' => $dataset === 'wallets' ? 'o.wallet' : null,
+                'active' => $dataset === 'products' ? 'o.active' : null,
+                default => null,
+            };
+            if ($expression === null) {
+                throw new \InvalidArgumentException('Unsupported aggregate grouping for dataset');
+            }
+            $expressions[$dimension] = $expression;
+        }
+
+        $select = ['COUNT(DISTINCT o.id) AS count'];
+        if (in_array($dataset, ['sales', 'orders', 'invoices'], true)) {
+            if ($dataset === 'sales') {
+                $queryBuilder->join('o.orderProducts', 'mcpOrderProduct')
+                    ->andWhere('mcpOrderProduct.orderProduct IS NULL');
+                $select[] = 'COALESCE(SUM(mcpOrderProduct.total), 0) AS total';
+            } else {
+                $select[] = 'COALESCE(SUM(o.price), 0) AS total';
+            }
+        } elseif ($dataset === 'products') {
+            $select[] = 'COALESCE(SUM(o.price), 0) AS total_price';
+        } elseif ($dataset === 'inventory') {
+            $select[] = 'COALESCE(SUM(o.available), 0) AS available';
+            $select[] = 'COALESCE(SUM(o.sales), 0) AS sales';
+            $select[] = 'COALESCE(SUM(o.purchases), 0) AS purchases';
+            $select[] = 'COALESCE(SUM(o.transit), 0) AS transit';
+        } elseif ($dataset === 'wallets') {
+            $select[] = 'COALESCE(SUM(o.balance), 0) AS balance';
+        }
+
+        foreach ($expressions as $dimension => $expression) {
+            $select[] = $expression . ' AS ' . $dimension;
+            $queryBuilder->addGroupBy($expression);
+        }
+        $queryBuilder->select(implode(', ', $select));
+        if (in_array($dataset, ['sales', 'orders', 'invoices'], true) && in_array('company_id', $groupBy, true)) {
+            $queryBuilder->setParameter('mcpCompanies', $companyIds);
+        }
+        if ($groupBy !== []) {
+            $queryBuilder->setMaxResults(100);
+        }
+    }
+
     private function roleFilter(string $dataset, string $role): string
     {
         $allowed = match ($dataset) {
@@ -288,9 +362,15 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
      */
     private function queryPeopleLinks(string $dataset, array $companyIds, ?int $requestedCompanyId, array $filters, Request $request): array
     {
+        $aggregate = (bool) ($filters['aggregate'] ?? false);
+        $groupBy = $filters['group_by'] ?? [];
         if (($filters['from'] ?? null) !== null || ($filters['to'] ?? null) !== null
-            || ($filters['company_role'] ?? null) !== null || ($filters['aggregate'] ?? false)) {
-            throw new \InvalidArgumentException('People and commission queries do not support date, role, or aggregate filters');
+            || ($filters['company_role'] ?? null) !== null
+            || ($aggregate && $dataset === 'commissions')) {
+            throw new \InvalidArgumentException('People and commission queries do not support date or role filters; commission aggregates are not available');
+        }
+        if ($aggregate && array_diff($groupBy, ['company_id']) !== []) {
+            throw new \InvalidArgumentException('People aggregates only support grouping by company_id');
         }
 
         $originalQuery = $request->query->all();
@@ -354,14 +434,32 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
                 $queryBuilder->join('o.company', 'mcpLinkCompany')
                     ->join('o.people', 'mcpLinkedPerson')
                     ->andWhere('IDENTITY(o.company) IN (:mcpCompanies)')
-                    ->setParameter('mcpCompanies', $requestedCompanyId === null ? $companyIds : [$requestedCompanyId])
-                    ->select('mcpLinkCompany.id AS company_id, mcpLinkCompany.name AS company, mcpLinkedPerson.id AS person_id, mcpLinkedPerson.name AS name, mcpLinkedPerson.alias AS alias, o.linkType AS relationship')
-                    ->orderBy('mcpLinkedPerson.name', 'ASC')
-                    ->setMaxResults((int) $filters['limit']);
+                    ->setParameter('mcpCompanies', $requestedCompanyId === null ? $companyIds : [$requestedCompanyId]);
+                if ($aggregate) {
+                    $queryBuilder->select('COUNT(DISTINCT mcpLinkedPerson.id) AS count');
+                    if (in_array('company_id', $groupBy, true)) {
+                        $queryBuilder->addSelect('mcpLinkCompany.id AS company_id')
+                            ->groupBy('mcpLinkCompany.id')
+                            ->setMaxResults(100);
+                    }
+                } else {
+                    $queryBuilder->select('mcpLinkCompany.id AS company_id, mcpLinkCompany.name AS company, mcpLinkedPerson.id AS person_id, mcpLinkedPerson.name AS name, mcpLinkedPerson.alias AS alias, o.linkType AS relationship')
+                        ->orderBy('mcpLinkedPerson.name', 'ASC')
+                        ->setMaxResults((int) $filters['limit']);
+                }
                 $rows = $queryBuilder->getQuery()->getArrayResult();
+                if ($aggregate) {
+                    foreach ($rows as &$row) {
+                        $row['count'] = (int) $row['count'];
+                    }
+                    unset($row);
+                }
             }
 
-            $this->auditQuery($dataset, $requestedCompanyId === null ? $companyIds : [$requestedCompanyId], true, count($rows), 'success');
+            $resultCount = $aggregate && !in_array('company_id', $groupBy, true)
+                ? (int) ($rows[0]['count'] ?? 0)
+                : count($rows);
+            $this->auditQuery($dataset, $requestedCompanyId === null ? $companyIds : [$requestedCompanyId], true, $resultCount, 'success');
             return $rows;
         } catch (\Throwable $exception) {
             $this->auditQuery(
