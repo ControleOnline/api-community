@@ -175,13 +175,17 @@ jobs:
               exit 0
             fi
 
-            PHP_BIN="$(command -v ea-php85 || command -v php8.5 || true)"
+            PHP_BIN=""
+            for candidate in "$(type -P ea-php85 || true)" "$(type -P php8.5 || true)" \
+              /opt/cpanel/ea-php85/root/usr/bin/php /opt/alt/php85/usr/bin/php \
+              /usr/local/bin/php85 "$(type -P php || true)"; do
+              if [ -n "$candidate" ] && [ -x "$candidate" ] \
+                && [ "$("$candidate" -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;' 2>/dev/null)" = "8.5" ]; then
+                PHP_BIN="$candidate"
+                break
+              fi
+            done
             if [ -z "$PHP_BIN" ]; then
-              for candidate in /opt/cpanel/ea-php85/root/usr/bin/php /usr/local/bin/php85; do
-                if [ -x "$candidate" ]; then PHP_BIN="$candidate"; break; fi
-              done
-            fi
-            if [ -z "$PHP_BIN" ] || [ "$($PHP_BIN -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')" != "8.5" ]; then
               echo "PHP 8.5 CLI is required for this deployment" >&2
               exit 1
             fi
@@ -302,7 +306,7 @@ jobs:
             nohup "$PHP_BIN" bin/console tenant:messenger:consume async --domain="${MESSENGER_DOMAIN}" >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
             touch "$HOME/.lsphp_restart.txt" 2>/dev/null || true
             touch "$RESTART_FILE" 2>/dev/null || true
-            rm -f "$HOME/.lsphp_restart.txt" "$RESTART_FILE" 2>/dev/null || true
+            echo "LiteSpeed restart markers set for the PHP 8.5 worker"
             echo "Deploy OK: $(git rev-parse --short HEAD) @ ${BRANCH} → ${TARGET}"
         env:
           DEPLOY_BRANCH: ${{ needs.configure.outputs.branch }}
