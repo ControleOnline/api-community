@@ -71,6 +71,7 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
         private readonly string $timezone,
         private readonly ?TokenStorageInterface $tokenStorage = null,
         private readonly ?LoggerInterface $logger = null,
+        private readonly ?McpOperationalReadQueryProvider $operationalQueryProvider = null,
     ) {
     }
 
@@ -88,13 +89,17 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
             ['name' => 'suppliers', 'description' => 'Supplier names linked to companies the user can access.'],
             ['name' => 'salespeople', 'description' => 'Salesperson names linked to companies the user can access.'],
             ['name' => 'commissions', 'description' => 'Commission rates and minimums for salespeople in companies the user can manage.'],
+            ['name' => 'configs', 'description' => 'Metadata for the devices configuration key only; configuration values and secrets are never returned.'],
+            ['name' => 'devices', 'description' => 'Device aliases and types configured for companies the user can access; device credentials are excluded.'],
+            ['name' => 'displays', 'description' => 'Production display names, types, companies and assigned queues for companies the user can access.'],
+            ['name' => 'production_queue', 'description' => 'Preparation items for sale orders, with product, queue, preparation status and timestamps.'],
         ];
     }
 
     public function query(string $dataset, array $filters): array
     {
         $definition = self::DATASETS[$dataset] ?? null;
-        if ($definition === null) {
+        if ($definition === null && !$this->operationalQueryProvider?->supports($dataset)) {
             throw new \InvalidArgumentException('Unsupported dataset');
         }
 
@@ -114,6 +119,10 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
         $request = $this->requestStack->getCurrentRequest();
         if ($request === null) {
             throw new \RuntimeException('MCP query requires an active authenticated request');
+        }
+
+        if ($this->operationalQueryProvider?->supports($dataset)) {
+            return $this->operationalQueryProvider->query($dataset, $companyIds, $requestedCompanyId, $filters, $request);
         }
 
         if (in_array($dataset, ['employees', 'clients', 'suppliers', 'salespeople', 'commissions'], true)) {
