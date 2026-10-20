@@ -1,0 +1,13 @@
+--- a/vendor/controleonline/people/src/Entity/PeopleLink.php
++++ b/vendor/controleonline/people/src/Entity/PeopleLink.php
+@@ -49,6 +49,10 @@
+     'people' => 'exact',
+     // linkType + enable: handled only in PeopleLinkService (SET + OR semantics).
+ ])]
++#[ApiFilter(\ApiPlatform\Serializer\Filter\PropertyFilter::class, arguments: [
++    'parameterName' => 'listFields',
++    'whitelist' => ['id', 'enable', 'linkType', 'people' => ['id', 'name', 'alias'], 'company' => ['id']],
++])]
+ class PeopleLink
+ {
+     public const HUMAN_LINK = [
