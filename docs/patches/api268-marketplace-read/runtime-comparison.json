@@ -1,0 +1,262 @@
+{
+  "before": {
+    "phase": "before",
+    "requests": [
+      {
+        "path": "/marketplace/integrations/catalog/status?provider_id=3",
+        "status": 200,
+        "elapsedMs": 25150.1,
+        "json": true,
+        "canonicalSha256": "3eeaef2869ad59c5d8985451231b85b85d6f22dee3196673f6ac70db42353729",
+        "sqlCount": 675,
+        "sqlMs": 19677.6,
+        "tables": {
+          "extra_fields": 335,
+          "extra_data": 321,
+          "people": 4,
+          "people_link": 4,
+          "product_group": 3,
+          "category": 2,
+          "config": 2,
+          "users": 1,
+          "people_domain": 1,
+          "timezones": 1
+        }
+      },
+      {
+        "path": "/marketplace/integrations?provider_id=3",
+        "status": 200,
+        "elapsedMs": 6059,
+        "json": true,
+        "canonicalSha256": "05e27837680c947b229c56f50adbcdca9c9574577b1c579f78198c7980c76c25",
+        "sqlCount": 222,
+        "sqlMs": 5790.3,
+        "tables": {
+          "extra_fields": 108,
+          "extra_data": 94,
+          "config": 5,
+          "people": 4,
+          "people_link": 4,
+          "product_group": 2,
+          "users": 1,
+          "people_domain": 1,
+          "timezones": 1,
+          "product": 1
+        }
+      },
+      {
+        "path": "/translates/overview?people=3&language.language=pt-br",
+        "status": 200,
+        "elapsedMs": 1362.3,
+        "json": true,
+        "canonicalSha256": "64afbc6b90906b36f5ac774784592a66a7561042010614f6889c63c125e94755",
+        "sqlCount": 15,
+        "sqlMs": 614.1,
+        "tables": {
+          "people_link": 5,
+          "people": 4,
+          "users": 1,
+          "people_domain": 1,
+          "timezones": 1,
+          "language": 1,
+          "translate": 1
+        }
+      }
+    ]
+  },
+  "after": {
+    "phase": "after",
+    "requests": [
+      {
+        "path": "/marketplace/integrations/catalog/status?provider_id=3",
+        "status": 200,
+        "elapsedMs": 6872,
+        "json": true,
+        "canonicalSha256": "3eeaef2869ad59c5d8985451231b85b85d6f22dee3196673f6ac70db42353729",
+        "sqlCount": 106,
+        "sqlMs": 3457.4,
+        "tables": {
+          "extra_data": 65,
+          "extra_fields": 22,
+          "people": 4,
+          "people_link": 4,
+          "product_group": 3,
+          "category": 2,
+          "config": 2,
+          "users": 1,
+          "people_domain": 1,
+          "timezones": 1
+        }
+      },
+      {
+        "path": "/marketplace/integrations?provider_id=3",
+        "status": 200,
+        "elapsedMs": 2766.2,
+        "json": true,
+        "canonicalSha256": "05e27837680c947b229c56f50adbcdca9c9574577b1c579f78198c7980c76c25",
+        "sqlCount": 87,
+        "sqlMs": 2532.1,
+        "tables": {
+          "extra_data": 47,
+          "extra_fields": 20,
+          "config": 5,
+          "people": 4,
+          "people_link": 4,
+          "product_group": 2,
+          "users": 1,
+          "people_domain": 1,
+          "timezones": 1,
+          "product": 1
+        }
+      },
+      {
+        "path": "/translates/overview?people=3&language.language=pt-br",
+        "status": 200,
+        "elapsedMs": 1755.6,
+        "json": true,
+        "canonicalSha256": "64afbc6b90906b36f5ac774784592a66a7561042010614f6889c63c125e94755",
+        "sqlCount": 15,
+        "sqlMs": 639.1,
+        "tables": {
+          "people_link": 5,
+          "people": 4,
+          "users": 1,
+          "people_domain": 1,
+          "timezones": 1,
+          "language": 1,
+          "translate": 1
+        }
+      }
+    ]
+  },
+  "after-confirm": {
+    "phase": "after-confirm",
+    "requests": [
+      {
+        "path": "/marketplace/integrations/catalog/status?provider_id=3",
+        "status": 200,
+        "elapsedMs": 21016.4,
+        "json": true,
+        "canonicalSha256": "3eeaef2869ad59c5d8985451231b85b85d6f22dee3196673f6ac70db42353729",
+        "sqlCount": 675,
+        "sqlMs": 18036.1,
+        "tables": {
+          "extra_fields": 335,
+          "extra_data": 321,
+          "people": 4,
+          "people_link": 4,
+          "product_group": 3,
+          "category": 2,
+          "config": 2,
+          "users": 1,
+          "people_domain": 1,
+          "timezones": 1
+        }
+      },
+      {
+        "path": "/marketplace/integrations?provider_id=3",
+        "status": 200,
+        "elapsedMs": 3075.3,
+        "json": true,
+        "canonicalSha256": "05e27837680c947b229c56f50adbcdca9c9574577b1c579f78198c7980c76c25",
+        "sqlCount": 87,
+        "sqlMs": 2829.8,
+        "tables": {
+          "extra_data": 47,
+          "extra_fields": 20,
+          "config": 5,
+          "people": 4,
+          "people_link": 4,
+          "product_group": 2,
+          "users": 1,
+          "people_domain": 1,
+          "timezones": 1,
+          "product": 1
+        }
+      },
+      {
+        "path": "/translates/overview?people=3&language.language=pt-br",
+        "status": 200,
+        "elapsedMs": 1225.4,
+        "json": true,
+        "canonicalSha256": "64afbc6b90906b36f5ac774784592a66a7561042010614f6889c63c125e94755",
+        "sqlCount": 15,
+        "sqlMs": 535.1,
+        "tables": {
+          "people_link": 5,
+          "people": 4,
+          "users": 1,
+          "people_domain": 1,
+          "timezones": 1,
+          "language": 1,
+          "translate": 1
+        }
+      }
+    ]
+  },
+  "after-stable": {
+    "phase": "after-stable",
+    "requests": [
+      {
+        "path": "/marketplace/integrations/catalog/status?provider_id=3",
+        "status": 200,
+        "elapsedMs": 8013.8,
+        "json": true,
+        "canonicalSha256": "3eeaef2869ad59c5d8985451231b85b85d6f22dee3196673f6ac70db42353729",
+        "sqlCount": 106,
+        "sqlMs": 5471.7,
+        "tables": {
+          "extra_data": 65,
+          "extra_fields": 22,
+          "people": 4,
+          "people_link": 4,
+          "product_group": 3,
+          "category": 2,
+          "config": 2,
+          "users": 1,
+          "people_domain": 1,
+          "timezones": 1
+        }
+      },
+      {
+        "path": "/marketplace/integrations?provider_id=3",
+        "status": 200,
+        "elapsedMs": 2979.7,
+        "json": true,
+        "canonicalSha256": "05e27837680c947b229c56f50adbcdca9c9574577b1c579f78198c7980c76c25",
+        "sqlCount": 87,
+        "sqlMs": 2749.1,
+        "tables": {
+          "extra_data": 47,
+          "extra_fields": 20,
+          "config": 5,
+          "people": 4,
+          "people_link": 4,
+          "product_group": 2,
+          "users": 1,
+          "people_domain": 1,
+          "timezones": 1,
+          "product": 1
+        }
+      },
+      {
+        "path": "/translates/overview?people=3&language.language=pt-br",
+        "status": 200,
+        "elapsedMs": 1358.3,
+        "json": true,
+        "canonicalSha256": "64afbc6b90906b36f5ac774784592a66a7561042010614f6889c63c125e94755",
+        "sqlCount": 15,
+        "sqlMs": 458.3,
+        "tables": {
+          "people_link": 5,
+          "people": 4,
+          "users": 1,
+          "people_domain": 1,
+          "timezones": 1,
+          "language": 1,
+          "translate": 1
+        }
+      }
+    ]
+  }
+}

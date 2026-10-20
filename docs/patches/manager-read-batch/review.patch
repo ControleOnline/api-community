@@ -1,0 +1,467 @@
+--- a/vendor/controleonline/common/src/Service/CollectionReadBatchHydrator.php
++++ b/vendor/controleonline/common/src/Service/CollectionReadBatchHydrator.php
+@@ -0,0 +1,79 @@
++<?php
++
++namespace ControleOnline\Service;
++
++use ControleOnline\Entity\People;
++use ControleOnline\Entity\Product;
++use Doctrine\ORM\EntityManagerInterface;
++
++/** Preloads existing response relationships, never chooses visibility or changes pagination. */
++class CollectionReadBatchHydrator
++{
++    public function __construct(
++        private readonly EntityManagerInterface $manager,
++        private readonly ExtraDataService $extraDataService,
++    ) {}
++
++    /** @return \WeakMap<object, array> Serialization-local extra data, including empty results. */
++    public function prepare(iterable $collection, string $resourceClass, array $context = []): \WeakMap
++    {
++        $cache = new \WeakMap();
++        if (!in_array($resourceClass, [People::class, Product::class], true)
++            || ($collection instanceof \Iterator && !$collection instanceof \ArrayIterator)) {
++            return $cache;
++        }
++        $page = [];
++        foreach ($collection as $entity) {
++            if ($entity instanceof $resourceClass) {
++                $page[] = $entity;
++            }
++        }
++        if ($page === []) {
++            return $cache;
++        }
++
++        // Roots came from the filtered, authorized page. Each separate fetch join has
++        // only one to-many path, avoiding a Cartesian product or LIMIT over child rows.
++        $paths = $resourceClass === People::class
++            ? ['document', 'company_document', 'address', 'phone', 'email', 'productPeople' => 'product', 'peopleMedia']
++            : ['productFiles' => 'file', 'productPeople'];
++        $repository = $this->manager->getRepository($resourceClass);
++        foreach (array_chunk($page, 100) as $batch) {
++            foreach ($paths as $key => $path) {
++                $relation = is_int($key) ? $path : $key;
++                $qb = $repository->createQueryBuilder('batch_root')
++                    ->leftJoin('batch_root.' . $relation, 'batch_relation')
++                    ->addSelect('batch_relation')
++                    ->andWhere('batch_root IN (:batchPage)')
++                    ->setParameter('batchPage', $batch);
++                if (!is_int($key)) {
++                    // Product lists serialize file metadata; do not fetch binary content
++                    // that belongs to the separate authenticated download operation.
++                    $metadataOnly = $resourceClass === Product::class && $relation === 'productFiles'
++                        && ($context['groups'] ?? []) === ['product:read'];
++                    $qb->leftJoin('batch_relation.' . $path, 'batch_nested')->addSelect($metadataOnly
++                        ? 'partial batch_nested.{id,fileType,fileName,context,extension,public}'
++                        : 'batch_nested');
++                }
++                if ($resourceClass === People::class && $relation === 'address') {
++                    // Only to-one descendants: the address batch still has one to-many path.
++                    foreach ([
++                        ['batch_relation.street', 'batch_address_street'],
++                        ['batch_address_street.district', 'batch_address_district'],
++                        ['batch_address_street.cep', 'batch_address_cep'],
++                        ['batch_address_district.city', 'batch_address_city'],
++                        ['batch_address_city.state', 'batch_address_state'],
++                        ['batch_address_state.country', 'batch_address_country'],
++                    ] as [$joinPath, $alias]) {
++                        $qb->leftJoin($joinPath, $alias)->addSelect($alias);
++                    }
++                }
++                $qb->getQuery()->getResult();
++            }
++        }
++
++        return $resourceClass === Product::class
++            ? $this->extraDataService->getExtraDataFromEntities($page)
++            : $cache;
++    }
++}
+--- a/vendor/controleonline/common/src/Service/ExtraDataService.php
++++ b/vendor/controleonline/common/src/Service/ExtraDataService.php
+@@ -38,6 +38,48 @@
+             $class->getShortName(),
+             $entity->getId()
+         );
++    }
++
++    /**
++     * Batch only objects already selected for this response. No shared cache survives
++     * serialization; absent metadata is cached too, avoiding one empty query per row.
++     * @return \WeakMap<object, array>
++     */
++    public function getExtraDataFromEntities(array $entities): \WeakMap
++    {
++        $cache = new \WeakMap();
++        $groups = [];
++        foreach ($entities as $entity) {
++            if (!is_object($entity) || !method_exists($entity, 'setExtraData') || !method_exists($entity, 'getId')) {
++                continue;
++            }
++            if (isset($cache[$entity])) {
++                continue;
++            }
++            $cache[$entity] = [];
++            $id = (int) $entity->getId();
++            if ($id > 0) {
++                $groups[$this->getEntityName($entity)->getShortName()][(string) $id][] = $entity;
++            }
++        }
++        foreach ($groups as $name => $objectsById) {
++            foreach (array_chunk(array_keys($objectsById), 100) as $ids) {
++                $rows = $this->extraDataRepository()->createQueryBuilder('batch_extra')
++                    ->leftJoin('batch_extra.extra_fields', 'batch_fields')->addSelect('batch_fields')
++                    ->andWhere('batch_extra.entity_name = :entityName')
++                    ->andWhere('batch_extra.entity_id IN (:entityIds)')
++                    ->setParameter('entityName', $name)->setParameter('entityIds', $ids)
++                    ->orderBy('batch_extra.id', 'ASC')->getQuery()->getResult();
++                foreach ($rows as $row) {
++                    foreach ($objectsById[(string) $row->getEntityId()] ?? [] as $entity) {
++                        $values = $cache[$entity];
++                        $values[] = $row;
++                        $cache[$entity] = $values;
++                    }
++                }
++            }
++        }
++        return $cache;
+     }
+ 
+     public function getExtraDataFromEntity(object $entity)
+--- a/vendor/controleonline/common/src/Serializer/CollectionSummaryNormalizer.php
++++ b/vendor/controleonline/common/src/Serializer/CollectionSummaryNormalizer.php
+@@ -5,6 +5,7 @@
+ use ApiPlatform\Metadata\CollectionOperationInterface;
+ use ControleOnline\Doctrine\Extension\CollectionDoctrineQueryDebugExtension;
+ use ControleOnline\State\CollectionSummaryResult;
++use ControleOnline\Service\CollectionReadBatchHydrator;
+ use Symfony\Component\HttpFoundation\RequestStack;
+ use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
+ use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
+@@ -16,7 +17,9 @@
+ 
+     private const ALREADY_CALLED = 'controleonline_collection_summary_normalizer_called';
+ 
+-    public function __construct(private readonly ?RequestStack $requestStack = null)
++    public function __construct(private readonly ?RequestStack $requestStack = null,
++        private readonly ?CollectionReadBatchHydrator $batchHydrator = null,
++    )
+     {
+     }
+ 
+@@ -47,6 +50,13 @@
+             $collection = $object->getCollection();
+         }
+ 
++        $operation = $context['operation'] ?? $context['api_operation'] ?? null;
++        if ($this->batchHydrator && is_iterable($collection) && $operation instanceof CollectionOperationInterface) {
++            $context['_extra_data_preloaded'] = $this->batchHydrator->prepare($collection, (string) $operation->getClass(), $context);
++            $context['exclude_from_cache_key'] = array_unique(array_merge(
++                $context['exclude_from_cache_key'] ?? [], ['_extra_data_preloaded'],
++            ));
++        }
+         $context[self::ALREADY_CALLED] = true;
+         $data = $this->normalizer->normalize($collection, $format, $context);
+ 
+@@ -78,7 +88,8 @@
+     {
+         return [
+             CollectionSummaryResult::class => true,
+-            'iterable' => false,
++            'object' => false,
++            'array' => false,
+         ];
+     }
+ 
+--- a/vendor/controleonline/common/src/Serializer/ExtraDataNormalizer.php
++++ b/vendor/controleonline/common/src/Serializer/ExtraDataNormalizer.php
+@@ -29,7 +29,7 @@
+         // Share reads across branches of this serialization only, never requests.
+         $context['_extra_data_cache'] ??= new \WeakMap();
+         $context['exclude_from_cache_key'] = array_unique(array_merge(
+-            $context['exclude_from_cache_key'] ?? [], ['_extra_data_cache', '_extra_data_applied'],
++            $context['exclude_from_cache_key'] ?? [], ['_extra_data_cache', '_extra_data_applied', '_extra_data_preloaded'],
+         ));
+         if (is_array($object)) {
+             return $this->normalizer->normalize($object, $format, $context);
+@@ -43,7 +43,10 @@
+             return $this->normalizer->normalize($object, $format, $context);
+         }
+ 
+-        $extraDataEntities = $this->extraDataService->getExtraDataFromEntity($object);
++        $preloaded = $context['_extra_data_preloaded'] ?? null;
++        $extraDataEntities = $preloaded instanceof \WeakMap && isset($preloaded[$object])
++            ? $preloaded[$object]
++            : $this->extraDataService->getExtraDataFromEntity($object);
+ 
+         $extraDataArray = [];
+         foreach ($extraDataEntities as $extraData) {
+--- a/vendor/controleonline/common/tests/Service/CollectionReadBatchHydratorTest.php
++++ b/vendor/controleonline/common/tests/Service/CollectionReadBatchHydratorTest.php
+@@ -0,0 +1,123 @@
++<?php
++namespace ControleOnline\Common\Tests\Service;
++
++use ControleOnline\Entity\People;
++use ControleOnline\Entity\Product;
++use ControleOnline\Service\CollectionReadBatchHydrator;
++use ControleOnline\Service\ExtraDataService;
++use Doctrine\ORM\EntityManagerInterface;
++use Doctrine\ORM\EntityRepository;
++use Doctrine\ORM\Query;
++use Doctrine\ORM\QueryBuilder;
++use PHPUnit\Framework\TestCase;
++
++final class CollectionReadBatchHydratorTest extends TestCase
++{
++    public function testHydratesPeopleRelationsSeparatelyForOnlyTheAlreadyAuthorizedPage(): void
++    {
++        $people = [new People(), new People()];
++        $manager = $this->createMock(EntityManagerInterface::class);
++        $repo = $this->createMock(EntityRepository::class);
++        $manager->expects(self::once())->method('getRepository')->with(People::class)->willReturn($repo);
++        $relations = [];
++        $repo->expects(self::exactly(7))->method('createQueryBuilder')->with('batch_root')
++            ->willReturnCallback(function () use (&$relations, $people): QueryBuilder {
++                $qb = $this->createMock(QueryBuilder::class);
++                $qb->method('leftJoin')->willReturnCallback(function ($path) use (&$relations, $qb) {
++                    $relations[] = $path; return $qb;
++                });
++                $qb->method('addSelect')->willReturnSelf();
++                $qb->expects(self::once())->method('andWhere')->with('batch_root IN (:batchPage)')->willReturnSelf();
++                $qb->expects(self::once())->method('setParameter')->with('batchPage', $people)->willReturnSelf();
++                $query = $this->createMock(Query::class);
++                $query->expects(self::once())->method('getResult')->willReturn($people);
++                $qb->method('getQuery')->willReturn($query);
++                return $qb;
++            });
++        $extras = $this->createMock(ExtraDataService::class);
++        $extras->expects(self::never())->method('getExtraDataFromEntities');
++        $cache = (new CollectionReadBatchHydrator($manager, $extras))->prepare($people, People::class);
++        self::assertCount(0, $cache);
++        self::assertContains('batch_root.phone', $relations);
++        self::assertContains('batch_relation.product', $relations);
++        self::assertContains('batch_relation.street', $relations);
++        self::assertContains('batch_address_street.district', $relations);
++        self::assertContains('batch_address_street.cep', $relations);
++        self::assertContains('batch_address_district.city', $relations);
++        self::assertContains('batch_address_city.state', $relations);
++        self::assertContains('batch_address_state.country', $relations);
++    }
++
++    public function testDoesNotConsumeSinglePassCollections(): void
++    {
++        $manager = $this->createMock(EntityManagerInterface::class);
++        $manager->expects(self::never())->method('getRepository');
++        $extras = $this->createMock(ExtraDataService::class);
++        $extras->expects(self::never())->method('getExtraDataFromEntities');
++        $person = new People();
++        $generator = (static function () use ($person) { yield $person; })();
++        self::assertCount(0, (new CollectionReadBatchHydrator($manager, $extras))->prepare($generator, People::class));
++        self::assertSame([$person], iterator_to_array($generator));
++    }
++
++    public function testEmptyAndUnrelatedCollectionsNeverQuery(): void
++    {
++        $manager = $this->createMock(EntityManagerInterface::class);
++        $manager->expects(self::never())->method('getRepository');
++        $extras = $this->createMock(ExtraDataService::class);
++        $extras->expects(self::never())->method('getExtraDataFromEntities');
++        $hydrator = new CollectionReadBatchHydrator($manager, $extras);
++        self::assertCount(0, $hydrator->prepare([], People::class));
++        self::assertCount(0, $hydrator->prepare([new \stdClass()], \stdClass::class));
++    }
++
++    public function testProductPagePreloadsFileObjectsAndBatchMetadataWithoutChangingEntities(): void
++    {
++        $products = [new Product(), new Product()];
++        $manager = $this->createMock(EntityManagerInterface::class);
++        $repo = $this->createMock(EntityRepository::class);
++        $manager->expects(self::once())->method('getRepository')->with(Product::class)->willReturn($repo);
++        $qb = $this->createMock(QueryBuilder::class);
++        $repo->expects(self::exactly(2))->method('createQueryBuilder')->willReturn($qb);
++        $qb->method('leftJoin')->willReturnSelf(); $qb->method('addSelect')->willReturnSelf();
++        $qb->method('andWhere')->willReturnSelf();
++        $qb->expects(self::exactly(2))->method('setParameter')->with('batchPage', $products)->willReturnSelf();
++        $query = $this->createMock(Query::class); $query->expects(self::exactly(2))->method('getResult')->willReturn($products);
++        $qb->method('getQuery')->willReturn($query);
++        $cache = new \WeakMap(); $cache[$products[0]] = [];
++        $extras = $this->createMock(ExtraDataService::class);
++        $extras->expects(self::once())->method('getExtraDataFromEntities')->with($products)->willReturn($cache);
++        self::assertSame($cache, (new CollectionReadBatchHydrator($manager, $extras))->prepare($products, Product::class));
++    }
++
++    public function testProductListPreloadsFileMetadataButPreservesFullReadsForOtherGroups(): void
++    {
++        foreach ([['product:read'], ['product:read', 'file_item:read'], []] as $groups) {
++            $products = [new Product()];
++            $manager = $this->createMock(EntityManagerInterface::class);
++            $repo = $this->createMock(EntityRepository::class);
++            $manager->method('getRepository')->willReturn($repo);
++            $qb = $this->createMock(QueryBuilder::class);
++            $repo->method('createQueryBuilder')->willReturn($qb);
++            $qb->method('leftJoin')->willReturnSelf();
++            $selections = [];
++            $qb->method('addSelect')->willReturnCallback(function ($value) use (&$selections, $qb) {
++                $selections[] = $value; return $qb;
++            });
++            $qb->method('andWhere')->willReturnSelf(); $qb->method('setParameter')->willReturnSelf();
++            $query = $this->createMock(Query::class); $query->method('getResult')->willReturn($products);
++            $qb->method('getQuery')->willReturn($query);
++            $extras = $this->createMock(ExtraDataService::class);
++            $extras->method('getExtraDataFromEntities')->willReturn(new \WeakMap());
++            (new CollectionReadBatchHydrator($manager, $extras))->prepare($products, Product::class, ['groups' => $groups]);
++            $partial = 'partial batch_nested.{id,fileType,fileName,context,extension,public}';
++            if ($groups === ['product:read']) {
++                self::assertContains($partial, $selections);
++                self::assertNotContains('batch_nested', $selections);
++            } else {
++                self::assertContains('batch_nested', $selections);
++                self::assertNotContains($partial, $selections);
++            }
++        }
++    }
++}
+--- a/vendor/controleonline/common/tests/Service/ExtraDataBatchReadTest.php
++++ b/vendor/controleonline/common/tests/Service/ExtraDataBatchReadTest.php
+@@ -0,0 +1,42 @@
++<?php
++namespace ControleOnline\Common\Tests\Service;
++
++use ControleOnline\Entity\ExtraData;
++use ControleOnline\Entity\Product;
++use ControleOnline\Repository\ExtraDataRepository;
++use ControleOnline\Service\DeviceService;
++use ControleOnline\Service\ExtraDataService;
++use ControleOnline\Service\SkyNetService;
++use Doctrine\ORM\EntityManagerInterface;
++use Doctrine\ORM\Query;
++use Doctrine\ORM\QueryBuilder;
++use PHPUnit\Framework\TestCase;
++use Symfony\Component\HttpFoundation\RequestStack;
++use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
++
++final class ExtraDataBatchReadTest extends TestCase
++{
++    public function testBatchKeepsEmptyEntriesAndDoesNotWriteOrQueryPerProduct(): void
++    {
++        $a = new Product(); $b = new Product();
++        $id = new \ReflectionProperty(Product::class, 'id'); $id->setValue($a, 2); $id->setValue($b, 3);
++        $row = $this->createStub(ExtraData::class); $row->method('getEntityId')->willReturn('2');
++        $manager = $this->createMock(EntityManagerInterface::class);
++        $manager->expects(self::never())->method('persist'); $manager->expects(self::never())->method('flush');
++        $repo = $this->createMock(ExtraDataRepository::class);
++        $manager->expects(self::once())->method('getRepository')->with(ExtraData::class)->willReturn($repo);
++        $qb = $this->createMock(QueryBuilder::class);
++        $repo->expects(self::once())->method('createQueryBuilder')->with('batch_extra')->willReturn($qb);
++        $qb->expects(self::once())->method('leftJoin')->with('batch_extra.extra_fields', 'batch_fields')->willReturnSelf();
++        $qb->method('addSelect')->willReturnSelf(); $qb->method('andWhere')->willReturnSelf();
++        $params = []; $qb->method('setParameter')->willReturnCallback(function($key, $value) use (&$params, $qb) { $params[$key] = $value; return $qb; });
++        $qb->method('orderBy')->willReturnSelf();
++        $query = $this->createMock(Query::class); $query->expects(self::once())->method('getResult')->willReturn([$row]);
++        $qb->method('getQuery')->willReturn($query);
++        $service = new ExtraDataService($manager, new RequestStack(), $this->createStub(TokenStorageInterface::class),
++            $this->createStub(DeviceService::class), $this->createStub(SkyNetService::class));
++        $cache = $service->getExtraDataFromEntities([$a, $a, $b, new \stdClass()]);
++        self::assertSame(['entityName' => 'Product', 'entityIds' => [2, 3]], $params);
++        self::assertSame([$row], $cache[$a]); self::assertSame([], $cache[$b]); self::assertCount(2, $cache);
++    }
++}
+--- a/vendor/controleonline/common/tests/Serializer/CollectionSummaryNormalizerTest.php
++++ b/vendor/controleonline/common/tests/Serializer/CollectionSummaryNormalizerTest.php
+@@ -12,6 +12,41 @@
+ 
+ final class CollectionSummaryNormalizerTest extends TestCase
+ {
++    public function testSymfonySelectsBatchNormalizerForPlainCollection(): void
++    {
++        $collection = new \ArrayIterator([new \ControleOnline\Entity\People()]);
++        $hydrator = $this->createMock(\ControleOnline\Service\CollectionReadBatchHydrator::class);
++        $hydrator->expects(self::once())->method('prepare')->with($collection, \ControleOnline\Entity\People::class)->willReturn(new \WeakMap());
++        $delegate = new class implements NormalizerInterface {
++            public function getSupportedTypes(?string $format): array { return ['object' => false, 'array' => false]; }
++            public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool { return is_iterable($data); }
++            public function normalize(mixed $object, ?string $format = null, array $context = []): array { return ['member' => [], 'totalItems' => 1]; }
++        };
++        $serializer = new \Symfony\Component\Serializer\Serializer([new CollectionSummaryNormalizer(null, $hydrator), $delegate]);
++        self::assertSame(['member' => [], 'totalItems' => 1], $serializer->normalize($collection, 'jsonld', ['operation' => new GetCollection(class: \ControleOnline\Entity\People::class)]));
++    }
++
++    public function testBatchingPreservesTheOriginalFilteredPaginatorSummaryAndContext(): void
++    {
++        $collection = new \ArrayIterator([new \ControleOnline\Entity\Product()]);
++        $wrapper = new \ControleOnline\State\CollectionSummaryResult($collection, ['total' => 91]);
++        $preloaded = new \WeakMap();
++        $hydrator = $this->createMock(\ControleOnline\Service\CollectionReadBatchHydrator::class);
++        $hydrator->expects(self::once())->method('prepare')
++            ->with($collection, \ControleOnline\Entity\Product::class)->willReturn($preloaded);
++        $delegate = $this->createMock(NormalizerInterface::class);
++        $operation = new GetCollection(class: \ControleOnline\Entity\Product::class);
++        $delegate->expects(self::once())->method('normalize')->with($collection, 'jsonld', self::callback(
++            static fn(array $context) => $context['operation'] === $operation
++                && $context['filters'] === ['company' => '/people/3']
++                && $context['_extra_data_preloaded'] === $preloaded
++        ))->willReturn(['hydra:member' => [['id' => 7]], 'hydra:totalItems' => 27]);
++        $normalizer = new CollectionSummaryNormalizer(null, $hydrator);
++        $normalizer->setNormalizer($delegate);
++        self::assertSame(['member' => [['id' => 7]], 'totalItems' => 27, 'summary' => ['total' => 91]],
++            $normalizer->normalize($wrapper, 'jsonld', ['operation' => $operation, 'filters' => ['company' => '/people/3']]));
++    }
++
+     public function testAddsDebugQueryFromCurrentRequest(): void
+     {
+         $request = Request::create('/orders', 'GET');
+--- a/vendor/controleonline/common/tests/Serializer/ExtraDataNormalizerTest.php
++++ b/vendor/controleonline/common/tests/Serializer/ExtraDataNormalizerTest.php
+@@ -10,6 +10,18 @@
+ 
+ final class ExtraDataNormalizerTest extends TestCase
+ {
++    public function testUsesBatchResultsIncludingEmptyResultsWithoutIndividualReads(): void
++    {
++        $first = new ExtraDataFixture(1); $second = new ExtraDataFixture(2);
++        $preloaded = new \WeakMap(); $preloaded[$first] = []; $preloaded[$second] = [];
++        $service = $this->createMock(ExtraDataService::class);
++        $service->expects(self::never())->method('getExtraDataFromEntity');
++        $serializer = new Serializer([new ExtraDataNormalizer($service), new ObjectNormalizer()]);
++        self::assertSame([
++            ['extraData' => [], 'id' => 1], ['extraData' => [], 'id' => 2],
++        ], $serializer->normalize([$first, $second], null, ['_extra_data_preloaded' => $preloaded]));
++    }
++
+     public function testReadsEachRepeatedEntityOnceAndPreservesTheFullResponse(): void
+     {
+         $entities = array_map(fn ($id) => new ExtraDataFixture($id), range(1, 22));
+--- a/vendor/controleonline/common/config/services/services.yaml
++++ b/vendor/controleonline/common/config/services/services.yaml
+@@ -97,8 +97,14 @@
+         arguments:
+             $inner: '@ControleOnline\State\CollectionSummaryProvider.inner'
+ 
++    ControleOnline\Service\CollectionReadBatchHydrator:
++        autowire: true
++        autoconfigure: false
++
+     ControleOnline\Serializer\CollectionSummaryNormalizer:
+         autowire: true
+         autoconfigure: false
++        arguments:
++            $batchHydrator: '@ControleOnline\Service\CollectionReadBatchHydrator'
+         tags:
+             - { name: serializer.normalizer, priority: 1100 }
+--- a/vendor/controleonline/people/src/Entity/PeopleLink.php
++++ b/vendor/controleonline/people/src/Entity/PeopleLink.php
+@@ -49,6 +49,10 @@
+     'people' => 'exact',
+     // linkType + enable: handled only in PeopleLinkService (SET + OR semantics).
+ ])]
++#[ApiFilter(\ApiPlatform\Serializer\Filter\PropertyFilter::class, arguments: [
++    'parameterName' => 'listFields',
++    'whitelist' => ['id', 'enable', 'linkType', 'people' => ['id', 'name', 'alias'], 'company' => ['id']],
++])]
+ class PeopleLink
+ {
+     public const HUMAN_LINK = [

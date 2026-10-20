@@ -1,0 +1,65 @@
+{
+  "package": "controleonline/common",
+  "version": "v1.0.5",
+  "reference": "1ed215c1c2270575fe7264c0b6d4fd9a705a4dd0",
+  "scope": "Exact local baseline including existing local normalization changes; not a stock release patch.",
+  "files": [
+    {
+      "path": "vendor/controleonline/common/src/Service/CollectionReadBatchHydrator.php",
+      "before": null,
+      "after": "7d58c00cea23cfaadbf17ae828b2181020c00e86509b17d19188af4a856a36b3"
+    },
+    {
+      "path": "vendor/controleonline/common/src/Service/ExtraDataService.php",
+      "before": "e88a258bbf58f8d26a877a9fd1ec271a476c9ffca461ef1f36d84a9410851ef8",
+      "after": "7563c436536d49d1e96796c93e60629be42678b2d26392ca3115be6dd9e1e396"
+    },
+    {
+      "path": "vendor/controleonline/common/src/Serializer/CollectionSummaryNormalizer.php",
+      "before": "c0b5bb7dac21beaa45b74aa49d7a1b0077d7eaa8c0e6a7dddfa55156816f8707",
+      "after": "a53d78b79bd076eef79a68af4ed1fb209663f36dc6f91397fef1271ceae3d9cf"
+    },
+    {
+      "path": "vendor/controleonline/common/src/Serializer/ExtraDataNormalizer.php",
+      "before": "438484219544b66c0e3883e3fd5cd092fee835d28629de12bf001c9a647a9465",
+      "after": "5bd7b7a9eba3de39ef9b71432ab4a81f97cc7fa3b7e1184543260e8544fbf5fe"
+    },
+    {
+      "path": "vendor/controleonline/common/tests/Service/CollectionReadBatchHydratorTest.php",
+      "before": null,
+      "after": "71712a2b2c9505cb2de71b77556af245f637e3690924abe8b472bfb9c0c2441e"
+    },
+    {
+      "path": "vendor/controleonline/common/tests/Service/ExtraDataBatchReadTest.php",
+      "before": null,
+      "after": "a8dc7fb83fa699a4b397b5fa6a3e4526fe978efcb37ecbd940532cb9d39ba5c2"
+    },
+    {
+      "path": "vendor/controleonline/common/tests/Serializer/CollectionSummaryNormalizerTest.php",
+      "before": "727af74861c5bb61862d499e4c9515f263290f0f2a2814858896fd22d7f9314d",
+      "after": "53d5ff8630c21460eb9d249ddf0b0f13d197ba58dc95eaed74810abdf33ffa4d"
+    },
+    {
+      "path": "vendor/controleonline/common/tests/Serializer/ExtraDataNormalizerTest.php",
+      "before": "138d5c6beaa4cee39f94e8e4fd66f93e0c7cb8f0dd7ab098fb712e84e0b3c34e",
+      "after": "a595b9ecc98d8922b456241c7b15581398683be3fc8de3e9d72be87bf5dcf1b8"
+    },
+    {
+      "path": "vendor/controleonline/common/config/services/services.yaml",
+      "before": "cc497aca05a2b7025711f34fc9c1ba4c87e676bc25dc25fd2a20a9fd72cf67da",
+      "after": "7f088b8ef6831a55dac241ead4c2832ae7663edbeafb9b3d3c9741a664ec7048"
+    },
+    {
+      "path": "vendor/controleonline/people/src/Entity/PeopleLink.php",
+      "before": "cfdf80f67495ee341fe57b3e55bdb6cd49d8c4abd4c3389daa93bc4bbc18f9db",
+      "after": "2bd6c378a909c6930021dd13b054acf319e0cedc197ce5ac8ec07948b7e1ae6e"
+    }
+  ],
+  "additionalPackages": [
+    {
+      "package": "controleonline/people",
+      "version": "v1.0.3",
+      "reference": "3f2b2854208d5dbb038548834b9eeb1abd022bce"
+    }
+  ]
+}
