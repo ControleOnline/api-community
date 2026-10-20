@@ -1,16 +1,53 @@
 {
-  "version": "1.10.53",
+  "version": "1.10.75",
   "rc": 1,
-  "branch": "rc/1.10.53-rc.1",
-  "baseMaster": "55794f54611fbb99d61d3c891842b8637b1dd5ac",
+  "branch": "rc/1.10.75-rc.1",
+  "baseMaster": "8e047ccc9413b3e254a7694a971a56c995379942",
   "tasks": [
-    259,
-    260
+    1117
   ],
+  "taskRepository": "ControleOnline/app-community",
   "repositories": {
-    "ControleOnline/api-community": "006c24e6a67ac5ccd585db984bda825d93a2072f",
-    "ControleOnline/api-platform-mcp": "049fcc6f44b2ae09173015e074fd543b0eb23e8e",
-    "ControleOnline/api-platform-people": "3f2b2854208d5dbb038548834b9eeb1abd022bce"
+    "ControleOnline/api-community": "c90812592446a1b6e4b7600bcd274b3ddb9eecf6",
+    "ControleOnline/api-platform-common": "0e048950dada1990b1ec319240554cecbc65902d",
+    "ControleOnline/api-platform-people": "26ccd2bb8283938cf77fa58a6be7cb7a2afff968",
+    "ControleOnline/api-platform-mcp": "290f1c0abe291e97fb427b263815d021466cb357",
+    "ControleOnline/api-platform-users": "41daafcdf7941602c83a097ff5aa75bc032aa277"
   },
+  "packages": {
+    "controleonline/common": {
+      "version": "1.0.6",
+      "source": "0e048950dada1990b1ec319240554cecbc65902d"
+    },
+    "controleonline/people": {
+      "version": "1.0.9",
+      "source": "26ccd2bb8283938cf77fa58a6be7cb7a2afff968"
+    },
+    "controleonline/mcp": {
+      "version": "1.0.14",
+      "source": "290f1c0abe291e97fb427b263815d021466cb357"
+    },
+    "controleonline/users": {
+      "version": "1.0.8",
+      "source": "41daafcdf7941602c83a097ff5aa75bc032aa277"
+    }
+  },
+  "integrationOrder": [
+    {
+      "task": 1117,
+      "source": "c90812592446a1b6e4b7600bcd274b3ddb9eecf6",
+      "result": "c0b288d10764cbb833b43e3ec4ef4a1a2793814b"
+    }
+  ],
+  "stagingReset": {
+    "previous": "c8581831c60df564104c17a24f201f3b4d99ed0b",
+    "contentTree": "8b124950b5dca44c7baf36260ecd547a4ed17a89",
+    "mode": "reviewed snapshot via protected PR"
+  },
+  "compositionNotes": [
+    "Only task #1117 over the current master; no production promotion.",
+    "No schema changes. Staging promotion commit must preserve [skip-db-migrations].",
+    "Known global API test errors remain disclosed in #1117; Security review is source-scoped and human functional review follows staging."
+  ],
   "frozen": true
 }
