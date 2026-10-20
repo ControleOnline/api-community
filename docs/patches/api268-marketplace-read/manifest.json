@@ -1,0 +1,17 @@
+{
+  "package": "controleonline/common",
+  "version": "v1.0.5",
+  "reference": "1ed215c1c2270575fe7264c0b6d4fd9a705a4dd0",
+  "files": [
+    {
+      "path": "vendor/controleonline/common/src/Service/ExtraDataService.php",
+      "before": "7563c436536d49d1e96796c93e60629be42678b2d26392ca3115be6dd9e1e396",
+      "after": "899138b4e32d319402fb4994b3be068af182e7c70187b6014f26612c92dad14f"
+    },
+    {
+      "path": "vendor/controleonline/common/src/Service/MarketplaceExtraDataRead.php",
+      "before": null,
+      "after": "36c0d579da54a3dc12d757cf03fec684ab35ad59fa450b9c7803f92bf0d5beef"
+    }
+  ]
+}
