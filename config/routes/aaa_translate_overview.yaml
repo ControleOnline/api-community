@@ -1,0 +1,10 @@
+# Reserve the static overview segment before API Platform's /translates/{id}.
+# API Platform still executes the resource provider, security and serialization.
+translate_overview:
+    path: /translates/overview
+    methods: [GET]
+    defaults:
+        _controller: api_platform.symfony.main_controller
+        _api_resource_class: ControleOnline\Entity\TranslateOverview
+        _api_operation_name: _api_/translates/overview_get_collection
+        _format: null

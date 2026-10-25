@@ -81,12 +81,14 @@ class Kernel extends BaseKernel
         $confDir = $this->getProjectDir() . '/config';
 
         $routes->import($confDir . '/{routes}/' . $this->environment . '/**/*' . self::CONFIG_EXTS, 'glob');
-        $routes->import($confDir . '/{routes}/*' . self::CONFIG_EXTS, 'glob');
-        $routes->import($confDir . '/{routes}' . self::CONFIG_EXTS, 'glob');
-
+        // Register explicit module actions before API Platform's generic /{id} routes.
+        // Otherwise /products/purchasing-suggestion is treated as a product identifier.
         foreach ($this->getModuleConfigDirs() as $configDir) {
             $routes->import($configDir . '/routes/*' . self::CONFIG_EXTS, 'glob');
         }
+
+        $routes->import($confDir . '/{routes}/*' . self::CONFIG_EXTS, 'glob');
+        $routes->import($confDir . '/{routes}' . self::CONFIG_EXTS, 'glob');
     }
 
     /**
