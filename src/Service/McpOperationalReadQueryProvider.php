@@ -92,7 +92,7 @@ final class McpOperationalReadQueryProvider
 
         return ($filters['aggregate'] ?? false) === true
             ? $qb->setMaxResults(100)->getQuery()->getArrayResult()
-            : $qb->orderBy('mcpCompany.name', 'ASC')->setMaxResults(100)->getQuery()->getArrayResult();
+            : $qb->orderBy('mcpCompany.name', 'ASC')->setFirstResult((int) ($filters['offset'] ?? 0))->setMaxResults((int) ($filters['limit'] ?? 50))->getQuery()->getArrayResult();
     }
 
     private function queryDevices(array $companyIds, ?int $companyId, array $filters): array
@@ -121,7 +121,7 @@ final class McpOperationalReadQueryProvider
         return ($filters['aggregate'] ?? false) === true
             ? $qb->setMaxResults(100)->getQuery()->getArrayResult()
             : $qb->orderBy('mcpCompany.name', 'ASC')->addOrderBy('mcpDevice.alias', 'ASC')
-                ->setMaxResults(100)->getQuery()->getArrayResult();
+                ->setFirstResult((int) ($filters['offset'] ?? 0))->setMaxResults((int) ($filters['limit'] ?? 50))->getQuery()->getArrayResult();
     }
 
     private function queryDisplays(array $companyIds, ?int $companyId, array $filters): array
@@ -151,7 +151,7 @@ final class McpOperationalReadQueryProvider
         return ($filters['aggregate'] ?? false) === true
             ? $qb->setMaxResults(100)->getQuery()->getArrayResult()
             : $qb->orderBy('mcpCompany.name', 'ASC')->addOrderBy('o.display', 'ASC')
-                ->setMaxResults(100)->getQuery()->getArrayResult();
+                ->setFirstResult((int) ($filters['offset'] ?? 0))->setMaxResults((int) ($filters['limit'] ?? 50))->getQuery()->getArrayResult();
     }
 
     private function queryProductionQueue(array $companyIds, ?int $companyId, array $filters): array
@@ -204,7 +204,7 @@ final class McpOperationalReadQueryProvider
             return $qb->setMaxResults(100)->getQuery()->getArrayResult();
         }
 
-        $rows = $qb->orderBy('o.registerTime', 'DESC')->setMaxResults((int) $filters['limit'])->getQuery()->getArrayResult();
+        $rows = $qb->orderBy('o.registerTime', 'DESC')->setFirstResult((int) ($filters['offset'] ?? 0))->setMaxResults((int) $filters['limit'])->getQuery()->getArrayResult();
         foreach ($rows as &$row) {
             foreach (['registered_at', 'updated_at'] as $field) {
                 if (($row[$field] ?? null) instanceof \DateTimeInterface) {
