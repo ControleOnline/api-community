@@ -1,0 +1,420 @@
+{
+  "identities": {
+    "repositoryHead": "8e047ccc9413b3e254a7694a971a56c995379942",
+    "remoteMaster": "8e047ccc9413b3e254a7694a971a56c995379942",
+    "php": "8.5.11",
+    "composerLockSha256": "4f2f046aba027e2e95afcb5f184b4b472b17e24bbbab3730dc130f567d7c55c3",
+    "database": "synthetic credentials; 127.0.0.1:1; no live configuration copied",
+    "overlays": {
+      "manager-read-batch": {
+        "package": "controleonline/common",
+        "version": "v1.0.5",
+        "reference": "1ed215c1c2270575fe7264c0b6d4fd9a705a4dd0",
+        "verifiedFiles": 10
+      },
+      "api268-marketplace-read": {
+        "package": "controleonline/common",
+        "version": "v1.0.5",
+        "reference": "1ed215c1c2270575fe7264c0b6d4fd9a705a4dd0",
+        "verifiedFiles": 2
+      }
+    }
+  },
+  "counts": {
+    "currentTests": 986,
+    "stockTests": 977,
+    "currentProblems": 66,
+    "stockProblems": 70,
+    "regressions": 0,
+    "fixed": 4,
+    "changedDiagnostics": 0
+  },
+  "regressions": {},
+  "fixed": {
+    "Metadata/MarketplaceExtraDataReadTest.php::MarketplaceExtraDataReadTest::testStatusReadsBatchByEntityKeepLatestAndDoNotSurviveRequest": {
+      "result": "failure",
+      "diagnostic": "ControleOnline\\Repository\\ExtraDataRepository::findOneByExtraFieldsEntityNameEntityId(ControleOnline\\Entity\\ExtraFields Object (...), 'Product', 9): ControleOnline\\Entity\\ExtraData was not expected to be called.\n\n<ROOT>/vendor/controleonline/common/src/Service/ExtraDataService.php:173\n<ROOT>/tests/Metadata/MarketplaceExtraDataReadTest.php:35"
+    },
+    "Metadata/MarketplaceExtraDataReadTest.php::MarketplaceExtraDataReadTest::testOnlyTheTwoReadOnlyMarketplaceEndpointsUseSnapshots": {
+      "result": "error",
+      "diagnostic": "Error: Class \"ControleOnline\\Service\\MarketplaceExtraDataRead\" not found\n\n<ROOT>/tests/Metadata/MarketplaceExtraDataReadTest.php:44"
+    },
+    "Metadata/PeopleLinkListFieldsTest.php::PeopleLinkListFieldsTest::testOptionalListProjectionRestrictsFieldsWithoutChangingDefaultReads": {
+      "result": "failure",
+      "diagnostic": "Failed asserting that actual size 0 matches expected size 1.\n\n<ROOT>/tests/Metadata/PeopleLinkListFieldsTest.php:13"
+    },
+    "Metadata/TranslateOverviewRoutingTest.php::TranslateOverviewRoutingTest::testOverviewIsMatchedBeforeTheGenericTranslateIdentifier": {
+      "result": "failure",
+      "diagnostic": "Failed asserting that two strings are identical.\n--- Expected\n+++ Actual\n@@ @@\n-'ControleOnline\\Entity\\TranslateOverview'\n+'ControleOnline\\Entity\\Translate'\n\n<ROOT>/tests/Metadata/TranslateOverviewRoutingTest.php:16"
+    }
+  },
+  "newPassingTests": [
+    "vendor/controleonline/common/tests/Serializer/CollectionSummaryNormalizerTest.php::ControleOnline.Common.Tests.Serializer.CollectionSummaryNormalizerTest::testSymfonySelectsBatchNormalizerForPlainCollection",
+    "vendor/controleonline/common/tests/Serializer/CollectionSummaryNormalizerTest.php::ControleOnline.Common.Tests.Serializer.CollectionSummaryNormalizerTest::testBatchingPreservesTheOriginalFilteredPaginatorSummaryAndContext",
+    "vendor/controleonline/common/tests/Serializer/ExtraDataNormalizerTest.php::ControleOnline.Common.Tests.Serializer.ExtraDataNormalizerTest::testUsesBatchResultsIncludingEmptyResultsWithoutIndividualReads",
+    "vendor/controleonline/common/tests/Service/CollectionReadBatchHydratorTest.php::ControleOnline.Common.Tests.Service.CollectionReadBatchHydratorTest::testHydratesPeopleRelationsSeparatelyForOnlyTheAlreadyAuthorizedPage",
+    "vendor/controleonline/common/tests/Service/CollectionReadBatchHydratorTest.php::ControleOnline.Common.Tests.Service.CollectionReadBatchHydratorTest::testDoesNotConsumeSinglePassCollections",
+    "vendor/controleonline/common/tests/Service/CollectionReadBatchHydratorTest.php::ControleOnline.Common.Tests.Service.CollectionReadBatchHydratorTest::testEmptyAndUnrelatedCollectionsNeverQuery",
+    "vendor/controleonline/common/tests/Service/CollectionReadBatchHydratorTest.php::ControleOnline.Common.Tests.Service.CollectionReadBatchHydratorTest::testProductPagePreloadsFileObjectsAndBatchMetadataWithoutChangingEntities",
+    "vendor/controleonline/common/tests/Service/CollectionReadBatchHydratorTest.php::ControleOnline.Common.Tests.Service.CollectionReadBatchHydratorTest::testProductListPreloadsFileMetadataButPreservesFullReadsForOtherGroups",
+    "vendor/controleonline/common/tests/Service/ExtraDataBatchReadTest.php::ControleOnline.Common.Tests.Service.ExtraDataBatchReadTest::testBatchKeepsEmptyEntriesAndDoesNotWriteOrQueryPerProduct"
+  ],
+  "existingProblems": [
+    {
+      "test": "Service/DeployShellControlFlowTest.php::App.Tests.Service.DeployShellControlFlowTest::testWritableNonRootDeploymentContinuesPastPermissionsCheck",
+      "result": "failure",
+      "reason": "Failed asserting that false is not false."
+    },
+    {
+      "test": "vendor/controleonline/accounting/tests/Service/Cte/CteFiscalConfigTest.php::ControleOnline.Tests.Service.Cte.CteFiscalConfigTest::testLoadWithoutCompanyReturnsEmptyKeysAndNextNumberOne",
+      "result": "failure",
+      "reason": "Failed asserting that null is identical to 1."
+    },
+    {
+      "test": "vendor/controleonline/accounting/tests/Service/Cte/CteXmlBuilderTest.php::ControleOnline.Tests.Service.Cte.CteXmlBuilderTest::testBuildRequiresRntrcInsteadOfUsingFallback",
+      "result": "failure",
+      "reason": "Failed asserting that exception message 'IE do emitente é obrigatório para emissão do CT-e.' contains 'RNTRC'."
+    },
+    {
+      "test": "vendor/controleonline/accounting/tests/Service/CteEmissionServiceTest.php::ControleOnline.Tests.Service.CteEmissionServiceTest::testIntegrateThrowsWhenPayloadIncomplete",
+      "result": "failure",
+      "reason": "Failed asserting that exception of type \"RuntimeException\" is thrown."
+    },
+    {
+      "test": "vendor/controleonline/accounting/tests/Service/CteEmissionServiceTest.php::ControleOnline.Tests.Service.CteEmissionServiceTest::testIntegrateDelegatesExistingInvoiceTask",
+      "result": "error",
+      "reason": "Error: Class \"ControleOnline\\Entity\\InvoiceTask\" not found"
+    },
+    {
+      "test": "vendor/controleonline/accounting/tests/Service/CteEmissionServiceTest.php::ControleOnline.Tests.Service.CteEmissionServiceTest::testIntegrateCreatesTaskFromLegacyIdsAndDelegates",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\UnknownClassOrInterfaceException: Class or interface \"ControleOnline\\Entity\\InvoiceTask\" does not exist"
+    },
+    {
+      "test": "vendor/controleonline/accounting/tests/Service/CteEmissionServiceTest.php::ControleOnline.Tests.Service.CteEmissionServiceTest::testIntegrateThrowsWhenLegacyNfsMissing",
+      "result": "failure",
+      "reason": "Failed asserting that exception of type \"RuntimeException\" is thrown."
+    },
+    {
+      "test": "vendor/controleonline/accounting/tests/Service/EmitCteServiceTest.php::ControleOnline.Tests.Service.EmitCteServiceTest::testEmitBindsSelectedInvoicesToCreatedTaskBeforeSefaz",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\IncompatibleReturnValueException: Method getQuery may not return value of type MockObject_AbstractQuery_<ID>, its declared return type is \"Doctrine\\ORM\\Query\""
+    },
+    {
+      "test": "vendor/controleonline/accounting/tests/Service/EmitCteServiceTest.php::ControleOnline.Tests.Service.EmitCteServiceTest::testEmitRejectsWhenInvoiceAlreadyHasTask",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\IncompatibleReturnValueException: Method getQuery may not return value of type MockObject_AbstractQuery_<ID>, its declared return type is \"Doctrine\\ORM\\Query\""
+    },
+    {
+      "test": "vendor/controleonline/accounting/tests/Service/EmitCteServiceTest.php::ControleOnline.Tests.Service.EmitCteServiceTest::testEmitRejectsWhenInvoiceAlreadyHasCte",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\IncompatibleReturnValueException: Method getQuery may not return value of type MockObject_AbstractQuery_<ID>, its declared return type is \"Doctrine\\ORM\\Query\""
+    },
+    {
+      "test": "vendor/controleonline/common/tests/Entity/FileDownloadRouteTest.php::ControleOnline.Tests.Entity.FileDownloadRouteTest::testDownloadRoutesIncludeBareAndTenantPrefixedTemplates",
+      "result": "failure",
+      "reason": "Failed asserting that an array contains '/{appDomain}/files/{id}/download'."
+    },
+    {
+      "test": "vendor/controleonline/common/tests/Service/FileServiceSecurityFilterTest.php::ControleOnline.Tests.Service.FileServiceSecurityFilterTest::testSecurityFilterBlocksWhenUserHasNoCompanies",
+      "result": "failure",
+      "reason": "Expectation failed for method name is \"andWhere\" when invoked 1 time"
+    },
+    {
+      "test": "vendor/controleonline/common/tests/Service/FileServiceSecurityFilterTest.php::ControleOnline.Tests.Service.FileServiceSecurityFilterTest::testSecurityFilterScopesReadsToUserCompanies",
+      "result": "failure",
+      "reason": "Expectation failed for method name is \"andWhere\" when invoked 1 time"
+    },
+    {
+      "test": "vendor/controleonline/common/tests/Service/MaintenanceRoutineServiceTest.php::ControleOnline.Tests.Service.MaintenanceRoutineServiceTest::testRunsOpenOverdueOpportunitiesRoutineWhenServiceAvailable",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\UnknownTypeException: Class or interface \"ControleOnline\\Service\\OverdueOpportunityMaintenanceService\" does not exist"
+    },
+    {
+      "test": "vendor/controleonline/financial/tests/Controller/CashRegisterControllerIncomeStatementsTest.php::ControleOnline.Tests.Controller.CashRegisterControllerIncomeStatementsTest::testGetIncomeStatementsReadsQueryBagWithoutRequestGet",
+      "result": "error",
+      "reason": "Error: Call to undefined method PHPUnit\\Framework\\MockObject\\MockBuilder::addMethods()"
+    },
+    {
+      "test": "vendor/controleonline/financial/tests/Entity/InvoiceListGroupTest.php::ControleOnline.Tests.Entity.InvoiceListGroupTest::testInvoiceListCoversDisplayedFields",
+      "result": "error",
+      "reason": "Error: Call to undefined method Symfony\\Component\\Serializer\\Attribute\\Groups::getGroups()"
+    },
+    {
+      "test": "vendor/controleonline/financial/tests/Entity/InvoiceListGroupTest.php::ControleOnline.Tests.Entity.InvoiceListGroupTest::testInvoiceListDoesNotExpandHeavyPeopleCollections",
+      "result": "error",
+      "reason": "Error: Call to undefined method Symfony\\Component\\Serializer\\Attribute\\Groups::getGroups()"
+    },
+    {
+      "test": "vendor/controleonline/financial/tests/Entity/InvoiceListGroupTest.php::ControleOnline.Tests.Entity.InvoiceListGroupTest::testInvoiceListDoesNotExpandCategoryCompany",
+      "result": "error",
+      "reason": "Error: Call to undefined method Symfony\\Component\\Serializer\\Attribute\\Groups::getGroups()"
+    },
+    {
+      "test": "vendor/controleonline/financial/tests/Entity/InvoiceReadGroupTest.php::ControleOnline.Tests.Entity.InvoiceReadGroupTest::testInvoiceReadDoesNotExpandPeopleCollections",
+      "result": "error",
+      "reason": "Error: Call to undefined method Symfony\\Component\\Serializer\\Attribute\\Groups::getGroups()"
+    },
+    {
+      "test": "vendor/controleonline/financial/tests/Entity/InvoiceReadGroupTest.php::ControleOnline.Tests.Entity.InvoiceReadGroupTest::testInvoiceReadDoesNotExpandCategoryCompany",
+      "result": "error",
+      "reason": "Error: Call to undefined method Symfony\\Component\\Serializer\\Attribute\\Groups::getGroups()"
+    },
+    {
+      "test": "vendor/controleonline/financial/tests/Listener/OrderSingleInvoiceCancellationListenerTest.php::ControleOnline.Tests.Listener.OrderSingleInvoiceCancellationListenerTest::testOnFlushCancelsUnitaryInvoicesWhenOrderTransitionsToCanceled",
+      "result": "failure",
+      "reason": "Expectation failed for method name is \"cancelSingleOrderInvoicesForCanceledOrder\" when invoked 1 time."
+    },
+    {
+      "test": "vendor/controleonline/financial/tests/Service/NotifyOverdueChargesServiceTest.php::ControleOnline.Tests.Service.NotifyOverdueChargesServiceTest::testNotifyOverdueChargesMarksNotifiedAndGroupsByPayer",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\IncompatibleReturnValueException: Method getQuery may not return value of type MockObject_AbstractQuery_<ID>, its declared return type is \"Doctrine\\ORM\\Query\""
+    },
+    {
+      "test": "vendor/controleonline/financial/tests/Service/NotifyOverdueChargesServiceTest.php::ControleOnline.Tests.Service.NotifyOverdueChargesServiceTest::testNotifyOverdueChargesSkipsWhenNoEligibleInvoices",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\IncompatibleReturnValueException: Method getQuery may not return value of type MockObject_AbstractQuery_<ID>, its declared return type is \"Doctrine\\ORM\\Query\""
+    },
+    {
+      "test": "vendor/controleonline/financial/tests/Service/NotifyOverdueChargesServiceTest.php::ControleOnline.Tests.Service.NotifyOverdueChargesServiceTest::testNotifyOverdueChargesIsolatesChannelFailures",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\IncompatibleReturnValueException: Method getQuery may not return value of type MockObject_AbstractQuery_<ID>, its declared return type is \"Doctrine\\ORM\\Query\""
+    },
+    {
+      "test": "vendor/controleonline/integration/tests/Controller/Webhook/CaptureControllerTest.php::ControleOnline.Integration.Tests.Controller.Webhook.CaptureControllerTest::testGithubWebhookKeepsLegacyProductionPath",
+      "result": "error",
+      "reason": "Error: Call to undefined method Symfony\\Component\\Routing\\Attribute\\Route::getPath()"
+    },
+    {
+      "test": "vendor/controleonline/integration/tests/Service/IntegrationServiceTest.php::ControleOnline.Integration.Tests.Service.IntegrationServiceTest::testIfoodMarketplaceFinancialGenerationTriggersOnlyForConclusionEvents",
+      "result": "error",
+      "reason": "ReflectionException: Method ControleOnline\\Service\\IntegrationService::shouldGenerateMarketplaceFinancial() does not exist"
+    },
+    {
+      "test": "vendor/controleonline/integration/tests/Service/Marketplace/IfoodStoreOperationsServiceTest.php::ControleOnline.Integration.Tests.Service.IfoodStoreOperationsServiceTest::testPersistOrderIntegrationStateMergesIfoodBlockIntoOrderOtherInformations",
+      "result": "failure",
+      "reason": "Failed asserting that null is of type array."
+    },
+    {
+      "test": "vendor/controleonline/integration/tests/Service/UberServiceTest.php::ControleOnline.Integration.Tests.Service.UberServiceTest::testBuildAddressPayloadIncludesFormattedAddressAndLocation",
+      "result": "failure",
+      "reason": "Failed asserting that two strings are identical."
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Controller/DiscoveryCartTest.php::ControleOnline.Orders.Tests.Controller.DiscoveryCartTest::testRequiresClient",
+      "result": "error",
+      "reason": "Error: Call to undefined method PHPUnit\\Framework\\MockObject\\MockBuilder::addMethods()"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Controller/DiscoveryCartTest.php::ControleOnline.Orders.Tests.Controller.DiscoveryCartTest::testRequiresProvider",
+      "result": "error",
+      "reason": "Error: Call to undefined method PHPUnit\\Framework\\MockObject\\MockBuilder::addMethods()"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Controller/DiscoveryCartTest.php::ControleOnline.Orders.Tests.Controller.DiscoveryCartTest::testResolvesCartWithProviderClientAndOrderTypeQuery",
+      "result": "error",
+      "reason": "Error: Call to undefined method PHPUnit\\Framework\\MockObject\\MockBuilder::addMethods()"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Controller/DiscoveryCartTest.php::ControleOnline.Orders.Tests.Controller.DiscoveryCartTest::testDefaultsStillRequireClientAndProviderWhenOrderTypeAbsent",
+      "result": "error",
+      "reason": "Error: Call to undefined method PHPUnit\\Framework\\MockObject\\MockBuilder::addMethods()"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Entity/OrderProductApiResourceTest.php::ControleOnline.Orders.Tests.Entity.OrderProductApiResourceTest::testMutationResponseContainsOnlyScalarOrderProductFields",
+      "result": "error",
+      "reason": "Error: Call to undefined method Symfony\\Component\\Serializer\\Attribute\\Groups::getGroups()"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Entity/OrderTrackingApiResourceTest.php::ControleOnline.Orders.Tests.Entity.OrderTrackingApiResourceTest::testTrackingContractContainsOnlyTheOperationalRelationsItNeeds",
+      "result": "error",
+      "reason": "Error: Call to undefined method Symfony\\Component\\Serializer\\Attribute\\Groups::getGroups()"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/DeliveryOrderPushServiceTest.php::ControleOnline.Orders.Tests.Service.DeliveryOrderPushServiceTest::testPostPersistSendsNotificationToDeliveryDeviceConfig",
+      "result": "failure",
+      "reason": "Expectation failed for method name is \"sendNotificationToToken\" when invoked 1 time."
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/DeliveryOrderPushServiceTest.php::ControleOnline.Orders.Tests.Service.DeliveryOrderPushServiceTest::testPostUpdateSendsOnlyWhenOrderTransitionsToAwaitingAcceptance",
+      "result": "failure",
+      "reason": "Expectation failed for method name is \"sendNotificationToToken\" when invoked 1 time."
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/MarkOrderAsPaidAuthorizationTest.php::ControleOnline.Orders.Tests.Service.MarkOrderAsPaidAuthorizationTest::testServiceRefusesTenantCrossLinkReferences",
+      "result": "error",
+      "reason": "Error: Call to undefined method ControleOnline\\Entity\\People::setId()"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/MarkOrderAsPaidAuthorizationTest.php::ControleOnline.Orders.Tests.Service.MarkOrderAsPaidAuthorizationTest::testServiceRefusesPublicResourceWithoutCompany",
+      "result": "error",
+      "reason": "Error: Call to undefined method ControleOnline\\Entity\\People::setId()"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/MarkOrderAsPaidServiceTest.php::ControleOnline.Tests.Service.MarkOrderAsPaidServiceTest::testApplyPaidOrderStatusDoesNotFallBackToClosedClosed",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\IncompatibleReturnValueException: Method discoveryStatus may not return value of type null, its declared return type is \"ControleOnline\\Entity\\Status\""
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderDeliveryMapServiceTest.php::ControleOnline.Orders.Tests.Service.OrderDeliveryMapServiceTest::testNormalizeDeliveryOrderFormatsAddressAndDisplayCode",
+      "result": "failure",
+      "reason": "Failed asserting that two strings are identical."
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderLoyaltySnapshotServiceTest.php::ControleOnline.Orders.Tests.Service.OrderLoyaltySnapshotServiceTest::testBuildForClientAcrossProvidersReturnsOneOpenCardPerFranchise",
+      "result": "failure",
+      "reason": "Failed asserting that two arrays are identical."
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceConsolidationTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceConsolidationTest::testAddingEquivalentSimpleProductIncrementsExistingQuantity",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceConsolidationTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceConsolidationTest::testAddingDifferentSimpleProductKeepsSeparateRootLine",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceConsolidationTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceConsolidationTest::testAddingLoyaltyGiftCommentKeepsSeparateRootLineAndPreservesComment",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceConsolidationTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceConsolidationTest::testAddingEquivalentCustomizedProductIncrementsTheWholeTree",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceConsolidationTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceConsolidationTest::testAddingDifferentCustomizedProductPersistsAnotherTree",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceConsolidationTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceConsolidationTest::testSameCustomizationWithDifferentComponentQuantityStaysSeparate",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceMutationGuardTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceMutationGuardTest::testPrePersistRejectsSaleOrderOnAddProductsRoute",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceMutationGuardTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceMutationGuardTest::testPrePersistRejectsSaleOrderOnReplaceProductsRoute",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceMutationGuardTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceMutationGuardTest::testPrePersistAllowsCartOrderOnAddProductsRoute",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceMutationGuardTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceMutationGuardTest::testPrePersistAllowsCartOrderOnReplaceProductsRoute",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceMutationGuardTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceMutationGuardTest::testPreUpdateAllowsCartOrderQuantityChanges",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceMutationGuardTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceMutationGuardTest::testPreUpdateRejectsSaleOrderQuantityChanges",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceMutationGuardTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceMutationGuardTest::testPreRemoveRejectsSaleOrderDeletion",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceMutationGuardTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceMutationGuardTest::testPreRemoveRejectsQuoteOrderDeletion",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceMutationGuardTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceMutationGuardTest::testPreRemoveAllowsCartOrderDeletion",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceRecursiveTreeTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceRecursiveTreeTest::testPersistsARecursiveComponentTree",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceRecursiveTreeTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceRecursiveTreeTest::testEquivalentRecursiveTreeIncrementsEveryLevel",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/orders/tests/Service/OrderProductServiceRecursiveTreeTest.php::ControleOnline.Orders.Tests.Service.OrderProductServiceRecursiveTreeTest::testDifferentGrandchildKeepsTheRootTreesSeparate",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\ClassIsFinalException: Class \"ControleOnline\\Service\\ProposalProductCategoryGuard\" is declared \"final\" and cannot be doubled"
+    },
+    {
+      "test": "vendor/controleonline/products/tests/Service/ProductShowcaseCatalogServiceTest.php::ControleOnline.Tests.Service.ProductShowcaseCatalogServiceTest::testResolvedEmptyShowcaseDoesNotLeakLegacyProducts",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\UnknownTypeException: Class or interface \"ControleOnline\\Tests\\Service\\ProductPublicCatalogAccessService\" does not exist"
+    },
+    {
+      "test": "vendor/controleonline/products/tests/Service/ProductShowcaseCatalogServiceTest.php::ControleOnline.Tests.Service.ProductShowcaseCatalogServiceTest::testLegacyFallbackIsExplicitOnlyWhenNoShowcaseResolves",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\UnknownTypeException: Class or interface \"ControleOnline\\Tests\\Service\\ProductPublicCatalogAccessService\" does not exist"
+    },
+    {
+      "test": "vendor/controleonline/products/tests/Service/ProductShowcaseCatalogServiceTest.php::ControleOnline.Tests.Service.ProductShowcaseCatalogServiceTest::testClientIdsCannotExpandTrustedShowcaseCategoryProjection",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\UnknownTypeException: Class or interface \"ControleOnline\\Tests\\Service\\ProductPublicCatalogAccessService\" does not exist"
+    },
+    {
+      "test": "vendor/controleonline/products/tests/Service/ProductShowcaseCatalogServiceTest.php::ControleOnline.Tests.Service.ProductShowcaseCatalogServiceTest::testPosResolvesConfiguredShowcaseFromDeviceWithinCompany",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\UnknownTypeException: Class or interface \"ControleOnline\\Tests\\Service\\ProductPublicCatalogAccessService\" does not exist"
+    },
+    {
+      "test": "vendor/controleonline/products/tests/Service/ProductShowcaseCatalogServiceTest.php::ControleOnline.Tests.Service.ProductShowcaseCatalogServiceTest::testShopResolvesShowcaseFromTrustedDomain",
+      "result": "error",
+      "reason": "PHPUnit\\Framework\\MockObject\\Generator\\UnknownTypeException: Class or interface \"ControleOnline\\Tests\\Service\\ProductPublicCatalogAccessService\" does not exist"
+    },
+    {
+      "test": "vendor/controleonline/queue/tests/Entity/DisplayPresentationTest.php::ControleOnline.Queue.Tests.Entity.DisplayPresentationTest::testPresentationFieldsAreAvailableToTheDisplayEditor",
+      "result": "error",
+      "reason": "Error: Call to undefined method Symfony\\Component\\Serializer\\Attribute\\Groups::getGroups()"
+    },
+    {
+      "test": "vendor/controleonline/report/tests/Service/PeopleAttendanceReportServiceTest.php::ControleOnline.Tests.Service.PeopleAttendanceReportServiceTest::testBuildRowsFromDataHighlightsLateWorkAndAbsenceStates",
+      "result": "error",
+      "reason": "TypeError: ControleOnline\\Entity\\EmployeeProfile::setDepartment(): Argument #1 ($department) must be of type ?ControleOnline\\Entity\\Category, string given, called in <ROOT>/vendor/controleonline/report/tests/Service/PeopleAttendanceReportServiceTest.php on line 37"
+    }
+  ],
+  "changedDiagnostics": {},
+  "execution": {
+    "current": {
+      "exitCode": 2,
+      "tests": 986,
+      "assertions": 7702,
+      "errors": 51,
+      "failures": 15
+    },
+    "stockBaseline": {
+      "exitCode": 2,
+      "tests": 977,
+      "assertions": 7578,
+      "errors": 52,
+      "failures": 18
+    },
+    "overlayTests": {
+      "exitCode": 0,
+      "tests": 3
+    },
+    "addedRegressionTestsAgainstStock": {
+      "currentPass": 4,
+      "stockFail": 4
+    },
+    "comparison": "Same failing test identities, result types and diagnostics after normalizing only temporary root paths and PHPUnit mock identifiers."
+  }
+}

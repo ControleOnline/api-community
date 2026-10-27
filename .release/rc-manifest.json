@@ -1,16 +1,70 @@
 {
-  "version": "1.10.53",
+  "version": "1.10.82",
   "rc": 1,
-  "branch": "rc/1.10.53-rc.1",
-  "baseMaster": "55794f54611fbb99d61d3c891842b8637b1dd5ac",
+  "branch": "rc/1.10.82-rc.1",
+  "baseMaster": "8e047ccc9413b3e254a7694a971a56c995379942",
   "tasks": [
-    259,
-    260
+    1117,
+    1164
   ],
+  "taskRepository": "ControleOnline/app-community",
   "repositories": {
-    "ControleOnline/api-community": "006c24e6a67ac5ccd585db984bda825d93a2072f",
-    "ControleOnline/api-platform-mcp": "049fcc6f44b2ae09173015e074fd543b0eb23e8e",
-    "ControleOnline/api-platform-people": "3f2b2854208d5dbb038548834b9eeb1abd022bce"
+    "ControleOnline/app-community": "8ea1564f040f10ffedf1516d0bf7313ef6a60b53",
+    "ControleOnline/api-community": "e1710ed0df1d998e430d67cfdaba7f31f508f2cf",
+    "ControleOnline/api-platform-orders": "adf023f697e3f64782fa36c3855655364f74847a",
+    "ControleOnline/ui-common": "74e5c987d5f5009d838b7e0d2280e49dc89474c6",
+    "ControleOnline/ui-default": "aa9fad75c5d47903a7c833e54c90890c6795d482",
+    "ControleOnline/ui-manager": "9105c9f9388ef3c800a1e773a665574dc0d87b44",
+    "ControleOnline/ui-people": "25aad29efd3a3b346baf21387a1ba0d190ad9e44",
+    "ControleOnline/ui-products": "4b204cafdb524dfdbcf5fb2c5ae0be8b64d10820",
+    "ControleOnline/ui-orders": "4b8dfb0eb748b80ce9a158f9df7ce94288b6a06e",
+    "ControleOnline/api-platform-common": "0e048950dada1990b1ec319240554cecbc65902d",
+    "ControleOnline/api-platform-people": "26ccd2bb8283938cf77fa58a6be7cb7a2afff968",
+    "ControleOnline/api-platform-mcp": "290f1c0abe291e97fb427b263815d021466cb357",
+    "ControleOnline/api-platform-users": "41daafcdf7941602c83a097ff5aa75bc032aa277"
   },
-  "frozen": true
+  "packages": {
+    "ui-common": {
+      "version": "1.2.104",
+      "source": "74e5c987d5f5009d838b7e0d2280e49dc89474c6"
+    },
+    "ui-default": {
+      "version": "1.0.282",
+      "source": "aa9fad75c5d47903a7c833e54c90890c6795d482"
+    },
+    "ui-manager": {
+      "version": "1.0.23",
+      "source": "9105c9f9388ef3c800a1e773a665574dc0d87b44"
+    },
+    "ui-people": {
+      "version": "1.0.102",
+      "source": "25aad29efd3a3b346baf21387a1ba0d190ad9e44"
+    },
+    "ui-products": {
+      "version": "1.0.41",
+      "source": "4b204cafdb524dfdbcf5fb2c5ae0be8b64d10820"
+    },
+    "ui-orders": {
+      "version": "1.3.49",
+      "source": "4b8dfb0eb748b80ce9a158f9df7ce94288b6a06e"
+    },
+    "controleonline/orders": {
+      "version": "1.0.5",
+      "source": "adf023f697e3f64782fa36c3855655364f74847a"
+    }
+  },
+  "frozen": true,
+  "contentCommit": "e1710ed0df1d998e430d67cfdaba7f31f508f2cf",
+  "stagingReset": {
+    "previous": "d380bc00e9f6456e8f3098b2f84e340198bd2e01",
+    "mode": "reviewed snapshot via protected PR; fast-forward RC to resulting merge without content change"
+  },
+  "validation": {
+    "appFocusedTests": 108,
+    "appBuild": "expo web export passed",
+    "apiWaiterTests": 114,
+    "apiFocusedTests": 60,
+    "security": "accepted",
+    "production": "not authorized"
+  }
 }
