@@ -1,16 +1,15 @@
 {
-  "version": "1.10.82",
+  "version": "1.10.85",
   "rc": 1,
-  "branch": "rc/1.10.82-rc.1",
-  "baseMaster": "8e047ccc9413b3e254a7694a971a56c995379942",
+  "branch": "rc/1.10.85-rc.1",
+  "baseMaster": "31f33c1f5d4e143f0ac9bfa6c3f0dcb306e97c94",
   "tasks": [
-    1117,
-    1164
+    1187
   ],
   "taskRepository": "ControleOnline/app-community",
   "repositories": {
     "ControleOnline/app-community": "8ea1564f040f10ffedf1516d0bf7313ef6a60b53",
-    "ControleOnline/api-community": "e1710ed0df1d998e430d67cfdaba7f31f508f2cf",
+    "ControleOnline/api-community": "caf8024b642797a1896766ff032d3b131b93d9d1",
     "ControleOnline/api-platform-orders": "adf023f697e3f64782fa36c3855655364f74847a",
     "ControleOnline/ui-common": "74e5c987d5f5009d838b7e0d2280e49dc89474c6",
     "ControleOnline/ui-default": "aa9fad75c5d47903a7c833e54c90890c6795d482",
@@ -19,7 +18,7 @@
     "ControleOnline/ui-products": "4b204cafdb524dfdbcf5fb2c5ae0be8b64d10820",
     "ControleOnline/ui-orders": "4b8dfb0eb748b80ce9a158f9df7ce94288b6a06e",
     "ControleOnline/api-platform-common": "0e048950dada1990b1ec319240554cecbc65902d",
-    "ControleOnline/api-platform-people": "26ccd2bb8283938cf77fa58a6be7cb7a2afff968",
+    "ControleOnline/api-platform-people": "57b4836d3bc4333808387e2271ae5a6bf6c91c74",
     "ControleOnline/api-platform-mcp": "290f1c0abe291e97fb427b263815d021466cb357",
     "ControleOnline/api-platform-users": "41daafcdf7941602c83a097ff5aa75bc032aa277"
   },
@@ -54,17 +53,11 @@
     }
   },
   "frozen": true,
-  "contentCommit": "e1710ed0df1d998e430d67cfdaba7f31f508f2cf",
-  "stagingReset": {
-    "previous": "d380bc00e9f6456e8f3098b2f84e340198bd2e01",
-    "mode": "reviewed snapshot via protected PR; fast-forward RC to resulting merge without content change"
-  },
+  "contentCommit": "caf8024b642797a1896766ff032d3b131b93d9d1",
   "validation": {
-    "appFocusedTests": 108,
-    "appBuild": "expo web export passed",
-    "apiWaiterTests": 114,
-    "apiFocusedTests": 60,
-    "security": "accepted",
+    "scope": "composer.json: controleonline/people 1.0.9 -> 1.0.10 (published on Packagist; checkout-cpf-lookup context + minimal payload normalizer)",
+    "security": "accepted (agent:security:accepted, app-community#1187)",
+    "tests": "PeopleCheckoutLookupNormalizerTest 2 ok, PeopleServiceTest 5 ok in api-community vendor; api-community CI baseline-checks failures identical to master baseline (68 errors/15 failures, other modules)",
     "production": "not authorized"
   }
 }
