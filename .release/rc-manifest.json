@@ -1,7 +1,7 @@
 {
   "version": "1.10.85",
-  "rc": 1,
-  "branch": "rc/1.10.85-rc.1",
+  "rc": 2,
+  "branch": "rc/1.10.85-rc.2",
   "baseMaster": "31f33c1f5d4e143f0ac9bfa6c3f0dcb306e97c94",
   "tasks": [
     1187
@@ -18,7 +18,7 @@
     "ControleOnline/ui-products": "4b204cafdb524dfdbcf5fb2c5ae0be8b64d10820",
     "ControleOnline/ui-orders": "4b8dfb0eb748b80ce9a158f9df7ce94288b6a06e",
     "ControleOnline/api-platform-common": "0e048950dada1990b1ec319240554cecbc65902d",
-    "ControleOnline/api-platform-people": "57b4836d3bc4333808387e2271ae5a6bf6c91c74",
+    "ControleOnline/api-platform-people": "cd0077e5c27a043cc99fb1e996d8303e12e2230b",
     "ControleOnline/api-platform-mcp": "290f1c0abe291e97fb427b263815d021466cb357",
     "ControleOnline/api-platform-users": "41daafcdf7941602c83a097ff5aa75bc032aa277"
   },
@@ -55,9 +55,9 @@
   "frozen": true,
   "contentCommit": "caf8024b642797a1896766ff032d3b131b93d9d1",
   "validation": {
-    "scope": "composer.json: controleonline/people 1.0.9 -> 1.0.10 (published on Packagist; checkout-cpf-lookup context + minimal payload normalizer)",
+    "scope": "composer.json: controleonline/people 1.0.9 -> 1.0.11 (Packagist). rc.2 fixes HTTP 500 of the checkout CPF lookup found on staging with rc.1 (EXISTS subquery replaced by PeopleService::getDocument); supersedes rc.1",
     "security": "accepted (agent:security:accepted, app-community#1187)",
-    "tests": "PeopleCheckoutLookupNormalizerTest 2 ok, PeopleServiceTest 5 ok in api-community vendor; api-community CI baseline-checks failures identical to master baseline (68 errors/15 failures, other modules)",
+    "tests": "PeopleServiceTest + PeopleCheckoutLookupNormalizerTest 12 ok in api-community vendor; CI baseline failures unchanged (68 errors/15 failures, other modules)",
     "production": "not authorized"
   }
 }
