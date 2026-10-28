@@ -21,7 +21,7 @@
         "controleonline/messages-sdk": "1.0.0",
         "controleonline/multi-tenancy": "1.0.2",
         "controleonline/orders": "1.0.5",
-        "controleonline/people": "1.0.9",
+        "controleonline/people": "1.0.11",
         "controleonline/products": "1.0.3",
         "controleonline/queue": "1.0.3",
         "controleonline/report": "1.0.2",
