@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Service\McpReadQueryProvider;
+use App\Service\McpPeopleLinkReadQueryProvider;
+use App\Service\McpSafeEntityNormalizer;
 use ControleOnline\Service\McpCompanyScopeProviderInterface;
 use ControleOnline\Service\McpReadQueryProviderInterface;
+use ControleOnline\Service\OrderService;
 use ControleOnline\Service\ProductService;
 use ControleOnline\Service\PeopleLinkService;
 use ControleOnline\Service\WalletService;
@@ -22,6 +25,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 final class McpReadQueryProviderTest extends TestCase
 {
@@ -50,19 +54,13 @@ final class McpReadQueryProviderTest extends TestCase
     public function testEmployeeDirectoryUsesPeopleLinkSecurityFilterAndCompanyScope(): void
     {
         $query = $this->createMock(Query::class);
-        $query->method('getArrayResult')->willReturn([[
-            'company_id' => 12,
-            'company' => 'Empresa A',
-            'person_id' => 44,
-            'name' => 'Funcionário A',
-            'alias' => 'funcionario-a',
-            'relationship' => 'employee',
-        ]]);
+        $link = $this->createMock(\ControleOnline\Entity\PeopleLink::class);
+        $query->method('getResult')->willReturn([$link]);
         $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['join', 'select', 'andWhere', 'setParameter', 'orderBy', 'setMaxResults', 'getQuery'])
+            ->onlyMethods(['join', 'select', 'andWhere', 'setParameter', 'orderBy', 'setFirstResult', 'setMaxResults', 'getQuery'])
             ->getMock();
-        foreach (['join', 'select', 'andWhere', 'setParameter', 'orderBy', 'setMaxResults'] as $method) {
+        foreach (['join', 'select', 'andWhere', 'setParameter', 'orderBy', 'setFirstResult', 'setMaxResults'] as $method) {
             $queryBuilder->method($method)->willReturnSelf();
         }
         $queryBuilder->method('getQuery')->willReturn($query);
@@ -88,11 +86,31 @@ final class McpReadQueryProviderTest extends TestCase
             ->willReturnCallback(static function () use ($request): void {
                 self::assertSame(['company' => 12], $request->query->all());
             });
+        $serializer = $this->createMock(NormalizerInterface::class);
+        $serializer->expects(self::once())->method('normalize')->with(
+            $link,
+            'json',
+            self::callback(static fn (array $context): bool => $context['groups'] === ['people_link:read']),
+        )->willReturn([
+            'id' => 8,
+            'linkType' => 'employee',
+            'company' => ['id' => 12, 'name' => 'Empresa A'],
+            'people' => ['id' => 44, 'name' => 'Funcionário A', 'email' => 'funcionario@example.com', 'document' => ['number' => '123']],
+            'apiKey' => 'must-not-leak',
+        ]);
+        $normalizer = new McpSafeEntityNormalizer($serializer);
+        $linkedProvider = null;
         $container = $this->createMock(ContainerInterface::class);
-        $container->expects(self::once())
-            ->method('get')
-            ->with('ControleOnline\Service\PeopleLinkService')
-            ->willReturn($peopleLinkService);
+        $container->expects(self::exactly(2))->method('get')->willReturnCallback(
+            static function (string $id) use ($peopleLinkService, &$linkedProvider): mixed {
+                return match ($id) {
+                    'ControleOnline\Service\PeopleLinkService' => $peopleLinkService,
+                    McpPeopleLinkReadQueryProvider::class => $linkedProvider,
+                    default => throw new \LogicException('Unexpected service: ' . $id),
+                };
+            },
+        );
+        $linkedProvider = new McpPeopleLinkReadQueryProvider($entityManager, $container, $normalizer);
         $scopeProvider = new class implements McpCompanyScopeProviderInterface {
             public function listForCurrentUser(): array
             {
@@ -112,7 +130,87 @@ final class McpReadQueryProviderTest extends TestCase
 
         self::assertSame(['original' => 'query'], $request->query->all());
         self::assertSame('Funcionário A', $rows[0]['name']);
-        self::assertArrayNotHasKey('document', $rows[0]);
+        self::assertSame(['number' => '123'], $rows[0]['people']['document']);
+        self::assertSame('funcionario@example.com', $rows[0]['people']['email']);
+        self::assertArrayNotHasKey('apiKey', $rows[0]);
+    }
+
+    public function testOrderDetailsKeepLinkedPeopleAndItemsWhileFilteringSecretsAndRecordId(): void
+    {
+        $entity = new \stdClass();
+        $query = $this->createMock(Query::class);
+        $query->method('getResult')->willReturn([$entity]);
+        $where = [];
+        $parameters = [];
+        $selections = [];
+        $builder = $this->getMockBuilder(QueryBuilder::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['select', 'andWhere', 'setParameter', 'orderBy', 'setFirstResult', 'setMaxResults', 'getQuery'])
+            ->getMock();
+        $builder->method('select')->willReturnCallback(static function (string $value) use (&$selections, $builder): QueryBuilder {
+            $selections[] = $value;
+            return $builder;
+        });
+        $builder->method('andWhere')->willReturnCallback(static function (string $value) use (&$where, $builder): QueryBuilder {
+            $where[] = $value;
+            return $builder;
+        });
+        $builder->method('setParameter')->willReturnCallback(static function (string $key, mixed $value) use (&$parameters, $builder): QueryBuilder {
+            $parameters[$key] = $value;
+            return $builder;
+        });
+        $builder->method('orderBy')->willReturnSelf();
+        $builder->method('setFirstResult')->willReturnSelf();
+        $builder->method('setMaxResults')->willReturnSelf();
+        $builder->method('getQuery')->willReturn($query);
+
+        $repository = $this->createMock(EntityRepository::class);
+        $repository->expects(self::once())->method('createQueryBuilder')->with('o')->willReturn($builder);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->expects(self::once())->method('getRepository')->with('ControleOnline\\Entity\\Order')->willReturn($repository);
+        $orderService = $this->getMockBuilder(OrderService::class)->disableOriginalConstructor()->onlyMethods(['securityFilter'])->getMock();
+        $orderService->expects(self::once())->method('securityFilter')->with($builder, 'ControleOnline\\Entity\\Order', 'collection', 'o');
+
+        $serializer = $this->createMock(NormalizerInterface::class);
+        $serializer->expects(self::once())->method('normalize')->with(
+            $entity,
+            'json',
+            self::callback(static fn (array $context): bool => $context['groups'] === ['order_details:read']),
+        )->willReturn([
+            'id' => 73230,
+            'client' => ['id' => 44, 'name' => 'Adelino'],
+            'provider' => ['id' => 3, 'name' => 'GYROS'],
+            'orderProducts' => [['quantity' => 5, 'product' => ['id' => 9, 'product' => 'Queijo', 'api_key' => 'hidden']]],
+            'chargeCapability' => ['secret' => 'hidden'],
+        ]);
+        $safeNormalizer = new McpSafeEntityNormalizer($serializer);
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects(self::exactly(2))->method('get')->willReturnMap([
+            ['ControleOnline\\Service\\OrderService', $orderService],
+            [McpSafeEntityNormalizer::class, $safeNormalizer],
+        ]);
+        $scope = new class implements McpCompanyScopeProviderInterface {
+            public function listForCurrentUser(): array { return [['id' => 3, 'name' => 'GYROS', 'alias' => 'gyros']]; }
+        };
+        $requestStack = new RequestStack();
+        $requestStack->push(new Request());
+        $provider = new McpReadQueryProvider($entityManager, $requestStack, $container, $scope, 'America/Sao_Paulo');
+
+        $rows = $provider->query('orders', [
+            'from' => null, 'to' => null, 'company_id' => 3, 'company_role' => null,
+            'record_id' => 73230, 'aggregate' => false, 'limit' => 20, 'offset' => 0,
+        ]);
+
+        self::assertContains('(IDENTITY(o.client) IN (:mcpCompanies) OR IDENTITY(o.provider) IN (:mcpCompanies))', $where);
+        self::assertContains('o.id = :mcpRecordId', $where);
+        self::assertSame([3], $parameters['mcpCompanies']);
+        self::assertSame(73230, $parameters['mcpRecordId']);
+        self::assertContains('o', $selections);
+        self::assertSame('Adelino', $rows[0]['client_name']);
+        self::assertSame('GYROS', $rows[0]['provider_name']);
+        self::assertSame('Queijo', $rows[0]['orderProducts'][0]['product']['product']);
+        self::assertArrayNotHasKey('chargeCapability', $rows[0]);
+        self::assertArrayNotHasKey('api_key', $rows[0]['orderProducts'][0]['product']);
     }
 
     public function testUnauthorizedCompanyIdReturnsNoDataWithoutQueryingDatabase(): void
