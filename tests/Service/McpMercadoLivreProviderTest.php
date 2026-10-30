@@ -40,13 +40,27 @@ final class McpMercadoLivreProviderTest extends TestCase
             ], JSON_THROW_ON_ERROR), ['http_code' => 200]),
         ]);
         $provider = $this->buildProvider([
-            'mercadolivre_access_token' => 'tok',
-            'mercadolivre_user_id' => '12345',
+            'mercado-livre-access-token' => 'tok',
+            'mercado-livre-user-id' => '12345',
         ], [1], $client);
 
         $result = $provider->searchItems(1, 0, 50);
         self::assertSame(['MLB1', 'MLB2'], $result['results']);
         self::assertSame('12345', $result['seller_id']);
+    }
+
+
+    public function testLegacyConfigKeysStillWork(): void
+    {
+        $provider = $this->buildProvider([
+            'mercadolivre_access_token' => 'legacy-tok',
+            'mercadolivre_user_id' => '999',
+        ], [1]);
+        $status = $provider->getStatus(1);
+        self::assertTrue($status['connected']);
+        self::assertSame('999', $status['user_id']);
+        self::assertArrayHasKey('oauth', $status);
+        self::assertSame('/marketplace/integrations/mercadolivre/authorization-page', $status['oauth']['authorization_endpoint']);
     }
 
     public function testGetItemDoesNotExposeSecrets(): void
@@ -62,7 +76,7 @@ final class McpMercadoLivreProviderTest extends TestCase
             ], JSON_THROW_ON_ERROR), ['http_code' => 200]),
         ]);
         $provider = $this->buildProvider([
-            'mercadolivre_access_token' => 'tok',
+            'mercado-livre-access-token' => 'tok',
         ], [1], $client);
 
         $item = $provider->getItem(1, 'MLB9');

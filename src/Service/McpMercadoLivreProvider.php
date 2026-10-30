@@ -15,21 +15,36 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * Mercado Livre seller tools for MCP.
  *
- * Tokens are stored per company in Config (never returned to the client):
- * - mercadolivre_access_token
- * - mercadolivre_refresh_token (optional)
- * - mercadolivre_user_id (optional)
- * - mercadolivre_token_expires_at (unix ts, optional)
+ * Tokens are stored per company in Config by the integration OAuth flow
+ * (api-platform-integration MercadoLivreService) and never returned to the client.
  *
- * All calls are scoped to companies the current user can access.
+ * Canonical keys (must match MercadoLivreService):
+ * - mercado-livre-access-token
+ * - mercado-livre-refresh-token (optional)
+ * - mercado-livre-user-id (optional)
+ *
+ * Legacy keys still accepted as fallback:
+ * - mercadolivre_access_token / mercadolivre_refresh_token / mercadolivre_user_id
+ *
+ * OAuth endpoints (ROLE_HUMAN, company-scoped):
+ * - POST /marketplace/integrations/mercadolivre/authorization-page
+ * - GET  /oauth/mercadolivre/return (callback, PKCE + state bound to provider)
+ *
+ * All MCP calls are scoped to companies the current user can access.
  */
 final class McpMercadoLivreProvider implements McpMercadoLivreProviderInterface
 {
     private const API_BASE = 'https://api.mercadolibre.com';
-    private const CONFIG_ACCESS = 'mercadolivre_access_token';
-    private const CONFIG_REFRESH = 'mercadolivre_refresh_token';
-    private const CONFIG_USER_ID = 'mercadolivre_user_id';
-    private const CONFIG_EXPIRES = 'mercadolivre_token_expires_at';
+    /** Canonical keys from ControleOnline\Service\MercadoLivreService */
+    private const CONFIG_ACCESS = 'mercado-livre-access-token';
+    private const CONFIG_REFRESH = 'mercado-livre-refresh-token';
+    private const CONFIG_USER_ID = 'mercado-livre-user-id';
+
+    /** Legacy keys from the first MCP provider slice (kept as read fallback). */
+    private const CONFIG_ACCESS_LEGACY = 'mercadolivre_access_token';
+    private const CONFIG_REFRESH_LEGACY = 'mercadolivre_refresh_token';
+    private const CONFIG_USER_ID_LEGACY = 'mercadolivre_user_id';
+    private const CONFIG_EXPIRES_LEGACY = 'mercadolivre_token_expires_at';
 
     public function __construct(
         private readonly EntityManagerInterface $em,
@@ -42,16 +57,20 @@ final class McpMercadoLivreProvider implements McpMercadoLivreProviderInterface
     public function getStatus(int $companyId): array
     {
         $this->assertCompanyAccess($companyId);
-        $token = $this->getConfigValue($companyId, self::CONFIG_ACCESS);
-        $userId = $this->getConfigValue($companyId, self::CONFIG_USER_ID);
-        $expires = $this->getConfigValue($companyId, self::CONFIG_EXPIRES);
+        $token = $this->getAccessToken($companyId);
+        $userId = $this->getConfigValue($companyId, self::CONFIG_USER_ID, self::CONFIG_USER_ID_LEGACY);
+        $expires = $this->getConfigValue($companyId, self::CONFIG_EXPIRES_LEGACY);
 
         return [
             'company_id' => $companyId,
             'connected' => $token !== null && $token !== '',
             'user_id' => $userId,
             'token_expires_at' => $expires !== null ? (int) $expires : null,
-            'has_refresh_token' => (bool) $this->getConfigValue($companyId, self::CONFIG_REFRESH),
+            'has_refresh_token' => $this->getConfigValue($companyId, self::CONFIG_REFRESH, self::CONFIG_REFRESH_LEGACY) !== null,
+            'oauth' => [
+                'authorization_endpoint' => '/marketplace/integrations/mercadolivre/authorization-page',
+                'callback_endpoint' => '/oauth/mercadolivre/return',
+            ],
         ];
     }
 
@@ -201,27 +220,55 @@ final class McpMercadoLivreProvider implements McpMercadoLivreProviderInterface
         }
     }
 
-    private function getConfigValue(int $companyId, string $key): ?string
+    private function getConfigValue(int $companyId, string $key, ?string $fallbackKey = null): ?string
     {
         $people = $this->em->find(People::class, $companyId);
         if ($people === null) {
             throw new \InvalidArgumentException('company not found');
         }
-        $configs = $this->em->getRepository(Config::class)->findBy([
-            'people' => $people,
-            'configKey' => $key,
-        ]);
-        if ($configs === []) {
-            return null;
-        }
-        $value = current($configs)->getConfigValue();
 
-        return is_string($value) ? $value : (is_scalar($value) ? (string) $value : null);
+        foreach (array_filter([$key, $fallbackKey], static fn ($k) => is_string($k) && $k !== '') as $candidate) {
+            $configs = $this->em->getRepository(Config::class)->findBy([
+                'people' => $people,
+                'configKey' => $candidate,
+            ]);
+            if ($configs === []) {
+                continue;
+            }
+            $value = current($configs)->getConfigValue();
+            if ($value === null || $value === '') {
+                continue;
+            }
+            if (is_string($value)) {
+                $trimmed = trim($value);
+                // Integration may JSON-encode scalar config values.
+                if ($trimmed !== '' && ($trimmed[0] === '"' || $trimmed[0] === '{')) {
+                    try {
+                        $decoded = json_decode($trimmed, true, 512, JSON_THROW_ON_ERROR);
+                        if (is_scalar($decoded)) {
+                            return trim((string) $decoded);
+                        }
+                    } catch (\JsonException) {
+                    }
+                }
+                return $trimmed;
+            }
+            if (is_scalar($value)) {
+                return trim((string) $value);
+            }
+        }
+
+        return null;
+    }
+
+    private function getAccessToken(int $companyId): ?string
+    {
+        return $this->getConfigValue($companyId, self::CONFIG_ACCESS, self::CONFIG_ACCESS_LEGACY);
     }
 
     private function requireAccessToken(int $companyId): string
     {
-        $token = $this->getConfigValue($companyId, self::CONFIG_ACCESS);
+        $token = $this->getAccessToken($companyId);
         if ($token === null || $token === '') {
             throw new \RuntimeException('Mercado Livre is not connected for this company (missing access token config)');
         }
@@ -231,7 +278,7 @@ final class McpMercadoLivreProvider implements McpMercadoLivreProviderInterface
 
     private function resolveSellerId(int $companyId): string
     {
-        $stored = $this->getConfigValue($companyId, self::CONFIG_USER_ID);
+        $stored = $this->getConfigValue($companyId, self::CONFIG_USER_ID, self::CONFIG_USER_ID_LEGACY);
         if ($stored !== null && $stored !== '') {
             return $stored;
         }
