@@ -7,6 +7,7 @@ namespace App\Service;
 use ControleOnline\Entity\Config;
 use ControleOnline\Entity\People;
 use ControleOnline\Service\McpCompanyScopeProviderInterface;
+use ControleOnline\Service\MercadoLivreService;
 use ControleOnline\Service\McpMercadoLivreProviderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -50,6 +51,7 @@ final class McpMercadoLivreProvider implements McpMercadoLivreProviderInterface
         private readonly EntityManagerInterface $em,
         private readonly HttpClientInterface $httpClient,
         private readonly McpCompanyScopeProviderInterface $companyScopeProvider,
+        private readonly ?MercadoLivreService $mercadoLivreService = null,
         private readonly ?LoggerInterface $logger = null,
     ) {
     }
@@ -163,6 +165,67 @@ final class McpMercadoLivreProvider implements McpMercadoLivreProviderInterface
 
         return $this->sanitizeOrder($this->apiGet($companyId, '/orders/' . rawurlencode($orderId)));
     }
+
+    public function searchOrders(int $companyId, int $offset = 0, int $limit = 50, ?string $status = null): array
+    {
+        $this->assertCompanyAccess($companyId);
+        if ($this->mercadoLivreService !== null) {
+            $provider = $this->em->find(People::class, $companyId);
+            if ($provider === null) {
+                throw new \InvalidArgumentException('company not found');
+            }
+
+            return $this->mercadoLivreService->searchOrders($provider, $offset, $limit, $status);
+        }
+
+        $sellerId = $this->resolveSellerId($companyId);
+        $offset = max(0, $offset);
+        $limit = max(1, min(50, $limit));
+        $query = ['seller' => $sellerId, 'offset' => $offset, 'limit' => $limit, 'sort' => 'date_desc'];
+        if ($status !== null && trim($status) !== '') {
+            $query['order.status'] = trim($status);
+        }
+        $data = $this->apiGet($companyId, '/orders/search', $query);
+        $results = [];
+        foreach (($data['results'] ?? []) as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            $results[] = [
+                'id' => $row['id'] ?? null,
+                'status' => $row['status'] ?? null,
+                'date_created' => $row['date_created'] ?? null,
+                'total_amount' => $row['total_amount'] ?? null,
+            ];
+        }
+
+        return [
+            'success' => true,
+            'company_id' => $companyId,
+            'seller_id' => $sellerId,
+            'results' => $results,
+            'paging' => $data['paging'] ?? null,
+        ];
+    }
+
+    public function importOrders(int $companyId, int $limit = 20, ?string $status = null): array
+    {
+        $this->assertCompanyAccess($companyId);
+        if ($this->mercadoLivreService === null) {
+            return [
+                'success' => false,
+                'error' => 'integration_unavailable',
+                'message' => 'MercadoLivreService is not available in this runtime',
+            ];
+        }
+        $provider = $this->em->find(People::class, $companyId);
+        if ($provider === null) {
+            throw new \InvalidArgumentException('company not found');
+        }
+
+        return $this->mercadoLivreService->importRecentOrders($provider, $limit, $status);
+    }
+
 
     public function importProducts(int $companyId, int $showcaseId, int $limit = 50): array
     {
