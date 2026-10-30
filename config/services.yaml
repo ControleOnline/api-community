@@ -50,5 +50,10 @@ services:
         arguments:
             $timezone: '%timezone%'
 
+    App\Service\McpMercadoLivreProvider: ~
+
+    ControleOnline\Service\McpMercadoLivreProviderInterface:
+        alias: App\Service\McpMercadoLivreProvider
+
     ControleOnline\Controller\McpController:
         tags: ['controller.service_arguments']
