@@ -4,8 +4,10 @@
   "rc": 1,
   "frozen": true,
   "baseMaster": "e8f07b4c66000e1fc6e9858fb4ca0a02bcd53430",
-  "tasks": [1221],
+  "tasks": [
+    1221
+  ],
   "repositories": {
-    "ControleOnline/api-community": "PENDING"
+    "ControleOnline/api-community": "1318b620ce0122fe91bac537501c4fbc758ac3b5"
   }
 }
