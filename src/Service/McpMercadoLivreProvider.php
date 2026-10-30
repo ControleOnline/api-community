@@ -5,73 +5,67 @@ declare(strict_types=1);
 namespace App\Service;
 
 use ControleOnline\Entity\Config;
+use ControleOnline\Entity\Order;
 use ControleOnline\Entity\People;
+use ControleOnline\Entity\Product;
+use ControleOnline\Entity\ProductInventory;
+use ControleOnline\Service\ExtraDataService;
 use ControleOnline\Service\McpCompanyScopeProviderInterface;
-use ControleOnline\Service\MercadoLivreService;
 use ControleOnline\Service\McpMercadoLivreProviderInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
- * Mercado Livre seller tools for MCP.
+ * MCP surface for Mercado Livre **local** domain data only.
  *
- * Tokens are stored per company in Config by the integration OAuth flow
- * (api-platform-integration MercadoLivreService) and never returned to the client.
+ * Architecture (owner rule):
+ * - MCP must NOT call marketplace APIs (api.mercadolibre.com, etc.).
+ * - Integration module syncs remote → local Product / ProductInventory / Order.
+ * - MCP reads local products, inventories and orders that already carry marketplace ids
+ *   (ExtraData context MercadoLivre, Order.app = MercadoLivre, externalCode).
  *
- * Canonical keys (must match MercadoLivreService):
- * - mercado-livre-access-token
- * - mercado-livre-refresh-token (optional)
- * - mercado-livre-user-id (optional)
- *
- * Legacy keys still accepted as fallback:
- * - mercadolivre_access_token / mercadolivre_refresh_token / mercadolivre_user_id
- *
- * OAuth endpoints (ROLE_HUMAN, company-scoped):
- * - POST /marketplace/integrations/mercadolivre/authorization-page
- * - GET  /oauth/mercadolivre/return (callback, PKCE + state bound to provider)
- *
- * All MCP calls are scoped to companies the current user can access.
+ * Sync/import from Mercado Livre remains on HTTP integration routes only, e.g.:
+ * - POST /marketplace/integrations/mercadolivre/products/import
+ * - POST /marketplace/integrations/mercadolivre/orders/import
+ * - POST /marketplace/integrations/mercadolivre/stock/push
  */
 final class McpMercadoLivreProvider implements McpMercadoLivreProviderInterface
 {
-    private const API_BASE = 'https://api.mercadolibre.com';
-    /** Canonical keys from ControleOnline\Service\MercadoLivreService */
+    private const APP_CONTEXT = 'MercadoLivre';
     private const CONFIG_ACCESS = 'mercado-livre-access-token';
     private const CONFIG_REFRESH = 'mercado-livre-refresh-token';
     private const CONFIG_USER_ID = 'mercado-livre-user-id';
-
-    /** Legacy keys from the first MCP provider slice (kept as read fallback). */
     private const CONFIG_ACCESS_LEGACY = 'mercadolivre_access_token';
     private const CONFIG_REFRESH_LEGACY = 'mercadolivre_refresh_token';
     private const CONFIG_USER_ID_LEGACY = 'mercadolivre_user_id';
-    private const CONFIG_EXPIRES_LEGACY = 'mercadolivre_token_expires_at';
 
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly HttpClientInterface $httpClient,
         private readonly McpCompanyScopeProviderInterface $companyScopeProvider,
-        private readonly ?MercadoLivreService $mercadoLivreService = null,
-        private readonly ?LoggerInterface $logger = null,
+        private readonly ?ExtraDataService $extraDataService = null,
     ) {
     }
 
     public function getStatus(int $companyId): array
     {
         $this->assertCompanyAccess($companyId);
-        $token = $this->getAccessToken($companyId);
+        $token = $this->getConfigValue($companyId, self::CONFIG_ACCESS, self::CONFIG_ACCESS_LEGACY);
         $userId = $this->getConfigValue($companyId, self::CONFIG_USER_ID, self::CONFIG_USER_ID_LEGACY);
-        $expires = $this->getConfigValue($companyId, self::CONFIG_EXPIRES_LEGACY);
 
         return [
             'company_id' => $companyId,
             'connected' => $token !== null && $token !== '',
             'user_id' => $userId,
-            'token_expires_at' => $expires !== null ? (int) $expires : null,
             'has_refresh_token' => $this->getConfigValue($companyId, self::CONFIG_REFRESH, self::CONFIG_REFRESH_LEGACY) !== null,
+            'data_source' => 'local',
+            'note' => 'MCP reads local products/inventory/orders. Marketplace sync is integration-only.',
             'oauth' => [
                 'authorization_endpoint' => '/marketplace/integrations/mercadolivre/authorization-page',
                 'callback_endpoint' => '/oauth/mercadolivre/return',
+            ],
+            'integration' => [
+                'products_import' => '/marketplace/integrations/mercadolivre/products/import',
+                'orders_import' => '/marketplace/integrations/mercadolivre/orders/import',
+                'stock_push' => '/marketplace/integrations/mercadolivre/stock/push',
             ],
         ];
     }
@@ -79,32 +73,51 @@ final class McpMercadoLivreProvider implements McpMercadoLivreProviderInterface
     public function getCurrentUser(int $companyId): array
     {
         $this->assertCompanyAccess($companyId);
-        $data = $this->apiGet($companyId, '/users/me');
+        $userId = $this->getConfigValue($companyId, self::CONFIG_USER_ID, self::CONFIG_USER_ID_LEGACY);
 
-        return $this->sanitizeUser($data);
+        return [
+            'company_id' => $companyId,
+            'user_id' => $userId,
+            'connected' => $this->getConfigValue($companyId, self::CONFIG_ACCESS, self::CONFIG_ACCESS_LEGACY) !== null,
+            'data_source' => 'local_config',
+        ];
     }
 
     public function searchItems(int $companyId, int $offset = 0, int $limit = 50): array
     {
         $this->assertCompanyAccess($companyId);
-        $userId = $this->resolveSellerId($companyId);
         $offset = max(0, $offset);
         $limit = max(1, min(100, $limit));
+        $company = $this->requireCompany($companyId);
 
-        $data = $this->apiGet($companyId, sprintf('/users/%s/items/search', rawurlencode($userId)), [
-            'offset' => $offset,
-            'limit' => $limit,
-        ]);
+        $products = $this->em->getRepository(Product::class)->findBy(
+            ['company' => $company],
+            ['id' => 'DESC'],
+            $limit * 3,
+            0
+        );
+
+        $results = [];
+        foreach ($products as $product) {
+            if (!$product instanceof Product) {
+                continue;
+            }
+            $remoteId = $this->resolveProductRemoteId($product);
+            if ($remoteId === '') {
+                continue;
+            }
+            $results[] = $remoteId;
+            if (count($results) >= $offset + $limit) {
+                break;
+            }
+        }
+        $page = array_slice($results, $offset, $limit);
 
         return [
             'company_id' => $companyId,
-            'seller_id' => $userId,
-            'results' => $data['results'] ?? [],
-            'paging' => $data['paging'] ?? [
-                'total' => isset($data['results']) ? count($data['results']) : 0,
-                'offset' => $offset,
-                'limit' => $limit,
-            ],
+            'data_source' => 'local_products',
+            'results' => $page,
+            'count' => count($page),
         ];
     }
 
@@ -116,42 +129,43 @@ final class McpMercadoLivreProvider implements McpMercadoLivreProviderInterface
             throw new \InvalidArgumentException('item_id is required');
         }
 
-        return $this->sanitizeItem($this->apiGet($companyId, '/items/' . rawurlencode($itemId)));
+        $product = $this->findLocalProductByRemoteId($companyId, $itemId);
+        if (!$product instanceof Product) {
+            return [
+                'success' => false,
+                'error' => 'not_found_local',
+                'message' => 'Product not found locally for this Mercado Livre id. Run integration products/import first.',
+                'item_id' => $itemId,
+            ];
+        }
+
+        return $this->projectProduct($product, $itemId);
     }
 
     public function getItemDescription(int $companyId, string $itemId): array
     {
-        $this->assertCompanyAccess($companyId);
-        $itemId = trim($itemId);
-        if ($itemId === '') {
-            throw new \InvalidArgumentException('item_id is required');
+        $item = $this->getItem($companyId, $itemId);
+        if (isset($item['error'])) {
+            return $item;
         }
-
-        $data = $this->apiGet($companyId, sprintf('/items/%s/description', rawurlencode($itemId)));
 
         return [
             'item_id' => $itemId,
-            'plain_text' => $data['plain_text'] ?? null,
-            'text' => $data['text'] ?? null,
+            'plain_text' => $item['description'] ?? null,
+            'text' => $item['description'] ?? null,
+            'data_source' => 'local_products',
         ];
     }
 
     public function getCategory(int $companyId, string $categoryId): array
     {
         $this->assertCompanyAccess($companyId);
-        $categoryId = trim($categoryId);
-        if ($categoryId === '') {
-            throw new \InvalidArgumentException('category_id is required');
-        }
-
-        // Category metadata is public on ML API; still requires a connected company for audit.
-        $this->requireAccessToken($companyId);
-        $data = $this->apiGet($companyId, '/categories/' . rawurlencode($categoryId));
 
         return [
-            'id' => $data['id'] ?? $categoryId,
-            'name' => $data['name'] ?? null,
-            'path_from_root' => $data['path_from_root'] ?? [],
+            'success' => false,
+            'error' => 'local_only',
+            'message' => 'Category metadata is not queried from Mercado Livre via MCP. Use local product categories or integration catalog sync.',
+            'category_id' => $categoryId,
         ];
     }
 
@@ -163,134 +177,252 @@ final class McpMercadoLivreProvider implements McpMercadoLivreProviderInterface
             throw new \InvalidArgumentException('order_id is required');
         }
 
-        return $this->sanitizeOrder($this->apiGet($companyId, '/orders/' . rawurlencode($orderId)));
+        $company = $this->requireCompany($companyId);
+        $order = $this->em->getRepository(Order::class)->findOneBy([
+            'provider' => $company,
+            'externalCode' => $orderId,
+        ]);
+
+        if (!$order instanceof Order) {
+            return [
+                'success' => false,
+                'error' => 'not_found_local',
+                'message' => 'Order not found locally. Run integration orders/import or wait for webhook.',
+                'order_id' => $orderId,
+            ];
+        }
+
+        return $this->projectOrder($order);
     }
 
     public function searchOrders(int $companyId, int $offset = 0, int $limit = 50, ?string $status = null): array
     {
         $this->assertCompanyAccess($companyId);
-        if ($this->mercadoLivreService !== null) {
-            $provider = $this->em->find(People::class, $companyId);
-            if ($provider === null) {
-                throw new \InvalidArgumentException('company not found');
-            }
-
-            return $this->mercadoLivreService->searchOrders($provider, $offset, $limit, $status);
-        }
-
-        $sellerId = $this->resolveSellerId($companyId);
         $offset = max(0, $offset);
         $limit = max(1, min(50, $limit));
-        $query = ['seller' => $sellerId, 'offset' => $offset, 'limit' => $limit, 'sort' => 'date_desc'];
-        if ($status !== null && trim($status) !== '') {
-            $query['order.status'] = trim($status);
+        $company = $this->requireCompany($companyId);
+
+        $qb = $this->em->getRepository(Order::class)->createQueryBuilder('o')
+            ->andWhere('o.provider = :provider')
+            ->setParameter('provider', $company)
+            ->andWhere('o.app = :app OR o.externalCode IS NOT NULL')
+            ->setParameter('app', Order::APP_MERCADO_LIVRE)
+            ->orderBy('o.id', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        if ($status !== null && trim($status) !== '' && method_exists(Order::class, 'getStatus')) {
+            // status filter best-effort via joined status name if mapping exists
         }
-        $data = $this->apiGet($companyId, '/orders/search', $query);
+
+        $rows = $qb->getQuery()->getResult();
         $results = [];
-        foreach (($data['results'] ?? []) as $row) {
-            if (!is_array($row)) {
+        foreach ($rows as $order) {
+            if (!$order instanceof Order) {
+                continue;
+            }
+            // Prefer ML orders: app match or external code present
+            if ($order->getApp() !== Order::APP_MERCADO_LIVRE && !$order->getExternalCode()) {
                 continue;
             }
             $results[] = [
-                'id' => $row['id'] ?? null,
-                'status' => $row['status'] ?? null,
-                'date_created' => $row['date_created'] ?? null,
-                'total_amount' => $row['total_amount'] ?? null,
+                'id' => $order->getExternalCode() ?: (string) $order->getId(),
+                'local_id' => $order->getId(),
+                'status' => method_exists($order, 'getStatus') && $order->getStatus()
+                    ? (method_exists($order->getStatus(), 'getStatus') ? $order->getStatus()->getStatus() : null)
+                    : null,
+                'data_source' => 'local_orders',
             ];
         }
 
         return [
             'success' => true,
             'company_id' => $companyId,
-            'seller_id' => $sellerId,
+            'data_source' => 'local_orders',
             'results' => $results,
-            'paging' => $data['paging'] ?? null,
         ];
     }
 
     public function importOrders(int $companyId, int $limit = 20, ?string $status = null): array
     {
         $this->assertCompanyAccess($companyId);
-        if ($this->mercadoLivreService === null) {
-            return [
-                'success' => false,
-                'error' => 'integration_unavailable',
-                'message' => 'MercadoLivreService is not available in this runtime',
-            ];
-        }
-        $provider = $this->em->find(People::class, $companyId);
-        if ($provider === null) {
-            throw new \InvalidArgumentException('company not found');
-        }
 
-        return $this->mercadoLivreService->importRecentOrders($provider, $limit, $status);
+        return [
+            'success' => false,
+            'error' => 'integration_only',
+            'message' => 'MCP does not call Mercado Livre. Use POST /marketplace/integrations/mercadolivre/orders/import then query local orders.',
+            'endpoint' => '/marketplace/integrations/mercadolivre/orders/import',
+        ];
     }
-
 
     public function importProducts(int $companyId, int $showcaseId, int $limit = 50): array
     {
         $this->assertCompanyAccess($companyId);
-        if ($showcaseId < 1) {
-            throw new \InvalidArgumentException('showcase_id must be >= 1');
-        }
-        $limit = max(1, min(100, $limit));
-
-        // First slice: list remote items only. Full product upsert is a follow-up task.
-        $search = $this->searchItems($companyId, 0, $limit);
-        $imported = [];
-        foreach ($search['results'] as $itemId) {
-            if (!is_string($itemId) || $itemId === '') {
-                continue;
-            }
-            try {
-                $item = $this->getItem($companyId, $itemId);
-                $imported[] = [
-                    'item_id' => $itemId,
-                    'title' => $item['title'] ?? null,
-                    'status' => $item['status'] ?? null,
-                    'available_quantity' => $item['available_quantity'] ?? null,
-                    'price' => $item['price'] ?? null,
-                    'showcase_id' => $showcaseId,
-                    'import_status' => 'listed_only',
-                ];
-            } catch (\Throwable $e) {
-                $this->logger?->warning('Mercado Livre item import skipped', [
-                    'company_id' => $companyId,
-                    'item_id' => $itemId,
-                    'exception_class' => $e::class,
-                ]);
-            }
-        }
 
         return [
-            'company_id' => $companyId,
+            'success' => false,
+            'error' => 'integration_only',
+            'message' => 'MCP does not call Mercado Livre. Use POST /marketplace/integrations/mercadolivre/products/import then query local products/inventory.',
+            'endpoint' => '/marketplace/integrations/mercadolivre/products/import',
             'showcase_id' => $showcaseId,
-            'count' => count($imported),
-            'items' => $imported,
-            'note' => 'listed_only: product upsert into local catalog is not implemented in this slice',
         ];
+    }
+
+    /**
+     * Local stock snapshot for a product linked to Mercado Livre (all product_inventory rows).
+     *
+     * @return list<array{inventory_id:int|null,inventory_name:?string,available:int}>
+     */
+    private function projectInventories(Product $product): array
+    {
+        $rows = $this->em->getRepository(ProductInventory::class)->findBy(['product' => $product]);
+        $out = [];
+        foreach ($rows as $row) {
+            if (!$row instanceof ProductInventory) {
+                continue;
+            }
+            $inv = $row->getInventory();
+            $out[] = [
+                'inventory_id' => $inv?->getId(),
+                'inventory_name' => $inv && method_exists($inv, 'getInventory') ? $inv->getInventory() : null,
+                'available' => (int) $row->getAvailable(),
+            ];
+        }
+
+        return $out;
+    }
+
+    private function projectProduct(Product $product, string $remoteId): array
+    {
+        return [
+            'id' => $remoteId,
+            'local_product_id' => $product->getId(),
+            'title' => method_exists($product, 'getProduct') ? $product->getProduct() : null,
+            'description' => method_exists($product, 'getDescription') ? $product->getDescription() : null,
+            'price' => method_exists($product, 'getPrice') ? $product->getPrice() : null,
+            'sku' => method_exists($product, 'getSku') ? $product->getSku() : null,
+            'active' => method_exists($product, 'isActive') ? $product->isActive() : null,
+            'available_quantity' => array_sum(array_column($this->projectInventories($product), 'available')),
+            'inventories' => $this->projectInventories($product),
+            'data_source' => 'local_products',
+        ];
+    }
+
+    private function projectOrder(Order $order): array
+    {
+        return [
+            'id' => $order->getExternalCode() ?: (string) $order->getId(),
+            'local_id' => $order->getId(),
+            'app' => $order->getApp(),
+            'external_code' => $order->getExternalCode(),
+            'data_source' => 'local_orders',
+        ];
+    }
+
+    private function findLocalProductByRemoteId(int $companyId, string $remoteId): ?Product
+    {
+        if ($this->extraDataService !== null) {
+            $entity = $this->extraDataService->getEntityByExtraData(
+                self::APP_CONTEXT,
+                'id',
+                $remoteId,
+                Product::class
+            );
+            if ($entity instanceof Product) {
+                $company = $entity->getCompany();
+                if ($company && (int) $company->getId() === $companyId) {
+                    return $entity;
+                }
+            }
+            $entity = $this->extraDataService->getEntityByExtraData(
+                self::APP_CONTEXT,
+                'code',
+                $remoteId,
+                Product::class
+            );
+            if ($entity instanceof Product) {
+                $company = $entity->getCompany();
+                if ($company && (int) $company->getId() === $companyId) {
+                    return $entity;
+                }
+            }
+        }
+
+        $company = $this->requireCompany($companyId);
+        $candidates = $this->em->getRepository(Product::class)->findBy(
+            ['company' => $company],
+            ['id' => 'DESC'],
+            200
+        );
+        foreach ($candidates as $product) {
+            if ($product instanceof Product && $this->resolveProductRemoteId($product) === $remoteId) {
+                return $product;
+            }
+        }
+
+        return null;
+    }
+
+    private function resolveProductRemoteId(Product $product): string
+    {
+        if ($this->extraDataService !== null) {
+            $id = trim((string) ($this->extraDataService->getExtraDataValue(
+                self::APP_CONTEXT,
+                'Product',
+                (int) $product->getId(),
+                'id',
+                'mercadolivre'
+            ) ?? ''));
+            if ($id !== '') {
+                return $id;
+            }
+            $code = trim((string) ($this->extraDataService->getExtraDataValue(
+                self::APP_CONTEXT,
+                'Product',
+                (int) $product->getId(),
+                'code',
+                'mercadolivre'
+            ) ?? ''));
+            if ($code !== '') {
+                return $code;
+            }
+        }
+
+        $sku = method_exists($product, 'getSku') ? trim((string) $product->getSku()) : '';
+        if ($sku !== '' && str_starts_with(strtoupper($sku), 'MLB')) {
+            return $sku;
+        }
+
+        return '';
+    }
+
+    private function requireCompany(int $companyId): People
+    {
+        $people = $this->em->find(People::class, $companyId);
+        if (!$people instanceof People) {
+            throw new \InvalidArgumentException('company not found');
+        }
+
+        return $people;
     }
 
     private function assertCompanyAccess(int $companyId): void
     {
         if ($companyId < 1) {
-            throw new \InvalidArgumentException('company_id must be >= 1');
+            throw new \InvalidArgumentException('company_id is required');
         }
-        $companies = $this->companyScopeProvider->listForCurrentUser();
-        $ids = array_map(static fn (array $c): int => (int) $c['id'], $companies);
-        if (!in_array($companyId, $ids, true)) {
-            throw new \InvalidArgumentException('company_id is not accessible to the current user');
+        foreach ($this->companyScopeProvider->listForCurrentUser() as $row) {
+            if ((int) ($row['id'] ?? 0) === $companyId) {
+                return;
+            }
         }
+        throw new \RuntimeException('Access denied to company_id ' . $companyId);
     }
 
     private function getConfigValue(int $companyId, string $key, ?string $fallbackKey = null): ?string
     {
-        $people = $this->em->find(People::class, $companyId);
-        if ($people === null) {
-            throw new \InvalidArgumentException('company not found');
-        }
-
-        foreach (array_filter([$key, $fallbackKey], static fn ($k) => is_string($k) && $k !== '') as $candidate) {
+        $people = $this->requireCompany($companyId);
+        foreach (array_filter([$key, $fallbackKey]) as $candidate) {
             $configs = $this->em->getRepository(Config::class)->findBy([
                 'people' => $people,
                 'configKey' => $candidate,
@@ -303,18 +435,7 @@ final class McpMercadoLivreProvider implements McpMercadoLivreProviderInterface
                 continue;
             }
             if (is_string($value)) {
-                $trimmed = trim($value);
-                // Integration may JSON-encode scalar config values.
-                if ($trimmed !== '' && ($trimmed[0] === '"' || $trimmed[0] === '{')) {
-                    try {
-                        $decoded = json_decode($trimmed, true, 512, JSON_THROW_ON_ERROR);
-                        if (is_scalar($decoded)) {
-                            return trim((string) $decoded);
-                        }
-                    } catch (\JsonException) {
-                    }
-                }
-                return $trimmed;
+                return trim($value);
             }
             if (is_scalar($value)) {
                 return trim((string) $value);
@@ -322,134 +443,5 @@ final class McpMercadoLivreProvider implements McpMercadoLivreProviderInterface
         }
 
         return null;
-    }
-
-    private function getAccessToken(int $companyId): ?string
-    {
-        return $this->getConfigValue($companyId, self::CONFIG_ACCESS, self::CONFIG_ACCESS_LEGACY);
-    }
-
-    private function requireAccessToken(int $companyId): string
-    {
-        $token = $this->getAccessToken($companyId);
-        if ($token === null || $token === '') {
-            throw new \RuntimeException('Mercado Livre is not connected for this company (missing access token config)');
-        }
-
-        return $token;
-    }
-
-    private function resolveSellerId(int $companyId): string
-    {
-        $stored = $this->getConfigValue($companyId, self::CONFIG_USER_ID, self::CONFIG_USER_ID_LEGACY);
-        if ($stored !== null && $stored !== '') {
-            return $stored;
-        }
-        $me = $this->apiGet($companyId, '/users/me');
-        $id = $me['id'] ?? null;
-        if ($id === null) {
-            throw new \RuntimeException('Unable to resolve Mercado Livre seller id');
-        }
-
-        return (string) $id;
-    }
-
-    /**
-     * @param array<string, scalar> $query
-     * @return array<string, mixed>
-     */
-    private function apiGet(int $companyId, string $path, array $query = []): array
-    {
-        $token = $this->requireAccessToken($companyId);
-        $url = self::API_BASE . $path;
-        try {
-            $response = $this->httpClient->request('GET', $url, [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $token,
-                    'Accept' => 'application/json',
-                ],
-                'query' => $query,
-                'timeout' => 20,
-            ]);
-            $status = $response->getStatusCode();
-            $data = $response->toArray(false);
-        } catch (\Throwable $e) {
-            $this->logger?->error('Mercado Livre API request failed', [
-                'company_id' => $companyId,
-                'path' => $path,
-                'exception_class' => $e::class,
-            ]);
-            throw new \RuntimeException('Mercado Livre API request failed');
-        }
-
-        if ($status >= 400) {
-            $this->logger?->warning('Mercado Livre API error status', [
-                'company_id' => $companyId,
-                'path' => $path,
-                'status' => $status,
-            ]);
-            $message = is_array($data) && isset($data['message']) ? (string) $data['message'] : 'Mercado Livre API error';
-            throw new \RuntimeException($message);
-        }
-
-        return is_array($data) ? $data : [];
-    }
-
-    /** @param array<string, mixed> $data */
-    private function sanitizeUser(array $data): array
-    {
-        return [
-            'id' => $data['id'] ?? null,
-            'nickname' => $data['nickname'] ?? null,
-            'permalink' => $data['permalink'] ?? null,
-            'site_id' => $data['site_id'] ?? null,
-            'user_type' => $data['user_type'] ?? null,
-            'tags' => $data['tags'] ?? [],
-        ];
-    }
-
-    /** @param array<string, mixed> $data */
-    private function sanitizeItem(array $data): array
-    {
-        return [
-            'id' => $data['id'] ?? null,
-            'title' => $data['title'] ?? null,
-            'category_id' => $data['category_id'] ?? null,
-            'price' => $data['price'] ?? null,
-            'currency_id' => $data['currency_id'] ?? null,
-            'available_quantity' => $data['available_quantity'] ?? null,
-            'sold_quantity' => $data['sold_quantity'] ?? null,
-            'status' => $data['status'] ?? null,
-            'permalink' => $data['permalink'] ?? null,
-            'thumbnail' => $data['thumbnail'] ?? null,
-        ];
-    }
-
-    /** @param array<string, mixed> $data */
-    private function sanitizeOrder(array $data): array
-    {
-        $orderItems = [];
-        foreach ($data['order_items'] ?? [] as $row) {
-            if (!is_array($row)) {
-                continue;
-            }
-            $item = is_array($row['item'] ?? null) ? $row['item'] : [];
-            $orderItems[] = [
-                'item_id' => $item['id'] ?? null,
-                'title' => $item['title'] ?? null,
-                'quantity' => $row['quantity'] ?? null,
-                'unit_price' => $row['unit_price'] ?? null,
-            ];
-        }
-
-        return [
-            'id' => $data['id'] ?? null,
-            'status' => $data['status'] ?? null,
-            'date_created' => $data['date_created'] ?? null,
-            'date_closed' => $data['date_closed'] ?? null,
-            'total_amount' => $data['total_amount'] ?? null,
-            'currency_id' => $data['currency_id'] ?? null,
-            'order_items' => $orderItems,
-        ];
     }
 }

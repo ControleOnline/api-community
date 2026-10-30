@@ -11,8 +11,6 @@ use ControleOnline\Service\McpCompanyScopeProviderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\HttpClient\Response\MockResponse;
 
 final class McpMercadoLivreProviderTest extends TestCase
 {
@@ -22,33 +20,15 @@ final class McpMercadoLivreProviderTest extends TestCase
         $status = $provider->getStatus(1);
         self::assertFalse($status['connected']);
         self::assertSame(1, $status['company_id']);
+        self::assertSame('local', $status['data_source']);
     }
 
     public function testDeniedCompanyScope(): void
     {
         $provider = $this->buildProvider([], [2]);
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\RuntimeException::class);
         $provider->getStatus(1);
     }
-
-    public function testSearchItemsUsesSellerIdAndSanitizes(): void
-    {
-        $client = new MockHttpClient([
-            new MockResponse(json_encode([
-                'results' => ['MLB1', 'MLB2'],
-                'paging' => ['total' => 2, 'offset' => 0, 'limit' => 50],
-            ], JSON_THROW_ON_ERROR), ['http_code' => 200]),
-        ]);
-        $provider = $this->buildProvider([
-            'mercado-livre-access-token' => 'tok',
-            'mercado-livre-user-id' => '12345',
-        ], [1], $client);
-
-        $result = $provider->searchItems(1, 0, 50);
-        self::assertSame(['MLB1', 'MLB2'], $result['results']);
-        self::assertSame('12345', $result['seller_id']);
-    }
-
 
     public function testLegacyConfigKeysStillWork(): void
     {
@@ -59,43 +39,36 @@ final class McpMercadoLivreProviderTest extends TestCase
         $status = $provider->getStatus(1);
         self::assertTrue($status['connected']);
         self::assertSame('999', $status['user_id']);
-        self::assertArrayHasKey('oauth', $status);
-        self::assertSame('/marketplace/integrations/mercadolivre/authorization-page', $status['oauth']['authorization_endpoint']);
+        self::assertArrayHasKey('integration', $status);
     }
 
-    public function testGetItemDoesNotExposeSecrets(): void
+    public function testImportProductsIsIntegrationOnly(): void
     {
-        $client = new MockHttpClient([
-            new MockResponse(json_encode([
-                'id' => 'MLB9',
-                'title' => 'Produto',
-                'price' => 10.5,
-                'status' => 'active',
-                'available_quantity' => 3,
-                'secret_field' => 'should-not-leak',
-            ], JSON_THROW_ON_ERROR), ['http_code' => 200]),
-        ]);
-        $provider = $this->buildProvider([
-            'mercado-livre-access-token' => 'tok',
-        ], [1], $client);
+        $provider = $this->buildProvider(['mercado-livre-access-token' => 'tok'], [1]);
+        $result = $provider->importProducts(1, 10, 5);
+        self::assertFalse($result['success']);
+        self::assertSame('integration_only', $result['error']);
+    }
 
-        $item = $provider->getItem(1, 'MLB9');
-        self::assertSame('MLB9', $item['id']);
-        self::assertSame('Produto', $item['title']);
-        self::assertArrayNotHasKey('secret_field', $item);
+    public function testImportOrdersIsIntegrationOnly(): void
+    {
+        $provider = $this->buildProvider(['mercado-livre-access-token' => 'tok'], [1]);
+        $result = $provider->importOrders(1, 5);
+        self::assertFalse($result['success']);
+        self::assertSame('integration_only', $result['error']);
     }
 
     /**
      * @param array<string, string> $configs
      * @param list<int> $accessible
      */
-    private function buildProvider(array $configs, array $accessible, ?MockHttpClient $client = null): McpMercadoLivreProvider
+    private function buildProvider(array $configs, array $accessible): McpMercadoLivreProvider
     {
         $people = $this->createMock(People::class);
         $people->method('getId')->willReturn(1);
 
         $repo = $this->createMock(EntityRepository::class);
-        $repo->method('findBy')->willReturnCallback(function (array $criteria) use ($configs, $people) {
+        $repo->method('findBy')->willReturnCallback(function (array $criteria) use ($configs) {
             $key = $criteria['configKey'] ?? null;
             if (!is_string($key) || !array_key_exists($key, $configs)) {
                 return [];
@@ -117,11 +90,6 @@ final class McpMercadoLivreProviderTest extends TestCase
             $accessible
         ));
 
-        return new McpMercadoLivreProvider(
-            $em,
-            $client ?? new MockHttpClient(),
-            $scope,
-            null,
-        );
+        return new McpMercadoLivreProvider($em, $scope, null);
     }
 }
