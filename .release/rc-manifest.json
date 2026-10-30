@@ -1,28 +1,32 @@
 {
   "version": "1.10.89",
-  "rc": 3,
-  "branch": "rc/1.10.89-rc.3",
+  "rc": 4,
+  "branch": "rc/1.10.89-rc.4",
   "baseMaster": "f8c28e3cdfdac137de166af6e1ed3fcf7aa4997f",
   "tasks": [
-    287
+    287,
+    290
   ],
   "frozen": true,
-  "contentCommit": "949d0a8e5e66cf03c966bbdee5595c1619248ef5",
+  "contentCommit": "b06f64f570c7f288f6e7034f1e72e1437ab50942",
   "repositories": {
-    "ControleOnline/api-community": "949d0a8e5e66cf03c966bbdee5595c1619248ef5",
+    "ControleOnline/api-community": "b06f64f570c7f288f6e7034f1e72e1437ab50942",
+    "ControleOnline/api-platform-orders": "be2c6a9cd117dd62a551c7a45ecdbc3b7c29992a",
     "ControleOnline/api-platform-mcp": "b8205f6da3efad97732e51daefc4e96063506b58",
     "ControleOnline/app-community": "48954d446d856e7b6042975d0cd65bb8f6336506"
   },
   "packages": {
+    "controleonline/orders": "1.0.6",
     "controleonline/common": "1.0.7",
     "controleonline/integration": "1.0.5",
     "controleonline/mcp": "1.0.17",
     "controleonline/whatsapp-sdk": "1.0.1"
   },
   "validation": {
-    "scope": "Restore API staging startup and login; preserve #1221, #264 and POS. Order-permission #46 remains local and excluded.",
-    "tests": "Clean registry installation; 22 focused API tests/1924 assertions; 19 MCP tests/113 assertions; prod cache compilation passed.",
-    "database": "No schema changes; skip database migrations.",
-    "production": "Application production publication is not part of this repair."
+    "scope": "Preserve existing API staging repair #287, Kim work, #264 and POS; add #290 consumer pin for orders#46 cumulative access fix.",
+    "installation": "Clean Packagist install: only orders changed versus prior validated composition, from 1.0.5 to 1.0.6. Exact package reference and both patched-file hashes verified. Symfony prod container compiled.",
+    "tests": "Previously validated patch: 36 tests/236 assertions and local POS browser flow. Same local suite intentionally not rerun at user's request; human staging POS review pending.",
+    "database": "No schema changes; deployment must skip database migrations.",
+    "production": "No application master or production promotion authorized in this delivery."
   }
 }
