@@ -55,5 +55,10 @@ services:
     ControleOnline\Service\McpMercadoLivreProviderInterface:
         alias: App\Service\McpMercadoLivreProvider
 
+    App\Service\McpLinkedInProvider: ~
+
+    ControleOnline\Service\McpLinkedInProviderInterface:
+        alias: App\Service\McpLinkedInProvider
+
     ControleOnline\Controller\McpController:
         tags: ['controller.service_arguments']
