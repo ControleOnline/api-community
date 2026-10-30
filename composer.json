@@ -17,7 +17,7 @@
         "controleonline/financial": "1.0.3",
         "controleonline/integration": "1.0.5",
         "controleonline/logistic": "1.0.2",
-        "controleonline/mcp": "1.0.14",
+        "controleonline/mcp": "1.0.17",
         "controleonline/messages-sdk": "1.0.0",
         "controleonline/multi-tenancy": "1.0.2",
         "controleonline/orders": "1.0.5",
