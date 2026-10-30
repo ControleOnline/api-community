@@ -1,63 +1,79 @@
 {
-  "version": "1.10.85",
+  "version": "1.10.89",
   "rc": 2,
-  "branch": "rc/1.10.85-rc.2",
-  "baseMaster": "31f33c1f5d4e143f0ac9bfa6c3f0dcb306e97c94",
+  "branch": "rc/1.10.89-rc.2",
+  "baseMaster": "08fa00714f0e3b32c6259df14cfd39c7a5516df3",
   "tasks": [
-    1187
+    264
   ],
-  "taskRepository": "ControleOnline/app-community",
+  "frozen": true,
+  "contentCommit": "1532789429654cf94698379693451893c5464523",
   "repositories": {
-    "ControleOnline/app-community": "8ea1564f040f10ffedf1516d0bf7313ef6a60b53",
-    "ControleOnline/api-community": "caf8024b642797a1896766ff032d3b131b93d9d1",
-    "ControleOnline/api-platform-orders": "adf023f697e3f64782fa36c3855655364f74847a",
-    "ControleOnline/ui-common": "74e5c987d5f5009d838b7e0d2280e49dc89474c6",
-    "ControleOnline/ui-default": "aa9fad75c5d47903a7c833e54c90890c6795d482",
-    "ControleOnline/ui-manager": "9105c9f9388ef3c800a1e773a665574dc0d87b44",
-    "ControleOnline/ui-people": "25aad29efd3a3b346baf21387a1ba0d190ad9e44",
-    "ControleOnline/ui-products": "4b204cafdb524dfdbcf5fb2c5ae0be8b64d10820",
-    "ControleOnline/ui-orders": "4b8dfb0eb748b80ce9a158f9df7ce94288b6a06e",
-    "ControleOnline/api-platform-common": "0e048950dada1990b1ec319240554cecbc65902d",
-    "ControleOnline/api-platform-people": "cd0077e5c27a043cc99fb1e996d8303e12e2230b",
-    "ControleOnline/api-platform-mcp": "290f1c0abe291e97fb427b263815d021466cb357",
-    "ControleOnline/api-platform-users": "41daafcdf7941602c83a097ff5aa75bc032aa277"
+    "ControleOnline/app-community": "30f7997553f7f0a8aec1e9b4c5c789b754527ffb",
+    "ControleOnline/api-community": "1532789429654cf94698379693451893c5464523",
+    "ControleOnline/ui-common": "9c543ca881fb8571d1bed0b9da5044f8b4813701"
   },
   "packages": {
-    "ui-common": {
-      "version": "1.2.104",
-      "source": "74e5c987d5f5009d838b7e0d2280e49dc89474c6"
+    "npm": {
+      "@controleonline/react-native-cielo-payment": "1.0.5",
+      "@controleonline/react-native-getnet-payment": "1.0.0",
+      "@controleonline/react-native-infinitepay-payment": "1.0.5",
+      "@controleonline/ui-accounting": "1.0.19",
+      "@controleonline/ui-carrier": "1.0.29",
+      "@controleonline/ui-common": "1.2.107",
+      "@controleonline/ui-config": "1.0.26",
+      "@controleonline/ui-contracts": "1.6.81",
+      "@controleonline/ui-crm": "1.0.44",
+      "@controleonline/ui-customers": "1.0.85",
+      "@controleonline/ui-default": "1.0.282",
+      "@controleonline/ui-employee": "1.0.28",
+      "@controleonline/ui-financial": "1.1.43",
+      "@controleonline/ui-layout": "1.0.20",
+      "@controleonline/ui-login": "1.0.116",
+      "@controleonline/ui-logistic": "1.0.41",
+      "@controleonline/ui-manager": "1.0.23",
+      "@controleonline/ui-orders": "1.3.51",
+      "@controleonline/ui-people": "1.0.102",
+      "@controleonline/ui-ppc": "1.0.56",
+      "@controleonline/ui-products": "1.0.41",
+      "@controleonline/ui-professionals": "1.0.32",
+      "@controleonline/ui-providers": "1.0.28",
+      "@controleonline/ui-report": "1.2.49",
+      "@controleonline/ui-shop": "1.0.19",
+      "@controleonline/ui-support": "1.0.20",
+      "@controleonline/ui-tasks": "1.1.64",
+      "@controleonline/ui-tests": "1.0.24",
+      "@controleonline/ui-translate": "1.1.69",
+      "@controleonline/ui-users": "1.0.50"
     },
-    "ui-default": {
-      "version": "1.0.282",
-      "source": "aa9fad75c5d47903a7c833e54c90890c6795d482"
-    },
-    "ui-manager": {
-      "version": "1.0.23",
-      "source": "9105c9f9388ef3c800a1e773a665574dc0d87b44"
-    },
-    "ui-people": {
-      "version": "1.0.102",
-      "source": "25aad29efd3a3b346baf21387a1ba0d190ad9e44"
-    },
-    "ui-products": {
-      "version": "1.0.41",
-      "source": "4b204cafdb524dfdbcf5fb2c5ae0be8b64d10820"
-    },
-    "ui-orders": {
-      "version": "1.3.49",
-      "source": "4b8dfb0eb748b80ce9a158f9df7ce94288b6a06e"
-    },
-    "controleonline/orders": {
-      "version": "1.0.5",
-      "source": "adf023f697e3f64782fa36c3855655364f74847a"
+    "composer": {
+      "controleonline/accounting": "1.0.2",
+      "controleonline/common": "1.0.6",
+      "controleonline/contract": "1.0.2",
+      "controleonline/ead": "1.0.2",
+      "controleonline/financial": "1.0.3",
+      "controleonline/integration": "1.0.3",
+      "controleonline/logistic": "1.0.2",
+      "controleonline/mcp": "1.0.14",
+      "controleonline/messages-sdk": "1.0.0",
+      "controleonline/multi-tenancy": "1.0.2",
+      "controleonline/orders": "1.0.5",
+      "controleonline/people": "1.0.11",
+      "controleonline/products": "1.0.3",
+      "controleonline/queue": "1.0.3",
+      "controleonline/report": "1.0.2",
+      "controleonline/smoke-tests-playground": "1.0.2",
+      "controleonline/spc-sdk": "1.0.0",
+      "controleonline/tasks": "1.0.2",
+      "controleonline/users": "1.0.8",
+      "controleonline/websocket-server": "1.0.4",
+      "controleonline/whatsapp-sdk": "1.0.0"
     }
   },
-  "frozen": true,
-  "contentCommit": "caf8024b642797a1896766ff032d3b131b93d9d1",
   "validation": {
-    "scope": "composer.json: controleonline/people 1.0.9 -> 1.0.11 (Packagist). rc.2 fixes HTTP 500 of the checkout CPF lookup found on staging with rc.1 (EXISTS subquery replaced by PeopleService::getDocument); supersedes rc.1",
-    "security": "accepted (agent:security:accepted, app-community#1187)",
-    "tests": "PeopleServiceTest + PeopleCheckoutLookupNormalizerTest 12 ok in api-community vendor; CI baseline failures unchanged (68 errors/15 failures, other modules)",
-    "production": "not authorized"
+    "authorization": "Explicit human approval in current session for dev/staging/master alignment; preserve #264 and POS fixes.",
+    "scope": "Reviewed composition matches locally tested code. No database or access-rule changes.",
+    "tests": "Clean Composer install; platform checks; Symfony production cache; 21 focused tests, 1918 assertions.",
+    "native": "Backport applied and hash verified; APK/IPA not built locally."
   }
 }
