@@ -1,16 +1,28 @@
 {
-  "branch": "rc/1.10.89-rc.1",
   "version": "1.10.89",
-  "rc": 1,
-  "frozen": true,
+  "rc": 3,
+  "branch": "rc/1.10.89-rc.3",
   "baseMaster": "f8c28e3cdfdac137de166af6e1ed3fcf7aa4997f",
   "tasks": [
-    1221
+    287
   ],
+  "frozen": true,
+  "contentCommit": "949d0a8e5e66cf03c966bbdee5595c1619248ef5",
   "repositories": {
-    "ControleOnline/api-community": "8a419b6251a46354b4c9d81ebddcaadf779f0b86",
-    "ControleOnline/api-platform-common": "f29b6192c3b9300b08d8974c252cfb9c6f72b2a0",
-    "ControleOnline/api-platform-integration": "954f77bbc77079fde81430a4c1de19f5864821d7",
-    "ControleOnline/whatsapp-sdk-php": "e393e1a2586c50d132faa0ee45beb6a1023707bd"
+    "ControleOnline/api-community": "949d0a8e5e66cf03c966bbdee5595c1619248ef5",
+    "ControleOnline/api-platform-mcp": "b8205f6da3efad97732e51daefc4e96063506b58",
+    "ControleOnline/app-community": "48954d446d856e7b6042975d0cd65bb8f6336506"
+  },
+  "packages": {
+    "controleonline/common": "1.0.7",
+    "controleonline/integration": "1.0.5",
+    "controleonline/mcp": "1.0.17",
+    "controleonline/whatsapp-sdk": "1.0.1"
+  },
+  "validation": {
+    "scope": "Restore API staging startup and login; preserve #1221, #264 and POS. Order-permission #46 remains local and excluded.",
+    "tests": "Clean registry installation; 22 focused API tests/1924 assertions; 19 MCP tests/113 assertions; prod cache compilation passed.",
+    "database": "No schema changes; skip database migrations.",
+    "production": "Application production publication is not part of this repair."
   }
 }

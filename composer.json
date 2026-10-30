@@ -20,7 +20,7 @@
         "controleonline/mcp": "1.0.17",
         "controleonline/messages-sdk": "1.0.0",
         "controleonline/multi-tenancy": "1.0.2",
-        "controleonline/orders": "1.0.5",
+        "controleonline/orders": "1.0.6",
         "controleonline/people": "1.0.11",
         "controleonline/products": "1.0.3",
         "controleonline/queue": "1.0.3",
