@@ -1,11 +1,12 @@
 {
   "version": "1.10.89",
-  "rc": 4,
-  "branch": "rc/1.10.89-rc.4",
+  "rc": 5,
+  "branch": "rc/1.10.89-rc.5",
   "baseMaster": "f8c28e3cdfdac137de166af6e1ed3fcf7aa4997f",
   "tasks": [
     287,
-    290
+    290,
+    1253
   ],
   "frozen": true,
   "contentCommit": "b06f64f570c7f288f6e7034f1e72e1437ab50942",
@@ -20,13 +21,11 @@
     "controleonline/common": "1.0.7",
     "controleonline/integration": "1.0.5",
     "controleonline/mcp": "1.0.17",
-    "controleonline/whatsapp-sdk": "1.0.1"
+    "controleonline/whatsapp-sdk": "1.0.1",
+    "controleonline/people": "1.0.12"
   },
   "validation": {
-    "scope": "Preserve existing API staging repair #287, Kim work, #264 and POS; add #290 consumer pin for orders#46 cumulative access fix.",
-    "installation": "Clean Packagist install: only orders changed versus prior validated composition, from 1.0.5 to 1.0.6. Exact package reference and both patched-file hashes verified. Symfony prod container compiled.",
-    "tests": "Previously validated patch: 36 tests/236 assertions and local POS browser flow. Same local suite intentionally not rerun at user's request; human staging POS review pending.",
-    "database": "No schema changes; deployment must skip database migrations.",
-    "production": "No application master or production promotion authorized in this delivery."
+    "scope": "Preserve rc.4 composition; bump people 1.0.11 -> 1.0.12 (app-community#1253: CPF lookup keeps leading zero via dedicated cpf param).",
+    "database": "No schema changes; deployment must skip database migrations."
   }
 }
