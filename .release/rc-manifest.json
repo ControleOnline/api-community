@@ -1,13 +1,16 @@
 {
-  "branch": "rc/1.10.90-rc.1",
-  "version": "1.10.90",
+  "branch": "rc/1.10.91-rc.1",
+  "version": "1.10.91",
   "rc": 1,
   "frozen": true,
-  "baseMaster": "e8f07b4c66000e1fc6e9858fb4ca0a02bcd53430",
+  "baseMaster": "0d5cc5e01bf58dffeb6da748918e78253e4380ff",
   "tasks": [
-    1221
+    1253
   ],
   "repositories": {
-    "ControleOnline/api-community": "1318b620ce0122fe91bac537501c4fbc758ac3b5"
+    "ControleOnline/api-community": "0d5cc5e01bf58dffeb6da748918e78253e4380ff"
+  },
+  "packages": {
+    "controleonline/people": "1.0.12"
   }
 }
