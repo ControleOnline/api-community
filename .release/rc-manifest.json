@@ -1,16 +1,20 @@
 {
-  "branch": "rc/1.10.91-rc.1",
-  "version": "1.10.91",
+  "version": "1.10.92",
   "rc": 1,
-  "frozen": true,
-  "baseMaster": "0d5cc5e01bf58dffeb6da748918e78253e4380ff",
+  "branch": "rc/1.10.92-rc.1",
+  "baseMaster": "8fe411846a77b81649c7391b92afd14249ad9e9c",
   "tasks": [
-    1253
+    303
   ],
+  "frozen": true,
+  "contentCommit": "eff5790e2dc3919047e691e36d050df8577f19e1",
   "repositories": {
-    "ControleOnline/api-community": "0d5cc5e01bf58dffeb6da748918e78253e4380ff"
+    "ControleOnline/api-community": "eff5790e2dc3919047e691e36d050df8577f19e1"
   },
-  "packages": {
-    "controleonline/people": "1.0.12"
+  "validation": {
+    "scope": "Hotfix MCP detailed query_business_data: inject McpSafeEntityNormalizer via constructor; from/to accept datetime.",
+    "tests": "php -l; unit tests updated for new constructor arity.",
+    "database": "No schema changes; skip database migrations.",
+    "production": "Required on apinew.lave-go.com after master publish."
   }
 }
