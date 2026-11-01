@@ -73,6 +73,7 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
         private readonly ContainerInterface $container,
         private readonly McpCompanyScopeProviderInterface $companyScopeProvider,
         private readonly string $timezone,
+        private readonly McpSafeEntityNormalizer $safeEntityNormalizer,
         private readonly ?TokenStorageInterface $tokenStorage = null,
         private readonly ?LoggerInterface $logger = null,
         private readonly ?McpOperationalReadQueryProvider $operationalQueryProvider = null,
@@ -217,14 +218,13 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
 
             if ($definition['date_field'] !== null) {
                 $dateField = 'o.' . $definition['date_field'];
-                if (is_string($filters['from'] ?? null)) {
+                if (is_string($filters['from'] ?? null) && $filters['from'] !== '') {
                     $queryBuilder->andWhere($dateField . ' >= :mcpFrom')
-                        ->setParameter('mcpFrom', new \DateTimeImmutable($filters['from'] . ' 00:00:00', new \DateTimeZone($this->timezone)));
+                        ->setParameter('mcpFrom', $this->parseBoundaryDate((string) $filters['from'], false));
                 }
-                if (is_string($filters['to'] ?? null)) {
-                    $toExclusive = (new \DateTimeImmutable($filters['to'] . ' 00:00:00', new \DateTimeZone($this->timezone)))->modify('+1 day');
+                if (is_string($filters['to'] ?? null) && $filters['to'] !== '') {
                     $queryBuilder->andWhere($dateField . ' < :mcpTo')
-                        ->setParameter('mcpTo', $toExclusive);
+                        ->setParameter('mcpTo', $this->parseBoundaryDate((string) $filters['to'], true));
                 }
             }
 
@@ -245,7 +245,7 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
                 $entities = $queryBuilder->getQuery()->getResult();
                 $rows = [];
                 foreach ($entities as $entity) {
-                    $row = $this->container->get(McpSafeEntityNormalizer::class)->normalize($entity, $definition['detail_group']);
+                    $row = $this->safeEntityNormalizer->normalize($entity, $definition['detail_group']);
                     if ($dataset === 'sales' || $dataset === 'orders') {
                         $row['client_id'] = $row['client']['id'] ?? null;
                         $row['client_name'] = $row['client']['name'] ?? $row['client']['alias'] ?? null;
@@ -420,5 +420,35 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
             'result_count' => $resultCount,
             'outcome' => $outcome,
         ]);
+    }
+
+    /**
+     * Parse from/to boundary in APP_TIMEZONE.
+     * - Date only (YYYY-MM-DD): from => 00:00:00; to => next day 00:00:00 (exclusive).
+     * - Datetime with time: from => inclusive instant; to => exclusive instant (no +1 day).
+     */
+    private function parseBoundaryDate(string $value, bool $isTo): \DateTimeImmutable
+    {
+        $tz = new \DateTimeZone($this->timezone);
+        $raw = trim(str_replace(' ', 'T', $value));
+
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $raw) === 1) {
+            $day = new \DateTimeImmutable($raw . ' 00:00:00', $tz);
+            return $isTo ? $day->modify('+1 day') : $day;
+        }
+
+        if (str_ends_with($raw, 'Z')) {
+            $raw = substr($raw, 0, -1);
+        }
+        if (preg_match('/[+-]\d{2}:\d{2}$/', $raw) === 1) {
+            $dt = new \DateTimeImmutable($raw);
+            return $dt->setTimezone($tz);
+        }
+
+        $normalized = str_replace('T', ' ', $raw);
+        if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/', $normalized) === 1) {
+            $normalized .= ':00';
+        }
+        return new \DateTimeImmutable($normalized, $tz);
     }
 }

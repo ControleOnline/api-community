@@ -43,6 +43,7 @@ final class McpReadQueryProviderTest extends TestCase
             $this->createMock(ContainerInterface::class),
             $scopeProvider,
             'America/Sao_Paulo',
+            new McpSafeEntityNormalizer($this->createMock(\Symfony\Component\Serializer\Normalizer\NormalizerInterface::class)),
         );
 
         self::assertSame(
@@ -118,7 +119,7 @@ final class McpReadQueryProviderTest extends TestCase
             }
         };
 
-        $provider = new McpReadQueryProvider($entityManager, $requestStack, $container, $scopeProvider, 'America/Sao_Paulo');
+        $provider = new McpReadQueryProvider($entityManager, $requestStack, $container, $scopeProvider, 'America/Sao_Paulo', new McpSafeEntityNormalizer($this->createMock(\Symfony\Component\Serializer\Normalizer\NormalizerInterface::class)));
         $rows = $provider->query('employees', [
             'from' => null,
             'to' => null,
@@ -194,7 +195,7 @@ final class McpReadQueryProviderTest extends TestCase
         };
         $requestStack = new RequestStack();
         $requestStack->push(new Request());
-        $provider = new McpReadQueryProvider($entityManager, $requestStack, $container, $scope, 'America/Sao_Paulo');
+        $provider = new McpReadQueryProvider($entityManager, $requestStack, $container, $scope, 'America/Sao_Paulo', new McpSafeEntityNormalizer($this->createMock(\Symfony\Component\Serializer\Normalizer\NormalizerInterface::class)));
 
         $rows = $provider->query('orders', [
             'from' => null, 'to' => null, 'company_id' => 3, 'company_role' => null,
@@ -234,6 +235,7 @@ final class McpReadQueryProviderTest extends TestCase
             $container,
             $scopeProvider,
             'America/Sao_Paulo',
+            new McpSafeEntityNormalizer($this->createMock(\Symfony\Component\Serializer\Normalizer\NormalizerInterface::class)),
             null,
             null,
             $operational,
@@ -349,7 +351,7 @@ final class McpReadQueryProviderTest extends TestCase
                 self::assertArrayNotHasKey('filters', $context);
                 return true;
             }));
-        $provider = new McpReadQueryProvider($entityManager, $requestStack, $container, $scopeProvider, 'America/Sao_Paulo', $tokenStorage, $logger);
+        $provider = new McpReadQueryProvider($entityManager, $requestStack, $container, $scopeProvider, 'America/Sao_Paulo', new McpSafeEntityNormalizer($this->createMock(\Symfony\Component\Serializer\Normalizer\NormalizerInterface::class)), $tokenStorage, $logger);
 
         $rows = $provider->query('wallets', [
             'from' => null,
@@ -439,7 +441,7 @@ final class McpReadQueryProviderTest extends TestCase
         $request = new Request(['original' => 'query']);
         $requestStack->push($request);
 
-        $provider = new McpReadQueryProvider($entityManager, $requestStack, $container, $scopeProvider, 'America/Sao_Paulo');
+        $provider = new McpReadQueryProvider($entityManager, $requestStack, $container, $scopeProvider, 'America/Sao_Paulo', new McpSafeEntityNormalizer($this->createMock(\Symfony\Component\Serializer\Normalizer\NormalizerInterface::class)));
         $rows = $provider->query('inventory', [
             'from' => null,
             'to' => null,
