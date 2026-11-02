@@ -1,16 +1,16 @@
 {
   "version": "1.10.93",
-  "rc": 1,
-  "branch": "rc/1.10.93-rc.1",
+  "rc": 2,
+  "branch": "rc/1.10.93-rc.2",
   "baseMaster": "0b1632b4b71562b2151430255c17bd48f91e88e4",
   "tasks": [
     1292
   ],
   "taskRepository": "ControleOnline/app-community",
   "frozen": true,
-  "contentCommit": "e03290ee2f20dbeec44d8749ca769f2f2488a73c",
+  "contentCommit": "9371379b2c98cabe6eebdd3ae65863be4d42f2d7",
   "repositories": {
-    "ControleOnline/api-community": "e03290ee2f20dbeec44d8749ca769f2f2488a73c",
+    "ControleOnline/api-community": "9371379b2c98cabe6eebdd3ae65863be4d42f2d7",
     "ControleOnline/api-platform-orders": "8131fc065fd11c8fa9d1764d9f63835d0ae697e5"
   },
   "packages": {
