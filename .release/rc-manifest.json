@@ -9,7 +9,7 @@
   "taskRepository": "ControleOnline/app-community",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "PENDING",
+    "ControleOnline/api-community": "5352c0c79aec97a9d7b26a1a6b5a4cd8fd9cfbc3",
     "ControleOnline/api-platform-common": "c7928d9d760bca1adc1c1c1781d9a9956b45bd3a"
   },
   "packages": {
