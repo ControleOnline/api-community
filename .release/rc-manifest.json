@@ -1,16 +1,17 @@
 {
-  "version": "1.10.113",
+  "version": "1.10.114",
   "rc": 1,
-  "branch": "rc/1.10.113-rc.1",
-  "baseMaster": "81f175154aee88677a02b5ee86ce8b42439d7b6c",
+  "branch": "rc/1.10.114-rc.1",
+  "baseMaster": "c5b32825a4b568f7b84fcb6c639fbfe719f7c02f",
   "tasks": [
     1325
   ],
   "frozen": true,
-  "repositories": {
-    "ControleOnline/api-community": "531f7072e58aad27bb38c366f12744084d8b81ba"
-  },
   "packages": {
+    "controleonline/users": "1.0.11",
     "controleonline/mcp": "1.0.21"
+  },
+  "repositories": {
+    "ControleOnline/api-community": "093ac383fb7b1620311ab6781b750545466d907f"
   }
 }
