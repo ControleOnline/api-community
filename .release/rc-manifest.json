@@ -1,25 +1,27 @@
 {
-  "version": "1.10.93",
-  "rc": 3,
-  "branch": "rc/1.10.93-rc.3",
-  "baseMaster": "0b1632b4b71562b2151430255c17bd48f91e88e4",
+  "version": "1.10.111",
+  "rc": 1,
+  "branch": "rc/1.10.111-rc.1",
+  "baseMaster": "4e71cce285b86d6e53132407ad732ca34df66e5a",
   "tasks": [
-    1292
+    1296
   ],
   "taskRepository": "ControleOnline/app-community",
   "frozen": true,
-  "contentCommit": "74b2c7c310811089b141c875462ec328705c7579",
   "repositories": {
-    "ControleOnline/api-community": "74b2c7c310811089b141c875462ec328705c7579",
-    "ControleOnline/api-platform-orders": "d97166d3c01c8f9204b0d4a520975ee55117e738"
+    "ControleOnline/api-community": "5352c0c79aec97a9d7b26a1a6b5a4cd8fd9cfbc3",
+    "ControleOnline/api-platform-common": "c7928d9d760bca1adc1c1c1781d9a9956b45bd3a",
+    "ControleOnline/api-platform-integration": "0252786dcdce7f7d5070558cc13bc0551c24584a",
+    "ControleOnline/api-platform-mcp": "c2843106b667be8de8411219c1f63154949d5291"
   },
   "packages": {
-    "controleonline/orders": "1.0.8"
+    "controleonline/common": "1.0.8",
+    "controleonline/integration": "1.0.6",
+    "controleonline/mcp": "1.0.19"
   },
   "validation": {
-    "database": "No schema or production data changes; skip database migrations.",
-    "scope": "Only task 1292 delta from current master; independent dev work excluded.",
-    "checks": "39 focused app tests; 5 package tests/29 assertions; API container lint and 2 aggregate tests/16 assertions; app export passed. Full API suite has unrelated failures, recorded in issue.",
-    "regression": "Preserve inferred Doctrine entity parameter type; movement HTTP 500 identified in dev; 6 focused tests/31 assertions pass."
+    "database": "Runs migration Version20261101120000 (8 MANAGER/configurator menus, idempotent). Do not skip DB migrations.",
+    "scope": "Task 1296 delta (common 1.0.7 -> 1.0.8, migration only) plus pins integration 1.0.6 + mcp 1.0.19 (fix MercadoLivreMcpProvider abstract methods, #1300), requested by owner.",
+    "checks": "Migration dry-run against staging DB inside a rolled-back transaction: 8 menus created, second run 0 changes."
   }
 }
