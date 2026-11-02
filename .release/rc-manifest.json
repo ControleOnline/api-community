@@ -1,24 +1,25 @@
 {
   "version": "1.10.93",
-  "rc": 2,
-  "branch": "rc/1.10.93-rc.2",
+  "rc": 3,
+  "branch": "rc/1.10.93-rc.3",
   "baseMaster": "0b1632b4b71562b2151430255c17bd48f91e88e4",
   "tasks": [
     1292
   ],
   "taskRepository": "ControleOnline/app-community",
   "frozen": true,
-  "contentCommit": "9371379b2c98cabe6eebdd3ae65863be4d42f2d7",
+  "contentCommit": "74b2c7c310811089b141c875462ec328705c7579",
   "repositories": {
-    "ControleOnline/api-community": "9371379b2c98cabe6eebdd3ae65863be4d42f2d7",
-    "ControleOnline/api-platform-orders": "8131fc065fd11c8fa9d1764d9f63835d0ae697e5"
+    "ControleOnline/api-community": "74b2c7c310811089b141c875462ec328705c7579",
+    "ControleOnline/api-platform-orders": "d97166d3c01c8f9204b0d4a520975ee55117e738"
   },
   "packages": {
-    "controleonline/orders": "1.0.7"
+    "controleonline/orders": "1.0.8"
   },
   "validation": {
     "database": "No schema or production data changes; skip database migrations.",
     "scope": "Only task 1292 delta from current master; independent dev work excluded.",
-    "checks": "39 focused app tests; 5 package tests/29 assertions; API container lint and 2 aggregate tests/16 assertions; app export passed. Full API suite has unrelated failures, recorded in issue."
+    "checks": "39 focused app tests; 5 package tests/29 assertions; API container lint and 2 aggregate tests/16 assertions; app export passed. Full API suite has unrelated failures, recorded in issue.",
+    "regression": "Preserve inferred Doctrine entity parameter type; movement HTTP 500 identified in dev; 6 focused tests/31 assertions pass."
   }
 }
