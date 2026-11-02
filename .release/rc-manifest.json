@@ -1,20 +1,23 @@
 {
-  "version": "1.10.110",
-  "rc": 2,
-  "branch": "rc/1.10.110-rc.2",
-  "baseMaster": "0b1632b4b71562b2151430255c17bd48f91e88e4",
+  "version": "1.10.111",
+  "rc": 1,
+  "branch": "rc/1.10.111-rc.1",
+  "baseMaster": "4e71cce285b86d6e53132407ad732ca34df66e5a",
   "tasks": [
-    1284
+    1296
   ],
+  "taskRepository": "ControleOnline/app-community",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "228bfa8ce001334da89e39f5cff632920a40e2a7"
+    "ControleOnline/api-community": "PENDING",
+    "ControleOnline/api-platform-common": "c7928d9d760bca1adc1c1c1781d9a9956b45bd3a"
   },
   "packages": {
-    "controleonline/mcp": "1.0.18",
-    "controleonline/tasks": "1.0.3"
+    "controleonline/common": "1.0.8"
   },
   "validation": {
-    "scope": "Pin mcp 1.0.18 + tasks 1.0.3 for /mcp/chat and type=ia (#1284)"
+    "database": "Runs migration Version20261101120000 (8 MANAGER/configurator menus, idempotent). Do not skip DB migrations.",
+    "scope": "Only task 1296 delta: common 1.0.7 -> 1.0.8 (migration only).",
+    "checks": "Migration dry-run against staging DB inside a rolled-back transaction: 8 menus created, second run 0 changes."
   }
 }
