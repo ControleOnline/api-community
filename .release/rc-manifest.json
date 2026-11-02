@@ -1,20 +1,28 @@
 {
-  "version": "1.10.92",
-  "rc": 1,
-  "branch": "rc/1.10.92-rc.1",
-  "baseMaster": "8fe411846a77b81649c7391b92afd14249ad9e9c",
+  "version": "1.10.89",
+  "rc": 3,
+  "branch": "rc/1.10.89-rc.3",
+  "baseMaster": "f8c28e3cdfdac137de166af6e1ed3fcf7aa4997f",
   "tasks": [
-    303
+    287
   ],
   "frozen": true,
-  "contentCommit": "eff5790e2dc3919047e691e36d050df8577f19e1",
+  "contentCommit": "949d0a8e5e66cf03c966bbdee5595c1619248ef5",
   "repositories": {
-    "ControleOnline/api-community": "eff5790e2dc3919047e691e36d050df8577f19e1"
+    "ControleOnline/api-community": "949d0a8e5e66cf03c966bbdee5595c1619248ef5",
+    "ControleOnline/api-platform-mcp": "b8205f6da3efad97732e51daefc4e96063506b58",
+    "ControleOnline/app-community": "48954d446d856e7b6042975d0cd65bb8f6336506"
+  },
+  "packages": {
+    "controleonline/common": "1.0.7",
+    "controleonline/integration": "1.0.5",
+    "controleonline/mcp": "1.0.17",
+    "controleonline/whatsapp-sdk": "1.0.1"
   },
   "validation": {
-    "scope": "Hotfix MCP detailed query_business_data: inject McpSafeEntityNormalizer via constructor; from/to accept datetime.",
-    "tests": "php -l; unit tests updated for new constructor arity.",
+    "scope": "Restore API staging startup and login; preserve #1221, #264 and POS. Order-permission #46 remains local and excluded.",
+    "tests": "Clean registry installation; 22 focused API tests/1924 assertions; 19 MCP tests/113 assertions; prod cache compilation passed.",
     "database": "No schema changes; skip database migrations.",
-    "production": "Required on apinew.lave-go.com after master publish."
+    "production": "Application production publication is not part of this repair."
   }
 }
