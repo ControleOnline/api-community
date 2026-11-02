@@ -1,20 +1,24 @@
 {
-  "version": "1.10.92",
+  "version": "1.10.93",
   "rc": 1,
-  "branch": "rc/1.10.92-rc.1",
-  "baseMaster": "8fe411846a77b81649c7391b92afd14249ad9e9c",
+  "branch": "rc/1.10.93-rc.1",
+  "baseMaster": "0b1632b4b71562b2151430255c17bd48f91e88e4",
   "tasks": [
-    303
+    1292
   ],
+  "taskRepository": "ControleOnline/app-community",
   "frozen": true,
-  "contentCommit": "eff5790e2dc3919047e691e36d050df8577f19e1",
+  "contentCommit": "e03290ee2f20dbeec44d8749ca769f2f2488a73c",
   "repositories": {
-    "ControleOnline/api-community": "eff5790e2dc3919047e691e36d050df8577f19e1"
+    "ControleOnline/api-community": "e03290ee2f20dbeec44d8749ca769f2f2488a73c",
+    "ControleOnline/api-platform-orders": "8131fc065fd11c8fa9d1764d9f63835d0ae697e5"
+  },
+  "packages": {
+    "controleonline/orders": "1.0.7"
   },
   "validation": {
-    "scope": "Hotfix MCP detailed query_business_data: inject McpSafeEntityNormalizer via constructor; from/to accept datetime.",
-    "tests": "php -l; unit tests updated for new constructor arity.",
-    "database": "No schema changes; skip database migrations.",
-    "production": "Required on apinew.lave-go.com after master publish."
+    "database": "No schema or production data changes; skip database migrations.",
+    "scope": "Only task 1292 delta from current master; independent dev work excluded.",
+    "checks": "39 focused app tests; 5 package tests/29 assertions; API container lint and 2 aggregate tests/16 assertions; app export passed. Full API suite has unrelated failures, recorded in issue."
   }
 }
