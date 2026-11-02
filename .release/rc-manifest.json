@@ -1,7 +1,7 @@
 {
   "version": "1.10.111",
-  "rc": 1,
-  "branch": "rc/1.10.111-rc.1",
+  "rc": 2,
+  "branch": "rc/1.10.111-rc.2",
   "baseMaster": "4e71cce285b86d6e53132407ad732ca34df66e5a",
   "tasks": [
     1296
@@ -22,6 +22,7 @@
   "validation": {
     "database": "Runs migration Version20261101120000 (8 MANAGER/configurator menus, idempotent). Do not skip DB migrations.",
     "scope": "Task 1296 delta (common 1.0.7 -> 1.0.8, migration only) plus pins integration 1.0.6 + mcp 1.0.19 (fix MercadoLivreMcpProvider abstract methods, #1300), requested by owner.",
-    "checks": "Migration dry-run against staging DB inside a rolled-back transaction: 8 menus created, second run 0 changes."
+    "checks": "Migration dry-run against staging DB inside a rolled-back transaction: 8 menus created, second run 0 changes.",
+    "note": "rc.2: same content as rc.1; re-promoted to staging so the push deploy runs migrations after People\\Version20261015010000 was registered as executed in the staging DB (it blocked the migration chain)."
   }
 }
