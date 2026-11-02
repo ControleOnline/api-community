@@ -432,23 +432,19 @@ final class McpReadQueryProvider implements McpReadQueryProviderInterface
         $tz = new \DateTimeZone($this->timezone);
         $raw = trim(str_replace(' ', 'T', $value));
 
-        // Pure date YYYY-MM-DD
         if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $raw) === 1) {
             $day = new \DateTimeImmutable($raw . ' 00:00:00', $tz);
             return $isTo ? $day->modify('+1 day') : $day;
         }
 
-        // Datetime — strip trailing Z and apply app timezone if no offset
         if (str_ends_with($raw, 'Z')) {
             $raw = substr($raw, 0, -1);
         }
-        // If has explicit offset, DateTimeImmutable parses it then we convert to app tz
         if (preg_match('/[+-]\d{2}:\d{2}$/', $raw) === 1) {
             $dt = new \DateTimeImmutable($raw);
             return $dt->setTimezone($tz);
         }
 
-        // Local datetime without offset → interpret in app timezone
         $normalized = str_replace('T', ' ', $raw);
         if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/', $normalized) === 1) {
             $normalized .= ':00';
