@@ -1,28 +1,15 @@
 {
-  "version": "1.10.111",
-  "rc": 3,
-  "branch": "rc/1.10.111-rc.3",
-  "baseMaster": "4e71cce285b86d6e53132407ad732ca34df66e5a",
+  "version": "1.10.135",
+  "rc": 1,
+  "branch": "rc/1.10.135-rc.1",
+  "baseMaster": "7d244e412a469e8991a578da815c16d402939b49",
   "tasks": [
-    1296
+    1374
   ],
-  "taskRepository": "ControleOnline/app-community",
-  "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "5352c0c79aec97a9d7b26a1a6b5a4cd8fd9cfbc3",
-    "ControleOnline/api-platform-common": "fdc43540fb9266a1570f11c79fdf84d871b2bf94",
-    "ControleOnline/api-platform-integration": "0252786dcdce7f7d5070558cc13bc0551c24584a",
-    "ControleOnline/api-platform-mcp": "c2843106b667be8de8411219c1f63154949d5291"
+    "ControleOnline/app-community": "d367acd0eb19c667f2208b8a8bdbf52fcb15341a",
+    "ControleOnline/api-community": "006962d9d9934d81847bddd44498b1e7848d1288",
+    "ControleOnline/api-platform-orders": "ea70e9be599dd5ce6a60343c16b11097d7c8d39b"
   },
-  "packages": {
-    "controleonline/common": "1.0.9",
-    "controleonline/integration": "1.0.6",
-    "controleonline/mcp": "1.0.19"
-  },
-  "validation": {
-    "database": "Runs migration Version20261101120000 (8 MANAGER/configurator menus, idempotent). Do not skip DB migrations.",
-    "scope": "Task 1296 delta (common 1.0.7 -> 1.0.8, migration only) plus pins integration 1.0.6 + mcp 1.0.19 (fix MercadoLivreMcpProvider abstract methods, #1300), requested by owner.",
-    "checks": "Migration dry-run against staging DB inside a rolled-back transaction: 8 menus created, second run 0 changes.",
-    "note": "rc.3: common 1.0.9 fixes the migration namespace (DoctrineMigrations\\Common) so the loader discovers Version20261101120000; staging DB had People\\Version20261015010000 registered manually to unblock the chain."
-  }
+  "frozen": true
 }

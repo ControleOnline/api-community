@@ -52,3 +52,7 @@ services:
 
     ControleOnline\Controller\McpController:
         tags: ['controller.service_arguments']
+
+    # Integration queue resolves ControleOnline\Service\{QueueName}Service via container->has(); must be public
+    ControleOnline\Service\McpChatService:
+        public: true
