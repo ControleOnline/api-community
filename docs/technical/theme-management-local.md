@@ -36,3 +36,5 @@ Validation after correction:21 backend tests (69 assertions; same installed-modu
 ### Revisão final de segurança
 
 Criação de `PeopleDomain` com tema passa pela mesma checagem de administração da empresa e leitura do tema utilizada na alteração. Criação sem tema e execução por console preservam o comportamento existente. Dois testes de regressão falharam antes do ajuste e passaram depois: total23 testes/77 assertions em `tests/Theme`, sem writes em dados reais. A revisão independente confirmou o fechamento do caminho de POST.
+
+Compatibilidade de publicação: `controleonline/orders:1.0.10` preserva o código de1.0.9 e fixa `common:1.0.9`, resolvendo o conflito que a preservação de `orders:1.0.8` em dev revelou. Tag publicado e indexado no Packagist antes da atualização deste consumidor. Código do pacote:ea70e9be599dd5ce6a60343c16b11097d7c8d39b.
