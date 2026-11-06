@@ -58,4 +58,21 @@ final class ThemeWriteListenerTest extends TestCase
         $consoleListener->onFlush($consoleEvent);
         self::assertTrue(true);
     }
+    public function testNewDomainCannotBindThemeWithoutCompanyAdministration(): void
+    {
+        $domain = new PeopleDomain();$domain->setPeople(new People());$domain->setTheme(new Theme());
+        [$listener, $event, $access, $roles] = $this->listenerEvent([$domain], []);
+        $roles->expects(self::once())->method('canAdministerCompany')->with($domain->getPeople())->willReturn(false);
+        $access->expects(self::never())->method('assertRead');
+        $this->expectException(AccessDeniedHttpException::class);$listener->onFlush($event);
+    }
+    public function testNewDomainBindingAlsoRequiresReadableTheme(): void
+    {
+        $domain = new PeopleDomain();$domain->setPeople(new People());$domain->setTheme(new Theme());
+        [$listener, $event, $access, $roles] = $this->listenerEvent([$domain], []);
+        $roles->expects(self::once())->method('canAdministerCompany')->with($domain->getPeople())->willReturn(true);
+        $access->expects(self::once())->method('assertRead')->with($domain->getTheme());
+        $listener->onFlush($event);
+    }
+
 }

@@ -23,13 +23,19 @@ final class ThemeWriteListener
         // edits require authority over every company affected by that shared theme.
         foreach ([...$unit->getScheduledEntityInsertions(), ...$unit->getScheduledEntityDeletions()] as $entity) {
             if ($entity instanceof Theme && !$this->roles->isSuperAdmin()) throw new AccessDeniedHttpException('A gestão global de temas exige superadministrador.');
+            if ($entity instanceof PeopleDomain && $entity->getTheme() && in_array($entity, $unit->getScheduledEntityInsertions(), true)) $this->assertDomainTheme($entity);
         }
         foreach ($unit->getScheduledEntityUpdates() as $entity) {
             if ($entity instanceof Theme && !$this->access->canEdit($entity)) throw new AccessDeniedHttpException('Sem permissão para editar este tema compartilhado.');
             if ($entity instanceof PeopleDomain && array_key_exists('theme', $unit->getEntityChangeSet($entity))) {
-                if (!$entity->getPeople() || !$this->roles->canAdministerCompany($entity->getPeople())) throw new AccessDeniedHttpException('Sem permissão para alterar o tema deste domínio.');
-                if ($entity->getTheme()) $this->access->assertRead($entity->getTheme());
+                $this->assertDomainTheme($entity);
             }
         }
+    }
+    private function assertDomainTheme(PeopleDomain $domain): void
+    {
+        // Both POST and updates must enforce the same existing company authority.
+        if (!$domain->getPeople() || !$this->roles->canAdministerCompany($domain->getPeople())) throw new AccessDeniedHttpException('Sem permissão para alterar o tema deste domínio.');
+        if ($domain->getTheme()) $this->access->assertRead($domain->getTheme());
     }
 }
