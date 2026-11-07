@@ -2,15 +2,13 @@
   "version": "1.10.136",
   "rc": 1,
   "branch": "rc/1.10.136-rc.1",
-  "baseMaster": "9901beb301abfc1301827457e3edde6ea223086d",
+  "baseMaster": "4b4a74a58def139f7fd4c5d4ff6aea6d662de22e",
   "tasks": [
-    128,
-    1374
+    128
   ],
+  "taskRepository": "ControleOnline/ui-common",
   "repositories": {
-    "ControleOnline/app-community": "d367acd0eb19c667f2208b8a8bdbf52fcb15341a",
-    "ControleOnline/api-community": "deba347cd2674fd9aafecd3155557e07bf93aa51",
-    "ControleOnline/api-platform-orders": "ea70e9be599dd5ce6a60343c16b11097d7c8d39b",
+    "ControleOnline/api-community": "20b29f667cf2db046d674d7f0c5e62abb6c07531",
     "ControleOnline/api-platform-financial": "893f224ea5bf23dd1de0afafdeb8680d15c8702e",
     "ControleOnline/api-platform-common": "13d71c7c4e22ccade1c46ac06ba3344e896002d6"
   },
