@@ -9,8 +9,7 @@
   "taskRepository": "ControleOnline/ui-common",
   "repositories": {
     "ControleOnline/api-community": "20b29f667cf2db046d674d7f0c5e62abb6c07531",
-    "ControleOnline/api-platform-financial": "893f224ea5bf23dd1de0afafdeb8680d15c8702e",
-    "ControleOnline/api-platform-common": "13d71c7c4e22ccade1c46ac06ba3344e896002d6"
+    "ControleOnline/api-platform-financial": "4c78c992deaba4bb5db808706643bff9c6465b7a"
   },
   "frozen": true
 }
