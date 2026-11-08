@@ -52,6 +52,50 @@ final class ThemeManagementTest extends TestCase
         return [new ThemeManagementService($manager, $roles, $usage, $access), $manager, $roles];
     }
 
+    public function testDomainCatalogAndCssUseTheSameOrderedBinding(): void
+    {
+        [$service, $manager] = $this->setupService();
+        $first = $this->domain($this->theme(11));
+        $second = $this->domain($this->theme(5));
+        (new ReflectionProperty(PeopleDomain::class, 'id'))->setValue($second, 12);
+        $second->setPeople($first->getPeople());
+        $domains = $this->createMock(EntityRepository::class);
+        $domains->expects(self::exactly(3))->method('findBy')->with(['domain' => 'local.example'], ['id' => 'ASC'])
+            ->willReturn([$first, $second]);
+        $manager->method('getRepository')->with(PeopleDomain::class)->willReturn($domains);
+        self::assertSame(7, $service->domain('local.example')['id']);
+
+        $first->getTheme()->setColors(['cardBackground' => '#abcdef']);
+        $host = $this->createMock(\ControleOnline\Service\DomainService::class);
+        $host->method('getDomain')->willReturn('local.example');
+        $response = (new \App\Controller\DomainThemeColorsAction($manager, $host))(new Request());
+        self::assertStringContainsString('--cardBackground: #abcdef', $response->getContent());
+
+        $first->setTheme(null);
+        self::assertSame(12, $service->domain('local.example')['id']);
+    }
+
+    public function testCrossCompanyDuplicatesBlockTheWrite(): void
+    {
+        [$service, $manager, $roles] = $this->setupService();
+        $theme = $this->theme(5);
+        $first = $this->domain($this->theme(11));
+        $second = $this->domain($theme);
+        (new ReflectionProperty(People::class, 'id'))->setValue($first->getPeople(), 1);
+        (new ReflectionProperty(People::class, 'id'))->setValue($second->getPeople(), 2);
+        $repository = $this->createMock(EntityRepository::class);
+        $repository->method('findBy')->willReturn([$first, $second]);
+        $repository->method('findOneBy')->willReturn($first);
+        $manager->method('getRepository')->willReturn($repository);
+        $manager->method('find')->willReturnCallback(fn ($type) => $type === Theme::class ? $theme : $first);
+        $roles->method('canAdministerCompany')->willReturn(true);
+
+        self::assertFalse($service->domain('local.example')['canApply']);
+        $manager->expects(self::never())->method('flush');
+        $this->expectException(ConflictHttpException::class);
+        $service->apply(7, 5, 11);
+    }
+
     public function testDeleteRequiresSuperBeforeLookingUpATheme(): void
     {
         [$service, $manager] = $this->setupService(false);
@@ -95,6 +139,9 @@ final class ThemeManagementTest extends TestCase
         [$service, $manager, $roles] = $this->setupService();
         $domain = $this->domain($this->theme(12));
         $manager->method('find')->willReturnCallback(fn ($type) => $type === Theme::class ? $this->theme(5) : $domain);
+        $repository = $this->createMock(EntityRepository::class);
+        $repository->method('findBy')->willReturn([$domain]);
+        $manager->method('getRepository')->willReturn($repository);
         $roles->method('canAdministerCompany')->willReturn(true);
         $manager->expects(self::never())->method('flush');
         $this->expectException(ConflictHttpException::class);
@@ -108,6 +155,9 @@ final class ThemeManagementTest extends TestCase
         $domain = $this->domain($this->theme(11));
         $company = $domain->getPeople();
         $manager->method('find')->willReturnCallback(fn ($type) => $type === Theme::class ? $theme : $domain);
+        $repository = $this->createMock(EntityRepository::class);
+        $repository->method('findBy')->willReturn([$domain]);
+        $manager->method('getRepository')->willReturn($repository);
         $roles->method('canAdministerCompany')->willReturn(true);
         $manager->expects(self::once())->method('refresh')->with($domain);
         $manager->expects(self::once())->method('flush');
@@ -141,7 +191,7 @@ final class ThemeManagementTest extends TestCase
     {
         [$service, $manager] = $this->setupService(false, 1);
         $domainRepository = $this->createMock(EntityRepository::class);
-        $domainRepository->method('findOneBy')->willReturn(null);
+        $domainRepository->method('findBy')->willReturn([]);
         $themeRepository = $this->createMock(EntityRepository::class);
         $themeRepository->expects(self::once())->method('findBy')->with(['id' => range(51, 101)], ['id' => 'ASC'], 51, 50)
             ->willReturn(array_map(fn ($id) => $this->theme($id), range(51, 101)));
@@ -180,8 +230,7 @@ final class ThemeManagementTest extends TestCase
         $access = $this->createMock(ThemeAccessService::class);
         $access->method('companyThemeIds')->willReturn([]);
         $repository = $this->createMock(EntityRepository::class);
-        $repository->method('findOneBy')->willReturn(null);
-        $repository->expects(self::never())->method('findBy');
+        $repository->method('findBy')->willReturn([]);
         $manager->expects(self::once())->method('getRepository')->with(PeopleDomain::class)->willReturn($repository);
         $service = new ThemeManagementService($manager, $roles, $this->createMock(ThemeUsageService::class), $access);
         $result = $service->catalog('local.example', 1);
@@ -195,7 +244,7 @@ final class ThemeManagementTest extends TestCase
     {
         [$service, $manager] = $this->setupService();
         $domains = $this->createMock(EntityRepository::class);
-        $domains->method('findOneBy')->willReturn(null);
+        $domains->method('findBy')->willReturn([]);
         $themes = $this->createMock(EntityRepository::class);
         $themes->expects(self::once())->method('findBy')->with([], ['id' => 'ASC'], 51, 0)->willReturn([$this->theme(5)]);
         $manager->method('getRepository')->willReturnCallback(fn ($type) => $type === Theme::class ? $themes : $domains);
