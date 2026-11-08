@@ -75,4 +75,22 @@ final class ThemeWriteListenerTest extends TestCase
         $listener->onFlush($event);
     }
 
+    public function testLegacyDomainWriteCannotChangeAmbiguousHostname(): void
+    {
+        $domain = new PeopleDomain();
+        $domain->setDomain('shared.example')->setPeople(new People())->setTheme(new Theme());
+        $other = new PeopleDomain();
+        $other->setDomain('shared.example')->setPeople(new People());
+        (new ReflectionProperty(People::class, 'id'))->setValue($domain->getPeople(), 1);
+        (new ReflectionProperty(People::class, 'id'))->setValue($other->getPeople(), 2);
+        [$listener, $event, $access, $roles, $unit] = $this->listenerEvent([], [$domain]);
+        $unit->method('getEntityChangeSet')->willReturn(['theme' => [null, $domain->getTheme()]]);
+        $roles->method('canAdministerCompany')->willReturn(true);
+        $repository = $this->createMock(\Doctrine\ORM\EntityRepository::class);
+        $repository->method('findBy')->willReturn([$domain, $other]);
+        $repository->method('findOneBy')->willReturn($domain);
+        $event->getObjectManager()->method('getRepository')->willReturn($repository);
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\ConflictHttpException::class);
+        $listener->onFlush($event);
+    }
 }

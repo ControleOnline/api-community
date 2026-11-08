@@ -21,6 +21,12 @@ class ThemeManagementController extends AbstractController
         return $this->json($this->themes->catalog(trim($request->query->getString('domain')), max(1, $request->query->getInt('page', 1)), $request->query->getString('scope', 'companies') === 'global'));
     }
 
+    #[Route('/theme-management/domain', methods: ['GET'])]
+    public function domain(Request $request): JsonResponse
+    {
+        return $this->json(['domain' => $this->themes->domain(trim($request->query->getString('domain')))]);
+    }
+
     #[Route('/theme-management/domains/{id}/theme', methods: ['PUT'], requirements: ['id' => '\d+'])]
     public function apply(int $id, Request $request): JsonResponse
     {
