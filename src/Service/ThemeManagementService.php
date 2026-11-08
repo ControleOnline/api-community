@@ -16,17 +16,28 @@ class ThemeManagementService
 {
     public function __construct(private EntityManagerInterface $manager, private PeopleRoleService $roles, private ThemeUsageService $usage, private ThemeAccessService $access) {}
 
+    public function domain(string $host): ?array
+    {
+        [$domain, $ambiguous] = DomainThemeBinding::resolve($this->manager, $host);
+        $company = $domain?->getPeople();
+        if (!$company || (!$this->roles->isSuperAdmin() && !$this->roles->canAccessCompany($company))) return null;
+
+        return [
+            'id' => $domain->getId(),
+            'domain' => $domain->getDomain(),
+            'themeId' => $domain->getTheme()?->getId(),
+            'canApply' => !$ambiguous && $this->roles->canAdministerCompany($company),
+            'applyBlockedReason' => $ambiguous ? 'ambiguous-company' : null,
+        ];
+    }
+
     public function catalog(string $domainName, int $page, bool $global = false): array
     {
         $super = $this->roles->isSuperAdmin();
         if ($global && !$super) throw new AccessDeniedHttpException('A gestão global exige superadministrador.');
-        $domain = $this->manager->getRepository(PeopleDomain::class)->findOneBy(['domain' => $domainName]);
-        // Domain details belong to its company, independently of the selected company in the app.
-        $canApply = $domain && $domain->getPeople() && $this->roles->canAdministerCompany($domain->getPeople());
+        $domain = $this->domain($domainName);
         $ids = $global ? [] : $this->access->companyThemeIds();
-        $canReadDomain = $domain && $domain->getPeople() && ($global || $this->roles->canAccessCompany($domain->getPeople()));
-        // Include the current domain only when the existing company policy grants access.
-        if (!$global && $canReadDomain && $domain->getTheme()) $ids[] = $domain->getTheme()->getId();
+        if (!$global && isset($domain['themeId'])) $ids[] = $domain['themeId'];
         $themes = !$global && $ids === [] ? [] : $this->manager->getRepository(Theme::class)->findBy(
             $global ? [] : ['id' => array_values(array_unique($ids))], ['id' => 'ASC'], 51, ($page - 1) * 50
         );
@@ -39,7 +50,7 @@ class ThemeManagementService
                 'canDelete' => $global && $super && $usage['count'] === 0];
         }
         return ['items' => $items, 'nextPage' => $more ? $page + 1 : null,
-            'domain' => $canReadDomain ? ['id' => $domain->getId(), 'domain' => $domain->getDomain(), 'themeId' => $domain->getTheme()?->getId(), 'canApply' => (bool) $canApply] : null,
+            'domain' => $domain,
             'canDeleteUnused' => $global && $super, 'canManageGlobal' => $super, 'scope' => $global ? 'global' : 'companies'];
     }
 
@@ -55,6 +66,10 @@ class ThemeManagementService
             $this->manager->refresh($domain);
             if (!$domain->getPeople() || !$this->roles->canAdministerCompany($domain->getPeople())) {
                 throw new AccessDeniedHttpException('Sem permissão para alterar o tema deste domínio.');
+            }
+            [$binding, $ambiguous] = DomainThemeBinding::resolve($this->manager, $domain->getDomain());
+            if ($ambiguous || $binding?->getId() !== $domainId) {
+                throw new ConflictHttpException('O registro ativo do domínio mudou ou está ambíguo. Atualize a lista.');
             }
             if ($domain->getTheme()?->getId() !== $expectedThemeId) {
                 throw new ConflictHttpException('O tema do domínio mudou. Atualize a lista antes de continuar.');
