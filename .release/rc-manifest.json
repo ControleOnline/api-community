@@ -1,18 +1,19 @@
 {
-  "version": "1.10.141",
+  "version": "1.10.143",
   "rc": 1,
-  "branch": "rc/1.10.141-rc.1",
+  "branch": "rc/1.10.143-rc.1",
   "baseMaster": "4b4a74a58def139f7fd4c5d4ff6aea6d662de22e",
   "tasks": [
     128,
     131,
     133,
+    134,
     1392
   ],
   "taskRepository": "ControleOnline/app-community",
   "repositories": {
-    "ControleOnline/api-community": "8ab0cfb0381780d0e0c004208e537efa43d7a87f",
-    "ControleOnline/api-platform-financial": "a6ea6c97ba09831d0d419cef01c820f44cb7dffc",
+    "ControleOnline/api-community": "002595c2c6b4541ba8d7ef8333fe951d59cb9120",
+    "ControleOnline/api-platform-financial": "bcefa71b44009fc51e0063bb24baad9f2f938779",
     "ControleOnline/api-platform-people": "3c17b24c8303f55be7d90fda2b1d42f086910f5d"
   },
   "frozen": true
