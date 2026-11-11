@@ -1,7 +1,7 @@
 {
   "version": "1.10.144",
-  "rc": 3,
-  "branch": "rc/1.10.144-rc.3",
+  "rc": 4,
+  "branch": "rc/1.10.144-rc.4",
   "baseMaster": "2069275a3c9a745bad3439ce4f98308c11b0627f",
   "tasks": [
     133,
@@ -12,19 +12,26 @@
   "taskRepository": "ControleOnline/app-community",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "1c8a197c970f6acee21840e2f603729331f057ee"
+    "ControleOnline/api-community": "1d553302d84223c8f7f0da243673109334f4a123",
+    "ControleOnline/api-platform-common": "51a461d323779828745601cfe9c156f29b2e0626",
+    "ControleOnline/api-platform-orders": "891f827600b89aa9fa32b5385e4909f95595f088"
   },
   "validation": {
-    "devCommit": "370a99079eee002795e68106696eebb7862848a2",
-    "taskSource": "882cb1b8292bb33f928e3a01a775fed479c2a72a",
-    "isolatedDeltaBase": "2069275a3c9a745bad3439ce4f98308c11b0627f",
-    "isolatedDeltaTip": "8afdb515fb470ab7a240edaaded8ecfe14217749",
-    "preservedStaging": "ae71f1f0dc953a96220dcccf3ff42032396632d1",
-    "checks": "164 theme + 52 Home/navigation + 2 i18n + 15 PHP tests (125 assertions); mocked database only",
-    "databaseMigrationExecuted": false,
-    "databaseWrites": false,
-    "deploymentMode": "source-only-no-runtime-activation",
-    "apiCommonRuntimePin": "1.0.9",
-    "runtimeActivationRequiresSeparateAuthorization": true
+    "devCommit": "21a62f5aeda716a64f331a4a410ac4980a2300bf",
+    "taskSource": "94bb8447852e2a2b2775ed67da31abf2715b4d62",
+    "preservedStaging": "520fd45c11ec62f0a723204eaf9a08e982ebb454",
+    "packagePins": {
+      "controleonline/common": "1.0.11",
+      "controleonline/orders": "1.0.11",
+      "controleonline/financial": "1.0.8"
+    },
+    "databaseMigrationExecuted": true,
+    "migration": "DoctrineMigrations\\Common\\Version20261110220000",
+    "authorizedDatabase": "co_staging",
+    "otherMigrationsExecuted": false,
+    "originalCategoryRouteDataUnchanged": true,
+    "checks": "15 PHP/125 assertions; readonly local/remote preflight; six workflow routing cases; PHP/YAML/Bash syntax; Composer updates only two reviewed packages",
+    "deploymentMode": "manual-guarded-staging-appearance",
+    "masterPromotionAuthorized": false
   }
 }
