@@ -1,7 +1,7 @@
 {
   "version": "1.10.144",
-  "rc": 4,
-  "branch": "rc/1.10.144-rc.4",
+  "rc": 5,
+  "branch": "rc/1.10.144-rc.5",
   "baseMaster": "2069275a3c9a745bad3439ce4f98308c11b0627f",
   "tasks": [
     133,
@@ -12,14 +12,14 @@
   "taskRepository": "ControleOnline/app-community",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "1d553302d84223c8f7f0da243673109334f4a123",
+    "ControleOnline/api-community": "ae5835597fd86ab0d67befcf01018d0e6a1a5b4c",
     "ControleOnline/api-platform-common": "51a461d323779828745601cfe9c156f29b2e0626",
     "ControleOnline/api-platform-orders": "891f827600b89aa9fa32b5385e4909f95595f088"
   },
   "validation": {
-    "devCommit": "21a62f5aeda716a64f331a4a410ac4980a2300bf",
-    "taskSource": "94bb8447852e2a2b2775ed67da31abf2715b4d62",
-    "preservedStaging": "520fd45c11ec62f0a723204eaf9a08e982ebb454",
+    "devCommit": "5a2e02cc03dd092f430e73142e818ac1c2897a6c",
+    "taskSource": "960e385cee7a43d33157f8fa8ae2ccf6cb0d81d8",
+    "preservedStaging": "63a787a0c7cd444294058202eeddf6a11eb34ea1",
     "packagePins": {
       "controleonline/common": "1.0.11",
       "controleonline/orders": "1.0.11",
@@ -31,7 +31,10 @@
     "otherMigrationsExecuted": false,
     "originalCategoryRouteDataUnchanged": true,
     "checks": "15 PHP/125 assertions; readonly local/remote preflight; six workflow routing cases; PHP/YAML/Bash syntax; Composer updates only two reviewed packages",
-    "deploymentMode": "manual-guarded-staging-appearance",
-    "masterPromotionAuthorized": false
+    "deploymentMode": "source-only-master-promotion",
+    "masterPromotionAuthorized": true,
+    "productionMigrationExecuted": false,
+    "productionRuntimeActivated": false,
+    "operationalDelta": "Only skip-deploy workflow guard; src, packages, schema and permissions identical to the manually homologated runtime. Broader CI/context/cache work explicitly deferred to the team by requester."
   }
 }
