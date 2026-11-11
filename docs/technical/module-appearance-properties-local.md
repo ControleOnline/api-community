@@ -13,3 +13,9 @@ As alterações preexistentes em `config/reference.php` e `.env.dev` não fazem 
 ## Referência local da task-1496
 
 O código e a migração estão no commit local `504a5437465c7eacb809ce27812781862467bef4` de `api-platform-common`, branch `task-1496`. Essa referência não foi publicada e não substitui uma versão estável no Composer. Este commit da API contém somente a documentação de integração; o vendor, os pins e o banco permanecem inalterados. A próxima promoção a dev/staging requer autorização própria, preservando a ordem pacote/API/migração/app descrita acima.
+
+## Integração de fonte em dev/staging — task #1496
+
+Após a preparação local descrita acima, foi autorizada a publicação das branches e integração do código em dev/staging, mantendo a mesma task. Isso não autoriza ativar o novo mapeamento nos servidores, executar a migração ou gravar dados. Os merges de integração deste pacote/API devem conter `[skip ci] [skip-db-migrations]` para não disparar deploy, bootstrap ou migrações automáticas. O app permanece compatível com a API anterior, mostrando como prévia os campos ainda não suportados.
+
+Não criar tag estável nem atualizar o pin `controleonline/common` da API nesta etapa. A liberação efetiva das novas propriedades depende da autorização posterior da migração e da ativação coordenada do pacote, com o tráfego suspenso até o schema estar pronto. Nenhum aceite desta integração de fonte equivale a homologação de persistência em banco.
