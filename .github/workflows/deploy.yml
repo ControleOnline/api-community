@@ -29,6 +29,8 @@ jobs:
   # ─── Step 1: resolve environment ───────────────────────────────────────────
   configure:
     name: "1 · Configure environment"
+    # Source-only promotion must not install packages or touch an unmigrated runtime.
+    if: github.event_name != 'push' || !contains(github.event.head_commit.message, '[skip-deploy]')
     runs-on: ubuntu-latest
     outputs:
       env: ${{ steps.set.outputs.env }}
