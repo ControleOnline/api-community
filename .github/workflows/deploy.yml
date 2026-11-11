@@ -270,7 +270,24 @@ jobs:
               exit 1
             }
 
-            if run_composer validate --no-check-publish --no-interaction >/dev/null 2>&1; then
+            if [ "${DEPLOY_OPERATION}" = "deploy-staging-appearance" ]; then
+              # Update only the two reviewed packages. Keep every other locked package unchanged.
+              cp composer.lock "$APPEARANCE_INSPECTOR.lock.before"
+              trap 'rm -f "$APPEARANCE_INSPECTOR" "$APPEARANCE_INSPECTOR.lock.before"' EXIT
+              run_composer update controleonline/common controleonline/orders --no-interaction --no-progress --no-scripts --no-plugins
+              "$PHP_BIN" -r '
+                $read = static function ($file) {
+                  $lock = json_decode(file_get_contents($file), true, 512, JSON_THROW_ON_ERROR);
+                  $packages = [];
+                  foreach (array_merge($lock["packages"] ?? [], $lock["packages-dev"] ?? []) as $package) {
+                    if (!in_array($package["name"], ["controleonline/common", "controleonline/orders"], true)) $packages[$package["name"]] = [$package["version"], $package["source"]["reference"] ?? null, $package["dist"]["reference"] ?? null];
+                  }
+                  ksort($packages);
+                  return $packages;
+                };
+                if ($read($argv[1]) !== $read("composer.lock")) throw new RuntimeException("Unrelated locked packages changed; activation stopped");
+              ' "$APPEARANCE_INSPECTOR.lock.before"
+            elif run_composer validate --no-check-publish --no-interaction >/dev/null 2>&1; then
               run_composer install --no-interaction --no-suggest --no-scripts
             else
               echo "composer.lock is stale; refreshing dependencies"

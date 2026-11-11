@@ -57,7 +57,7 @@ try {
     if (getenv('APPEARANCE_REQUIRE_SCHEMA') && !$valid) {
         throw new RuntimeException('The five authorized optional columns must exist before API activation.');
     }
-    if (getenv('APPEARANCE_REQUIRE_PACKAGE') && (ltrim((string) $version, 'v') !== '1.0.11' || InstalledVersions::getReference('controleonline/common') !== '51a461d323779828745601cfe9c156f29b2e0626')) {
+    if (getenv('APPEARANCE_REQUIRE_PACKAGE') && (ltrim((string) $version, 'v') !== '1.0.11' || InstalledVersions::getReference('controleonline/common') !== '51a461d323779828745601cfe9c156f29b2e0626' || InstalledVersions::getReference('controleonline/orders') !== '891f827600b89aa9fa32b5385e4909f95595f088')) {
         throw new RuntimeException('The reviewed stable common 1.0.11 package is not installed.');
     }
 } catch (Throwable $error) {
