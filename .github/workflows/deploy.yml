@@ -19,7 +19,7 @@ on:
         required: false
         type: choice
         default: deploy
-        options: [deploy, cache-recovery, inspect-prod-errors]
+        options: [deploy, cache-recovery, inspect-prod-errors, inspect-staging-appearance, deploy-staging-appearance]
 
 concurrency:
   group: deploy-${{ github.event.inputs.target || github.ref_name }}
@@ -47,9 +47,13 @@ jobs:
           REF="${{ github.event.inputs.target || github.ref_name }}"
           OPERATION="${{ github.event.inputs.operation || 'deploy' }}"
           case "$OPERATION" in
-            deploy|cache-recovery|inspect-prod-errors) ;;
+            deploy|cache-recovery|inspect-prod-errors|inspect-staging-appearance|deploy-staging-appearance) ;;
             *) echo "Unsupported operation: $OPERATION"; exit 1 ;;
           esac
+          if [[ "$OPERATION" == *staging-appearance ]] && [ "$REF" != staging ]; then
+            echo "Module appearance operations are restricted to staging" >&2
+            exit 1
+          fi
           case "$REF" in
             dev)
               ENV=dev; BRANCH=dev
@@ -128,7 +132,7 @@ jobs:
           port: ${{ needs.configure.outputs.env == 'master' && secrets.PORT || 22 }}
           # set -e in the remote script preserves if/else and function control flow.
           # Per-line script_stop instrumentation breaks false conditional branches.
-          envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP,SKIP_DB_MIGRATIONS,DEPLOY_OPERATION
+          envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP,SKIP_DB_MIGRATIONS,DEPLOY_OPERATION,APPEARANCE_SOURCE_SHA
           script: |
             set -e
             # Keep tool resolution inside the remote SSH script.
@@ -188,6 +192,20 @@ jobs:
             if [ -z "$PHP_BIN" ]; then
               echo "PHP 8.5 CLI is required for this deployment" >&2
               exit 1
+            fi
+
+            if [[ "${DEPLOY_OPERATION}" == *staging-appearance ]]; then
+              test "${BRANCH}" = staging || exit 1
+              git fetch --no-tags origin "${APPEARANCE_SOURCE_SHA}"
+              APPEARANCE_INSPECTOR="$(mktemp)"
+              trap 'rm -f "$APPEARANCE_INSPECTOR"' EXIT
+              git show "${APPEARANCE_SOURCE_SHA}:scripts/inspect-staging-module-appearance.php" > "$APPEARANCE_INSPECTOR"
+              if [ "${DEPLOY_OPERATION}" = "deploy-staging-appearance" ]; then
+                APPEARANCE_REQUIRE_SCHEMA=1 "$PHP_BIN" "$APPEARANCE_INSPECTOR"
+              else
+                "$PHP_BIN" "$APPEARANCE_INSPECTOR"
+                exit 0
+              fi
             fi
 
             if [ "${DEPLOY_OPERATION}" = "cache-recovery" ]; then
@@ -252,7 +270,24 @@ jobs:
               exit 1
             }
 
-            if run_composer validate --no-check-publish --no-interaction >/dev/null 2>&1; then
+            if [ "${DEPLOY_OPERATION}" = "deploy-staging-appearance" ]; then
+              # Update only the two reviewed packages. Keep every other locked package unchanged.
+              cp composer.lock "$APPEARANCE_INSPECTOR.lock.before"
+              trap 'rm -f "$APPEARANCE_INSPECTOR" "$APPEARANCE_INSPECTOR.lock.before"' EXIT
+              run_composer update controleonline/common controleonline/orders --no-interaction --no-progress --no-scripts --no-plugins
+              "$PHP_BIN" -r '
+                $read = static function ($file) {
+                  $lock = json_decode(file_get_contents($file), true, 512, JSON_THROW_ON_ERROR);
+                  $packages = [];
+                  foreach (array_merge($lock["packages"] ?? [], $lock["packages-dev"] ?? []) as $package) {
+                    if (!in_array($package["name"], ["controleonline/common", "controleonline/orders"], true)) $packages[$package["name"]] = [$package["version"], $package["source"]["reference"] ?? null, $package["dist"]["reference"] ?? null];
+                  }
+                  ksort($packages);
+                  return $packages;
+                };
+                if ($read($argv[1]) !== $read("composer.lock")) throw new RuntimeException("Unrelated locked packages changed; activation stopped");
+              ' "$APPEARANCE_INSPECTOR.lock.before"
+            elif run_composer validate --no-check-publish --no-interaction >/dev/null 2>&1; then
               run_composer install --no-interaction --no-suggest --no-scripts
             else
               echo "composer.lock is stale; refreshing dependencies"
@@ -303,7 +338,12 @@ jobs:
                 echo "Using pre-provisioned shared permissions for $(id -un) and www-data"
               fi
             fi
-            nohup "$PHP_BIN" bin/console tenant:messenger:consume async --domain="${MESSENGER_DOMAIN}" >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
+            if [ "${DEPLOY_OPERATION}" != "deploy-staging-appearance" ]; then
+              nohup "$PHP_BIN" bin/console tenant:messenger:consume async --domain="${MESSENGER_DOMAIN}" >> var/log/tenant-messenger-consume.log 2>&1 </dev/null &
+            fi
+            if [ "${DEPLOY_OPERATION}" = "deploy-staging-appearance" ]; then
+              APPEARANCE_REQUIRE_SCHEMA=1 APPEARANCE_REQUIRE_PACKAGE=1 "$PHP_BIN" "$APPEARANCE_INSPECTOR"
+            fi
             touch "$HOME/.lsphp_restart.txt" 2>/dev/null || true
             touch "$RESTART_FILE" 2>/dev/null || true
             echo "LiteSpeed restart markers set for the PHP 8.5 worker"
@@ -315,6 +355,7 @@ jobs:
           BOOTSTRAP: ${{ needs.configure.outputs.bootstrap }}
           SKIP_DB_MIGRATIONS: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message, '[skip-db-migrations]')) || (github.event_name == 'workflow_dispatch' && (github.event.inputs.target == 'staging' || needs.configure.outputs.env == 'staging')) }}
           DEPLOY_OPERATION: ${{ needs.configure.outputs.operation }}
+          APPEARANCE_SOURCE_SHA: ${{ github.sha }}
 
   # ─── Step 3: tests ─────────────────────────────────────────────────────────
   tests:
