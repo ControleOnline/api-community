@@ -45,6 +45,8 @@ try {
         'authorizedDatabase' => $actualDatabase,
         'commonVersion' => $version,
         'commonReference' => InstalledVersions::getReference('controleonline/common'),
+        'rootPins' => array_intersect_key(json_decode(file_get_contents(getcwd().'/composer.json'), true)['require'], array_flip(['controleonline/common', 'controleonline/orders', 'controleonline/financial'])),
+        'installedCompanions' => ['orders' => InstalledVersions::getPrettyVersion('controleonline/orders'), 'financial' => InstalledVersions::getPrettyVersion('controleonline/financial')],
         'optionalColumns' => count($columns),
         'schemaReady' => $valid,
         'migrationRegistered' => (int) $connection->fetchOne(
@@ -55,7 +57,7 @@ try {
     if (getenv('APPEARANCE_REQUIRE_SCHEMA') && !$valid) {
         throw new RuntimeException('The five authorized optional columns must exist before API activation.');
     }
-    if (getenv('APPEARANCE_REQUIRE_PACKAGE') && ltrim((string) $version, 'v') !== '1.0.11') {
+    if (getenv('APPEARANCE_REQUIRE_PACKAGE') && (ltrim((string) $version, 'v') !== '1.0.11' || InstalledVersions::getReference('controleonline/common') !== '51a461d323779828745601cfe9c156f29b2e0626')) {
         throw new RuntimeException('The reviewed stable common 1.0.11 package is not installed.');
     }
 } catch (Throwable $error) {
