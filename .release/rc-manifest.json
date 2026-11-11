@@ -1,18 +1,30 @@
 {
   "version": "1.10.144",
-  "rc": 1,
-  "branch": "rc/1.10.144-rc.1",
-  "baseMaster": "4f489cf1a6314df9a565c9b8fbdba78fd9c9d1c7",
+  "rc": 3,
+  "branch": "rc/1.10.144-rc.3",
+  "baseMaster": "2069275a3c9a745bad3439ce4f98308c11b0627f",
   "tasks": [
     133,
     134,
-    1437
+    1437,
+    1496
   ],
   "taskRepository": "ControleOnline/app-community",
+  "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "0af668614741d1b7fa0881d107e099b37e02af32",
-    "ControleOnline/api-platform-financial": "bcefa71b44009fc51e0063bb24baad9f2f938779",
-    "ControleOnline/api-platform-people": "3c17b24c8303f55be7d90fda2b1d42f086910f5d"
+    "ControleOnline/api-community": "1c8a197c970f6acee21840e2f603729331f057ee"
   },
-  "frozen": true
+  "validation": {
+    "devCommit": "370a99079eee002795e68106696eebb7862848a2",
+    "taskSource": "882cb1b8292bb33f928e3a01a775fed479c2a72a",
+    "isolatedDeltaBase": "2069275a3c9a745bad3439ce4f98308c11b0627f",
+    "isolatedDeltaTip": "8afdb515fb470ab7a240edaaded8ecfe14217749",
+    "preservedStaging": "ae71f1f0dc953a96220dcccf3ff42032396632d1",
+    "checks": "164 theme + 52 Home/navigation + 2 i18n + 15 PHP tests (125 assertions); mocked database only",
+    "databaseMigrationExecuted": false,
+    "databaseWrites": false,
+    "deploymentMode": "source-only-no-runtime-activation",
+    "apiCommonRuntimePin": "1.0.9",
+    "runtimeActivationRequiresSeparateAuthorization": true
+  }
 }
