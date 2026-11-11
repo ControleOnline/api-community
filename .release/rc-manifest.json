@@ -1,14 +1,40 @@
 {
   "version": "1.10.144",
-  "rc": 2,
-  "branch": "rc/1.10.144-rc.2",
-  "baseMaster": "4f489cf1a6314df9a565c9b8fbdba78fd9c9d1c7",
+  "rc": 5,
+  "branch": "rc/1.10.144-rc.5",
+  "baseMaster": "2069275a3c9a745bad3439ce4f98308c11b0627f",
   "tasks": [
-    1437
+    133,
+    134,
+    1437,
+    1496
   ],
   "taskRepository": "ControleOnline/app-community",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "3a2fd553f1a491f306e2fd635582e561035feb78"
+    "ControleOnline/api-community": "ae5835597fd86ab0d67befcf01018d0e6a1a5b4c",
+    "ControleOnline/api-platform-common": "51a461d323779828745601cfe9c156f29b2e0626",
+    "ControleOnline/api-platform-orders": "891f827600b89aa9fa32b5385e4909f95595f088"
+  },
+  "validation": {
+    "devCommit": "5a2e02cc03dd092f430e73142e818ac1c2897a6c",
+    "taskSource": "960e385cee7a43d33157f8fa8ae2ccf6cb0d81d8",
+    "preservedStaging": "63a787a0c7cd444294058202eeddf6a11eb34ea1",
+    "packagePins": {
+      "controleonline/common": "1.0.11",
+      "controleonline/orders": "1.0.11",
+      "controleonline/financial": "1.0.8"
+    },
+    "databaseMigrationExecuted": true,
+    "migration": "DoctrineMigrations\\Common\\Version20261110220000",
+    "authorizedDatabase": "co_staging",
+    "otherMigrationsExecuted": false,
+    "originalCategoryRouteDataUnchanged": true,
+    "checks": "15 PHP/125 assertions; readonly local/remote preflight; six workflow routing cases; PHP/YAML/Bash syntax; Composer updates only two reviewed packages",
+    "deploymentMode": "source-only-master-promotion",
+    "masterPromotionAuthorized": true,
+    "productionMigrationExecuted": false,
+    "productionRuntimeActivated": false,
+    "operationalDelta": "Only skip-deploy workflow guard; src, packages, schema and permissions identical to the manually homologated runtime. Broader CI/context/cache work explicitly deferred to the team by requester."
   }
 }
