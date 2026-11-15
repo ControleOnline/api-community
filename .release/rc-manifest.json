@@ -1,7 +1,7 @@
 {
   "version": "1.10.145",
-  "rc": 2,
-  "branch": "rc/1.10.145-rc.2",
+  "rc": 3,
+  "branch": "rc/1.10.145-rc.3",
   "baseMaster": "26b5085ff2f8d0489385728c37801b813bb7ace9",
   "tasks": [
     355
@@ -9,18 +9,20 @@
   "taskRepository": "ControleOnline/api-community",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "7d96a582030b63837fdb48f9d9d9d630f79141cd"
+    "ControleOnline/api-community": "542f6baa71bd07ae6eb52f471624d9440cf44f2d"
   },
   "validation": {
     "packagePins": {
       "controleonline/mcp": "1.0.30",
       "controleonline/tasks": "1.0.6",
       "controleonline/integration": "1.0.7",
-      "controleonline/common": "1.0.11"
+      "controleonline/common": "1.0.11",
+      "controleonline/people": "1.0.15"
     },
     "migration": "DoctrineMigrations\\Tasks\\Version20261114120000 (tasks.ai_agent nullable + index)",
     "checks": "lint:container OK with the published packages; McpChat/WhatsAppCloud/EmailInbound/EmailOutbound handlers resolvable; package unit tests green. Dev deploy succeeded; CI Tests job fails on a pre-existing syntax error in controleonline/financial tests (unrelated).",
     "authorization": "User authorized dev and frozen release to staging (app-community#1335).",
-    "rc2": "rc.1 + mcp 1.0.30: /ai customer chat; company AI escalates to Suporte/Comercial ticket with the platform."
+    "rc2": "rc.1 + mcp 1.0.30: /ai customer chat; company AI escalates to Suporte/Comercial ticket with the platform.",
+    "rc3": "rc.2 + people 1.0.15 (idempotent Version20261015010000) so the migration chain cannot stall before tasks.ai_agent. Human authorized production publication."
   }
 }
