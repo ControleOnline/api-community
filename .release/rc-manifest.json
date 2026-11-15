@@ -1,7 +1,7 @@
 {
   "version": "1.10.145",
-  "rc": 6,
-  "branch": "rc/1.10.145-rc.6",
+  "rc": 7,
+  "branch": "rc/1.10.145-rc.7",
   "baseMaster": "26b5085ff2f8d0489385728c37801b813bb7ace9",
   "tasks": [
     355
@@ -9,7 +9,7 @@
   "taskRepository": "ControleOnline/api-community",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "b7b24339be0f8e18df0e52c4e0fc7f11685b6b14"
+    "ControleOnline/api-community": "f546c4a86e560183556e29102f00dd6eb30d30fc"
   },
   "validation": {
     "packagePins": {
@@ -26,6 +26,7 @@
     "rc3": "rc.2 + people 1.0.15 (idempotent Version20261015010000) so the migration chain cannot stall before tasks.ai_agent. Human authorized production publication.",
     "rc4": "rc.3 + mcp 1.0.31 (default AI per company, immediate processing, Claude workspace header removed, Gemini model).",
     "rc5": "rc.4 + mcp 1.0.32 (AI retry, Gemini fallback model, failures logged).",
-    "rc6": "rc.5 + mcp 1.0.33 (Gemini schema allowlist; hanging model skipped and cooled down). Validated on dev server with real Gemini key and 20 MCP tools."
+    "rc6": "rc.5 + mcp 1.0.33 (Gemini schema allowlist; hanging model skipped and cooled down). Validated on dev server with real Gemini key and 20 MCP tools.",
+    "rc7": "rc.6 + mcp 1.0.34 (/ai reliability: DB reconnect, request context for MCP queries, final no-tool round, quota skip, same-company provider fallback, date in prompt). Validated end to end on dev."
   }
 }
