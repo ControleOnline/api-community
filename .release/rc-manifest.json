@@ -1,7 +1,7 @@
 {
   "version": "1.10.145",
-  "rc": 4,
-  "branch": "rc/1.10.145-rc.4",
+  "rc": 5,
+  "branch": "rc/1.10.145-rc.5",
   "baseMaster": "26b5085ff2f8d0489385728c37801b813bb7ace9",
   "tasks": [
     355
@@ -9,7 +9,7 @@
   "taskRepository": "ControleOnline/api-community",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "4987f8914d45e6729dc3443ffbd0a7a1c8096ed2"
+    "ControleOnline/api-community": "dc2324697eb40c3379ed42f7618314e0540c7393"
   },
   "validation": {
     "packagePins": {
@@ -24,6 +24,7 @@
     "authorization": "User authorized dev and frozen release to staging (app-community#1335).",
     "rc2": "rc.1 + mcp 1.0.30: /ai customer chat; company AI escalates to Suporte/Comercial ticket with the platform.",
     "rc3": "rc.2 + people 1.0.15 (idempotent Version20261015010000) so the migration chain cannot stall before tasks.ai_agent. Human authorized production publication.",
-    "rc4": "rc.3 + mcp 1.0.31 (default AI per company, immediate processing, Claude workspace header removed, Gemini model)."
+    "rc4": "rc.3 + mcp 1.0.31 (default AI per company, immediate processing, Claude workspace header removed, Gemini model).",
+    "rc5": "rc.4 + mcp 1.0.32 (AI retry, Gemini fallback model, failures logged)."
   }
 }
