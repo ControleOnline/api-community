@@ -26,7 +26,7 @@ final class DeployShellControlFlowTest extends TestCase
     {
         $script = $this->deployScript();
         $start = strpos($script, 'if id www-data');
-        $end = strpos($script, 'nohup php', $start);
+        $end = strpos($script, 'if [ "${DEPLOY_OPERATION}" != "deploy-staging-appearance" ]; then', $start);
         self::assertNotFalse($start);
         self::assertNotFalse($end);
         $checks = substr($script, $start, $end - $start);
