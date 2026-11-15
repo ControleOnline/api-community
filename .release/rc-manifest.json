@@ -1,40 +1,29 @@
 {
-  "version": "1.10.144",
-  "rc": 5,
-  "branch": "rc/1.10.144-rc.5",
-  "baseMaster": "2069275a3c9a745bad3439ce4f98308c11b0627f",
+  "version": "1.10.145",
+  "rc": 4,
+  "branch": "rc/1.10.145-rc.4",
+  "baseMaster": "26b5085ff2f8d0489385728c37801b813bb7ace9",
   "tasks": [
-    133,
-    134,
-    1437,
-    1496
+    355
   ],
-  "taskRepository": "ControleOnline/app-community",
+  "taskRepository": "ControleOnline/api-community",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "ae5835597fd86ab0d67befcf01018d0e6a1a5b4c",
-    "ControleOnline/api-platform-common": "51a461d323779828745601cfe9c156f29b2e0626",
-    "ControleOnline/api-platform-orders": "891f827600b89aa9fa32b5385e4909f95595f088"
+    "ControleOnline/api-community": "4987f8914d45e6729dc3443ffbd0a7a1c8096ed2"
   },
   "validation": {
-    "devCommit": "5a2e02cc03dd092f430e73142e818ac1c2897a6c",
-    "taskSource": "960e385cee7a43d33157f8fa8ae2ccf6cb0d81d8",
-    "preservedStaging": "63a787a0c7cd444294058202eeddf6a11eb34ea1",
     "packagePins": {
+      "controleonline/mcp": "1.0.30",
+      "controleonline/tasks": "1.0.6",
+      "controleonline/integration": "1.0.7",
       "controleonline/common": "1.0.11",
-      "controleonline/orders": "1.0.11",
-      "controleonline/financial": "1.0.8"
+      "controleonline/people": "1.0.15"
     },
-    "databaseMigrationExecuted": true,
-    "migration": "DoctrineMigrations\\Common\\Version20261110220000",
-    "authorizedDatabase": "co_staging",
-    "otherMigrationsExecuted": false,
-    "originalCategoryRouteDataUnchanged": true,
-    "checks": "15 PHP/125 assertions; readonly local/remote preflight; six workflow routing cases; PHP/YAML/Bash syntax; Composer updates only two reviewed packages",
-    "deploymentMode": "source-only-master-promotion",
-    "masterPromotionAuthorized": true,
-    "productionMigrationExecuted": false,
-    "productionRuntimeActivated": false,
-    "operationalDelta": "Only skip-deploy workflow guard; src, packages, schema and permissions identical to the manually homologated runtime. Broader CI/context/cache work explicitly deferred to the team by requester."
+    "migration": "DoctrineMigrations\\Tasks\\Version20261114120000 (tasks.ai_agent nullable + index)",
+    "checks": "lint:container OK with the published packages; McpChat/WhatsAppCloud/EmailInbound/EmailOutbound handlers resolvable; package unit tests green. Dev deploy succeeded; CI Tests job fails on a pre-existing syntax error in controleonline/financial tests (unrelated).",
+    "authorization": "User authorized dev and frozen release to staging (app-community#1335).",
+    "rc2": "rc.1 + mcp 1.0.30: /ai customer chat; company AI escalates to Suporte/Comercial ticket with the platform.",
+    "rc3": "rc.2 + people 1.0.15 (idempotent Version20261015010000) so the migration chain cannot stall before tasks.ai_agent. Human authorized production publication.",
+    "rc4": "rc.3 + mcp 1.0.31 (default AI per company, immediate processing, Claude workspace header removed, Gemini model)."
   }
 }
