@@ -1,6 +1,6 @@
 # Single deploy pipeline for dev / staging / master.
 # Step 1 (configure) resolves environment variables from the branch.
-# Step 2 (deploy) consumes those outputs — one process, no per-env copies.
+# Step 2 validates the selected revision; Step 3 deploys only that checked SHA.
 # LaveGo whitelabel remains separate (workflow_dispatch / branch xxx only).
 name: Deploy
 
@@ -92,14 +92,32 @@ jobs:
           } >> "$GITHUB_OUTPUT"
           echo "Configured: env=$ENV branch=$BRANCH path=$REMOTE_PATH auth=$AUTH_MODE operation=$OPERATION"
 
-  # ─── Step 2: deploy ────────────────────────────────────────────────────────
-  deploy:
-    name: "2 · Deploy (${{ needs.configure.outputs.env }})"
+  # Run the same install, boot and backend checks as pull requests before SSH.
+  validate:
     needs: configure
+    if: needs.configure.outputs.operation == 'deploy' || needs.configure.outputs.operation == 'deploy-staging-appearance'
+    uses: ./.github/workflows/pull-request-checks.yml
+    with:
+      ref: ${{ github.event_name == 'push' && github.sha || needs.configure.outputs.branch }}
+
+  # ─── Step 3: deploy ────────────────────────────────────────────────────────
+  deploy:
+    name: "3 · Deploy (${{ needs.configure.outputs.env }})"
+    needs: [configure, validate]
+    # A skipped validation is allowed only for operations that do not install packages.
+    if: >-
+      always() && !cancelled() && needs.configure.result == 'success' &&
+      (needs.validate.result == 'success' ||
+       (needs.validate.result == 'skipped' &&
+        (needs.configure.outputs.operation == 'cache-recovery' ||
+         needs.configure.outputs.operation == 'inspect-prod-errors' ||
+         needs.configure.outputs.operation == 'inspect-staging-appearance')))
     runs-on: ubuntu-latest
     environment: ${{ needs.configure.outputs.github_environment }}
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ needs.validate.outputs.sha || github.sha }}
 
       - name: Validate required secrets for environment
         run: |
@@ -123,6 +141,27 @@ jobs:
               ;;
           esac
 
+      - name: Download validated dependency lock
+        if: needs.validate.result == 'success'
+        uses: actions/download-artifact@v4
+        with:
+          name: composer-lock-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .validated-dependencies
+
+      - name: Stage validated dependency lock
+        if: needs.validate.result == 'success'
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ needs.configure.outputs.env == 'dev' && secrets.DEV_HOST || needs.configure.outputs.env == 'staging' && secrets.STAGING_HOST || secrets.API_HOST }}
+          username: ${{ needs.configure.outputs.env == 'dev' && secrets.DEV_USER || needs.configure.outputs.env == 'staging' && secrets.STAGING_USER || secrets.USER }}
+          password: ${{ needs.configure.outputs.env == 'dev' && secrets.DEV_PASS || needs.configure.outputs.env == 'staging' && secrets.STAGING_PASS || '' }}
+          key: ${{ needs.configure.outputs.env == 'master' && secrets.CONTROLEONLINE || '' }}
+          passphrase: ${{ needs.configure.outputs.env == 'staging' && secrets.STAGING_PASS || '' }}
+          port: ${{ needs.configure.outputs.env == 'master' && secrets.PORT || 22 }}
+          source: .validated-dependencies/composer.lock
+          strip_components: 1
+          target: /tmp/controleonline-deploy-${{ github.run_id }}-${{ github.run_attempt }}
+
       - name: Deploy application over SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -134,7 +173,7 @@ jobs:
           port: ${{ needs.configure.outputs.env == 'master' && secrets.PORT || 22 }}
           # set -e in the remote script preserves if/else and function control flow.
           # Per-line script_stop instrumentation breaks false conditional branches.
-          envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP,SKIP_DB_MIGRATIONS,DEPLOY_OPERATION,APPEARANCE_SOURCE_SHA
+          envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP,SKIP_DB_MIGRATIONS,DEPLOY_OPERATION,APPEARANCE_SOURCE_SHA,DEPLOY_SHA,VALIDATED_LOCK_SHA256,VALIDATED_LOCK_PATH
           script: |
             set -e
             # Keep tool resolution inside the remote SSH script.
@@ -226,13 +265,25 @@ jobs:
               exit 0
             fi
 
+            if ! [[ "$VALIDATED_LOCK_SHA256" =~ ^[0-9a-f]{64}$ ]] ||
+               ! printf '%s  %s\n' "$VALIDATED_LOCK_SHA256" "$VALIDATED_LOCK_PATH" | sha256sum --check --status; then
+              echo "Validated dependency lock is missing or has changed" >&2
+              exit 1
+            fi
+
+            # Never reset the server to a branch that advanced after validation.
+            if ! [[ "${DEPLOY_SHA}" =~ ^[0-9a-f]{40}$ ]]; then
+              echo "Missing or invalid validated deployment SHA" >&2
+              exit 1
+            fi
             git -c submodule.recurse=false fetch --no-recurse-submodules origin
+            git cat-file -e "${DEPLOY_SHA}^{commit}"
             if git show-ref --verify --quiet "refs/heads/${BRANCH}"; then
               git checkout "$BRANCH"
             else
               git checkout -B "$BRANCH" "origin/${BRANCH}"
             fi
-            git reset --hard "origin/${BRANCH}"
+            git reset --hard "${DEPLOY_SHA}"
             # Legacy module checkouts may contain files owned by another deploy user.
             # Packages are restored by Composer below; preserve these retired paths.
             git clean -ffd -e '/modules/controleonline/'
@@ -276,7 +327,6 @@ jobs:
               # Update only the two reviewed packages. Keep every other locked package unchanged.
               cp composer.lock "$APPEARANCE_INSPECTOR.lock.before"
               trap 'rm -f "$APPEARANCE_INSPECTOR" "$APPEARANCE_INSPECTOR.lock.before"' EXIT
-              run_composer update controleonline/common controleonline/orders --no-interaction --no-progress --no-scripts --no-plugins
               "$PHP_BIN" -r '
                 $read = static function ($file) {
                   $lock = json_decode(file_get_contents($file), true, 512, JSON_THROW_ON_ERROR);
@@ -287,14 +337,15 @@ jobs:
                   ksort($packages);
                   return $packages;
                 };
-                if ($read($argv[1]) !== $read("composer.lock")) throw new RuntimeException("Unrelated locked packages changed; activation stopped");
-              ' "$APPEARANCE_INSPECTOR.lock.before"
-            elif run_composer validate --no-check-publish --no-interaction >/dev/null 2>&1; then
-              run_composer install --no-interaction --no-suggest --no-scripts
-            else
-              echo "composer.lock is stale; refreshing dependencies"
-              run_composer update --no-interaction --no-progress --with-all-dependencies --no-scripts
+                if ($read($argv[1]) !== $read($argv[2])) throw new RuntimeException("Unrelated locked packages changed; activation stopped");
+              ' "$APPEARANCE_INSPECTOR.lock.before" "$VALIDATED_LOCK_PATH"
             fi
+            # Install exactly the graph tested by CI, never resolve again on the server.
+            cp "$VALIDATED_LOCK_PATH" composer.lock
+            rm -f "$VALIDATED_LOCK_PATH"
+            rmdir "$(dirname "$VALIDATED_LOCK_PATH")"
+            run_composer validate --strict --no-check-all --no-check-publish --no-interaction
+            run_composer install --no-interaction --no-progress --prefer-dist --no-scripts
             echo "Reconciling Composer module paths"
             # FixAutoload::postInstall is a no-op (Packagist); kept for compatibility
             if "$PHP_BIN" -d display_errors=1 -r 'require "vendor/autoload.php"; App\FixAutoload::postInstall();'; then
@@ -351,32 +402,13 @@ jobs:
             echo "LiteSpeed restart markers set for the PHP 8.5 worker"
             echo "Deploy OK: $(git rev-parse --short HEAD) @ ${BRANCH} → ${TARGET}"
         env:
+          VALIDATED_LOCK_SHA256: ${{ needs.validate.outputs.lock_sha256 }}
+          VALIDATED_LOCK_PATH: /tmp/controleonline-deploy-${{ github.run_id }}-${{ github.run_attempt }}/composer.lock
+          DEPLOY_SHA: ${{ needs.validate.outputs.sha }}
           DEPLOY_BRANCH: ${{ needs.configure.outputs.branch }}
           REMOTE_PATH: ${{ needs.configure.outputs.remote_path }}
           MESSENGER_DOMAIN: ${{ needs.configure.outputs.messenger_domain }}
           BOOTSTRAP: ${{ needs.configure.outputs.bootstrap }}
           SKIP_DB_MIGRATIONS: ${{ (github.event_name == 'push' && contains(github.event.head_commit.message, '[skip-db-migrations]')) || (github.event_name == 'workflow_dispatch' && (github.event.inputs.target == 'staging' || needs.configure.outputs.env == 'staging')) }}
           DEPLOY_OPERATION: ${{ needs.configure.outputs.operation }}
-          APPEARANCE_SOURCE_SHA: ${{ github.sha }}
-
-  # ─── Step 3: tests ─────────────────────────────────────────────────────────
-  tests:
-    name: "3 · Tests"
-    needs: [configure, deploy]
-    if: needs.configure.outputs.operation == 'deploy'
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          ref: ${{ needs.configure.outputs.branch }}
-          submodules: recursive
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.5"
-          coverage: none
-          tools: composer:v2
-      - name: Install Dependencies
-        run: composer install --no-interaction --no-progress --prefer-dist
-      - name: Run PHPUnit
-        run: ./vendor/bin/phpunit
+          APPEARANCE_SOURCE_SHA: ${{ needs.validate.outputs.sha || github.sha }}

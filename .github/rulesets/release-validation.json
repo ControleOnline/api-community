@@ -1,0 +1,24 @@
+{
+  "name": "Release validation",
+  "target": "branch",
+  "enforcement": "active",
+  "bypass_actors": [],
+  "conditions": {
+    "ref_name": {
+      "include": ["refs/heads/staging", "refs/heads/master"],
+      "exclude": []
+    }
+  },
+  "rules": [
+    {
+      "type": "required_status_checks",
+      "parameters": {
+        "strict_required_status_checks_policy": true,
+        "required_status_checks": [
+          {"context": "baseline-checks"},
+          {"context": "source-policy"}
+        ]
+      }
+    }
+  ]
+}
