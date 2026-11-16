@@ -129,13 +129,16 @@
             "echo '{\"directory\" : \"public/vendor/\"}' > .bowerrc"
         ],
         "post-install-cmd": [
+            "@patch:tasks-date-setter",
             "@auto-scripts"
         ],
         "post-update-cmd": [
+            "@patch:tasks-date-setter",
             "@auto-scripts"
         ],
         "test:waiter": "vendor/bin/phpunit --configuration phpunit.waiter.xml.dist",
-        "test:backend": "vendor/bin/phpunit --configuration phpunit.xml.dist"
+        "test:backend": "vendor/bin/phpunit --configuration phpunit.xml.dist",
+        "patch:tasks-date-setter": "@php scripts/patch-tasks-date-setter.php"
     },
     "extra": {
         "symfony": {
