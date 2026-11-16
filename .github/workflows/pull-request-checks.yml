@@ -1,6 +1,19 @@
 name: Pull Request Checks
 
 on:
+  workflow_call:
+    inputs:
+      ref:
+        description: "Revision to validate before deployment"
+        required: true
+        type: string
+    outputs:
+      sha:
+        description: "Exact commit that passed backend validation"
+        value: ${{ jobs.baseline-checks.outputs.sha }}
+      lock_sha256:
+        description: "SHA-256 of the dependency lock produced by passing checks"
+        value: ${{ jobs.baseline-checks.outputs.lock_sha256 }}
   workflow_dispatch:
   push:
     branches:
@@ -17,10 +30,19 @@ concurrency:
 jobs:
   baseline-checks:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
+    outputs:
+      sha: ${{ steps.revision.outputs.sha }}
+      lock_sha256: ${{ steps.lock.outputs.sha256 }}
 
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+
+      - name: Resolve checked revision
+        id: revision
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -51,3 +73,15 @@ jobs:
 
       - name: Check diff hygiene
         run: git diff --check
+
+      - name: Record validated dependency lock
+        id: lock
+        run: echo "sha256=$(sha256sum composer.lock | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload validated dependency lock
+        uses: actions/upload-artifact@v4
+        with:
+          name: composer-lock-${{ github.run_id }}-${{ github.run_attempt }}
+          path: composer.lock
+          if-no-files-found: error
+          retention-days: 1
