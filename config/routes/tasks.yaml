@@ -1,0 +1,4 @@
+# app-community#1595-#1600: /tickets/* (responders, settings) and /public/contacts (site form)
+controleonline_tasks:
+    resource: ../../vendor/controleonline/tasks/src/Controller/
+    type: attribute
