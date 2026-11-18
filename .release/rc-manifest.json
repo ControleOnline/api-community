@@ -1,17 +1,17 @@
 {
-  "version": "1.10.147",
+  "version": "1.10.148",
   "rc": 1,
-  "branch": "rc/1.10.147-rc.1",
-  "baseMaster": "eee95a05a060a6195b6be24179ededa455afe023",
+  "branch": "rc/1.10.148-rc.1",
+  "baseMaster": "080499189119c6bf724baeaf46bfd3a43857e04d",
   "tasks": [
     355
   ],
   "taskRepository": "ControleOnline/api-community",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "3efbd6e4670f0664cf58a206320b79106bfcd4da"
+    "ControleOnline/api-community": "95a026694f4b5775e2e804221ee2dd5ef64c0720"
   },
   "validation": {
-    "rc1": "master (1.10.146-rc.1) + tasks 1.0.10, integration 1.0.10: WhatsApp oficial (app-community#1643)."
+    "rc1": "master (1.10.147-rc.1) + common 1.0.18: segredos em config sempre private (api-platform-common#71)."
   }
 }
