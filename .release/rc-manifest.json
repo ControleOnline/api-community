@@ -1,7 +1,7 @@
 {
   "version": "1.10.145",
-  "rc": 10,
-  "branch": "rc/1.10.145-rc.10",
+  "rc": 11,
+  "branch": "rc/1.10.145-rc.11",
   "baseMaster": "26b5085ff2f8d0489385728c37801b813bb7ace9",
   "tasks": [
     355,
@@ -32,6 +32,6 @@
     "rc7": "rc.6 + mcp 1.0.34 (/ai reliability: DB reconnect, request context for MCP queries, final no-tool round, quota skip, same-company provider fallback, date in prompt). Validated end to end on dev.",
     "rc8": "rc.7 + mcp 1.0.35 (visible failure note), tasks 1.0.7 (Task isolation by company), common 1.0.12 (email channel, idempotent connections migrations, per-project long-lived processes), financial 1.0.9 (test fix).",
     "rc9": "rc.8 + tasks 1.0.8 (requests: distribution, responders, reply rules, public contact; fixes duplicate setAlterDate), integration 1.0.8 (request push, voice transcription), mcp 1.0.36 (requests screen human-only, attachments), common 1.0.13 (menus), orders 1.0.12 (common constraint that broke rc.8), tasks routes + public contacts access.",
-    "rc10": "rc.9 + common 1.0.15 (task 1644: category.categoryCardBackground/categoryCardText/categoryCardMenu columns, migration Common\\Version20261117130000 copies legacy icon_color/text_color; MenuAppearanceProperties/MenuConfigService/MenuRepository expose them). Only the common pin changes; other pins untouched."
+    "rc11": "rc.9 (current staging) + common 1.0.15 (task 1644: category.categoryCardBackground/categoryCardText/categoryCardMenu columns; migration Common\\Version20261117130000 copies legacy icon_color/text_color). Only the common pin changes. Does not include the unpromoted rc/1.10.145-rc.10."
   }
 }
