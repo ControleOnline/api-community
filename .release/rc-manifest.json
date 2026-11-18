@@ -16,8 +16,8 @@
     "packagePins": {
       "controleonline/common": "1.0.17"
     },
-    "scope": "master (rc.9) + only the common pin 1.0.13 -> 1.0.17 (tasks 1644 and 1650: category categoryCard* and routes routeCard*/routeMenu* columns).",
+    "scope": "master (rc.10, 3171d6e) + only the common pin 1.0.13 -> 1.0.17 (tasks 1644 and 1650: category categoryCard* and routes routeCard*/routeMenu* columns). All other pins untouched.",
     "migrations": "Common Version20261117130000, Version20261118120000, Version20261118130000 (additive, idempotent, copy legacy colors).",
-    "staging": "Already validated on staging via rc/1.10.145-rc.11, rc.12 and rc.13 (same common versions). Does not include the unpromoted rc/1.10.145-rc.10."
+    "staging": "Validated on staging via rc/1.10.145-rc.11, rc.12 and rc.13 (same common versions)."
   }
 }
