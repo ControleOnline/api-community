@@ -1,23 +1,17 @@
 {
-  "version": "1.10.146",
+  "version": "1.10.147",
   "rc": 1,
-  "branch": "rc/1.10.146-rc.1",
-  "baseMaster": "3171d6e911b6df2259bedd6cf3c0bdd60d4a8632",
+  "branch": "rc/1.10.147-rc.1",
+  "baseMaster": "eee95a05a060a6195b6be24179ededa455afe023",
   "tasks": [
-    1644,
-    1650
+    355
   ],
-  "taskRepository": "ControleOnline/app-community",
+  "taskRepository": "ControleOnline/api-community",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "3171d6e911b6df2259bedd6cf3c0bdd60d4a8632"
+    "ControleOnline/api-community": "3efbd6e4670f0664cf58a206320b79106bfcd4da"
   },
   "validation": {
-    "packagePins": {
-      "controleonline/common": "1.0.17"
-    },
-    "scope": "master (rc.10, 3171d6e) + only the common pin 1.0.13 -> 1.0.17 (tasks 1644 and 1650: category categoryCard* and routes routeCard*/routeMenu* columns). All other pins untouched.",
-    "migrations": "Common Version20261117130000, Version20261118120000, Version20261118130000 (additive, idempotent, copy legacy colors).",
-    "staging": "Validated on staging via rc/1.10.145-rc.11, rc.12 and rc.13 (same common versions)."
+    "rc1": "master (1.10.146-rc.1) + tasks 1.0.10, integration 1.0.10: WhatsApp oficial (app-community#1643)."
   }
 }
