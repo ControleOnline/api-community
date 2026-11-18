@@ -11,7 +11,7 @@
   "taskRepository": "ControleOnline/api-community",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "e6f11be3559e2cc4c53b0c78d2d9c530a209b7c7"
+    "ControleOnline/api-community": "0d582349fa0b022e51792e79951c7fa494998dc2"
   },
   "validation": {
     "packagePins": {
