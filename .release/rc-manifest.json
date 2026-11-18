@@ -1,7 +1,7 @@
 {
   "version": "1.10.145",
-  "rc": 13,
-  "branch": "rc/1.10.145-rc.13",
+  "rc": 14,
+  "branch": "rc/1.10.145-rc.14",
   "baseMaster": "26b5085ff2f8d0489385728c37801b813bb7ace9",
   "tasks": [
     355,
@@ -35,6 +35,7 @@
     "rc9": "rc.8 + tasks 1.0.8 (requests: distribution, responders, reply rules, public contact; fixes duplicate setAlterDate), integration 1.0.8 (request push, voice transcription), mcp 1.0.36 (requests screen human-only, attachments), common 1.0.13 (menus), orders 1.0.12 (common constraint that broke rc.8), tasks routes + public contacts access.",
     "rc11": "rc.9 (current staging) + common 1.0.15 (task 1644: category.categoryCardBackground/categoryCardText/categoryCardMenu columns; migration Common\\Version20261117130000 copies legacy icon_color/text_color). Only the common pin changes. Does not include the unpromoted rc/1.10.145-rc.10.",
     "rc12": "rc.11 + common 1.0.16 (task 1650: routes.routeCardBackground/Icon/IconBackground/Text/Border columns; migration Common\\Version20261118120000 copies legacy icon_background_color to routeCardBackground). Only the common pin changes.",
-    "rc13": "rc.12 + common 1.0.17 (task 1650: routes.routeMenuBackground/routeMenuIcon/routeMenuText columns; migration Common\\Version20261118130000). Only the common pin changes."
+    "rc13": "rc.12 + common 1.0.17 (task 1650: routes.routeMenuBackground/routeMenuIcon/routeMenuText columns; migration Common\\Version20261118130000). Only the common pin changes.",
+    "rc14": "rc.13 (common 1.0.17, task 1650) + tasks 1.0.9, integration 1.0.9, mcp 1.0.37 (#355). Restores staging after rc.10 replaced rc.13 content."
   }
 }
