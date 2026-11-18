@@ -1,41 +1,17 @@
 {
-  "version": "1.10.145",
-  "rc": 14,
-  "branch": "rc/1.10.145-rc.14",
-  "baseMaster": "26b5085ff2f8d0489385728c37801b813bb7ace9",
+  "version": "1.10.147",
+  "rc": 1,
+  "branch": "rc/1.10.147-rc.1",
+  "baseMaster": "eee95a05a060a6195b6be24179ededa455afe023",
   "tasks": [
-    355,
-    1644,
-    1650
+    355
   ],
   "taskRepository": "ControleOnline/api-community",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "0d582349fa0b022e51792e79951c7fa494998dc2"
+    "ControleOnline/api-community": "3efbd6e4670f0664cf58a206320b79106bfcd4da"
   },
   "validation": {
-    "packagePins": {
-      "controleonline/mcp": "1.0.30",
-      "controleonline/tasks": "1.0.6",
-      "controleonline/integration": "1.0.7",
-      "controleonline/common": "1.0.11",
-      "controleonline/people": "1.0.15",
-      "common": "1.0.17"
-    },
-    "migration": "DoctrineMigrations\\Tasks\\Version20261114120000 (tasks.ai_agent nullable + index)",
-    "checks": "lint:container OK with the published packages; McpChat/WhatsAppCloud/EmailInbound/EmailOutbound handlers resolvable; package unit tests green. Dev deploy succeeded; CI Tests job fails on a pre-existing syntax error in controleonline/financial tests (unrelated).",
-    "authorization": "User authorized dev and frozen release to staging (app-community#1335).",
-    "rc2": "rc.1 + mcp 1.0.30: /ai customer chat; company AI escalates to Suporte/Comercial ticket with the platform.",
-    "rc3": "rc.2 + people 1.0.15 (idempotent Version20261015010000) so the migration chain cannot stall before tasks.ai_agent. Human authorized production publication.",
-    "rc4": "rc.3 + mcp 1.0.31 (default AI per company, immediate processing, Claude workspace header removed, Gemini model).",
-    "rc5": "rc.4 + mcp 1.0.32 (AI retry, Gemini fallback model, failures logged).",
-    "rc6": "rc.5 + mcp 1.0.33 (Gemini schema allowlist; hanging model skipped and cooled down). Validated on dev server with real Gemini key and 20 MCP tools.",
-    "rc7": "rc.6 + mcp 1.0.34 (/ai reliability: DB reconnect, request context for MCP queries, final no-tool round, quota skip, same-company provider fallback, date in prompt). Validated end to end on dev.",
-    "rc8": "rc.7 + mcp 1.0.35 (visible failure note), tasks 1.0.7 (Task isolation by company), common 1.0.12 (email channel, idempotent connections migrations, per-project long-lived processes), financial 1.0.9 (test fix).",
-    "rc9": "rc.8 + tasks 1.0.8 (requests: distribution, responders, reply rules, public contact; fixes duplicate setAlterDate), integration 1.0.8 (request push, voice transcription), mcp 1.0.36 (requests screen human-only, attachments), common 1.0.13 (menus), orders 1.0.12 (common constraint that broke rc.8), tasks routes + public contacts access.",
-    "rc11": "rc.9 (current staging) + common 1.0.15 (task 1644: category.categoryCardBackground/categoryCardText/categoryCardMenu columns; migration Common\\Version20261117130000 copies legacy icon_color/text_color). Only the common pin changes. Does not include the unpromoted rc/1.10.145-rc.10.",
-    "rc12": "rc.11 + common 1.0.16 (task 1650: routes.routeCardBackground/Icon/IconBackground/Text/Border columns; migration Common\\Version20261118120000 copies legacy icon_background_color to routeCardBackground). Only the common pin changes.",
-    "rc13": "rc.12 + common 1.0.17 (task 1650: routes.routeMenuBackground/routeMenuIcon/routeMenuText columns; migration Common\\Version20261118130000). Only the common pin changes.",
-    "rc14": "rc.13 (common 1.0.17, task 1650) + tasks 1.0.9, integration 1.0.9, mcp 1.0.37 (#355). Restores staging after rc.10 replaced rc.13 content."
+    "rc1": "master (1.10.146-rc.1) + tasks 1.0.10, integration 1.0.10: WhatsApp oficial (app-community#1643)."
   }
 }
