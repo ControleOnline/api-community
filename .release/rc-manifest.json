@@ -1,7 +1,7 @@
 {
   "version": "1.10.149",
-  "rc": 2,
-  "branch": "rc/1.10.149-rc.2",
+  "rc": 3,
+  "branch": "rc/1.10.149-rc.3",
   "baseMaster": "4369f2461cbe45110a2efcb396248ed20d066d91",
   "tasks": [
     355
@@ -13,6 +13,7 @@
   },
   "validation": {
     "rc1": "master + tasks 1.0.11, mcp 1.0.38, integration 1.0.11: atendimento IA/pessoa primeiro (app-community#1709).",
-    "rc2": "rc.1 + tasks 1.0.12: usuário da IA com timezone (falhava com timezone_id nulo no dev)."
+    "rc2": "rc.1 + tasks 1.0.12: usuário da IA com timezone (falhava com timezone_id nulo no dev).",
+    "rc3": "rc.2 + people 1.0.16: nome do autor nas interações."
   }
 }
