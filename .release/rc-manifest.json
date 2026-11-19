@@ -1,7 +1,7 @@
 {
   "version": "1.10.149",
-  "rc": 1,
-  "branch": "rc/1.10.149-rc.1",
+  "rc": 2,
+  "branch": "rc/1.10.149-rc.2",
   "baseMaster": "4369f2461cbe45110a2efcb396248ed20d066d91",
   "tasks": [
     355
@@ -12,6 +12,7 @@
     "ControleOnline/api-community": "af4f5367fc9416ddf5249a94e03cae4be0462df2"
   },
   "validation": {
-    "rc1": "master + tasks 1.0.11, mcp 1.0.38, integration 1.0.11: atendimento IA/pessoa primeiro (app-community#1709)."
+    "rc1": "master + tasks 1.0.11, mcp 1.0.38, integration 1.0.11: atendimento IA/pessoa primeiro (app-community#1709).",
+    "rc2": "rc.1 + tasks 1.0.12: usuário da IA com timezone (falhava com timezone_id nulo no dev)."
   }
 }
