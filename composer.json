@@ -12,7 +12,7 @@
         "composer/installers": "^2.2",
         "controleonline/accounting": "1.0.2",
         "controleonline/common": "1.0.18",
-        "controleonline/contract": "1.0.2",
+        "controleonline/contract": "1.0.3",
         "controleonline/ead": "1.0.2",
         "controleonline/financial": "1.0.9",
         "controleonline/integration": "1.0.10",
