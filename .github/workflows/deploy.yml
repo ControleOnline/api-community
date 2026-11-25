@@ -132,6 +132,12 @@ jobs:
           key: ${{ needs.configure.outputs.env == 'master' && secrets.CONTROLEONLINE || '' }}
           passphrase: ${{ needs.configure.outputs.env == 'staging' && secrets.STAGING_PASS || '' }}
           port: ${{ needs.configure.outputs.env == 'master' && secrets.PORT || 22 }}
+          # Production host policy blocks SSH on its public IP except from the dev
+          # server, so production deploys jump through dev (same DEV_* credentials).
+          proxy_host: ${{ needs.configure.outputs.env == 'master' && secrets.DEV_HOST || '' }}
+          proxy_username: ${{ needs.configure.outputs.env == 'master' && secrets.DEV_USER || '' }}
+          proxy_password: ${{ needs.configure.outputs.env == 'master' && secrets.DEV_PASS || '' }}
+          proxy_port: 22
           # set -e in the remote script preserves if/else and function control flow.
           # Per-line script_stop instrumentation breaks false conditional branches.
           envs: DEPLOY_BRANCH,REMOTE_PATH,MESSENGER_DOMAIN,BOOTSTRAP,SKIP_DB_MIGRATIONS,DEPLOY_OPERATION,APPEARANCE_SOURCE_SHA
