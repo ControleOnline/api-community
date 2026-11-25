@@ -345,14 +345,7 @@ jobs:
             if [ "${SKIP_DB_MIGRATIONS}" = "true" ] || [ "${SKIP_DB_MIGRATIONS}" = "TRUE" ] || [ "${SKIP_DB_MIGRATIONS}" = "True" ]; then
               echo "Database migrations intentionally skipped for this deploy ([skip-db-migrations]); no schema changes are included"
             else
-              # Production connects to the tenancy registry with a read-only user and
-              # needs no schema change there; only tenant databases are migrated.
-              if [ "${DEPLOY_BRANCH}" = "master" ]; then
-                echo "Tenancy registry migrations skipped on production (read-only registry user)"
-              else
-                "$PHP_BIN" bin/console doctrine:migrations:sync-metadata-storage --configuration=config/migrations/multi_tenancy.yaml --no-interaction
-                "$PHP_BIN" bin/console doctrine:migrations:migrate --configuration=config/migrations/multi_tenancy.yaml --no-interaction
-              fi
+              # Deploys migrate tenant databases only; the tenancy registry is not migrated here.
               "$PHP_BIN" bin/console tenant:migrations:migrate --no-interaction
             fi
             echo "Database migration steps completed"
