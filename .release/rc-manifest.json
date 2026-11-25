@@ -1,17 +1,17 @@
 {
-  "version": "1.10.148",
+  "version": "1.10.150",
   "rc": 1,
-  "branch": "rc/1.10.148-rc.1",
-  "baseMaster": "080499189119c6bf724baeaf46bfd3a43857e04d",
+  "branch": "rc/1.10.150-rc.1",
+  "baseMaster": "4369f2461cbe45110a2efcb396248ed20d066d91",
   "tasks": [
-    355
+    98
   ],
-  "taskRepository": "ControleOnline/api-community",
+  "taskRepository": "ControleOnline/ui-crm",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "95a026694f4b5775e2e804221ee2dd5ef64c0720"
+    "ControleOnline/api-community": "4369f2461cbe45110a2efcb396248ed20d066d91"
   },
   "validation": {
-    "rc1": "master (1.10.147-rc.1) + common 1.0.18: segredos em config sempre private (api-platform-common#71)."
+    "rc1": "master (1.10.148) + deploy de produ\u00e7\u00e3o via proxy no dev (host bloqueou SSH p\u00fablico); validado com inspect-prod-errors run 45614566904."
   }
 }
