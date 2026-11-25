@@ -1,17 +1,17 @@
 {
-  "version": "1.10.152",
+  "version": "1.10.153",
   "rc": 1,
-  "branch": "rc/1.10.152-rc.1",
-  "baseMaster": "128c923eaaf577bceb838f7fa3a0f3b9862a406b",
+  "branch": "rc/1.10.153-rc.1",
+  "baseMaster": "cbd3aebdff9e2009f354d6f6db548a26adc3f591",
   "tasks": [
+    96,
     98
   ],
-  "taskRepository": "ControleOnline/ui-crm",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "128c923eaaf577bceb838f7fa3a0f3b9862a406b"
+    "ControleOnline/api-community": "cbd3aebdff9e2009f354d6f6db548a26adc3f591"
   },
   "validation": {
-    "rc1": "master (1.10.151) + deploy migra s\u00f3 os bancos dos tenants (n\u00e3o o banco de tenancy)."
+    "rc1": "common 1.0.19 + people 1.0.19 (fluxo do vendedor: importa\u00e7\u00e3o/atribui\u00e7\u00e3o de prospects) + integration 1.0.13 (WhatsApp Embedded Signup). Validados no dev."
   }
 }
