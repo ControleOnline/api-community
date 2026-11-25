@@ -216,8 +216,26 @@ jobs:
               fi
             fi
 
+            # PHP workers keep writing to var/cache while it is deleted ("Directory not
+            # empty"): move each entry aside atomically, then delete the moved copies.
+            clear_symfony_cache() {
+              for attempt in 1 2 3; do
+                for entry in var/cache/*; do
+                  [ -e "$entry" ] || continue
+                  case "$entry" in *.stale.*) continue ;; esac
+                  mv "$entry" "$entry.stale.$$.$attempt" 2>/dev/null || true
+                done
+                rm -rf var/cache/*.stale.* 2>/dev/null || true
+                if [ -z "$(ls -A var/cache 2>/dev/null | grep -v '\.stale\.')" ]; then
+                  return 0
+                fi
+                sleep 2
+              done
+              return 1
+            }
+
             if [ "${DEPLOY_OPERATION}" = "cache-recovery" ]; then
-              if rm -rf var/cache/* 2>/dev/null; then
+              if clear_symfony_cache; then
                 echo "Symfony cache removed"
               elif command -v sudo >/dev/null 2>&1 && sudo -n rm -rf var/cache/* 2>/dev/null; then
                 echo "Symfony cache removed with elevated permissions"
@@ -313,7 +331,7 @@ jobs:
             # Rebuild Symfony's compiled container for the current Composer packages.
             # The deploy user may not own cache files created by PHP-FPM; escalate
             # non-interactively or stop before serving a stale container.
-            if rm -rf var/cache/* 2>/dev/null; then
+            if clear_symfony_cache; then
               echo "Symfony cache cleanup completed"
             elif command -v sudo >/dev/null 2>&1 && sudo -n rm -rf var/cache/* 2>/dev/null; then
               echo "Symfony cache cleanup completed with elevated permissions"

@@ -1,17 +1,17 @@
 {
-  "version": "1.10.150",
+  "version": "1.10.151",
   "rc": 1,
-  "branch": "rc/1.10.150-rc.1",
-  "baseMaster": "4369f2461cbe45110a2efcb396248ed20d066d91",
+  "branch": "rc/1.10.151-rc.1",
+  "baseMaster": "800eeca0af74c29aecdea1c8733ad26ccbcb3ec2",
   "tasks": [
     98
   ],
   "taskRepository": "ControleOnline/ui-crm",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "4369f2461cbe45110a2efcb396248ed20d066d91"
+    "ControleOnline/api-community": "800eeca0af74c29aecdea1c8733ad26ccbcb3ec2"
   },
   "validation": {
-    "rc1": "master (1.10.148) + deploy de produ\u00e7\u00e3o via proxy no dev (host bloqueou SSH p\u00fablico); validado com inspect-prod-errors run 45614566904."
+    "rc1": "master (1.10.150) + limpeza at\u00f4mica do cache no deploy (run 45615042580 falhou no rm -rf por concorr\u00eancia)."
   }
 }
