@@ -1,17 +1,16 @@
 {
-  "version": "1.10.153",
+  "version": "1.10.154",
   "rc": 1,
-  "branch": "rc/1.10.153-rc.1",
-  "baseMaster": "cbd3aebdff9e2009f354d6f6db548a26adc3f591",
+  "branch": "rc/1.10.154-rc.1",
+  "baseMaster": "fc252a9cd5c06d811e408e64b10b0871cc5db8f2",
   "tasks": [
-    96,
-    98
+    96
   ],
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "cbd3aebdff9e2009f354d6f6db548a26adc3f591"
+    "ControleOnline/api-community": "fc252a9cd5c06d811e408e64b10b0871cc5db8f2"
   },
   "validation": {
-    "rc1": "common 1.0.19 + people 1.0.19 (fluxo do vendedor: importa\u00e7\u00e3o/atribui\u00e7\u00e3o de prospects) + integration 1.0.13 (WhatsApp Embedded Signup). Validados no dev."
+    "rc1": "Rollback de 1.10.153: integration 1.0.15 exige TicketAttendanceService (pacote tasks mais novo); volta common 1.0.18, people 1.0.15, integration 1.0.10."
   }
 }
