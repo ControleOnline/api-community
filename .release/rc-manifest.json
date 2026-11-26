@@ -1,16 +1,17 @@
 {
-  "version": "1.10.155",
+  "version": "1.10.156",
   "rc": 1,
-  "branch": "rc/1.10.155-rc.1",
-  "baseMaster": "7307f67f30f9ad6e56e08a33c2b5e2aa1a48022d",
+  "branch": "rc/1.10.156-rc.1",
+  "baseMaster": "dbf40ba6240d94966adfdf68e6fab97f8e62f398",
   "tasks": [
-    96
+    1761
   ],
+  "taskRepository": "ControleOnline/app-community",
   "frozen": true,
   "repositories": {
-    "ControleOnline/api-community": "7307f67f30f9ad6e56e08a33c2b5e2aa1a48022d"
+    "ControleOnline/api-community": "dbf40ba6240d94966adfdf68e6fab97f8e62f398"
   },
   "validation": {
-    "rc1": "integration 1.0.10.1 = 1.0.10 + WhatsApp Embedded Signup; lint:container OK numa c\u00f3pia da produ\u00e7\u00e3o."
+    "rc1": "Pacotes reconciliados (master ∪ produção ∪ staging ∪ dev). lint:container, mapeamento Doctrine e cache:warmup numa cópia da produção; deploy e migrations OK na dev."
   }
 }
